@@ -82,8 +82,9 @@ const BoMExplorer = ({
   const navigate = useNavigate();
   const location = useOptimisticLocation();
 
-  const { itemId } = params;
+  const { itemId, methodId } = params;
   if (!itemId) throw new Error("itemId not found");
+  if (!methodId) throw new Error("methodId not found");
 
   const [selectedMaterialId, setSelectedMaterialId] = useBom();
   useMount(() => {
@@ -143,8 +144,11 @@ const BoMExplorer = ({
                     selectNode(node.id);
                     setSelectedMaterialId(node.data.methodMaterialId);
                     if (node.data.isRoot) {
-                      if (location.pathname !== getRootLink(itemType, itemId)) {
-                        navigate(getRootLink(itemType, itemId));
+                      if (
+                        location.pathname !==
+                        getRootLink(itemType, itemId, methodId)
+                      ) {
+                        navigate(getRootLink(itemType, itemId, methodId));
                       }
                     } else {
                       if (
@@ -319,12 +323,16 @@ function NodePreview({ node }: { node: FlatTreeItem<Method> }) {
   );
 }
 
-function getRootLink(itemType: MethodItemType, itemId: string) {
+function getRootLink(
+  itemType: MethodItemType,
+  itemId: string,
+  methodId: string
+) {
   switch (itemType) {
     case "Part":
-      return path.to.partMakeMethod(itemId);
+      return path.to.partMakeMethod(itemId, methodId);
     case "Tool":
-      return path.to.toolMakeMethod(itemId);
+      return path.to.toolMakeMethod(itemId, methodId);
     default:
       throw new Error(`Unimplemented BoMExplorer itemType: ${itemType}`);
   }

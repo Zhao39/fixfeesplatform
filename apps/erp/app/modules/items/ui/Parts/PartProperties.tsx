@@ -30,6 +30,7 @@ import { zfd } from "zod-form-data";
 import { MethodBadge, MethodIcon, TrackingTypeIcon } from "~/components";
 import { Boolean, Tags, UnitOfMeasure } from "~/components/Form";
 import CustomFormInlineFields from "~/components/Form/CustomFormInlineFields";
+import { ReplenishmentSystemIcon } from "~/components/Icons";
 import { ItemThumbnailUpload } from "~/components/ItemThumnailUpload";
 import { useRouteData } from "~/hooks";
 import { methodType } from "~/modules/shared";
@@ -48,7 +49,6 @@ import type {
   SupplierPart,
 } from "../../types";
 import { FileBadge } from "../Item";
-import { ReplenishmentSystemIcon } from "~/components/Icons";
 
 const PartProperties = () => {
   const { itemId } = useParams();

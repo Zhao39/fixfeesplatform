@@ -94,8 +94,9 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function MakeMethodRoute() {
   const permissions = usePermissions();
-  const { itemId } = useParams();
+  const { itemId, methodId } = useParams();
   if (!itemId) throw new Error("Could not find itemId");
+  if (!methodId) throw new Error("Could not find methodId");
 
   const { tags } = useLoaderData<typeof loader>();
 
@@ -115,7 +116,7 @@ export default function MakeMethodRoute() {
     makeMethod: MakeMethod;
     methodMaterials: Material[];
     methodOperations: MethodOperation[];
-  }>(path.to.partManufacturing(itemId));
+  }>(path.to.partMethod(itemId, methodId));
 
   if (!manufacturingRouteData) throw new Error("Could not find route data");
 
@@ -130,7 +131,7 @@ export default function MakeMethodRoute() {
 
   return (
     <VStack spacing={2} className="p-2">
-      <MakeMethodTools itemId={itemId} type="Part" />
+      <MakeMethodTools itemId={itemId} type="Part" revisions={[]} />
       <PartManufacturingForm
         key={itemId}
         // @ts-ignore
