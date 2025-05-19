@@ -31,6 +31,7 @@ type BoMExplorerProps = {
   makeMethodId: string;
   methods: FlatTreeItem<Method>[];
   selectedId?: string;
+  revision: string;
 };
 
 const BoMExplorer = ({
@@ -38,6 +39,7 @@ const BoMExplorer = ({
   makeMethodId,
   methods,
   selectedId,
+  revision,
 }: BoMExplorerProps) => {
   const [filterText, setFilterText] = useState("");
   const parentRef = useRef<HTMLDivElement>(null);
@@ -156,6 +158,7 @@ const BoMExplorer = ({
                         getMaterialLink(
                           itemType,
                           itemId,
+                          methodId,
                           node.data.methodType === "Make"
                             ? node.data.materialMakeMethodId
                             : node.data.makeMethodId
@@ -165,6 +168,7 @@ const BoMExplorer = ({
                           getMaterialLink(
                             itemType,
                             itemId,
+                            methodId,
                             node.data.methodType === "Make"
                               ? node.data.materialMakeMethodId
                               : node.data.makeMethodId
@@ -223,8 +227,8 @@ const BoMExplorer = ({
                     </div>
                     <div className="flex items-center gap-1">
                       {node.data.isRoot ? (
-                        <Badge variant="outline" className="text-xs">
-                          Method
+                        <Badge variant="secondary" className="text-xs">
+                          V{revision}
                         </Badge>
                       ) : (
                         <NodeData node={node} />
@@ -341,13 +345,14 @@ function getRootLink(
 function getMaterialLink(
   itemType: MethodItemType,
   itemId: string,
+  methodId: string,
   makeMethodId: string
 ) {
   switch (itemType) {
     case "Part":
-      return path.to.partManufacturingMaterial(itemId, makeMethodId);
+      return path.to.partManufacturingMaterial(itemId, methodId, makeMethodId);
     case "Tool":
-      return path.to.toolManufacturingMaterial(itemId, makeMethodId);
+      return path.to.toolManufacturingMaterial(itemId, methodId, makeMethodId);
     default:
       throw new Error(`Unimplemented BoMExplorer itemType: ${itemType}`);
   }

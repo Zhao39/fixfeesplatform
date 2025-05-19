@@ -116,19 +116,17 @@ export function MethodBadge({ type, text, to, className }: MethodBadgeProps) {
   const mode = useMode();
   const style = getReplenishmentBadgeColor(type, mode);
   return (
-    <HStack className="group" spacing={1}>
-      <Badge style={style} className={className}>
-        <MethodIcon type={type} className="w-3 h-3 mr-1 " />
-        {text}
-      </Badge>
-      <Link
-        className="group-hover:opacity-100 opacity-0 transition-opacity duration-200 w-4 h-4 text-foreground"
-        to={to}
-        prefetch="intent"
-      >
-        <LuExternalLink />
-      </Link>
-    </HStack>
+    <Link to={to} prefetch="intent">
+      <HStack className="group" spacing={1}>
+        <Badge style={style} className={className}>
+          <MethodIcon type={type} className="w-3 h-3 mr-1 " />
+          {text}
+        </Badge>
+        <div className="group-hover:opacity-100 opacity-0 transition-opacity duration-200 w-4 h-4 text-foreground">
+          <LuExternalLink />
+        </div>
+      </HStack>
+    </Link>
   );
 }
 

@@ -671,7 +671,8 @@ export async function getMakeMethods(
     .from("makeMethod")
     .select("*")
     .eq("itemId", itemId)
-    .eq("companyId", companyId);
+    .eq("companyId", companyId)
+    .order("revision", { ascending: false });
 }
 
 export async function getMakeMethodById(

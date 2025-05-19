@@ -16,15 +16,22 @@ import {
   cn,
   toast,
 } from "@carbon/react";
-import { Await, useFetcher, useParams } from "@remix-run/react";
+import { Await, Link, useFetcher, useParams } from "@remix-run/react";
+import type { PostgrestResponse } from "@supabase/supabase-js";
 import { Suspense, useCallback, useEffect } from "react";
-import { LuCopy, LuKeySquare, LuLink } from "react-icons/lu";
+import {
+  LuCopy,
+  LuExternalLink,
+  LuKeySquare,
+  LuLink,
+  LuMove3D,
+} from "react-icons/lu";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
 import { MethodBadge, MethodIcon, TrackingTypeIcon } from "~/components";
-import { Enumerable } from "~/components/Enumerable";
-import { Boolean, Tags } from "~/components/Form";
+import { Boolean, Tags, UnitOfMeasure } from "~/components/Form";
 import CustomFormInlineFields from "~/components/Form/CustomFormInlineFields";
+import { ReplenishmentSystemIcon } from "~/components/Icons";
 import { ItemThumbnailUpload } from "~/components/ItemThumnailUpload";
 import { useRouteData } from "~/hooks";
 import { methodType } from "~/modules/shared";
@@ -36,9 +43,14 @@ import {
   itemReplenishmentSystems,
   itemTrackingTypes,
 } from "../../items.models";
-import type { ItemFile, PickMethod, SupplierPart, Tool } from "../../types";
+import type {
+  ItemFile,
+  MakeMethod,
+  PickMethod,
+  SupplierPart,
+  Tool,
+} from "../../types";
 import { FileBadge } from "../Item";
-import { ReplenishmentSystemIcon } from "~/components/Icons";
 
 const ToolProperties = () => {
   const { itemId } = useParams();
@@ -52,6 +64,7 @@ const ToolProperties = () => {
     files: Promise<ItemFile[]>;
     supplierParts: SupplierPart[];
     pickMethods: PickMethod[];
+    makeMethods: Promise<PostgrestResponse<MakeMethod>>;
     tags: { name: string }[];
   }>(path.to.tool(itemId));
 
@@ -78,17 +91,19 @@ const ToolProperties = () => {
   const onUpdate = useCallback(
     (
       field:
-        | "name"
-        | "replenishmentSystem"
+        | "active"
         | "defaultMethodType"
         | "itemTrackingType"
-        | "active",
-      value: string
+        | "name"
+        | "replenishmentSystem"
+        | "unitOfMeasureCode",
+      value: string | null
     ) => {
       const formData = new FormData();
 
       formData.append("items", itemId);
       formData.append("field", field);
+
       formData.append("value", value?.toString() ?? "");
       fetcher.submit(formData, {
         method: "post",
@@ -179,7 +194,7 @@ const ToolProperties = () => {
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <span>Copy part unique identifier</span>
+                <span>Copy tool unique identifier</span>
               </TooltipContent>
             </Tooltip>
             <Tooltip>
@@ -233,8 +248,19 @@ const ToolProperties = () => {
         <ItemThumbnailUpload
           path={routeData?.toolSummary?.thumbnailPath}
           itemId={itemId}
+          modelId={routeData?.toolSummary?.modelId}
         />
       </VStack>
+
+      {/* <VStack spacing={2}>
+        <h3 className="text-xs text-muted-foreground">Assignee</h3>
+        <Assignee
+          id={itemId}
+          table="item"
+          value={assignee ?? ""}
+          isReadOnly={!permissions.can("update", "parts")}
+        />
+      </VStack> */}
 
       <VStack spacing={2}>
         <h3 className="text-xs text-muted-foreground">Tracking Type</h3>
@@ -281,17 +307,15 @@ const ToolProperties = () => {
             </Badge>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            {methodType
-              .filter((type) => type !== "Make")
-              .map((type) => (
-                <DropdownMenuItem
-                  key={type}
-                  onClick={() => onUpdate("defaultMethodType", type)}
-                >
-                  <DropdownMenuIcon icon={<MethodIcon type={type} />} />
-                  <span>{type}</span>
-                </DropdownMenuItem>
-              ))}
+            {methodType.map((type) => (
+              <DropdownMenuItem
+                key={type}
+                onClick={() => onUpdate("defaultMethodType", type)}
+              >
+                <DropdownMenuIcon icon={<MethodIcon type={type} />} />
+                <span>{type}</span>
+              </DropdownMenuItem>
+            ))}
           </DropdownMenuContent>
         </DropdownMenu>
       </VStack>
@@ -324,16 +348,48 @@ const ToolProperties = () => {
         </DropdownMenu>
       </VStack>
 
-      <VStack spacing={2}>
-        <h3 className="text-xs text-muted-foreground">Unit of Measure</h3>
-        <Enumerable value={routeData?.toolSummary?.unitOfMeasure ?? null} />
-      </VStack>
+      <ValidatedForm
+        defaultValues={{
+          unitOfMeasureCode:
+            routeData?.toolSummary?.unitOfMeasureCode ?? undefined,
+        }}
+        validator={z.object({
+          unitOfMeasureCode: z
+            .string()
+            .min(1, { message: "Unit of Measure is required" }),
+        })}
+        className="w-full"
+      >
+        <UnitOfMeasure
+          label="Unit of Measure"
+          name="unitOfMeasureCode"
+          inline
+          onChange={(value) => {
+            onUpdate("unitOfMeasureCode", value?.value ?? null);
+          }}
+        />
+      </ValidatedForm>
 
       <VStack spacing={2}>
         <HStack className="w-full justify-between">
           <h3 className="text-xs text-muted-foreground">Methods</h3>
         </HStack>
-
+        {routeData?.toolSummary?.replenishmentSystem?.includes("Make") && (
+          <Suspense fallback={null}>
+            <Await resolve={routeData?.makeMethods}>
+              {(makeMethods) =>
+                makeMethods.data?.map((method) => (
+                  <MethodBadge
+                    key={method.id}
+                    type="Make"
+                    text={`Revision ${method.revision}`}
+                    to={path.to.partMakeMethod(itemId, method.id)}
+                  />
+                ))
+              }
+            </Await>
+          </Suspense>
+        )}
         {routeData?.toolSummary?.replenishmentSystem?.includes("Buy") &&
           supplierParts.map((method) => (
             <MethodBadge
@@ -380,9 +436,9 @@ const ToolProperties = () => {
         className="w-full"
       >
         <Tags
+          availableTags={routeData?.tags ?? []}
           label="Tags"
           name="tags"
-          availableTags={routeData?.tags ?? []}
           table="tool"
           inline
           onChange={onUpdateTags}
@@ -402,6 +458,21 @@ const ToolProperties = () => {
         <HStack className="w-full justify-between">
           <h3 className="text-xs text-muted-foreground">Files</h3>
         </HStack>
+        {routeData?.toolSummary?.modelId && (
+          <HStack className="group" spacing={1}>
+            <Badge variant="secondary">
+              <LuMove3D className="w-3 h-3 mr-1 text-emerald-500" />
+              3D Model
+            </Badge>
+            <Link
+              className="group-hover:opacity-100 opacity-0 transition-opacity duration-200 w-4 h-4 text-foreground"
+              to={path.to.file.cadModel(routeData?.toolSummary.modelId)}
+              target="_blank"
+            >
+              <LuExternalLink />
+            </Link>
+          </HStack>
+        )}
 
         <Suspense fallback={null}>
           <Await resolve={routeData?.files}>

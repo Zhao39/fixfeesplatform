@@ -151,6 +151,7 @@ export default function PartManufacturing() {
               <BoMExplorer
                 itemType="Part"
                 makeMethodId={makeMethod.id}
+                revision={makeMethod.revision}
                 // @ts-ignore
                 methods={methods}
               />

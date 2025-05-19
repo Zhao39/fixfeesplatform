@@ -24,7 +24,13 @@ Menubar.displayName = "Menubar";
 const MenubarItem = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ children, ...props }, ref) => {
     return (
-      <Button className="rounded-md" ref={ref} variant="ghost" {...props}>
+      <Button
+        className="rounded-md"
+        ref={ref}
+        size="sm"
+        variant="ghost"
+        {...props}
+      >
         {children}
       </Button>
     );

@@ -12,13 +12,10 @@ import type { z } from "zod";
 import CadModel from "~/components/CadModel";
 import { usePermissions, useRouteData } from "~/hooks";
 import type {
-  ConfigurationParameter,
-  ConfigurationParameterGroup,
-  ConfigurationRule,
   MakeMethod,
   Material,
   MethodOperation,
-  PartSummary,
+  Tool,
 } from "~/modules/items";
 import {
   partManufacturingValidator,
@@ -29,10 +26,6 @@ import {
   BillOfProcess,
   MakeMethodTools,
 } from "~/modules/items/ui/Item";
-import {
-  ConfigurationParametersForm,
-  PartManufacturingForm,
-} from "~/modules/items/ui/Parts";
 import { getTagsList } from "~/modules/shared";
 import { getCustomFields, setCustomFields } from "~/utils/form";
 import { path } from "~/utils/path";
@@ -78,7 +71,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   });
   if (updatePartManufacturing.error) {
     throw redirect(
-      path.to.part(itemId),
+      path.to.tool(itemId),
       await flash(
         request,
         error(
@@ -90,7 +83,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   }
 
   throw redirect(
-    path.to.partMakeMethod(itemId, methodId),
+    path.to.toolMakeMethod(itemId, methodId),
     await flash(request, success("Updated part manufacturing"))
   );
 }
@@ -104,19 +97,15 @@ export default function MakeMethodRoute() {
   const { tags } = useLoaderData<typeof loader>();
 
   const itemRouteData = useRouteData<{
-    partSummary: PartSummary;
+    toolSummary: Tool;
     makeMethods: Promise<PostgrestResponse<MakeMethod>>;
-  }>(path.to.part(itemId));
+  }>(path.to.tool(itemId));
 
   const manufacturingRouteData = useRouteData<{
     partManufacturing: z.infer<typeof partManufacturingValidator> & {
       customFields: Record<string, string>;
     };
-    configurationParametersAndGroups: {
-      groups: ConfigurationParameterGroup[];
-      parameters: ConfigurationParameter[];
-    };
-    configurationRules: ConfigurationRule[];
+
     makeMethod: MakeMethod;
     methodMaterials: Material[];
     methodOperations: MethodOperation[];
@@ -146,17 +135,17 @@ export default function MakeMethodRoute() {
                   name: m.revision,
                 })) ?? []
               }
-              type="Part"
+              type="Tool"
             />
           )}
         </Await>
       </Suspense>
-      <PartManufacturingForm
+      {/* <ToolManufacturingForm
         key={itemId}
         // @ts-ignore
         initialValues={manufacturingInitialValues}
-      />
-      {manufacturingRouteData?.partManufacturing.requiresConfiguration && (
+      /> */}
+      {/* {manufacturingRouteData?.partManufacturing.requiresConfiguration && (
         <ConfigurationParametersForm
           key={`options:${itemId}`}
           parameters={
@@ -166,20 +155,20 @@ export default function MakeMethodRoute() {
             manufacturingRouteData?.configurationParametersAndGroups.groups
           }
         />
-      )}
+      )} */}
 
       <BillOfProcess
         key={`bop:${itemId}`}
         makeMethodId={makeMethodId}
         // @ts-ignore
         operations={manufacturingRouteData?.methodOperations ?? []}
-        configurable={
-          manufacturingRouteData?.partManufacturing.requiresConfiguration
-        }
-        configurationRules={manufacturingRouteData?.configurationRules}
-        parameters={
-          manufacturingRouteData?.configurationParametersAndGroups.parameters
-        }
+        // configurable={
+        //   manufacturingRouteData?.partManufacturing.requiresConfiguration
+        // }
+        // configurationRules={manufacturingRouteData?.configurationRules}
+        // parameters={
+        //   manufacturingRouteData?.configurationParametersAndGroups.parameters
+        // }
         tags={tags}
       />
       <BillOfMaterial
@@ -189,19 +178,19 @@ export default function MakeMethodRoute() {
         materials={manufacturingRouteData?.methodMaterials ?? []}
         // @ts-ignore
         operations={manufacturingRouteData?.methodOperations}
-        configurable={
-          manufacturingRouteData?.partManufacturing.requiresConfiguration
-        }
-        configurationRules={manufacturingRouteData?.configurationRules}
-        parameters={
-          manufacturingRouteData?.configurationParametersAndGroups.parameters
-        }
+        // configurable={
+        //   manufacturingRouteData?.partManufacturing.requiresConfiguration
+        // }
+        // configurationRules={manufacturingRouteData?.configurationRules}
+        // parameters={
+        //   manufacturingRouteData?.configurationParametersAndGroups.parameters
+        // }
       />
 
       <CadModel
         isReadOnly={!permissions.can("update", "parts")}
         metadata={{ itemId }}
-        modelPath={itemRouteData?.partSummary?.modelPath ?? null}
+        modelPath={itemRouteData?.toolSummary?.modelPath ?? null}
         title="CAD Model"
         uploadClassName="aspect-square min-h-[420px] max-h-[70vh]"
         viewerClassName="aspect-square min-h-[420px] max-h-[70vh]"

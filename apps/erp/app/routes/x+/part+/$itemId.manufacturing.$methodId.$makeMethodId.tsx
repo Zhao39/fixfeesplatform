@@ -1,5 +1,5 @@
 import type { JSONContent } from "@carbon/react";
-import { VStack } from "@carbon/react";
+import { Menubar, VStack } from "@carbon/react";
 import {
   Await,
   defer,
@@ -25,6 +25,7 @@ import type {
 } from "~/modules/items";
 import {
   getMakeMethodById,
+  getMakeMethods,
   getMethodMaterialsByMakeMethod,
   getMethodOperationsByMakeMethodId,
 } from "~/modules/items";
@@ -89,7 +90,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   return defer({
     makeMethod: makeMethod.data,
-
+    makeMethods: getMakeMethods(client, makeMethod.data.itemId, companyId),
     methodMaterials:
       methodMaterials.data?.map((m) => ({
         ...m,
@@ -120,7 +121,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 export default function MethodMaterialMakePage() {
   const loaderData = useLoaderData<typeof loader>();
   const permissions = usePermissions();
-  const { makeMethod, methodMaterials, methodOperations, tags } = loaderData;
+  const { makeMethod, makeMethods, methodMaterials, methodOperations, tags } =
+    loaderData;
 
   const { itemId, makeMethodId } = useParams();
   if (!itemId) throw new Error("Could not find itemId");
@@ -139,8 +141,22 @@ export default function MethodMaterialMakePage() {
 
   return (
     <VStack spacing={2} className="p-2">
-      <MakeMethodTools itemId={makeMethod.itemId} type="Part" />
-
+      <Suspense fallback={<Menubar />}>
+        <Await resolve={makeMethods}>
+          {(makeMethods) => (
+            <MakeMethodTools
+              itemId={makeMethod.itemId}
+              revisions={
+                makeMethods?.data?.map((m) => ({
+                  id: m.id,
+                  name: m.revision,
+                })) ?? []
+              }
+              type="Part"
+            />
+          )}
+        </Await>
+      </Suspense>
       <BillOfProcess
         key={`bop:${itemId}`}
         makeMethodId={makeMethodId}
@@ -165,7 +181,7 @@ export default function MethodMaterialMakePage() {
           {(model) => (
             <CadModel
               key={`cad:${model.itemId}`}
-              isReadOnly={!permissions.can("update", "sales")}
+              isReadOnly={!permissions.can("update", "parts")}
               metadata={{
                 itemId: model?.itemId ?? undefined,
               }}

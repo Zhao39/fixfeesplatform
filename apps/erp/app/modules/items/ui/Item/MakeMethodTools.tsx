@@ -31,7 +31,6 @@ import {
   LuChevronDown,
   LuCirclePlus,
   LuGitBranch,
-  LuGitFork,
   LuGitMerge,
   LuGitPullRequestArrow,
   LuTriangleAlert,
@@ -99,26 +98,18 @@ const MakeMethodTools = ({ itemId, revisions, type }: MakeMethodToolsProps) => {
             >
               Save Method
             </MenubarItem>
-            {itemLink && (
-              <MenubarItem leftIcon={<LuGitFork />} asChild>
-                <Link prefetch="intent" to={itemLink}>
-                  Item Master
-                </Link>
-              </MenubarItem>
-            )}
           </HStack>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
+              <MenubarItem
                 leftIcon={<LuGitPullRequestArrow />}
                 rightIcon={<LuChevronDown />}
               >
                 Versions
-              </Button>
+              </MenubarItem>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="start">
               {permissions.can("create", "production") && (
                 <DropdownMenuItem onClick={newVersionDisclosure.onOpen}>
                   <DropdownMenuIcon icon={<LuCirclePlus />} />
@@ -132,10 +123,10 @@ const MakeMethodTools = ({ itemId, revisions, type }: MakeMethodToolsProps) => {
                   {revisions.map((revision) => (
                     <Link
                       key={revision.id}
-                      to={path.to.procedure(revision.id)}
+                      to={path.to.partMakeMethod(itemId, revision.id)}
                       className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
                     >
-                      {revision.name}
+                      Revision {revision.name}
                     </Link>
                   ))}
                 </>
