@@ -1598,6 +1598,229 @@ export type Database = {
           },
         ]
       }
+      agent: {
+        Row: {
+          companyId: string
+          createdAt: string
+          description: string | null
+          displayName: string
+          id: string
+          maxSteps: number
+          mcpId: string | null
+          outputFields: Json
+          outputType: string
+          profilePictureUrl: string
+          systemPrompt: string
+          testPrompt: string
+          updatedAt: string
+        }
+        Insert: {
+          companyId: string
+          createdAt?: string
+          description?: string | null
+          displayName: string
+          id?: string
+          maxSteps: number
+          mcpId?: string | null
+          outputFields: Json
+          outputType: string
+          profilePictureUrl: string
+          systemPrompt: string
+          testPrompt: string
+          updatedAt?: string
+        }
+        Update: {
+          companyId?: string
+          createdAt?: string
+          description?: string | null
+          displayName?: string
+          id?: string
+          maxSteps?: number
+          mcpId?: string | null
+          outputFields?: Json
+          outputType?: string
+          profilePictureUrl?: string
+          systemPrompt?: string
+          testPrompt?: string
+          updatedAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_agent_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_agent_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_agent_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_agent_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_agent_mcp"
+            columns: ["mcpId"]
+            isOneToOne: false
+            referencedRelation: "mcp"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      aiProvider: {
+        Row: {
+          config: Json
+          createdAt: string
+          id: string
+          provider: string
+          updatedAt: string
+        }
+        Insert: {
+          config: Json
+          createdAt?: string
+          id?: string
+          provider: string
+          updatedAt?: string
+        }
+        Update: {
+          config?: Json
+          createdAt?: string
+          id?: string
+          provider?: string
+          updatedAt?: string
+        }
+        Relationships: []
+      }
+      aiUsage: {
+        Row: {
+          companyId: string
+          cost: number
+          createdAt: string
+          id: string
+          model: string
+          provider: string
+          updatedAt: string
+        }
+        Insert: {
+          companyId: string
+          cost: number
+          createdAt?: string
+          id?: string
+          model: string
+          provider: string
+          updatedAt?: string
+        }
+        Update: {
+          companyId?: string
+          cost?: number
+          createdAt?: string
+          id?: string
+          model?: string
+          provider?: string
+          updatedAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_aiUsage_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_aiUsage_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_aiUsage_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_aiUsage_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+        ]
+      }
+      alert: {
+        Row: {
+          channel: string
+          companyId: string
+          createdAt: string
+          id: string
+          receiver: string
+          updatedAt: string
+        }
+        Insert: {
+          channel: string
+          companyId: string
+          createdAt?: string
+          id?: string
+          receiver: string
+          updatedAt?: string
+        }
+        Update: {
+          channel?: string
+          companyId?: string
+          createdAt?: string
+          id?: string
+          receiver?: string
+          updatedAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_alert_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_alert_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_alert_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_alert_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+        ]
+      }
       apiKey: {
         Row: {
           companyId: string
@@ -1686,6 +1909,240 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
+          },
+        ]
+      }
+      appConnection: {
+        Row: {
+          companyId: string
+          createdAt: string
+          displayName: string
+          externalId: string
+          id: string
+          metadata: Json | null
+          ownerId: string | null
+          pieceName: string
+          status: string
+          type: string
+          updatedAt: string
+          value: Json
+        }
+        Insert: {
+          companyId: string
+          createdAt?: string
+          displayName: string
+          externalId: string
+          id?: string
+          metadata?: Json | null
+          ownerId?: string | null
+          pieceName: string
+          status?: string
+          type: string
+          updatedAt?: string
+          value: Json
+        }
+        Update: {
+          companyId?: string
+          createdAt?: string
+          displayName?: string
+          externalId?: string
+          id?: string
+          metadata?: Json | null
+          ownerId?: string | null
+          pieceName?: string
+          status?: string
+          type?: string
+          updatedAt?: string
+          value?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_appConnection_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_appConnection_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_appConnection_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_appConnection_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_appConnection_owner"
+            columns: ["ownerId"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_appConnection_owner"
+            columns: ["ownerId"]
+            isOneToOne: false
+            referencedRelation: "employeesAcrossCompanies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_appConnection_owner"
+            columns: ["ownerId"]
+            isOneToOne: false
+            referencedRelation: "employeeSummary"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_appConnection_owner"
+            columns: ["ownerId"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_appConnection_owner"
+            columns: ["ownerId"]
+            isOneToOne: false
+            referencedRelation: "userDefaults"
+            referencedColumns: ["userId"]
+          },
+        ]
+      }
+      appCredential: {
+        Row: {
+          appName: string
+          companyId: string
+          createdAt: string
+          id: string
+          settings: Json
+          updatedAt: string
+        }
+        Insert: {
+          appName: string
+          companyId: string
+          createdAt?: string
+          id?: string
+          settings: Json
+          updatedAt?: string
+        }
+        Update: {
+          appName?: string
+          companyId?: string
+          createdAt?: string
+          id?: string
+          settings?: Json
+          updatedAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_appCredential_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_appCredential_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_appCredential_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_appCredential_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+        ]
+      }
+      appEventRouting: {
+        Row: {
+          appName: string
+          companyId: string
+          createdAt: string
+          event: string
+          flowId: string
+          id: string
+          identifierValue: string
+          updatedAt: string
+        }
+        Insert: {
+          appName: string
+          companyId: string
+          createdAt?: string
+          event: string
+          flowId: string
+          id?: string
+          identifierValue: string
+          updatedAt?: string
+        }
+        Update: {
+          appName?: string
+          companyId?: string
+          createdAt?: string
+          event?: string
+          flowId?: string
+          id?: string
+          identifierValue?: string
+          updatedAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_appEventRouting_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_appEventRouting_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_appEventRouting_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_appEventRouting_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_appEventRouting_flow"
+            columns: ["flowId"]
+            isOneToOne: false
+            referencedRelation: "flow"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -1904,6 +2361,154 @@ export type Database = {
           },
         ]
       }
+      cell: {
+        Row: {
+          companyId: string
+          createdAt: string
+          fieldId: string
+          id: string
+          recordId: string
+          updatedAt: string
+          value: string
+        }
+        Insert: {
+          companyId: string
+          createdAt?: string
+          fieldId: string
+          id?: string
+          recordId: string
+          updatedAt?: string
+          value: string
+        }
+        Update: {
+          companyId?: string
+          createdAt?: string
+          fieldId?: string
+          id?: string
+          recordId?: string
+          updatedAt?: string
+          value?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_cell_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_cell_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_cell_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_cell_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_cell_field"
+            columns: ["fieldId"]
+            isOneToOne: false
+            referencedRelation: "field"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_cell_record"
+            columns: ["recordId"]
+            isOneToOne: false
+            referencedRelation: "record"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chatbot: {
+        Row: {
+          companyId: string
+          connectionId: string | null
+          createdAt: string
+          dataSources: Json
+          displayName: string
+          id: string
+          prompt: string | null
+          type: string
+          updatedAt: string
+          visibilityStatus: string
+        }
+        Insert: {
+          companyId: string
+          connectionId?: string | null
+          createdAt?: string
+          dataSources: Json
+          displayName: string
+          id?: string
+          prompt?: string | null
+          type: string
+          updatedAt?: string
+          visibilityStatus: string
+        }
+        Update: {
+          companyId?: string
+          connectionId?: string | null
+          createdAt?: string
+          dataSources?: Json
+          displayName?: string
+          id?: string
+          prompt?: string | null
+          type?: string
+          updatedAt?: string
+          visibilityStatus?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_chatbot_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_chatbot_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_chatbot_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_chatbot_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_chatbot_connection"
+            columns: ["connectionId"]
+            isOneToOne: false
+            referencedRelation: "appConnection"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       company: {
         Row: {
           addressLine1: string | null
@@ -2086,6 +2691,83 @@ export type Database = {
           },
         ]
       }
+      companyPlan: {
+        Row: {
+          aiTokensLimit: number
+          companyId: string
+          createdAt: string
+          id: string
+          includedAiTokens: number
+          includedTasks: number
+          includedUsers: number
+          stripeCustomerId: string | null
+          stripeSubscriptionId: string
+          stripeSubscriptionStatus: string
+          subscriptionStartDate: string
+          tasksLimit: number
+          updatedAt: string
+        }
+        Insert: {
+          aiTokensLimit?: number
+          companyId: string
+          createdAt?: string
+          id?: string
+          includedAiTokens?: number
+          includedTasks?: number
+          includedUsers?: number
+          stripeCustomerId?: string | null
+          stripeSubscriptionId: string
+          stripeSubscriptionStatus?: string
+          subscriptionStartDate: string
+          tasksLimit?: number
+          updatedAt?: string
+        }
+        Update: {
+          aiTokensLimit?: number
+          companyId?: string
+          createdAt?: string
+          id?: string
+          includedAiTokens?: number
+          includedTasks?: number
+          includedUsers?: number
+          stripeCustomerId?: string | null
+          stripeSubscriptionId?: string
+          stripeSubscriptionStatus?: string
+          subscriptionStartDate?: string
+          tasksLimit?: number
+          updatedAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_companyPlan_company"
+            columns: ["companyId"]
+            isOneToOne: true
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_companyPlan_company"
+            columns: ["companyId"]
+            isOneToOne: true
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_companyPlan_company"
+            columns: ["companyId"]
+            isOneToOne: true
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_companyPlan_company"
+            columns: ["companyId"]
+            isOneToOne: true
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+        ]
+      }
       companySettings: {
         Row: {
           digitalQuoteEnabled: boolean
@@ -2093,7 +2775,6 @@ export type Database = {
           digitalQuoteNotificationGroup: string[]
           id: string
           inventoryJobCompletedNotificationGroup: string[]
-          jobCompletedNotificationGroup: string[]
           productLabelSize: string | null
           rfqReadyNotificationGroup: string[]
           salesJobCompletedNotificationGroup: string[]
@@ -2105,7 +2786,6 @@ export type Database = {
           digitalQuoteNotificationGroup?: string[]
           id: string
           inventoryJobCompletedNotificationGroup?: string[]
-          jobCompletedNotificationGroup?: string[]
           productLabelSize?: string | null
           rfqReadyNotificationGroup?: string[]
           salesJobCompletedNotificationGroup?: string[]
@@ -2117,7 +2797,6 @@ export type Database = {
           digitalQuoteNotificationGroup?: string[]
           id?: string
           inventoryJobCompletedNotificationGroup?: string[]
-          jobCompletedNotificationGroup?: string[]
           productLabelSize?: string | null
           rfqReadyNotificationGroup?: string[]
           salesJobCompletedNotificationGroup?: string[]
@@ -2149,6 +2828,68 @@ export type Database = {
             foreignKeyName: "companySettings_companyId_fkey"
             columns: ["id"]
             isOneToOne: true
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+        ]
+      }
+      companyUsage: {
+        Row: {
+          aiTokens: number
+          companyId: string
+          createdAt: string
+          id: string
+          nextResetDatetime: string
+          tasks: number
+          updatedAt: string
+          users: number
+        }
+        Insert: {
+          aiTokens?: number
+          companyId: string
+          createdAt?: string
+          id?: string
+          nextResetDatetime: string
+          tasks?: number
+          updatedAt?: string
+          users?: number
+        }
+        Update: {
+          aiTokens?: number
+          companyId?: string
+          createdAt?: string
+          id?: string
+          nextResetDatetime?: string
+          tasks?: number
+          updatedAt?: string
+          users?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_companyUsage_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_companyUsage_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_companyUsage_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_companyUsage_company"
+            columns: ["companyId"]
+            isOneToOne: false
             referencedRelation: "integrations"
             referencedColumns: ["companyId"]
           },
@@ -2575,6 +3316,59 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
+          },
+        ]
+      }
+      connectionKey: {
+        Row: {
+          companyId: string
+          createdAt: string
+          id: string
+          settings: Json
+          updatedAt: string
+        }
+        Insert: {
+          companyId: string
+          createdAt?: string
+          id?: string
+          settings: Json
+          updatedAt?: string
+        }
+        Update: {
+          companyId?: string
+          createdAt?: string
+          id?: string
+          settings?: Json
+          updatedAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_connectionKey_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_connectionKey_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_connectionKey_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_connectionKey_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
           },
         ]
       }
@@ -6275,6 +7069,121 @@ export type Database = {
           },
         ]
       }
+      field: {
+        Row: {
+          companyId: string
+          createdAt: string
+          data: Json | null
+          externalId: string
+          id: string
+          name: string
+          tableId: string
+          type: string
+          updatedAt: string
+        }
+        Insert: {
+          companyId: string
+          createdAt?: string
+          data?: Json | null
+          externalId: string
+          id?: string
+          name: string
+          tableId: string
+          type: string
+          updatedAt?: string
+        }
+        Update: {
+          companyId?: string
+          createdAt?: string
+          data?: Json | null
+          externalId?: string
+          id?: string
+          name?: string
+          tableId?: string
+          type?: string
+          updatedAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_field_table"
+            columns: ["tableId"]
+            isOneToOne: false
+            referencedRelation: "table"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      file: {
+        Row: {
+          companyId: string | null
+          createdAt: string
+          extension: string
+          id: string
+          metadata: Json | null
+          name: string
+          path: string
+          readGroups: string[] | null
+          size: number
+          type: string | null
+          updatedAt: string
+        }
+        Insert: {
+          companyId?: string | null
+          createdAt?: string
+          extension: string
+          id?: string
+          metadata?: Json | null
+          name: string
+          path: string
+          readGroups?: string[] | null
+          size: number
+          type?: string | null
+          updatedAt?: string
+        }
+        Update: {
+          companyId?: string | null
+          createdAt?: string
+          extension?: string
+          id?: string
+          metadata?: Json | null
+          name?: string
+          path?: string
+          readGroups?: string[] | null
+          size?: number
+          type?: string | null
+          updatedAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_file_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_file_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_file_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_file_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+        ]
+      }
       fiscalYearSettings: {
         Row: {
           companyId: string
@@ -6595,6 +7504,401 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
+          },
+        ]
+      }
+      flag: {
+        Row: {
+          companyId: string
+          createdAt: string
+          id: string
+          updatedAt: string
+          value: Json
+        }
+        Insert: {
+          companyId: string
+          createdAt?: string
+          id?: string
+          updatedAt?: string
+          value: Json
+        }
+        Update: {
+          companyId?: string
+          createdAt?: string
+          id?: string
+          updatedAt?: string
+          value?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_flag_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_flag_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_flag_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_flag_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+        ]
+      }
+      flow: {
+        Row: {
+          companyId: string
+          createdAt: string
+          externalId: string
+          folderId: string | null
+          handshakeConfiguration: Json | null
+          id: string
+          metadata: Json | null
+          publishedVersionId: string | null
+          schedule: Json | null
+          status: string
+          updatedAt: string
+        }
+        Insert: {
+          companyId: string
+          createdAt?: string
+          externalId: string
+          folderId?: string | null
+          handshakeConfiguration?: Json | null
+          id?: string
+          metadata?: Json | null
+          publishedVersionId?: string | null
+          schedule?: Json | null
+          status?: string
+          updatedAt?: string
+        }
+        Update: {
+          companyId?: string
+          createdAt?: string
+          externalId?: string
+          folderId?: string | null
+          handshakeConfiguration?: Json | null
+          id?: string
+          metadata?: Json | null
+          publishedVersionId?: string | null
+          schedule?: Json | null
+          status?: string
+          updatedAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_flow_folder"
+            columns: ["folderId"]
+            isOneToOne: false
+            referencedRelation: "folder"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_flow_publishedVersion"
+            columns: ["publishedVersionId"]
+            isOneToOne: false
+            referencedRelation: "flowVersion"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      flowRun: {
+        Row: {
+          companyId: string
+          createdAt: string
+          environment: string | null
+          failedStepName: string | null
+          finishTime: string | null
+          flowDisplayName: string
+          flowId: string
+          flowVersionId: string
+          id: string
+          logsFileId: string | null
+          pauseMetadata: Json | null
+          startTime: string
+          status: string
+          tags: string[] | null
+          tasks: number | null
+          terminationReason: string | null
+          updatedAt: string
+        }
+        Insert: {
+          companyId: string
+          createdAt?: string
+          environment?: string | null
+          failedStepName?: string | null
+          finishTime?: string | null
+          flowDisplayName: string
+          flowId: string
+          flowVersionId: string
+          id?: string
+          logsFileId?: string | null
+          pauseMetadata?: Json | null
+          startTime: string
+          status: string
+          tags?: string[] | null
+          tasks?: number | null
+          terminationReason?: string | null
+          updatedAt?: string
+        }
+        Update: {
+          companyId?: string
+          createdAt?: string
+          environment?: string | null
+          failedStepName?: string | null
+          finishTime?: string | null
+          flowDisplayName?: string
+          flowId?: string
+          flowVersionId?: string
+          id?: string
+          logsFileId?: string | null
+          pauseMetadata?: Json | null
+          startTime?: string
+          status?: string
+          tags?: string[] | null
+          tasks?: number | null
+          terminationReason?: string | null
+          updatedAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_flowRun_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_flowRun_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_flowRun_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_flowRun_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_flowRun_flow"
+            columns: ["flowId"]
+            isOneToOne: false
+            referencedRelation: "flow"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_flowRun_flowVersion"
+            columns: ["flowVersionId"]
+            isOneToOne: false
+            referencedRelation: "flowVersion"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_flowRun_logsFile"
+            columns: ["logsFileId"]
+            isOneToOne: false
+            referencedRelation: "file"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      flowVersion: {
+        Row: {
+          companyId: string
+          connectionIds: string[] | null
+          createdAt: string
+          createdBy: string
+          displayName: string
+          flowId: string
+          id: string
+          schemaVersion: string | null
+          state: string
+          trigger: Json | null
+          updatedAt: string
+          updatedBy: string | null
+          valid: boolean
+        }
+        Insert: {
+          companyId: string
+          connectionIds?: string[] | null
+          createdAt?: string
+          createdBy: string
+          displayName: string
+          flowId: string
+          id?: string
+          schemaVersion?: string | null
+          state: string
+          trigger?: Json | null
+          updatedAt?: string
+          updatedBy?: string | null
+          valid: boolean
+        }
+        Update: {
+          companyId?: string
+          connectionIds?: string[] | null
+          createdAt?: string
+          createdBy?: string
+          displayName?: string
+          flowId?: string
+          id?: string
+          schemaVersion?: string | null
+          state?: string
+          trigger?: Json | null
+          updatedAt?: string
+          updatedBy?: string | null
+          valid?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_flowVersion_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_flowVersion_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_flowVersion_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_flowVersion_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_flowVersion_createdBy"
+            columns: ["createdBy"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_flowVersion_createdBy"
+            columns: ["createdBy"]
+            isOneToOne: false
+            referencedRelation: "employeesAcrossCompanies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_flowVersion_createdBy"
+            columns: ["createdBy"]
+            isOneToOne: false
+            referencedRelation: "employeeSummary"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_flowVersion_createdBy"
+            columns: ["createdBy"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_flowVersion_createdBy"
+            columns: ["createdBy"]
+            isOneToOne: false
+            referencedRelation: "userDefaults"
+            referencedColumns: ["userId"]
+          },
+          {
+            foreignKeyName: "fk_flowVersion_flow"
+            columns: ["flowId"]
+            isOneToOne: false
+            referencedRelation: "flow"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      folder: {
+        Row: {
+          companyId: string
+          createdAt: string
+          displayName: string
+          displayOrder: number
+          id: string
+          updatedAt: string
+        }
+        Insert: {
+          companyId: string
+          createdAt?: string
+          displayName: string
+          displayOrder?: number
+          id?: string
+          updatedAt?: string
+        }
+        Update: {
+          companyId?: string
+          createdAt?: string
+          displayName?: string
+          displayOrder?: number
+          id?: string
+          updatedAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_folder_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_folder_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_folder_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_folder_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
           },
         ]
       }
@@ -7590,6 +8894,75 @@ export type Database = {
           },
         ]
       }
+      issue: {
+        Row: {
+          companyId: string
+          createdAt: string
+          flowId: string
+          id: string
+          lastOccurrence: string
+          status: string
+          stepName: string | null
+          updatedAt: string
+        }
+        Insert: {
+          companyId: string
+          createdAt?: string
+          flowId: string
+          id?: string
+          lastOccurrence: string
+          status: string
+          stepName?: string | null
+          updatedAt?: string
+        }
+        Update: {
+          companyId?: string
+          createdAt?: string
+          flowId?: string
+          id?: string
+          lastOccurrence?: string
+          status?: string
+          stepName?: string | null
+          updatedAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_issue_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_issue_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_issue_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_issue_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_issue_flow"
+            columns: ["flowId"]
+            isOneToOne: false
+            referencedRelation: "flow"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       item: {
         Row: {
           active: boolean
@@ -8215,17 +9588,20 @@ export type Database = {
           createdBy: string
           critical: boolean
           customFields: Json | null
+          demandAccumulationIncludesInventory: boolean
           demandAccumulationPeriod: number
-          demandAccumulationSafetyStock: number
+          demandReschedulingPeriod: number
           itemId: string
           locationId: string
-          maximumInventoryQuantity: number
           maximumOrderQuantity: number
           minimumOrderQuantity: number
           orderMultiple: number
           reorderingPolicy: Database["public"]["Enums"]["itemReorderingPolicy"]
+          reorderMaximumInventory: number
           reorderPoint: number
           reorderQuantity: number
+          safetyStockLeadTime: number
+          safetyStockQuantity: number
           tags: string[] | null
           updatedAt: string | null
           updatedBy: string | null
@@ -8236,17 +9612,20 @@ export type Database = {
           createdBy: string
           critical?: boolean
           customFields?: Json | null
+          demandAccumulationIncludesInventory?: boolean
           demandAccumulationPeriod?: number
-          demandAccumulationSafetyStock?: number
+          demandReschedulingPeriod?: number
           itemId: string
           locationId: string
-          maximumInventoryQuantity?: number
           maximumOrderQuantity?: number
           minimumOrderQuantity?: number
           orderMultiple?: number
           reorderingPolicy?: Database["public"]["Enums"]["itemReorderingPolicy"]
+          reorderMaximumInventory?: number
           reorderPoint?: number
           reorderQuantity?: number
+          safetyStockLeadTime?: number
+          safetyStockQuantity?: number
           tags?: string[] | null
           updatedAt?: string | null
           updatedBy?: string | null
@@ -8257,17 +9636,20 @@ export type Database = {
           createdBy?: string
           critical?: boolean
           customFields?: Json | null
+          demandAccumulationIncludesInventory?: boolean
           demandAccumulationPeriod?: number
-          demandAccumulationSafetyStock?: number
+          demandReschedulingPeriod?: number
           itemId?: string
           locationId?: string
-          maximumInventoryQuantity?: number
           maximumOrderQuantity?: number
           minimumOrderQuantity?: number
           orderMultiple?: number
           reorderingPolicy?: Database["public"]["Enums"]["itemReorderingPolicy"]
+          reorderMaximumInventory?: number
           reorderPoint?: number
           reorderQuantity?: number
+          safetyStockLeadTime?: number
+          safetyStockQuantity?: number
           tags?: string[] | null
           updatedAt?: string | null
           updatedBy?: string | null
@@ -12114,6 +13496,202 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
+          },
+        ]
+      }
+      mcp: {
+        Row: {
+          agentId: string | null
+          companyId: string
+          createdAt: string
+          id: string
+          name: string
+          token: string
+          updatedAt: string
+        }
+        Insert: {
+          agentId?: string | null
+          companyId: string
+          createdAt?: string
+          id?: string
+          name?: string
+          token: string
+          updatedAt?: string
+        }
+        Update: {
+          agentId?: string | null
+          companyId?: string
+          createdAt?: string
+          id?: string
+          name?: string
+          token?: string
+          updatedAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_mcp_agent"
+            columns: ["agentId"]
+            isOneToOne: false
+            referencedRelation: "agent"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mcpRun: {
+        Row: {
+          companyId: string
+          createdAt: string
+          id: string
+          input: Json
+          mcpId: string
+          metadata: Json
+          output: Json
+          status: string
+          toolId: string | null
+          updatedAt: string
+        }
+        Insert: {
+          companyId: string
+          createdAt?: string
+          id?: string
+          input: Json
+          mcpId: string
+          metadata: Json
+          output: Json
+          status: string
+          toolId?: string | null
+          updatedAt?: string
+        }
+        Update: {
+          companyId?: string
+          createdAt?: string
+          id?: string
+          input?: Json
+          mcpId?: string
+          metadata?: Json
+          output?: Json
+          status?: string
+          toolId?: string | null
+          updatedAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_mcpRun_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_mcpRun_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_mcpRun_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_mcpRun_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_mcpRun_mcp"
+            columns: ["mcpId"]
+            isOneToOne: false
+            referencedRelation: "mcp"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_mcpRun_tool"
+            columns: ["toolId"]
+            isOneToOne: false
+            referencedRelation: "mcpTool"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mcpTool: {
+        Row: {
+          companyId: string
+          createdAt: string
+          flowId: string | null
+          id: string
+          mcpId: string
+          pieceMetadata: Json | null
+          type: string
+          updatedAt: string
+        }
+        Insert: {
+          companyId: string
+          createdAt?: string
+          flowId?: string | null
+          id?: string
+          mcpId: string
+          pieceMetadata?: Json | null
+          type: string
+          updatedAt?: string
+        }
+        Update: {
+          companyId?: string
+          createdAt?: string
+          flowId?: string | null
+          id?: string
+          mcpId?: string
+          pieceMetadata?: Json | null
+          type?: string
+          updatedAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_mcpTool_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_mcpTool_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_mcpTool_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_mcpTool_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_mcpTool_flow"
+            columns: ["flowId"]
+            isOneToOne: false
+            referencedRelation: "flow"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_mcpTool_mcp"
+            columns: ["mcpId"]
+            isOneToOne: false
+            referencedRelation: "mcp"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -16304,6 +17882,36 @@ export type Database = {
           },
         ]
       }
+      oauthApp: {
+        Row: {
+          clientId: string
+          clientSecret: Json
+          companyId: string
+          createdAt: string
+          id: string
+          pieceName: string
+          updatedAt: string
+        }
+        Insert: {
+          clientId: string
+          clientSecret: Json
+          companyId: string
+          createdAt?: string
+          id?: string
+          pieceName: string
+          updatedAt?: string
+        }
+        Update: {
+          clientId?: string
+          clientSecret?: Json
+          companyId?: string
+          createdAt?: string
+          id?: string
+          pieceName?: string
+          updatedAt?: string
+        }
+        Relationships: []
+      }
       oauthClient: {
         Row: {
           clientId: string
@@ -17287,6 +18895,114 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
+          },
+        ]
+      }
+      pieceMetadata: {
+        Row: {
+          actions: Json | null
+          archiveId: string | null
+          auth: Json | null
+          authors: string[] | null
+          categories: string[] | null
+          companyId: string
+          companyUsage: number
+          createdAt: string
+          description: string | null
+          displayName: string
+          i18n: Json | null
+          id: string
+          logoUrl: string
+          maximumSupportedRelease: string
+          minimumSupportedRelease: string
+          name: string
+          packageType: string
+          pieceType: string
+          triggers: Json | null
+          updatedAt: string
+          version: string
+        }
+        Insert: {
+          actions?: Json | null
+          archiveId?: string | null
+          auth?: Json | null
+          authors?: string[] | null
+          categories?: string[] | null
+          companyId: string
+          companyUsage?: number
+          createdAt?: string
+          description?: string | null
+          displayName: string
+          i18n?: Json | null
+          id?: string
+          logoUrl: string
+          maximumSupportedRelease: string
+          minimumSupportedRelease: string
+          name: string
+          packageType?: string
+          pieceType?: string
+          triggers?: Json | null
+          updatedAt?: string
+          version: string
+        }
+        Update: {
+          actions?: Json | null
+          archiveId?: string | null
+          auth?: Json | null
+          authors?: string[] | null
+          categories?: string[] | null
+          companyId?: string
+          companyUsage?: number
+          createdAt?: string
+          description?: string | null
+          displayName?: string
+          i18n?: Json | null
+          id?: string
+          logoUrl?: string
+          maximumSupportedRelease?: string
+          minimumSupportedRelease?: string
+          name?: string
+          packageType?: string
+          pieceType?: string
+          triggers?: Json | null
+          updatedAt?: string
+          version?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_pieceMetadata_archive"
+            columns: ["archiveId"]
+            isOneToOne: false
+            referencedRelation: "file"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_pieceMetadata_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_pieceMetadata_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_pieceMetadata_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_pieceMetadata_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
           },
         ]
       }
@@ -24505,6 +26221,66 @@ export type Database = {
           },
         ]
       }
+      record: {
+        Row: {
+          companyId: string
+          createdAt: string
+          id: string
+          tableId: string
+          updatedAt: string
+        }
+        Insert: {
+          companyId: string
+          createdAt?: string
+          id?: string
+          tableId: string
+          updatedAt?: string
+        }
+        Update: {
+          companyId?: string
+          createdAt?: string
+          id?: string
+          tableId?: string
+          updatedAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_record_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_record_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_record_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_record_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_record_table"
+            columns: ["tableId"]
+            isOneToOne: false
+            referencedRelation: "table"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       salesInvoice: {
         Row: {
           assignee: string | null
@@ -28863,6 +30639,134 @@ export type Database = {
           },
         ]
       }
+      stepFile: {
+        Row: {
+          companyId: string
+          createdAt: string
+          data: string
+          flowId: string
+          id: string
+          name: string
+          size: number
+          stepName: string
+          updatedAt: string
+        }
+        Insert: {
+          companyId: string
+          createdAt?: string
+          data: string
+          flowId: string
+          id?: string
+          name: string
+          size: number
+          stepName: string
+          updatedAt?: string
+        }
+        Update: {
+          companyId?: string
+          createdAt?: string
+          data?: string
+          flowId?: string
+          id?: string
+          name?: string
+          size?: number
+          stepName?: string
+          updatedAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_stepFile_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_stepFile_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_stepFile_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_stepFile_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_stepFile_flow"
+            columns: ["flowId"]
+            isOneToOne: false
+            referencedRelation: "flow"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      storeEntry: {
+        Row: {
+          companyId: string
+          createdAt: string
+          id: string
+          key: string
+          updatedAt: string
+          value: Json | null
+        }
+        Insert: {
+          companyId: string
+          createdAt?: string
+          id?: string
+          key: string
+          updatedAt?: string
+          value?: Json | null
+        }
+        Update: {
+          companyId?: string
+          createdAt?: string
+          id?: string
+          key?: string
+          updatedAt?: string
+          value?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_storeEntry_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_storeEntry_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_storeEntry_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_storeEntry_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+        ]
+      }
       supplier: {
         Row: {
           accountManagerId: string | null
@@ -31795,6 +33699,59 @@ export type Database = {
           },
         ]
       }
+      table: {
+        Row: {
+          companyId: string
+          createdAt: string
+          id: string
+          name: string
+          updatedAt: string
+        }
+        Insert: {
+          companyId: string
+          createdAt?: string
+          id?: string
+          name: string
+          updatedAt?: string
+        }
+        Update: {
+          companyId?: string
+          createdAt?: string
+          id?: string
+          name?: string
+          updatedAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_table_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_table_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_table_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_table_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+        ]
+      }
       tableView: {
         Row: {
           columnOrder: string[] | null
@@ -31945,6 +33902,79 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
+          },
+        ]
+      }
+      tableWebhook: {
+        Row: {
+          companyId: string
+          createdAt: string
+          events: string[]
+          flowId: string
+          id: string
+          tableId: string
+          updatedAt: string
+        }
+        Insert: {
+          companyId: string
+          createdAt?: string
+          events: string[]
+          flowId: string
+          id?: string
+          tableId: string
+          updatedAt?: string
+        }
+        Update: {
+          companyId?: string
+          createdAt?: string
+          events?: string[]
+          flowId?: string
+          id?: string
+          tableId?: string
+          updatedAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_tableWebhook_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_tableWebhook_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_tableWebhook_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_tableWebhook_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_tableWebhook_flow"
+            columns: ["flowId"]
+            isOneToOne: false
+            referencedRelation: "flow"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_tableWebhook_table"
+            columns: ["tableId"]
+            isOneToOne: false
+            referencedRelation: "table"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -32250,6 +34280,364 @@ export type Database = {
           {
             foreignKeyName: "terms_updatedBy_fkey"
             columns: ["updatedBy"]
+            isOneToOne: false
+            referencedRelation: "userDefaults"
+            referencedColumns: ["userId"]
+          },
+        ]
+      }
+      todo: {
+        Row: {
+          agentId: string | null
+          assigneeId: string | null
+          companyId: string
+          createdAt: string
+          createdBy: string | null
+          description: string | null
+          flowId: string | null
+          id: string
+          locked: boolean
+          resolveUrl: string | null
+          runId: string | null
+          status: Json
+          statusOptions: Json
+          title: string
+          updatedAt: string
+        }
+        Insert: {
+          agentId?: string | null
+          assigneeId?: string | null
+          companyId: string
+          createdAt?: string
+          createdBy?: string | null
+          description?: string | null
+          flowId?: string | null
+          id?: string
+          locked?: boolean
+          resolveUrl?: string | null
+          runId?: string | null
+          status: Json
+          statusOptions: Json
+          title: string
+          updatedAt?: string
+        }
+        Update: {
+          agentId?: string | null
+          assigneeId?: string | null
+          companyId?: string
+          createdAt?: string
+          createdBy?: string | null
+          description?: string | null
+          flowId?: string | null
+          id?: string
+          locked?: boolean
+          resolveUrl?: string | null
+          runId?: string | null
+          status?: Json
+          statusOptions?: Json
+          title?: string
+          updatedAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_todo_agent"
+            columns: ["agentId"]
+            isOneToOne: false
+            referencedRelation: "agent"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_todo_assignee"
+            columns: ["assigneeId"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_todo_assignee"
+            columns: ["assigneeId"]
+            isOneToOne: false
+            referencedRelation: "employeesAcrossCompanies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_todo_assignee"
+            columns: ["assigneeId"]
+            isOneToOne: false
+            referencedRelation: "employeeSummary"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_todo_assignee"
+            columns: ["assigneeId"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_todo_assignee"
+            columns: ["assigneeId"]
+            isOneToOne: false
+            referencedRelation: "userDefaults"
+            referencedColumns: ["userId"]
+          },
+          {
+            foreignKeyName: "fk_todo_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_todo_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_todo_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_todo_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_todo_createdBy"
+            columns: ["createdBy"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_todo_createdBy"
+            columns: ["createdBy"]
+            isOneToOne: false
+            referencedRelation: "employeesAcrossCompanies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_todo_createdBy"
+            columns: ["createdBy"]
+            isOneToOne: false
+            referencedRelation: "employeeSummary"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_todo_createdBy"
+            columns: ["createdBy"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_todo_createdBy"
+            columns: ["createdBy"]
+            isOneToOne: false
+            referencedRelation: "userDefaults"
+            referencedColumns: ["userId"]
+          },
+          {
+            foreignKeyName: "fk_todo_flow"
+            columns: ["flowId"]
+            isOneToOne: false
+            referencedRelation: "flow"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_todo_run"
+            columns: ["runId"]
+            isOneToOne: false
+            referencedRelation: "flowRun"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      todoActivity: {
+        Row: {
+          agentId: string | null
+          companyId: string
+          content: string
+          createdAt: string
+          id: string
+          todoId: string
+          updatedAt: string
+          userId: string | null
+        }
+        Insert: {
+          agentId?: string | null
+          companyId: string
+          content: string
+          createdAt?: string
+          id?: string
+          todoId: string
+          updatedAt?: string
+          userId?: string | null
+        }
+        Update: {
+          agentId?: string | null
+          companyId?: string
+          content?: string
+          createdAt?: string
+          id?: string
+          todoId?: string
+          updatedAt?: string
+          userId?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_todoActivity_agent_id"
+            columns: ["agentId"]
+            isOneToOne: false
+            referencedRelation: "agent"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_todoActivity_todo_id"
+            columns: ["todoId"]
+            isOneToOne: false
+            referencedRelation: "todo"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_todoActivity_user_id"
+            columns: ["userId"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_todoActivity_user_id"
+            columns: ["userId"]
+            isOneToOne: false
+            referencedRelation: "employeesAcrossCompanies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_todoActivity_user_id"
+            columns: ["userId"]
+            isOneToOne: false
+            referencedRelation: "employeeSummary"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_todoActivity_user_id"
+            columns: ["userId"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_todoActivity_user_id"
+            columns: ["userId"]
+            isOneToOne: false
+            referencedRelation: "userDefaults"
+            referencedColumns: ["userId"]
+          },
+        ]
+      }
+      todoComment: {
+        Row: {
+          companyId: string
+          content: string
+          createdAt: string
+          id: string
+          todoId: string
+          updatedAt: string
+          userId: string
+        }
+        Insert: {
+          companyId: string
+          content: string
+          createdAt?: string
+          id?: string
+          todoId: string
+          updatedAt?: string
+          userId: string
+        }
+        Update: {
+          companyId?: string
+          content?: string
+          createdAt?: string
+          id?: string
+          todoId?: string
+          updatedAt?: string
+          userId?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_todoComment_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_todoComment_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_todoComment_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_todoComment_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_todoComment_todo"
+            columns: ["todoId"]
+            isOneToOne: false
+            referencedRelation: "todo"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_todoComment_user"
+            columns: ["userId"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_todoComment_user"
+            columns: ["userId"]
+            isOneToOne: false
+            referencedRelation: "employeesAcrossCompanies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_todoComment_user"
+            columns: ["userId"]
+            isOneToOne: false
+            referencedRelation: "employeeSummary"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_todoComment_user"
+            columns: ["userId"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_todoComment_user"
+            columns: ["userId"]
             isOneToOne: false
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
@@ -32842,6 +35230,79 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
+          },
+        ]
+      }
+      triggerEvent: {
+        Row: {
+          companyId: string
+          createdAt: string
+          fileId: string | null
+          flowId: string
+          id: string
+          sourceName: string
+          updatedAt: string
+        }
+        Insert: {
+          companyId: string
+          createdAt?: string
+          fileId?: string | null
+          flowId: string
+          id?: string
+          sourceName: string
+          updatedAt?: string
+        }
+        Update: {
+          companyId?: string
+          createdAt?: string
+          fileId?: string | null
+          flowId?: string
+          id?: string
+          sourceName?: string
+          updatedAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_triggerEvent_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_triggerEvent_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_triggerEvent_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_triggerEvent_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_triggerEvent_file"
+            columns: ["fileId"]
+            isOneToOne: false
+            referencedRelation: "file"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_triggerEvent_flow"
+            columns: ["flowId"]
+            isOneToOne: false
+            referencedRelation: "flow"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -33878,6 +36339,66 @@ export type Database = {
           },
         ]
       }
+      webhookSimulation: {
+        Row: {
+          companyId: string
+          createdAt: string
+          flowId: string
+          id: string
+          updatedAt: string
+        }
+        Insert: {
+          companyId: string
+          createdAt?: string
+          flowId: string
+          id?: string
+          updatedAt?: string
+        }
+        Update: {
+          companyId?: string
+          createdAt?: string
+          flowId?: string
+          id?: string
+          updatedAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_webhookSimulation_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_webhookSimulation_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_webhookSimulation_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_webhookSimulation_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_webhookSimulation_flow"
+            columns: ["flowId"]
+            isOneToOne: false
+            referencedRelation: "flow"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       webhookTable: {
         Row: {
           module: Database["public"]["Enums"]["module"]
@@ -34225,6 +36746,27 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      workerMachine: {
+        Row: {
+          createdAt: string
+          id: string
+          information: Json
+          updatedAt: string
+        }
+        Insert: {
+          createdAt?: string
+          id?: string
+          information: Json
+          updatedAt?: string
+        }
+        Update: {
+          createdAt?: string
+          id?: string
+          information?: Json
+          updatedAt?: string
+        }
+        Relationships: []
       }
     }
     Views: {
@@ -37586,11 +40128,8 @@ export type Database = {
             | Database["public"]["Enums"]["itemTrackingType"]
             | null
           jobId: string | null
-          jobMakeMethodId: string | null
-          jobReadableId: string | null
           leadTime: number | null
           locationId: string | null
-          parentMaterialId: string | null
           quantityToIssue: number | null
           replenishmentSystem:
             | Database["public"]["Enums"]["itemReplenishmentSystem"]
@@ -37603,27 +40142,6 @@ export type Database = {
             columns: ["locationId"]
             isOneToOne: false
             referencedRelation: "location"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "jobMakeMethod_parentMaterialId_fkey"
-            columns: ["parentMaterialId"]
-            isOneToOne: false
-            referencedRelation: "jobMaterial"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "jobMakeMethod_parentMaterialId_fkey"
-            columns: ["parentMaterialId"]
-            isOneToOne: false
-            referencedRelation: "jobMaterialWithMakeMethodId"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "jobMakeMethod_parentMaterialId_fkey"
-            columns: ["parentMaterialId"]
-            isOneToOne: false
-            referencedRelation: "openJobMaterialLines"
             referencedColumns: ["id"]
           },
           {
@@ -37711,20 +40229,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "jobMaterial_jobMakeMethodId_fkey"
-            columns: ["jobMakeMethodId"]
-            isOneToOne: false
-            referencedRelation: "jobMakeMethod"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "jobMaterial_jobMakeMethodId_fkey"
-            columns: ["jobMakeMethodId"]
-            isOneToOne: false
-            referencedRelation: "jobMaterialWithMakeMethodId"
-            referencedColumns: ["jobMaterialMakeMethodId"]
-          },
-          {
             foreignKeyName: "jobMaterial_unitOfMeasureCode_fkey"
             columns: ["unitOfMeasureCode", "companyId"]
             isOneToOne: false
@@ -37736,14 +40240,12 @@ export type Database = {
       openProductionOrders: {
         Row: {
           companyId: string | null
-          deadlineType: Database["public"]["Enums"]["deadlineType"] | null
           dueDate: string | null
           id: string | null
           itemId: string | null
           itemTrackingType:
             | Database["public"]["Enums"]["itemTrackingType"]
             | null
-          jobId: string | null
           leadTime: number | null
           locationId: string | null
           quantityToReceive: number | null
@@ -41680,14 +44182,14 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["customerCountryCode"]
+            columns: ["invoiceCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
           },
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["invoiceCountryCode"]
+            columns: ["customerCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
@@ -45112,89 +47614,6 @@ export type Database = {
           claim: string
         }
         Returns: string[]
-      }
-      get_production_planning: {
-        Args: {
-          company_id: string
-          location_id: string
-          periods: string[]
-        }
-        Returns: {
-          id: string
-          readableIdWithRevision: string
-          name: string
-          active: boolean
-          type: Database["public"]["Enums"]["itemType"]
-          itemTrackingType: Database["public"]["Enums"]["itemTrackingType"]
-          replenishmentSystem: Database["public"]["Enums"]["itemReplenishmentSystem"]
-          thumbnailPath: string
-          unitOfMeasureCode: string
-          leadTime: number
-          manufacturingBlocked: boolean
-          lotSize: number
-          reorderingPolicy: Database["public"]["Enums"]["itemReorderingPolicy"]
-          demandAccumulationPeriod: number
-          demandAccumulationSafetyStock: number
-          reorderPoint: number
-          reorderQuantity: number
-          minimumOrderQuantity: number
-          maximumOrderQuantity: number
-          orderMultiple: number
-          quantityOnHand: number
-          maximumInventoryQuantity: number
-          week1: number
-          week2: number
-          week3: number
-          week4: number
-          week5: number
-          week6: number
-          week7: number
-          week8: number
-          week9: number
-          week10: number
-          week11: number
-          week12: number
-          week13: number
-          week14: number
-          week15: number
-          week16: number
-          week17: number
-          week18: number
-          week19: number
-          week20: number
-          week21: number
-          week22: number
-          week23: number
-          week24: number
-          week25: number
-          week26: number
-          week27: number
-          week28: number
-          week29: number
-          week30: number
-          week31: number
-          week32: number
-          week33: number
-          week34: number
-          week35: number
-          week36: number
-          week37: number
-          week38: number
-          week39: number
-          week40: number
-          week41: number
-          week42: number
-          week43: number
-          week44: number
-          week45: number
-          week46: number
-          week47: number
-          week48: number
-          week49: number
-          week50: number
-          week51: number
-          week52: number
-        }[]
       }
       get_quote_methods: {
         Args: {
