@@ -205,31 +205,7 @@ export const entityFormValidator = zfd.formData({
 
 ### 5. Test Migration Locally
 
-- Run the migration on your local database
-- Verify the changes were applied correctly
-- Test that RLS policies work as expected
-- Ensure the Zod validators match the schema
-
-### 6. Update Application Code
-
-- Create or update the module's data access functions
-- Ensure queries include proper companyId filtering
-- Update any affected API endpoints
-- Add the new types to the module's index
-
-### 7. Write Tests
-
-- Add unit tests for new validators
-- Test RLS policies with different user permissions
-- Include integration tests for CRUD operations
-- Test multi-tenant isolation
-
-### 8. Create Pull Request
-
-- Commit migration file and related code changes
-- Create PR with description of database changes
-- Include any special deployment instructions
-- Request review from team members
+- Test the migration by running `npm run db:build`
 
 ## Best Practices
 

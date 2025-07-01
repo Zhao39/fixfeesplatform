@@ -35,7 +35,7 @@ CREATE TABLE "companyPlan" (
   "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   "planTemplateId" TEXT REFERENCES "planTemplate"("id"),
-  "planType" "planType" NOT NULL DEFAULT 'flat_fee',
+  "planType" "planType" NOT NULL DEFAULT 'Flat Fee',
   "pricePerUser" DECIMAL(10,2),
   "flatPrice" DECIMAL(10,2),
   "trialEndDate" TIMESTAMP WITH TIME ZONE,
