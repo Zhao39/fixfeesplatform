@@ -29,6 +29,8 @@ import {
   seedCompany,
   updateCompany,
 } from "~/modules/settings";
+import { createCustomer, createSubscription } from "~/modules/billing";
+import { createCompanyPlan, getPlanTemplates } from "~/modules/billing";
 
 export async function loader({ request }: ActionFunctionArgs) {
   const { client, companyId } = await requirePermissions(request, {
@@ -65,6 +67,22 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const serviceRole = getCarbonServiceRole();
   const { next, ...data } = validation.data;
+
+  // Get plan template ID from URL params
+  const url = new URL(request.url);
+  const planTemplateId = url.searchParams.get("planTemplateId");
+  
+  if (!planTemplateId) {
+    throw new Error("Plan selection is required");
+  }
+
+  // Get the selected plan template
+  const plans = await getPlanTemplates(client);
+  const selectedPlan = plans.data?.find(p => p.id === planTemplateId);
+  
+  if (!selectedPlan) {
+    throw new Error("Invalid plan selected");
+  }
 
   let companyId: string | undefined;
 
@@ -125,7 +143,68 @@ export async function action({ request }: ActionFunctionArgs) {
       throw new Error("Fatal: failed to get company ID");
     }
 
-    const seed = await seedCompany(serviceRole, companyId, userId);
+    // Get user email for Stripe customer creation
+    const { data: userData, error: userError } = await serviceRole
+      .from("user")
+      .select("email, firstName, lastName")
+      .eq("id", userId)
+      .single();
+
+    if (userError || !userData) {
+      throw new Error("Fatal: failed to get user data");
+    }
+
+    // Create Stripe customer for non-trial plans
+    let stripeCustomerId = "";
+    let stripeSubscriptionId = "";
+    let stripeSubscriptionStatus = "trialing";
+    
+    if (selectedPlan.planType !== "Trial") {
+      try {
+        const customer = await createCustomer({
+          email: userData.email,
+          name: `${userData.firstName} ${userData.lastName}`,
+          metadata: {
+            companyId,
+            userId,
+          },
+        });
+        stripeCustomerId = customer.id;
+
+        // Create subscription
+        const subscription = await createSubscription({
+          customer: customer.id,
+          items: [{ price: selectedPlan.stripePriceId }],
+          trial_period_days: selectedPlan.trialDays || undefined,
+          metadata: {
+            companyId,
+            userId,
+            planTemplateId,
+          },
+        });
+        stripeSubscriptionId = subscription.id;
+        stripeSubscriptionStatus = subscription.status;
+      } catch (stripeError) {
+        console.error("Stripe error:", stripeError);
+        throw new Error("Fatal: failed to create subscription");
+      }
+    }
+
+    // Create company plan
+    await createCompanyPlan(serviceRole, {
+      companyId,
+      planTemplateId,
+      stripeCustomerId,
+      stripeSubscriptionId,
+      stripeSubscriptionStatus,
+      subscriptionStartDate: new Date().toISOString(),
+      trialEndDate: selectedPlan.trialDays 
+        ? new Date(Date.now() + selectedPlan.trialDays * 24 * 60 * 60 * 1000).toISOString()
+        : undefined,
+      billingCycle: "monthly",
+    });
+
+    const seed = await seedCompany(serviceRole, companyId, userId, userId); // Set owner
     if (seed.error) {
       console.error(seed.error);
       throw new Error("Fatal: failed to seed company");

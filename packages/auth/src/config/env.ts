@@ -10,6 +10,7 @@ declare global {
       POSTHOG_PROJECT_PUBLIC_KEY: string;
       VERCEL_URL: string;
       VERCEL_ENV: string;
+      STRIPE_PUBLISHABLE_KEY: string;
     };
   }
 }
@@ -24,6 +25,9 @@ declare global {
       SESSION_SECRET: string;
       SESSION_KEY: string;
       SESSION_ERROR_KEY: string;
+      STRIPE_SECRET_KEY: string;
+      STRIPE_PUBLISHABLE_KEY: string;
+      STRIPE_WEBHOOK_SECRET: string;
       SUPABASE_ANON_KEY: string;
       SUPABASE_URL: string;
       SUPABASE_SERVICE_ROLE_KEY: string;
@@ -80,6 +84,12 @@ export const NOVU_SECRET_KEY = getEnv("NOVU_SECRET_KEY");
 export const SLACK_BOT_TOKEN = getEnv("SLACK_BOT_TOKEN", {
   isRequired: false,
 });
+export const STRIPE_SECRET_KEY = getEnv("STRIPE_SECRET_KEY", {
+  isRequired: false,
+});
+export const STRIPE_WEBHOOK_SECRET = getEnv("STRIPE_WEBHOOK_SECRET", {
+  isRequired: false,
+});
 export const SUPABASE_SERVICE_ROLE_KEY = getEnv("SUPABASE_SERVICE_ROLE_KEY");
 export const SESSION_SECRET = getEnv("SESSION_SECRET");
 export const SESSION_KEY = "auth";
@@ -109,6 +119,10 @@ export const SUPABASE_URL = getEnv("SUPABASE_URL", { isSecret: false });
 export const SUPABASE_ANON_KEY = getEnv("SUPABASE_ANON_KEY", {
   isSecret: false,
 });
+export const STRIPE_PUBLISHABLE_KEY = getEnv("STRIPE_PUBLISHABLE_KEY", {
+  isSecret: false,
+  isRequired: false,
+});
 
 export function getAppUrl() {
   if (VERCEL_ENV === "production" || NODE_ENV === "production") {
@@ -132,6 +146,7 @@ export function getBrowserEnv() {
     VERCEL_ENV,
     VERCEL_URL,
     NODE_ENV,
+    STRIPE_PUBLISHABLE_KEY,
   };
 }
 

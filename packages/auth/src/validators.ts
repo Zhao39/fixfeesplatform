@@ -60,3 +60,12 @@ export const verifySignupValidator = z.object({
     .min(1, { message: "Verification code is required" })
     .length(6, { message: "Verification code must be 6 characters" }),
 });
+
+export const signupValidator = z.object({
+  email: z
+    .string()
+    .min(1, { message: "Email is required" })
+    .email("Must be a valid email"),
+  password: z.string().min(8, { message: "Password must be at least 8 characters" }),
+  redirectTo: zfd.text(z.string().optional()),
+});

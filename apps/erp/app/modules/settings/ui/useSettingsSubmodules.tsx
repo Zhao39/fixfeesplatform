@@ -1,5 +1,6 @@
 import {
   LuBarcode,
+  LuCreditCard,
   LuCrown,
   LuFactory,
   LuImage,
@@ -22,6 +23,12 @@ const settingsRoutes: AuthenticatedRouteGroup[] = [
         to: path.to.company,
         role: "employee",
         icon: <LuFactory />,
+      },
+      {
+        name: "Billing",
+        to: path.to.billing,
+        role: "employee",
+        icon: <LuCreditCard />,
       },
       {
         name: "Labels",

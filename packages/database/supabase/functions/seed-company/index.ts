@@ -32,12 +32,13 @@ serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
-  const { companyId: id, userId } = await req.json();
+  const { companyId: id, userId, ownerId } = await req.json();
 
   console.log({
     function: "seed-company",
     id,
     userId,
+    ownerId,
   });
 
   try {
@@ -304,6 +305,15 @@ serve(async (req: Request) => {
         .update({ permissions: newPermissions })
         .eq("id", userId);
       if (error) throw new Error(error.message);
+      
+      // Update the company with the ownerId if provided
+      if (ownerId) {
+        await trx
+          .updateTable("company")
+          .set({ ownerId })
+          .where("id", "=", companyId)
+          .execute();
+      }
     });
 
     return new Response(

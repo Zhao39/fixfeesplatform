@@ -3558,6 +3558,168 @@ export default {
         tags: ["scrapReason"],
       },
     },
+    "/companyUsage": {
+      get: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.companyUsage.id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyUsage.users",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyUsage.tasks",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyUsage.aiTokens",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyUsage.nextResetDatetime",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyUsage.companyId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyUsage.createdAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyUsage.updatedAt",
+          },
+          {
+            $ref: "#/parameters/select",
+          },
+          {
+            $ref: "#/parameters/order",
+          },
+          {
+            $ref: "#/parameters/range",
+          },
+          {
+            $ref: "#/parameters/rangeUnit",
+          },
+          {
+            $ref: "#/parameters/offset",
+          },
+          {
+            $ref: "#/parameters/limit",
+          },
+          {
+            $ref: "#/parameters/preferCount",
+          },
+        ],
+        responses: {
+          "200": {
+            description: "OK",
+            schema: {
+              items: {
+                $ref: "#/definitions/companyUsage",
+              },
+              type: "array",
+            },
+          },
+          "206": {
+            description: "Partial Content",
+          },
+        },
+        tags: ["companyUsage"],
+      },
+      post: {
+        parameters: [
+          {
+            $ref: "#/parameters/body.companyUsage",
+          },
+          {
+            $ref: "#/parameters/select",
+          },
+          {
+            $ref: "#/parameters/preferPost",
+          },
+        ],
+        responses: {
+          "201": {
+            description: "Created",
+          },
+        },
+        tags: ["companyUsage"],
+      },
+      delete: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.companyUsage.id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyUsage.users",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyUsage.tasks",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyUsage.aiTokens",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyUsage.nextResetDatetime",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyUsage.companyId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyUsage.createdAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyUsage.updatedAt",
+          },
+          {
+            $ref: "#/parameters/preferReturn",
+          },
+        ],
+        responses: {
+          "204": {
+            description: "No Content",
+          },
+        },
+        tags: ["companyUsage"],
+      },
+      patch: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.companyUsage.id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyUsage.users",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyUsage.tasks",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyUsage.aiTokens",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyUsage.nextResetDatetime",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyUsage.companyId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyUsage.createdAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyUsage.updatedAt",
+          },
+          {
+            $ref: "#/parameters/body.companyUsage",
+          },
+          {
+            $ref: "#/parameters/preferReturn",
+          },
+        ],
+        responses: {
+          "204": {
+            description: "No Content",
+          },
+        },
+        tags: ["companyUsage"],
+      },
+    },
     "/jobOperationsWithDependencies": {
       get: {
         parameters: [
@@ -17593,6 +17755,168 @@ export default {
           },
         },
         tags: ["supplierPayment"],
+      },
+    },
+    "/billingEvent": {
+      get: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.billingEvent.id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.billingEvent.companyId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.billingEvent.eventType",
+          },
+          {
+            $ref: "#/parameters/rowFilter.billingEvent.stripeEventId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.billingEvent.amount",
+          },
+          {
+            $ref: "#/parameters/rowFilter.billingEvent.currency",
+          },
+          {
+            $ref: "#/parameters/rowFilter.billingEvent.metadata",
+          },
+          {
+            $ref: "#/parameters/rowFilter.billingEvent.createdAt",
+          },
+          {
+            $ref: "#/parameters/select",
+          },
+          {
+            $ref: "#/parameters/order",
+          },
+          {
+            $ref: "#/parameters/range",
+          },
+          {
+            $ref: "#/parameters/rangeUnit",
+          },
+          {
+            $ref: "#/parameters/offset",
+          },
+          {
+            $ref: "#/parameters/limit",
+          },
+          {
+            $ref: "#/parameters/preferCount",
+          },
+        ],
+        responses: {
+          "200": {
+            description: "OK",
+            schema: {
+              items: {
+                $ref: "#/definitions/billingEvent",
+              },
+              type: "array",
+            },
+          },
+          "206": {
+            description: "Partial Content",
+          },
+        },
+        tags: ["billingEvent"],
+      },
+      post: {
+        parameters: [
+          {
+            $ref: "#/parameters/body.billingEvent",
+          },
+          {
+            $ref: "#/parameters/select",
+          },
+          {
+            $ref: "#/parameters/preferPost",
+          },
+        ],
+        responses: {
+          "201": {
+            description: "Created",
+          },
+        },
+        tags: ["billingEvent"],
+      },
+      delete: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.billingEvent.id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.billingEvent.companyId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.billingEvent.eventType",
+          },
+          {
+            $ref: "#/parameters/rowFilter.billingEvent.stripeEventId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.billingEvent.amount",
+          },
+          {
+            $ref: "#/parameters/rowFilter.billingEvent.currency",
+          },
+          {
+            $ref: "#/parameters/rowFilter.billingEvent.metadata",
+          },
+          {
+            $ref: "#/parameters/rowFilter.billingEvent.createdAt",
+          },
+          {
+            $ref: "#/parameters/preferReturn",
+          },
+        ],
+        responses: {
+          "204": {
+            description: "No Content",
+          },
+        },
+        tags: ["billingEvent"],
+      },
+      patch: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.billingEvent.id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.billingEvent.companyId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.billingEvent.eventType",
+          },
+          {
+            $ref: "#/parameters/rowFilter.billingEvent.stripeEventId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.billingEvent.amount",
+          },
+          {
+            $ref: "#/parameters/rowFilter.billingEvent.currency",
+          },
+          {
+            $ref: "#/parameters/rowFilter.billingEvent.metadata",
+          },
+          {
+            $ref: "#/parameters/rowFilter.billingEvent.createdAt",
+          },
+          {
+            $ref: "#/parameters/body.billingEvent",
+          },
+          {
+            $ref: "#/parameters/preferReturn",
+          },
+        ],
+        responses: {
+          "204": {
+            description: "No Content",
+          },
+        },
+        tags: ["billingEvent"],
       },
     },
     "/purchasePayment": {
@@ -32901,6 +33225,267 @@ export default {
         tags: ["trackedEntity"],
       },
     },
+    "/companyPlan": {
+      get: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.includedTasks",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.includedAiTokens",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.includedUsers",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.tasksLimit",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.aiTokensLimit",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.subscriptionStartDate",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.stripeCustomerId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.stripeSubscriptionId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.stripeSubscriptionStatus",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.companyId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.createdAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.updatedAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.planTemplateId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.planType",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.pricePerUser",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.flatPrice",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.trialEndDate",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.billingCycle",
+          },
+          {
+            $ref: "#/parameters/select",
+          },
+          {
+            $ref: "#/parameters/order",
+          },
+          {
+            $ref: "#/parameters/range",
+          },
+          {
+            $ref: "#/parameters/rangeUnit",
+          },
+          {
+            $ref: "#/parameters/offset",
+          },
+          {
+            $ref: "#/parameters/limit",
+          },
+          {
+            $ref: "#/parameters/preferCount",
+          },
+        ],
+        responses: {
+          "200": {
+            description: "OK",
+            schema: {
+              items: {
+                $ref: "#/definitions/companyPlan",
+              },
+              type: "array",
+            },
+          },
+          "206": {
+            description: "Partial Content",
+          },
+        },
+        tags: ["companyPlan"],
+      },
+      post: {
+        parameters: [
+          {
+            $ref: "#/parameters/body.companyPlan",
+          },
+          {
+            $ref: "#/parameters/select",
+          },
+          {
+            $ref: "#/parameters/preferPost",
+          },
+        ],
+        responses: {
+          "201": {
+            description: "Created",
+          },
+        },
+        tags: ["companyPlan"],
+      },
+      delete: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.includedTasks",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.includedAiTokens",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.includedUsers",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.tasksLimit",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.aiTokensLimit",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.subscriptionStartDate",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.stripeCustomerId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.stripeSubscriptionId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.stripeSubscriptionStatus",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.companyId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.createdAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.updatedAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.planTemplateId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.planType",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.pricePerUser",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.flatPrice",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.trialEndDate",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.billingCycle",
+          },
+          {
+            $ref: "#/parameters/preferReturn",
+          },
+        ],
+        responses: {
+          "204": {
+            description: "No Content",
+          },
+        },
+        tags: ["companyPlan"],
+      },
+      patch: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.includedTasks",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.includedAiTokens",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.includedUsers",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.tasksLimit",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.aiTokensLimit",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.subscriptionStartDate",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.stripeCustomerId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.stripeSubscriptionId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.stripeSubscriptionStatus",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.companyId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.createdAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.updatedAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.planTemplateId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.planType",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.pricePerUser",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.flatPrice",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.trialEndDate",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companyPlan.billingCycle",
+          },
+          {
+            $ref: "#/parameters/body.companyPlan",
+          },
+          {
+            $ref: "#/parameters/preferReturn",
+          },
+        ],
+        responses: {
+          "204": {
+            description: "No Content",
+          },
+        },
+        tags: ["companyPlan"],
+      },
+    },
     "/salesRfqLines": {
       get: {
         parameters: [
@@ -40759,6 +41344,9 @@ export default {
             $ref: "#/parameters/rowFilter.company.slackChannel",
           },
           {
+            $ref: "#/parameters/rowFilter.company.ownerId",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -40878,6 +41466,9 @@ export default {
             $ref: "#/parameters/rowFilter.company.slackChannel",
           },
           {
+            $ref: "#/parameters/rowFilter.company.ownerId",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -40949,6 +41540,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.company.slackChannel",
+          },
+          {
+            $ref: "#/parameters/rowFilter.company.ownerId",
           },
           {
             $ref: "#/parameters/body.company",
@@ -45037,6 +45631,235 @@ export default {
           },
         },
         tags: ["purchaseOrderPayment"],
+      },
+    },
+    "/planTemplate": {
+      get: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.name",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.description",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.planType",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.stripePriceId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.stripeProductId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.pricePerUser",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.flatPrice",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.includedUsers",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.includedTasks",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.includedAiTokens",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.trialDays",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.active",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.createdAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.updatedAt",
+          },
+          {
+            $ref: "#/parameters/select",
+          },
+          {
+            $ref: "#/parameters/order",
+          },
+          {
+            $ref: "#/parameters/range",
+          },
+          {
+            $ref: "#/parameters/rangeUnit",
+          },
+          {
+            $ref: "#/parameters/offset",
+          },
+          {
+            $ref: "#/parameters/limit",
+          },
+          {
+            $ref: "#/parameters/preferCount",
+          },
+        ],
+        responses: {
+          "200": {
+            description: "OK",
+            schema: {
+              items: {
+                $ref: "#/definitions/planTemplate",
+              },
+              type: "array",
+            },
+          },
+          "206": {
+            description: "Partial Content",
+          },
+        },
+        summary: "Defines available subscription plans with pricing and limits",
+        tags: ["planTemplate"],
+      },
+      post: {
+        parameters: [
+          {
+            $ref: "#/parameters/body.planTemplate",
+          },
+          {
+            $ref: "#/parameters/select",
+          },
+          {
+            $ref: "#/parameters/preferPost",
+          },
+        ],
+        responses: {
+          "201": {
+            description: "Created",
+          },
+        },
+        summary: "Defines available subscription plans with pricing and limits",
+        tags: ["planTemplate"],
+      },
+      delete: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.name",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.description",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.planType",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.stripePriceId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.stripeProductId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.pricePerUser",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.flatPrice",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.includedUsers",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.includedTasks",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.includedAiTokens",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.trialDays",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.active",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.createdAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.updatedAt",
+          },
+          {
+            $ref: "#/parameters/preferReturn",
+          },
+        ],
+        responses: {
+          "204": {
+            description: "No Content",
+          },
+        },
+        summary: "Defines available subscription plans with pricing and limits",
+        tags: ["planTemplate"],
+      },
+      patch: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.name",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.description",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.planType",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.stripePriceId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.stripeProductId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.pricePerUser",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.flatPrice",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.includedUsers",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.includedTasks",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.includedAiTokens",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.trialDays",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.active",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.createdAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.planTemplate.updatedAt",
+          },
+          {
+            $ref: "#/parameters/body.planTemplate",
+          },
+          {
+            $ref: "#/parameters/preferReturn",
+          },
+        ],
+        responses: {
+          "204": {
+            description: "No Content",
+          },
+        },
+        summary: "Defines available subscription plans with pricing and limits",
+        tags: ["planTemplate"],
       },
     },
     "/supplyActual": {
@@ -53335,6 +54158,74 @@ export default {
         tags: ["(rpc) is_claims_admin"],
       },
     },
+    "/rpc/increment_tasks": {
+      get: {
+        parameters: [
+          {
+            format: "text",
+            in: "query",
+            name: "company_id",
+            required: true,
+            type: "string",
+          },
+          {
+            format: "integer",
+            in: "query",
+            name: "count",
+            required: false,
+            type: "integer",
+          },
+        ],
+        produces: [
+          "application/json",
+          "application/vnd.pgrst.object+json;nulls=stripped",
+          "application/vnd.pgrst.object+json",
+        ],
+        responses: {
+          "200": {
+            description: "OK",
+          },
+        },
+        tags: ["(rpc) increment_tasks"],
+      },
+      post: {
+        parameters: [
+          {
+            in: "body",
+            name: "args",
+            required: true,
+            schema: {
+              properties: {
+                company_id: {
+                  format: "text",
+                  type: "string",
+                },
+                count: {
+                  format: "integer",
+                  type: "integer",
+                },
+              },
+              required: ["company_id"],
+              type: "object",
+            },
+          },
+          {
+            $ref: "#/parameters/preferParams",
+          },
+        ],
+        produces: [
+          "application/json",
+          "application/vnd.pgrst.object+json;nulls=stripped",
+          "application/vnd.pgrst.object+json",
+        ],
+        responses: {
+          "200": {
+            description: "OK",
+          },
+        },
+        tags: ["(rpc) increment_tasks"],
+      },
+    },
     "/rpc/xid": {
       get: {
         parameters: [
@@ -55946,6 +56837,74 @@ export default {
         tags: ["(rpc) has_role"],
       },
     },
+    "/rpc/increment_ai_tokens": {
+      get: {
+        parameters: [
+          {
+            format: "text",
+            in: "query",
+            name: "company_id",
+            required: true,
+            type: "string",
+          },
+          {
+            format: "integer",
+            in: "query",
+            name: "count",
+            required: false,
+            type: "integer",
+          },
+        ],
+        produces: [
+          "application/json",
+          "application/vnd.pgrst.object+json;nulls=stripped",
+          "application/vnd.pgrst.object+json",
+        ],
+        responses: {
+          "200": {
+            description: "OK",
+          },
+        },
+        tags: ["(rpc) increment_ai_tokens"],
+      },
+      post: {
+        parameters: [
+          {
+            in: "body",
+            name: "args",
+            required: true,
+            schema: {
+              properties: {
+                company_id: {
+                  format: "text",
+                  type: "string",
+                },
+                count: {
+                  format: "integer",
+                  type: "integer",
+                },
+              },
+              required: ["company_id"],
+              type: "object",
+            },
+          },
+          {
+            $ref: "#/parameters/preferParams",
+          },
+        ],
+        produces: [
+          "application/json",
+          "application/vnd.pgrst.object+json;nulls=stripped",
+          "application/vnd.pgrst.object+json",
+        ],
+        responses: {
+          "200": {
+            description: "OK",
+          },
+        },
+        tags: ["(rpc) increment_ai_tokens"],
+      },
+    },
     "/rpc/has_valid_api_key_for_company": {
       get: {
         parameters: [
@@ -56668,6 +57627,63 @@ export default {
         tags: ["(rpc) get_purchasing_planning"],
       },
     },
+    "/rpc/check_usage_limits": {
+      get: {
+        parameters: [
+          {
+            format: "text",
+            in: "query",
+            name: "company_id",
+            required: true,
+            type: "string",
+          },
+        ],
+        produces: [
+          "application/json",
+          "application/vnd.pgrst.object+json;nulls=stripped",
+          "application/vnd.pgrst.object+json",
+        ],
+        responses: {
+          "200": {
+            description: "OK",
+          },
+        },
+        tags: ["(rpc) check_usage_limits"],
+      },
+      post: {
+        parameters: [
+          {
+            in: "body",
+            name: "args",
+            required: true,
+            schema: {
+              properties: {
+                company_id: {
+                  format: "text",
+                  type: "string",
+                },
+              },
+              required: ["company_id"],
+              type: "object",
+            },
+          },
+          {
+            $ref: "#/parameters/preferParams",
+          },
+        ],
+        produces: [
+          "application/json",
+          "application/vnd.pgrst.object+json;nulls=stripped",
+          "application/vnd.pgrst.object+json",
+        ],
+        responses: {
+          "200": {
+            description: "OK",
+          },
+        },
+        tags: ["(rpc) check_usage_limits"],
+      },
+    },
     "/rpc/get_custom_field_unique_values": {
       get: {
         parameters: [
@@ -56870,6 +57886,63 @@ export default {
           },
         },
         tags: ["(rpc) get_opportunity_with_related_records"],
+      },
+    },
+    "/rpc/increment_users": {
+      get: {
+        parameters: [
+          {
+            format: "text",
+            in: "query",
+            name: "company_id",
+            required: true,
+            type: "string",
+          },
+        ],
+        produces: [
+          "application/json",
+          "application/vnd.pgrst.object+json;nulls=stripped",
+          "application/vnd.pgrst.object+json",
+        ],
+        responses: {
+          "200": {
+            description: "OK",
+          },
+        },
+        tags: ["(rpc) increment_users"],
+      },
+      post: {
+        parameters: [
+          {
+            in: "body",
+            name: "args",
+            required: true,
+            schema: {
+              properties: {
+                company_id: {
+                  format: "text",
+                  type: "string",
+                },
+              },
+              required: ["company_id"],
+              type: "object",
+            },
+          },
+          {
+            $ref: "#/parameters/preferParams",
+          },
+        ],
+        produces: [
+          "application/json",
+          "application/vnd.pgrst.object+json;nulls=stripped",
+          "application/vnd.pgrst.object+json",
+        ],
+        responses: {
+          "200": {
+            description: "OK",
+          },
+        },
+        tags: ["(rpc) increment_users"],
       },
     },
     "/rpc/items_search": {
@@ -58397,6 +59470,62 @@ export default {
         },
         customFields: {
           format: "jsonb",
+        },
+      },
+      type: "object",
+    },
+    companyUsage: {
+      required: [
+        "id",
+        "users",
+        "tasks",
+        "aiTokens",
+        "nextResetDatetime",
+        "companyId",
+        "createdAt",
+        "updatedAt",
+      ],
+      properties: {
+        id: {
+          default: "public.xid()",
+          description: "Note:\nThis is a Primary Key.<pk/>",
+          format: "text",
+          type: "string",
+        },
+        users: {
+          default: 0,
+          format: "integer",
+          type: "integer",
+        },
+        tasks: {
+          default: 0,
+          format: "integer",
+          type: "integer",
+        },
+        aiTokens: {
+          default: 0,
+          format: "integer",
+          type: "integer",
+        },
+        nextResetDatetime: {
+          format: "timestamp with time zone",
+          type: "string",
+        },
+        companyId: {
+          description:
+            "Note:\nThis is a Foreign Key to `company.id`.<fk table='company' column='id'/>",
+          format: "text",
+          type: "string",
+        },
+        createdAt: {
+          default: "now()",
+          format: "timestamp with time zone",
+          type: "string",
+        },
+        updatedAt: {
+          default: "now()",
+          format: "timestamp with time zone",
+          type: "string",
         },
       },
       type: "object",
@@ -65129,6 +66258,49 @@ export default {
             type: "string",
           },
           type: "array",
+        },
+      },
+      type: "object",
+    },
+    billingEvent: {
+      required: ["id", "companyId", "eventType", "currency", "createdAt"],
+      properties: {
+        id: {
+          default: "public.xid()",
+          description: "Note:\nThis is a Primary Key.<pk/>",
+          format: "text",
+          type: "string",
+        },
+        companyId: {
+          description:
+            "Note:\nThis is a Foreign Key to `company.id`.<fk table='company' column='id'/>",
+          format: "text",
+          type: "string",
+        },
+        eventType: {
+          format: "text",
+          type: "string",
+        },
+        stripeEventId: {
+          format: "text",
+          type: "string",
+        },
+        amount: {
+          format: "numeric",
+          type: "number",
+        },
+        currency: {
+          default: "USD",
+          format: "text",
+          type: "string",
+        },
+        metadata: {
+          format: "jsonb",
+        },
+        createdAt: {
+          default: "now()",
+          format: "timestamp with time zone",
+          type: "string",
         },
       },
       type: "object",
@@ -72035,6 +73207,120 @@ export default {
       },
       type: "object",
     },
+    companyPlan: {
+      required: [
+        "id",
+        "includedTasks",
+        "includedAiTokens",
+        "includedUsers",
+        "tasksLimit",
+        "aiTokensLimit",
+        "subscriptionStartDate",
+        "stripeSubscriptionId",
+        "stripeSubscriptionStatus",
+        "companyId",
+        "createdAt",
+        "updatedAt",
+        "planType",
+        "billingCycle",
+      ],
+      properties: {
+        id: {
+          default: "public.xid()",
+          description: "Note:\nThis is a Primary Key.<pk/>",
+          format: "text",
+          type: "string",
+        },
+        includedTasks: {
+          default: 10000,
+          format: "integer",
+          type: "integer",
+        },
+        includedAiTokens: {
+          default: 1000000,
+          format: "integer",
+          type: "integer",
+        },
+        includedUsers: {
+          default: 10,
+          format: "integer",
+          type: "integer",
+        },
+        tasksLimit: {
+          default: 10000,
+          format: "integer",
+          type: "integer",
+        },
+        aiTokensLimit: {
+          default: 1000000,
+          format: "integer",
+          type: "integer",
+        },
+        subscriptionStartDate: {
+          format: "timestamp with time zone",
+          type: "string",
+        },
+        stripeCustomerId: {
+          format: "text",
+          type: "string",
+        },
+        stripeSubscriptionId: {
+          format: "text",
+          type: "string",
+        },
+        stripeSubscriptionStatus: {
+          default: "ACTIVE",
+          format: "text",
+          type: "string",
+        },
+        companyId: {
+          description:
+            "Note:\nThis is a Foreign Key to `company.id`.<fk table='company' column='id'/>",
+          format: "text",
+          type: "string",
+        },
+        createdAt: {
+          default: "now()",
+          format: "timestamp with time zone",
+          type: "string",
+        },
+        updatedAt: {
+          default: "now()",
+          format: "timestamp with time zone",
+          type: "string",
+        },
+        planTemplateId: {
+          description:
+            "Note:\nThis is a Foreign Key to `planTemplate.id`.<fk table='planTemplate' column='id'/>",
+          format: "text",
+          type: "string",
+        },
+        planType: {
+          default: "Flat Fee",
+          enum: ["Trial", "Per User", "Flat Fee"],
+          format: 'public."planType"',
+          type: "string",
+        },
+        pricePerUser: {
+          format: "numeric",
+          type: "number",
+        },
+        flatPrice: {
+          format: "numeric",
+          type: "number",
+        },
+        trialEndDate: {
+          format: "timestamp with time zone",
+          type: "string",
+        },
+        billingCycle: {
+          default: "monthly",
+          format: "text",
+          type: "string",
+        },
+      },
+      type: "object",
+    },
     salesRfqLines: {
       properties: {
         id: {
@@ -76081,6 +77367,12 @@ export default {
           format: "text",
           type: "string",
         },
+        ownerId: {
+          description:
+            "The user who owns and manages this company account\n\nNote:\nThis is a Foreign Key to `user.id`.<fk table='user' column='id'/>",
+          format: "text",
+          type: "string",
+        },
       },
       type: "object",
     },
@@ -78023,6 +79315,95 @@ export default {
             type: "string",
           },
           type: "array",
+        },
+      },
+      type: "object",
+    },
+    planTemplate: {
+      description:
+        "Defines available subscription plans with pricing and limits",
+      required: [
+        "id",
+        "name",
+        "planType",
+        "stripePriceId",
+        "stripeProductId",
+        "includedUsers",
+        "includedTasks",
+        "includedAiTokens",
+        "active",
+        "createdAt",
+        "updatedAt",
+      ],
+      properties: {
+        id: {
+          default: "public.xid()",
+          description: "Note:\nThis is a Primary Key.<pk/>",
+          format: "text",
+          type: "string",
+        },
+        name: {
+          format: "text",
+          type: "string",
+        },
+        description: {
+          format: "text",
+          type: "string",
+        },
+        planType: {
+          enum: ["Trial", "Per User", "Flat Fee"],
+          format: 'public."planType"',
+          type: "string",
+        },
+        stripePriceId: {
+          format: "text",
+          type: "string",
+        },
+        stripeProductId: {
+          format: "text",
+          type: "string",
+        },
+        pricePerUser: {
+          format: "numeric",
+          type: "number",
+        },
+        flatPrice: {
+          format: "numeric",
+          type: "number",
+        },
+        includedUsers: {
+          default: 1,
+          format: "integer",
+          type: "integer",
+        },
+        includedTasks: {
+          default: 10000,
+          format: "integer",
+          type: "integer",
+        },
+        includedAiTokens: {
+          default: 1000000,
+          format: "integer",
+          type: "integer",
+        },
+        trialDays: {
+          format: "integer",
+          type: "integer",
+        },
+        active: {
+          default: true,
+          format: "boolean",
+          type: "boolean",
+        },
+        createdAt: {
+          default: "now()",
+          format: "timestamp with time zone",
+          type: "string",
+        },
+        updatedAt: {
+          default: "now()",
+          format: "timestamp with time zone",
+          type: "string",
         },
       },
       type: "object",
@@ -83189,6 +84570,63 @@ export default {
     },
     "rowFilter.scrapReason.customFields": {
       name: "customFields",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "body.companyUsage": {
+      name: "companyUsage",
+      description: "companyUsage",
+      required: false,
+      in: "body",
+      schema: {
+        $ref: "#/definitions/companyUsage",
+      },
+    },
+    "rowFilter.companyUsage.id": {
+      name: "id",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.companyUsage.users": {
+      name: "users",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.companyUsage.tasks": {
+      name: "tasks",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.companyUsage.aiTokens": {
+      name: "aiTokens",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.companyUsage.nextResetDatetime": {
+      name: "nextResetDatetime",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.companyUsage.companyId": {
+      name: "companyId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.companyUsage.createdAt": {
+      name: "createdAt",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.companyUsage.updatedAt": {
+      name: "updatedAt",
       required: false,
       in: "query",
       type: "string",
@@ -90704,6 +92142,63 @@ export default {
     },
     "rowFilter.supplierPayment.tags": {
       name: "tags",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "body.billingEvent": {
+      name: "billingEvent",
+      description: "billingEvent",
+      required: false,
+      in: "body",
+      schema: {
+        $ref: "#/definitions/billingEvent",
+      },
+    },
+    "rowFilter.billingEvent.id": {
+      name: "id",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.billingEvent.companyId": {
+      name: "companyId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.billingEvent.eventType": {
+      name: "eventType",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.billingEvent.stripeEventId": {
+      name: "stripeEventId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.billingEvent.amount": {
+      name: "amount",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.billingEvent.currency": {
+      name: "currency",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.billingEvent.metadata": {
+      name: "metadata",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.billingEvent.createdAt": {
+      name: "createdAt",
       required: false,
       in: "query",
       type: "string",
@@ -98568,6 +100063,129 @@ export default {
       in: "query",
       type: "string",
     },
+    "body.companyPlan": {
+      name: "companyPlan",
+      description: "companyPlan",
+      required: false,
+      in: "body",
+      schema: {
+        $ref: "#/definitions/companyPlan",
+      },
+    },
+    "rowFilter.companyPlan.id": {
+      name: "id",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.companyPlan.includedTasks": {
+      name: "includedTasks",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.companyPlan.includedAiTokens": {
+      name: "includedAiTokens",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.companyPlan.includedUsers": {
+      name: "includedUsers",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.companyPlan.tasksLimit": {
+      name: "tasksLimit",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.companyPlan.aiTokensLimit": {
+      name: "aiTokensLimit",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.companyPlan.subscriptionStartDate": {
+      name: "subscriptionStartDate",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.companyPlan.stripeCustomerId": {
+      name: "stripeCustomerId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.companyPlan.stripeSubscriptionId": {
+      name: "stripeSubscriptionId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.companyPlan.stripeSubscriptionStatus": {
+      name: "stripeSubscriptionStatus",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.companyPlan.companyId": {
+      name: "companyId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.companyPlan.createdAt": {
+      name: "createdAt",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.companyPlan.updatedAt": {
+      name: "updatedAt",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.companyPlan.planTemplateId": {
+      name: "planTemplateId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.companyPlan.planType": {
+      name: "planType",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.companyPlan.pricePerUser": {
+      name: "pricePerUser",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.companyPlan.flatPrice": {
+      name: "flatPrice",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.companyPlan.trialEndDate": {
+      name: "trialEndDate",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.companyPlan.billingCycle": {
+      name: "billingCycle",
+      required: false,
+      in: "query",
+      type: "string",
+    },
     "body.salesRfqLines": {
       name: "salesRfqLines",
       description: "salesRfqLines",
@@ -103170,6 +104788,13 @@ export default {
       in: "query",
       type: "string",
     },
+    "rowFilter.company.ownerId": {
+      name: "ownerId",
+      description: "The user who owns and manages this company account",
+      required: false,
+      in: "query",
+      type: "string",
+    },
     "body.salesOrderLocations": {
       name: "salesOrderLocations",
       description: "salesOrderLocations",
@@ -105350,6 +106975,105 @@ export default {
     },
     "rowFilter.purchaseOrderPayment.tags": {
       name: "tags",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "body.planTemplate": {
+      name: "planTemplate",
+      description: "planTemplate",
+      required: false,
+      in: "body",
+      schema: {
+        $ref: "#/definitions/planTemplate",
+      },
+    },
+    "rowFilter.planTemplate.id": {
+      name: "id",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.planTemplate.name": {
+      name: "name",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.planTemplate.description": {
+      name: "description",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.planTemplate.planType": {
+      name: "planType",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.planTemplate.stripePriceId": {
+      name: "stripePriceId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.planTemplate.stripeProductId": {
+      name: "stripeProductId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.planTemplate.pricePerUser": {
+      name: "pricePerUser",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.planTemplate.flatPrice": {
+      name: "flatPrice",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.planTemplate.includedUsers": {
+      name: "includedUsers",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.planTemplate.includedTasks": {
+      name: "includedTasks",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.planTemplate.includedAiTokens": {
+      name: "includedAiTokens",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.planTemplate.trialDays": {
+      name: "trialDays",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.planTemplate.active": {
+      name: "active",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.planTemplate.createdAt": {
+      name: "createdAt",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.planTemplate.updatedAt": {
+      name: "updatedAt",
       required: false,
       in: "query",
       type: "string",

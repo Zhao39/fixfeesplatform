@@ -1904,6 +1904,68 @@ export type Database = {
           },
         ]
       }
+      billingEvent: {
+        Row: {
+          amount: number | null
+          companyId: string
+          createdAt: string
+          currency: string
+          eventType: string
+          id: string
+          metadata: Json | null
+          stripeEventId: string | null
+        }
+        Insert: {
+          amount?: number | null
+          companyId: string
+          createdAt?: string
+          currency?: string
+          eventType: string
+          id?: string
+          metadata?: Json | null
+          stripeEventId?: string | null
+        }
+        Update: {
+          amount?: number | null
+          companyId?: string
+          createdAt?: string
+          currency?: string
+          eventType?: string
+          id?: string
+          metadata?: Json | null
+          stripeEventId?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_billingEvent_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_billingEvent_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_billingEvent_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_billingEvent_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+        ]
+      }
       challengeAttempt: {
         Row: {
           courseId: string
@@ -1982,6 +2044,7 @@ export type Database = {
           logoLight: string | null
           logoLightIcon: string | null
           name: string
+          ownerId: string | null
           phone: string | null
           postalCode: string | null
           slackChannel: string | null
@@ -2004,6 +2067,7 @@ export type Database = {
           logoLight?: string | null
           logoLightIcon?: string | null
           name: string
+          ownerId?: string | null
           phone?: string | null
           postalCode?: string | null
           slackChannel?: string | null
@@ -2026,6 +2090,7 @@ export type Database = {
           logoLight?: string | null
           logoLightIcon?: string | null
           name?: string
+          ownerId?: string | null
           phone?: string | null
           postalCode?: string | null
           slackChannel?: string | null
@@ -2076,6 +2141,41 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "currencyCode"
             referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "company_ownerId_fkey"
+            columns: ["ownerId"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "company_ownerId_fkey"
+            columns: ["ownerId"]
+            isOneToOne: false
+            referencedRelation: "employeesAcrossCompanies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "company_ownerId_fkey"
+            columns: ["ownerId"]
+            isOneToOne: false
+            referencedRelation: "employeeSummary"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "company_ownerId_fkey"
+            columns: ["ownerId"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "company_ownerId_fkey"
+            columns: ["ownerId"]
+            isOneToOne: false
+            referencedRelation: "userDefaults"
+            referencedColumns: ["userId"]
           },
         ]
       }
@@ -2149,6 +2249,108 @@ export type Database = {
           },
         ]
       }
+      companyPlan: {
+        Row: {
+          aiTokensLimit: number
+          billingCycle: string
+          companyId: string
+          createdAt: string
+          flatPrice: number | null
+          id: string
+          includedAiTokens: number
+          includedTasks: number
+          includedUsers: number
+          planTemplateId: string | null
+          planType: Database["public"]["Enums"]["planType"]
+          pricePerUser: number | null
+          stripeCustomerId: string | null
+          stripeSubscriptionId: string
+          stripeSubscriptionStatus: string
+          subscriptionStartDate: string
+          tasksLimit: number
+          trialEndDate: string | null
+          updatedAt: string
+        }
+        Insert: {
+          aiTokensLimit?: number
+          billingCycle?: string
+          companyId: string
+          createdAt?: string
+          flatPrice?: number | null
+          id?: string
+          includedAiTokens?: number
+          includedTasks?: number
+          includedUsers?: number
+          planTemplateId?: string | null
+          planType?: Database["public"]["Enums"]["planType"]
+          pricePerUser?: number | null
+          stripeCustomerId?: string | null
+          stripeSubscriptionId: string
+          stripeSubscriptionStatus?: string
+          subscriptionStartDate: string
+          tasksLimit?: number
+          trialEndDate?: string | null
+          updatedAt?: string
+        }
+        Update: {
+          aiTokensLimit?: number
+          billingCycle?: string
+          companyId?: string
+          createdAt?: string
+          flatPrice?: number | null
+          id?: string
+          includedAiTokens?: number
+          includedTasks?: number
+          includedUsers?: number
+          planTemplateId?: string | null
+          planType?: Database["public"]["Enums"]["planType"]
+          pricePerUser?: number | null
+          stripeCustomerId?: string | null
+          stripeSubscriptionId?: string
+          stripeSubscriptionStatus?: string
+          subscriptionStartDate?: string
+          tasksLimit?: number
+          trialEndDate?: string | null
+          updatedAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "companyPlan_planTemplateId_fkey"
+            columns: ["planTemplateId"]
+            isOneToOne: false
+            referencedRelation: "planTemplate"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_companyPlan_company"
+            columns: ["companyId"]
+            isOneToOne: true
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_companyPlan_company"
+            columns: ["companyId"]
+            isOneToOne: true
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_companyPlan_company"
+            columns: ["companyId"]
+            isOneToOne: true
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_companyPlan_company"
+            columns: ["companyId"]
+            isOneToOne: true
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+        ]
+      }
       companySettings: {
         Row: {
           digitalQuoteEnabled: boolean
@@ -2209,6 +2411,68 @@ export type Database = {
             foreignKeyName: "companySettings_companyId_fkey"
             columns: ["id"]
             isOneToOne: true
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+        ]
+      }
+      companyUsage: {
+        Row: {
+          aiTokens: number
+          companyId: string
+          createdAt: string
+          id: string
+          nextResetDatetime: string
+          tasks: number
+          updatedAt: string
+          users: number
+        }
+        Insert: {
+          aiTokens?: number
+          companyId: string
+          createdAt?: string
+          id?: string
+          nextResetDatetime: string
+          tasks?: number
+          updatedAt?: string
+          users?: number
+        }
+        Update: {
+          aiTokens?: number
+          companyId?: string
+          createdAt?: string
+          id?: string
+          nextResetDatetime?: string
+          tasks?: number
+          updatedAt?: string
+          users?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_companyUsage_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_companyUsage_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_companyUsage_company"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "fk_companyUsage_company"
+            columns: ["companyId"]
+            isOneToOne: false
             referencedRelation: "integrations"
             referencedColumns: ["companyId"]
           },
@@ -17412,6 +17676,60 @@ export type Database = {
             referencedColumns: ["userId"]
           },
         ]
+      }
+      planTemplate: {
+        Row: {
+          active: boolean
+          createdAt: string
+          description: string | null
+          flatPrice: number | null
+          id: string
+          includedAiTokens: number
+          includedTasks: number
+          includedUsers: number
+          name: string
+          planType: Database["public"]["Enums"]["planType"]
+          pricePerUser: number | null
+          stripePriceId: string
+          stripeProductId: string
+          trialDays: number | null
+          updatedAt: string
+        }
+        Insert: {
+          active?: boolean
+          createdAt?: string
+          description?: string | null
+          flatPrice?: number | null
+          id?: string
+          includedAiTokens?: number
+          includedTasks?: number
+          includedUsers?: number
+          name: string
+          planType: Database["public"]["Enums"]["planType"]
+          pricePerUser?: number | null
+          stripePriceId: string
+          stripeProductId: string
+          trialDays?: number | null
+          updatedAt?: string
+        }
+        Update: {
+          active?: boolean
+          createdAt?: string
+          description?: string | null
+          flatPrice?: number | null
+          id?: string
+          includedAiTokens?: number
+          includedTasks?: number
+          includedUsers?: number
+          name?: string
+          planType?: Database["public"]["Enums"]["planType"]
+          pricePerUser?: number | null
+          stripePriceId?: string
+          stripeProductId?: string
+          trialDays?: number | null
+          updatedAt?: string
+        }
+        Relationships: []
       }
       postingGroupInventory: {
         Row: {
@@ -44618,6 +44936,19 @@ export type Database = {
         }
         Returns: boolean
       }
+      check_usage_limits: {
+        Args: {
+          company_id: string
+        }
+        Returns: {
+          users_exceeded: boolean
+          tasks_exceeded: boolean
+          ai_tokens_exceeded: boolean
+          users_left: number
+          tasks_left: number
+          ai_tokens_left: number
+        }[]
+      }
       create_rfq_from_model_v1: {
         Args: {
           company_id: string
@@ -45632,6 +45963,26 @@ export type Database = {
         }
         Returns: boolean
       }
+      increment_ai_tokens: {
+        Args: {
+          company_id: string
+          count?: number
+        }
+        Returns: number
+      }
+      increment_tasks: {
+        Args: {
+          company_id: string
+          count?: number
+        }
+        Returns: number
+      }
+      increment_users: {
+        Args: {
+          company_id: string
+        }
+        Returns: number
+      }
       increment_webhook_error: {
         Args: {
           webhook_id: string
@@ -46030,6 +46381,7 @@ export type Database = {
         | "Fixture"
       paymentTermCalculationMethod: "Net" | "End of Month" | "Day of Month"
       periodType: "Week" | "Day" | "Month"
+      planType: "Trial" | "Per User" | "Flat Fee"
       procedureAttributeType:
         | "Value"
         | "Measurement"
