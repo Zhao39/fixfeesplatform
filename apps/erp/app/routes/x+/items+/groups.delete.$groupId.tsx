@@ -1,11 +1,16 @@
 import { error, notFound, success } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
+import type {
+  ActionFunctionArgs,
+  ClientActionFunctionArgs,
+  LoaderFunctionArgs
+} from "react-router";
 import { redirect, useLoaderData, useNavigate, useParams } from "react-router";
 import { ConfirmDelete } from "~/components/Modals";
 import { deleteItemPostingGroup, getItemPostingGroup } from "~/modules/items";
 import { getParams, path } from "~/utils/path";
+import { getCompanyId } from "~/utils/react-query";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client } = await requirePermissions(request, {
@@ -59,6 +64,19 @@ export async function action({ request, params }: ActionFunctionArgs) {
     path.to.itemPostingGroups,
     await flash(request, success("Successfully deleted item group"))
   );
+}
+
+export async function clientAction({ serverAction }: ClientActionFunctionArgs) {
+  const companyId = getCompanyId();
+
+  window.clientCache?.invalidateQueries({
+    predicate: (query) => {
+      const queryKey = query.queryKey as string[];
+      return queryKey[0] === "itemPostingGroups" && queryKey[1] === companyId;
+    }
+  });
+
+  return await serverAction();
 }
 
 export default function DeleteItemPostingGroupRoute() {
