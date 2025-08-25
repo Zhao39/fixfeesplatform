@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle
 } from "@carbon/react";
-import { useUrlParams } from "@carbon/remix";
+import { useRouteData, useUrlParams } from "@carbon/remix";
 import { Link, useFetcher, useNavigate } from "react-router";
 import { SearchFilter } from "~/components";
 import { path } from "~/utils/path";
@@ -61,9 +61,31 @@ function IntegrationCard({
 }) {
   const fetcher = useFetcher<{}>();
   const navigate = useNavigate();
+  const routeData = useRouteData<{ state: string }>(path.to.integrations);
+
+  const getOauthUrl = (integration: IntegrationConfig) => {
+    if ("oauth" in integration && !!integration.oauth) {
+      const { clientId, redirectUri, scopes } = integration.oauth;
+      const encodedRedirectUri = encodeURIComponent(
+        `${window.location.origin}${redirectUri}`
+      );
+      const encodedScopes = encodeURIComponent(scopes.join(" "));
+      const encodedState = encodeURIComponent(
+        routeData?.state ?? Math.random().toString(36).substring(2, 15)
+      );
+
+      return `${integration.oauth.authUrl}?client_id=${clientId}&redirect_uri=${encodedRedirectUri}&response_type=code&state=${encodedState}&scope=${encodedScopes}`;
+    }
+    return null;
+  };
 
   const handleInstall = async () => {
-    if (integration.settings.some((setting) => setting.required)) {
+    const oauthUrl = getOauthUrl(integration);
+
+    if (oauthUrl) {
+      console.log("oauthUrl", oauthUrl);
+      // window.open(oauthUrl);
+    } else if (integration.settings.some((setting) => setting.required)) {
       navigate(path.to.integration(integration.id));
     } else if (integration.onInitialize) {
       await integration.onInitialize?.();

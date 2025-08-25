@@ -1,12 +1,12 @@
-import { z } from "zod/v3";
 import { zfd } from "zod-form-data";
+import { z } from "zod/v3";
 
 export const chartIntervals = [
   { key: "week", label: "Week" },
   { key: "month", label: "Month" },
   { key: "quarter", label: "Quarter" },
   { key: "year", label: "Year" },
-  { key: "custom", label: "Custom" }
+  { key: "custom", label: "Custom" },
 ];
 
 export const documentTypes = [
@@ -20,7 +20,7 @@ export const documentTypes = [
   "Video",
   "Audio",
   "Model",
-  "Other"
+  "Other",
 ] as const;
 
 export const inspectionStatus = ["Pass", "Fail"] as const;
@@ -32,20 +32,20 @@ export const tablesWithTags = [
   "material",
   "part",
   "suggestion",
-  "tool"
+  "tool",
 ];
 
 export const methodItemType = [
   "Part",
   "Material",
   "Tool",
-  "Consumable"
+  "Consumable",
   // "Service",
 ] as const;
 
 export const methodOperationOrders = [
   "After Previous",
-  "With Previous"
+  "With Previous",
 ] as const;
 
 export const months = [
@@ -60,7 +60,7 @@ export const months = [
   "September",
   "October",
   "November",
-  "December"
+  "December",
 ] as const;
 
 export const methodType = ["Buy", "Make", "Pick"] as const;
@@ -68,7 +68,7 @@ export const methodType = ["Buy", "Make", "Pick"] as const;
 export const noteValidator = z.object({
   id: zfd.text(z.string().optional()),
   documentId: z.string().min(1),
-  note: z.string().min(1, { message: "Note is required" })
+  note: z.string().min(1, { message: "Note is required" }),
 });
 
 export const operationTypes = ["Inside", "Outside"] as const;
@@ -82,19 +82,19 @@ export const procedureStepType = [
   "Person",
   "List",
   "File",
-  "Inspection"
+  "Inspection",
 ] as const;
 
 export const processTypes = [
   "Inside",
   "Outside",
-  "Inside and Outside"
+  "Inside and Outside",
 ] as const;
 
 export const feedbackValidator = z.object({
   feedback: z.string().min(1, { message: "" }),
   attachmentPath: z.string().optional(),
-  location: z.string()
+  location: z.string(),
 });
 
 export const suggestionValidator = z.object({
@@ -102,7 +102,12 @@ export const suggestionValidator = z.object({
   emoji: z.string().default("💡"),
   attachmentPath: z.string().optional(),
   path: z.string(),
-  userId: zfd.text(z.string().optional())
+  userId: zfd.text(z.string().optional()),
+});
+
+export const oAuthCallbackSchema = z.object({
+  code: z.string(),
+  state: z.string(),
 });
 
 export const operationStepValidator = z
@@ -122,13 +127,13 @@ export const operationStepValidator = z
         }
       }),
     type: z.enum(procedureStepType, {
-      errorMap: () => ({ message: "Type is required" })
+      errorMap: () => ({ message: "Type is required" }),
     }),
     unitOfMeasureCode: zfd.text(z.string().optional()),
     minValue: zfd.numeric(z.number().min(0).optional()),
     maxValue: zfd.numeric(z.number().min(0).optional()),
     listValues: z.array(z.string()).optional(),
-    sortOrder: zfd.numeric(z.number().min(0).optional())
+    sortOrder: zfd.numeric(z.number().min(0).optional()),
   })
   .refine(
     (data) => {
@@ -139,7 +144,7 @@ export const operationStepValidator = z
     },
     {
       message: "Unit of measure is required",
-      path: ["unitOfMeasureCode"]
+      path: ["unitOfMeasureCode"],
     }
   )
   .refine(
@@ -155,7 +160,7 @@ export const operationStepValidator = z
     },
     {
       message: "List options are required",
-      path: ["listOptions"]
+      path: ["listOptions"],
     }
   )
   .refine(
@@ -167,7 +172,7 @@ export const operationStepValidator = z
     },
     {
       message: "Maximum value must be greater than or equal to minimum value",
-      path: ["maxValue"]
+      path: ["maxValue"],
     }
   );
 
@@ -177,14 +182,14 @@ export const operationToolValidator = z.object({
   toolId: z.string().min(1, { message: "Tool is required" }),
   quantity: zfd.numeric(
     z.number().min(0.000001, { message: "Quantity is required" })
-  )
+  ),
 });
 
 export const operationParameterValidator = z.object({
   id: zfd.text(z.string().optional()),
   operationId: z.string().min(1, { message: "Operation is required" }),
   key: z.string().min(1, { message: "Key is required" }),
-  value: z.string().min(1, { message: "Value is required" })
+  value: z.string().min(1, { message: "Value is required" }),
 });
 
 export const savedViewValidator = z.object({
@@ -195,7 +200,7 @@ export const savedViewValidator = z.object({
   filter: z.string().optional(),
   sort: z.string().optional(),
   state: z.string(),
-  type: z.enum(["Public", "Private"])
+  type: z.enum(["Public", "Private"]),
 });
 
 export const savedViewStateValidator = z.object({
@@ -203,7 +208,7 @@ export const savedViewStateValidator = z.object({
   columnPinning: z.any(),
   columnVisibility: z.record(z.boolean()),
   filters: z.array(z.string()).optional(),
-  sorts: z.array(z.string()).optional()
+  sorts: z.array(z.string()).optional(),
 });
 
 export const standardFactorType = [
@@ -217,5 +222,5 @@ export const standardFactorType = [
   "Pieces/Minute",
   "Seconds/Piece",
   "Total Hours",
-  "Total Minutes"
+  "Total Minutes",
 ] as const;
