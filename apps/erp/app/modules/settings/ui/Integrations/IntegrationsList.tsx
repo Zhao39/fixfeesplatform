@@ -1,16 +1,6 @@
 import type { IntegrationConfig } from "@carbon/ee";
-import {
-  Badge,
-  Button,
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from "@carbon/react";
-import { useRouteData, useUrlParams } from "@carbon/remix";
-import { Link, useFetcher, useNavigate } from "react-router";
 import { SearchFilter } from "~/components";
+import { useUrlParams } from "~/hooks";
 import { IntegrationCard } from "./IntegrationCard";
 
 type IntegrationsListProps = {
