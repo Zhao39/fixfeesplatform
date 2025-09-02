@@ -47112,21 +47112,21 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "address_countryCode_fkey"
-            columns: ["paymentCountryCode"]
-            isOneToOne: false
-            referencedRelation: "country"
-            referencedColumns: ["alpha2"]
+            foreignKeyName: "address_countryCode_fkey";
+            columns: ["paymentCountryCode"];
+            isOneToOne: false;
+            referencedRelation: "country";
+            referencedColumns: ["alpha2"];
           },
           {
-            foreignKeyName: "address_countryCode_fkey"
-            columns: ["customerCountryCode"]
-            isOneToOne: false
-            referencedRelation: "country"
-            referencedColumns: ["alpha2"]
-          },
-        ]
-      }
+            foreignKeyName: "address_countryCode_fkey";
+            columns: ["customerCountryCode"];
+            isOneToOne: false;
+            referencedRelation: "country";
+            referencedColumns: ["alpha2"];
+          }
+        ];
+      };
       salesOrders: {
         Row: {
           assignee: string | null
