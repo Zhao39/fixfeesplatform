@@ -70,11 +70,16 @@ export async function loader({ request }: LoaderFunctionArgs) {
         id: QuickBooks.id,
         active: true,
         // @ts-ignore
-        metadata: auth,
+        metadata: {
+          ...auth,
+          tenantId: data.realmId,
+        },
         updatedBy: userId,
         companyId: companyId,
       }
     );
+
+    console.log({ createdQuickBooksIntegration });
 
     if (createdQuickBooksIntegration?.data?.metadata) {
       const requestUrl = new URL(request.url);

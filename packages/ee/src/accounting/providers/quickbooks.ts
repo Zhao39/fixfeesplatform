@@ -75,7 +75,6 @@ export class QuickBooksProvider extends CoreProvider {
       accessToken: data.access_token,
       refreshToken: data.refresh_token,
       expiresAt: new Date(Date.now() + data.expires_in * 1000),
-      tenantId: data.realmId, // QuickBooks uses realmId as tenant identifier
     };
   }
 
