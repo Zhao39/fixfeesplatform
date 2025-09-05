@@ -1,5 +1,25 @@
-import { getCarbonServiceRole, QUICKBOOKS_WEBHOOK_SECRET } from "@carbon/auth";
+/**
+ * QuickBooks Webhook Handler
+ *
+ * This endpoint receives webhook notifications from QuickBooks when entities
+ * (customers, vendors, etc.) are created, updated, or deleted in QuickBooks.
+ *
+ * The webhook handler:
+ * 1. Validates the webhook payload structure
+ * 2. Verifies the webhook signature for security
+ * 3. Looks up the company integration by QuickBooks realm ID
+ * 4. Triggers background sync jobs to process the entity changes
+ *
+ * Supported entity types:
+ * - Customer: Synced to Carbon's customer table
+ * - Vendor: Synced to Carbon's supplier table
+ *
+ * The actual sync logic is handled asynchronously by the accounting-sync
+ * background job to prevent webhook timeouts and ensure reliability.
+ */
 
+import { getCarbonServiceRole, QUICKBOOKS_WEBHOOK_SECRET } from "@carbon/auth";
+import { tasks } from "@trigger.dev/sdk/v3";
 import type { ActionFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
 import crypto from "crypto";
@@ -46,21 +66,78 @@ function verifyQuickBooksSignature(
   );
 }
 
+async function triggerAccountingSync(
+  companyId: string,
+  realmId: string,
+  entities: Array<{
+    entityType: "customer" | "vendor";
+    entityId: string;
+    operation: "Create" | "Update" | "Delete";
+  }>
+) {
+  // Prepare the payload for the accounting sync job
+  const payload = {
+    companyId,
+    provider: "quickbooks" as const,
+    syncType: "webhook" as const,
+    syncDirection: "from_accounting" as const,
+    entities: entities.map((entity) => ({
+      entityType: entity.entityType,
+      entityId: entity.entityId,
+      operation: entity.operation.toLowerCase() as
+        | "create"
+        | "update"
+        | "delete",
+      externalId: entity.entityId, // In QuickBooks, the entity ID is the external ID
+    })),
+    metadata: {
+      tenantId: realmId,
+      webhookId: crypto.randomUUID(),
+      timestamp: new Date().toISOString(),
+    },
+  };
+
+  // Trigger the background job using Trigger.dev
+  const handle = await tasks.trigger("accounting-sync", payload);
+
+  console.log(
+    `Triggered accounting sync job ${handle.id} for ${entities.length} entities`
+  );
+
+  return handle;
+}
+
 export async function action({ request, params }: ActionFunctionArgs) {
   const serviceRole = await getCarbonServiceRole();
 
+  // Parse and validate the webhook payload
   const payload = await request.clone().json();
-
   const parsedPayload = quickbooksEventValidator.safeParse(payload);
+
   if (!parsedPayload.success) {
-    return json({ success: false }, { status: 400 });
+    console.error("Invalid QuickBooks webhook payload:", parsedPayload.error);
+    return json(
+      {
+        success: false,
+        error: "Invalid payload format",
+      },
+      { status: 400 }
+    );
   }
 
+  // Verify webhook signature for security
   const payloadText = await request.text();
   const signatureHeader = request.headers.get("intuit-signature");
 
   if (!signatureHeader) {
-    return json({ success: false }, { status: 401 });
+    console.warn("QuickBooks webhook received without signature");
+    return json(
+      {
+        success: false,
+        error: "Missing signature",
+      },
+      { status: 401 }
+    );
   }
 
   const requestIsValid = verifyQuickBooksSignature(
@@ -69,51 +146,121 @@ export async function action({ request, params }: ActionFunctionArgs) {
   );
 
   if (!requestIsValid) {
-    return json({ success: false }, { status: 401 });
+    console.error("QuickBooks webhook signature verification failed");
+    return json(
+      {
+        success: false,
+        error: "Invalid signature",
+      },
+      { status: 401 }
+    );
   }
 
+  console.log(
+    "Processing QuickBooks webhook with",
+    parsedPayload.data.eventNotifications.length,
+    "events"
+  );
+
   const events = parsedPayload.data.eventNotifications;
-  for await (const event of events) {
-    const { realmId, dataChangeEvent } = event;
+  const syncJobs = [];
+  const errors = [];
 
-    const companyIntegration = await serviceRole
-      .from("companyIntegration")
-      .select("*")
-      .eq("metadata->>tenantId", realmId)
-      .eq("id", "quickbooks")
-      .single();
+  // Process each event notification
+  for (const event of events) {
+    try {
+      const { realmId, dataChangeEvent } = event;
 
-    console.log({ companyIntegration });
+      // Find the company integration for this QuickBooks realm
+      const companyIntegration = await serviceRole
+        .from("companyIntegration")
+        .select("*")
+        .eq("metadata->>tenantId", realmId)
+        .eq("id", "quickbooks")
+        .single();
 
-    const { entities } = dataChangeEvent;
-    for await (const entity of entities) {
-      const { id, name, operation } = entity;
-      console.log({ realmId, id, name, operation });
+      if (companyIntegration.error || !companyIntegration.data.companyId) {
+        console.error(`No QuickBooks integration found for realm ${realmId}`);
+        errors.push({
+          realmId,
+          error: "Integration not found",
+        });
+        continue;
+      }
+
+      const companyId = companyIntegration.data.companyId;
+      const { entities } = dataChangeEvent;
+
+      // Group entities by type for efficient batch processing
+      const entitiesToSync: Array<{
+        entityType: "customer" | "vendor";
+        entityId: string;
+        operation: "Create" | "Update" | "Delete";
+      }> = [];
+
+      for (const entity of entities) {
+        const { id, name, operation } = entity;
+
+        // Log each entity change for debugging
+        console.log(
+          `QuickBooks ${operation}: ${name} ${id} (realm: ${realmId})`
+        );
+
+        // Map QuickBooks entity types to our internal types
+        if (name === "Customer") {
+          entitiesToSync.push({
+            entityType: "customer",
+            entityId: id,
+            operation,
+          });
+        } else if (name === "Vendor") {
+          entitiesToSync.push({
+            entityType: "vendor",
+            entityId: id,
+            operation,
+          });
+        } else {
+          console.log(`Skipping unsupported entity type: ${name}`);
+        }
+      }
+
+      // Trigger background sync job if there are entities to process
+      if (entitiesToSync.length > 0) {
+        try {
+          const jobHandle = await triggerAccountingSync(
+            companyId,
+            realmId,
+            entitiesToSync
+          );
+          syncJobs.push({
+            id: jobHandle.id,
+            companyId,
+            realmId,
+            entityCount: entitiesToSync.length,
+          });
+        } catch (error) {
+          console.error("Failed to trigger sync job:", error);
+          errors.push({
+            realmId,
+            error:
+              error instanceof Error ? error.message : "Failed to trigger job",
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Error processing event:", error);
+      errors.push({
+        error: error instanceof Error ? error.message : "Unknown error",
+      });
     }
   }
 
-  // const quickbooksIntegration = await serviceRole
-  //   .from("companyIntegration")
-  //   .select("*")
-  //   .eq("metadata->>tenantId", realmId)
-  //   .eq("id", "quickbooks")
-  //   .single();
-
-  // try {
-  //   const { webhookToken } = integrationValidator.parse(
-  //     quickbooksIntegration.data.metadata
-  //   );
-
-  //   const payloadText = await request.text();
-  //
-
-  //   const payload = JSON.parse(payloadText);
-  //   console.log("QuickBooks webhook payload", payload);
-
-  //   await tasks.trigger<typeof quickbooksTask>("quickbooks", {
-  //     companyId,
-  //     payload,
-  //   });
-
-  return json({ success: true });
+  // Return detailed response
+  return json({
+    success: errors.length === 0,
+    jobsTriggered: syncJobs.length,
+    jobs: syncJobs,
+    errors: errors.length > 0 ? errors : undefined,
+    timestamp: new Date().toISOString(),
+  });
 }

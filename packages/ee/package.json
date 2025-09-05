@@ -4,6 +4,7 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
+    "./accounting": "./src/accounting/index.ts",
     "./exchange-rates.server": "./src/exchange-rates/exchange-rates.server.ts",
     "./notifications": "./src/notifications/index.ts",
     "./onshape": "./src/onshape/lib/index.ts",
