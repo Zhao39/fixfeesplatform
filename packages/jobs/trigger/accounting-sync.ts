@@ -59,7 +59,7 @@ export const accountingSyncTask = task({
       );
     }
 
-    const providerConfig: ProviderConfig = metadataSchema.safeParse(
+    const providerConfig = metadataSchema.safeParse(
       companyIntegration.data.metadata
     );
 

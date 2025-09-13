@@ -42669,18 +42669,18 @@ export type Database = {
             referencedColumns: ["userId"]
           },
           {
-            foreignKeyName: "partner_id_fkey"
-            columns: ["supplierLocationId"]
-            isOneToOne: false
-            referencedRelation: "supplierLocation"
-            referencedColumns: ["id"]
+            foreignKeyName: "partner_id_fkey";
+            columns: ["id"];
+            isOneToOne: false;
+            referencedRelation: "supplierLocation";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "partner_id_fkey"
-            columns: ["id"]
-            isOneToOne: false
-            referencedRelation: "supplierLocation"
-            referencedColumns: ["id"]
+            foreignKeyName: "partner_id_fkey";
+            columns: ["supplierLocationId"];
+            isOneToOne: false;
+            referencedRelation: "supplierLocation";
+            referencedColumns: ["id"];
           },
           {
             foreignKeyName: "partner_updatedBy_fkey"
@@ -46577,6 +46577,13 @@ export type Database = {
           },
           {
             foreignKeyName: "address_countryCode_fkey";
+            columns: ["customerCountryCode"];
+            isOneToOne: false;
+            referencedRelation: "country";
+            referencedColumns: ["alpha2"];
+          },
+          {
+            foreignKeyName: "address_countryCode_fkey";
             columns: ["invoiceCountryCode"];
             isOneToOne: false;
             referencedRelation: "country";
@@ -47113,14 +47120,14 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "address_countryCode_fkey";
-            columns: ["paymentCountryCode"];
+            columns: ["customerCountryCode"];
             isOneToOne: false;
             referencedRelation: "country";
             referencedColumns: ["alpha2"];
           },
           {
             foreignKeyName: "address_countryCode_fkey";
-            columns: ["customerCountryCode"];
+            columns: ["paymentCountryCode"];
             isOneToOne: false;
             referencedRelation: "country";
             referencedColumns: ["alpha2"];
@@ -49958,41 +49965,37 @@ export type Database = {
       get_consumable_details: {
         Args: { item_id: string }
         Returns: {
-          active: boolean
-          assignee: string
-          companyId: string
-          createdAt: string
-          createdBy: string
-          customFields: Json
-          defaultMethodType: Database["public"]["Enums"]["methodType"]
-          description: string
-          id: string
-          itemPostingGroupId: string
-          itemTrackingType: Database["public"]["Enums"]["itemTrackingType"]
-          modelName: string
-          modelPath: string
-          modelSize: number
-          modelUploadId: string
-          name: string
-          notes: Json
-          readableId: string
-          readableIdWithRevision: string
-          replenishmentSystem: Database["public"]["Enums"]["itemReplenishmentSystem"]
-          revision: string
-          revisions: Json
-          supplierIds: string
-          tags: string[]
-          thumbnailPath: string
-          unitOfMeasure: string
-          unitOfMeasureCode: string
-          updatedAt: string
-          updatedBy: string
-        }[]
-      }
-      get_current_training_period: {
-        Args: { frequency: Database["public"]["Enums"]["trainingFrequency"] }
-        Returns: string
-      }
+          active: boolean;
+          assignee: string;
+          companyId: string;
+          createdAt: string;
+          createdBy: string;
+          customFields: Json;
+          defaultMethodType: Database["public"]["Enums"]["methodType"];
+          description: string;
+          id: string;
+          itemTrackingType: Database["public"]["Enums"]["itemTrackingType"];
+          modelName: string;
+          modelPath: string;
+          modelSize: number;
+          modelUploadId: string;
+          name: string;
+          notes: Json;
+          readableId: string;
+          readableIdWithRevision: string;
+          replenishmentSystem: Database["public"]["Enums"]["itemReplenishmentSystem"];
+          revision: string;
+          revisions: Json;
+          supplierIds: string;
+          tags: string[];
+          itemPostingGroupId: string;
+          createdBy: string;
+          createdAt: string;
+          updatedBy: string;
+          updatedAt: string;
+          updatedBy: string;
+        }[];
+      };
       get_custom_field_unique_values: {
         Args: { company_id: string; field_key: string; table_name: string }
         Returns: {
@@ -50350,49 +50353,49 @@ export type Database = {
       get_material_details: {
         Args: { item_id: string }
         Returns: {
-          active: boolean
-          assignee: string
-          companyId: string
-          createdAt: string
-          createdBy: string
-          customFields: Json
-          defaultMethodType: Database["public"]["Enums"]["methodType"]
-          description: string
-          dimensionId: string
-          dimensions: string
-          finish: string
-          finishId: string
-          grade: string
-          gradeId: string
-          id: string
-          itemPostingGroupId: string
-          itemTrackingType: Database["public"]["Enums"]["itemTrackingType"]
-          materialForm: string
-          materialFormId: string
-          materialSubstance: string
-          materialSubstanceId: string
-          materialType: string
-          materialTypeId: string
-          modelName: string
-          modelPath: string
-          modelSize: number
-          modelUploadId: string
-          name: string
-          notes: Json
-          readableId: string
-          readableIdWithRevision: string
-          replenishmentSystem: Database["public"]["Enums"]["itemReplenishmentSystem"]
-          revision: string
-          revisions: Json
-          supplierIds: string
-          tags: string[]
-          thumbnailPath: string
-          unitOfMeasure: string
-          unitOfMeasureCode: string
-          updatedAt: string
-          updatedBy: string
-        }[]
-      }
+          active: boolean;
+          assignee: string;
+          companyId: string;
+          createdAt: string;
+          createdBy: string;
+          customFields: Json;
+          defaultMethodType: Database["public"]["Enums"]["methodType"];
+          description: string;
+          dimensionId: string;
+          dimensions: string;
+          finish: string;
+          finishId: string;
+          grade: string;
+          gradeId: string;
+          id: string;
+          itemTrackingType: Database["public"]["Enums"]["itemTrackingType"];
+          materialForm: string;
+          materialFormId: string;
+          materialSubstance: string;
+          materialSubstanceId: string;
+          materialType: string;
+          materialTypeId: string;
+          modelName: string;
+          modelPath: string;
+          modelSize: number;
+          modelUploadId: string;
+          name: string;
+          notes: Json;
+          readableId: string;
+          readableIdWithRevision: string;
+          replenishmentSystem: Database["public"]["Enums"]["itemReplenishmentSystem"];
+          revision: string;
+          revisions: Json;
+          supplierIds: string;
+          tags: string[];
+          itemPostingGroupId: string;
+          createdBy: string;
+          createdAt: string;
+          updatedBy: string;
+          updatedAt: string;
+          updatedBy: string;
+        }[];
+      };
       get_material_naming_details: {
         Args: { readable_id: string }
         Returns: {
@@ -50471,38 +50474,37 @@ export type Database = {
       get_part_details: {
         Args: { item_id: string }
         Returns: {
-          active: boolean
-          assignee: string
-          companyId: string
-          createdAt: string
-          createdBy: string
-          customFields: Json
-          defaultMethodType: Database["public"]["Enums"]["methodType"]
-          description: string
-          id: string
-          itemTrackingType: Database["public"]["Enums"]["itemTrackingType"]
-          modelId: string
-          modelName: string
-          modelPath: string
-          modelSize: number
-          name: string
-          notes: Json
-          readableId: string
-          readableIdWithRevision: string
-          replenishmentSystem: Database["public"]["Enums"]["itemReplenishmentSystem"]
-          revision: string
-          revisions: Json
-          tags: string[]
-          thumbnailPath: string
-          unitOfMeasure: string
-          unitOfMeasureCode: string
-          updatedAt: string
-          updatedBy: string
-        }[]
-      }
-      get_period_end_date: { Args: { period: string }; Returns: string }
-      get_period_start_date: { Args: { period: string }; Returns: string }
-      get_permission_companies: { Args: { claim: string }; Returns: string[] }
+          active: boolean;
+          assignee: string;
+          companyId: string;
+          createdAt: string;
+          createdBy: string;
+          customFields: Json;
+          defaultMethodType: Database["public"]["Enums"]["methodType"];
+          description: string;
+          id: string;
+          itemTrackingType: Database["public"]["Enums"]["itemTrackingType"];
+          modelId: string;
+          modelName: string;
+          modelPath: string;
+          modelSize: number;
+          name: string;
+          notes: Json;
+          readableId: string;
+          readableIdWithRevision: string;
+          replenishmentSystem: Database["public"]["Enums"]["itemReplenishmentSystem"];
+          revision: string;
+          revisions: Json;
+          tags: string[];
+          itemPostingGroupId: string;
+          createdBy: string;
+          createdAt: string;
+          updatedBy: string;
+          updatedAt: string;
+          updatedBy: string;
+        }[];
+      };
+      get_permission_companies: { Args: { claim: string }; Returns: string[] };
       get_production_planning: {
         Args: { company_id: string; location_id: string; periods: string[] }
         Returns: {
@@ -50927,89 +50929,36 @@ export type Database = {
       get_tool_details: {
         Args: { item_id: string }
         Returns: {
-          active: boolean
-          assignee: string
-          companyId: string
-          createdAt: string
-          createdBy: string
-          customFields: Json
-          defaultMethodType: Database["public"]["Enums"]["methodType"]
-          description: string
-          id: string
-          itemTrackingType: Database["public"]["Enums"]["itemTrackingType"]
-          modelId: string
-          modelName: string
-          modelPath: string
-          modelSize: number
-          name: string
-          notes: Json
-          readableId: string
-          readableIdWithRevision: string
-          replenishmentSystem: Database["public"]["Enums"]["itemReplenishmentSystem"]
-          revision: string
-          revisions: Json
-          tags: string[]
-          thumbnailPath: string
-          unitOfMeasure: string
-          unitOfMeasureCode: string
-          updatedAt: string
-          updatedBy: string
-        }[]
-      }
-      get_training_assignment_status: {
-        Args: { p_company_id: string }
-        Returns: {
-          avatarUrl: string
-          companyId: string
-          completedAt: string
-          completionId: number
-          currentPeriod: string
-          employeeId: string
-          employeeName: string
-          employeeStartDate: string
-          frequency: Database["public"]["Enums"]["trainingFrequency"]
-          status: string
-          trainingAssignmentId: string
-          trainingId: string
-          trainingName: string
-          trainingType: Database["public"]["Enums"]["trainingType"]
-        }[]
-      }
-      get_training_assignment_summary: {
-        Args: { p_company_id: string }
-        Returns: {
-          completed: number
-          completionPercent: number
-          currentPeriod: string
-          frequency: Database["public"]["Enums"]["trainingFrequency"]
-          overdue: number
-          pending: number
-          totalAssigned: number
-          trainingId: string
-          trainingName: string
-        }[]
-      }
-      get_training_assignments_by_user: {
-        Args: { user_id: string }
-        Returns: {
-          assignee: string
-          companyId: string
-          content: Json
-          createdAt: string
-          createdBy: string
-          description: string
-          estimatedDuration: string
-          frequency: Database["public"]["Enums"]["trainingFrequency"]
-          name: string
-          status: Database["public"]["Enums"]["trainingStatus"]
-          tags: string[]
-          trainingAssignmentId: number
-          type: Database["public"]["Enums"]["trainingType"]
-          updatedAt: string
-          updatedBy: string
-          version: number
-        }[]
-      }
+          active: boolean;
+          assignee: string;
+          companyId: string;
+          createdAt: string;
+          createdBy: string;
+          customFields: Json;
+          defaultMethodType: Database["public"]["Enums"]["methodType"];
+          description: string;
+          id: string;
+          itemTrackingType: Database["public"]["Enums"]["itemTrackingType"];
+          modelId: string;
+          modelName: string;
+          modelPath: string;
+          modelSize: number;
+          name: string;
+          notes: Json;
+          readableId: string;
+          readableIdWithRevision: string;
+          replenishmentSystem: Database["public"]["Enums"]["itemReplenishmentSystem"];
+          revision: string;
+          revisions: Json;
+          tags: string[];
+          itemPostingGroupId: string;
+          createdBy: string;
+          createdAt: string;
+          updatedBy: string;
+          updatedAt: string;
+          updatedBy: string;
+        }[];
+      };
       get_unscheduled_jobs: {
         Args: { location_id: string }
         Returns: {
