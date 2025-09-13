@@ -10,7 +10,7 @@ import { redirect, useLoaderData, useNavigate, useParams } from "react-router";
 import { ConfirmDelete } from "~/components/Modals";
 import { deleteItemPostingGroup, getItemPostingGroup } from "~/modules/items";
 import { getParams, path } from "~/utils/path";
-import { getCompanyId } from "~/utils/react-query";
+import { getCompanyId, itemPostingGroupsQuery } from "~/utils/react-query";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client } = await requirePermissions(request, {
@@ -67,15 +67,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export async function clientAction({ serverAction }: ClientActionFunctionArgs) {
-  const companyId = getCompanyId();
-
-  window.clientCache?.invalidateQueries({
-    predicate: (query) => {
-      const queryKey = query.queryKey as string[];
-      return queryKey[0] === "itemPostingGroups" && queryKey[1] === companyId;
-    }
-  });
-
+  window.clientCache?.setQueryData(
+    itemPostingGroupsQuery(getCompanyId()).queryKey,
+    null
+  );
   return await serverAction();
 }
 

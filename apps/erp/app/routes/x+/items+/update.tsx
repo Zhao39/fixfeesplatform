@@ -26,7 +26,6 @@ export async function action({ request }: ActionFunctionArgs) {
     case "name":
     case "replenishmentSystem":
     case "unitOfMeasureCode":
-      // For other fields, just update the specified field
       if (field === "replenishmentSystem" && value !== "Buy and Make") {
         return await client
           .from("item")
@@ -319,7 +318,6 @@ export async function action({ request }: ActionFunctionArgs) {
       // Update itemCost table for all selected items
       const itemCostUpdates = await Promise.all(
         (items as string[]).map(async (itemId) => {
-          // First check if itemCost record exists
           const existingCost = await client
             .from("itemCost")
             .select("itemId")

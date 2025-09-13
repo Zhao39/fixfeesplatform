@@ -1,5 +1,6 @@
 import {
   Badge,
+  Button,
   HStack,
   MenuIcon,
   MenuItem,
@@ -13,6 +14,7 @@ import {
   LuCalendar,
   LuEuro,
   LuGlobe,
+  LuGroup,
   LuPencil,
   LuPhone,
   LuPrinter,
@@ -22,7 +24,7 @@ import {
   LuTrash,
   LuUser
 } from "react-icons/lu";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import {
   CustomerAvatar,
   EmployeeAvatar,
@@ -293,7 +295,17 @@ const CustomersTable = memo(
           ]}
           primaryAction={
             permissions.can("create", "sales") && (
-              <New label="Customer" to={path.to.newCustomer} />
+              <div className="flex items-center gap-2">
+                <Button
+                  className="hidden md:inline-flex"
+                  variant="secondary"
+                  leftIcon={<LuShapes />}
+                  asChild
+                >
+                  <Link to={path.to.customerTypes}>Customer Types</Link>
+                </Button>
+                <New label="Customer" to={path.to.newCustomer} />
+              </div>
             )
           }
           renderContextMenu={renderContextMenu}

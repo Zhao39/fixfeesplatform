@@ -1,5 +1,6 @@
 import {
   Badge,
+  Button,
   Checkbox,
   DropdownMenuContent,
   DropdownMenuGroup,
@@ -30,6 +31,7 @@ import {
   LuCalendar,
   LuCheck,
   LuGitPullRequestArrow,
+  LuGroup,
   LuLoaderCircle,
   LuPencil,
   LuTag,
@@ -38,7 +40,7 @@ import {
 } from "react-icons/lu";
 import { RxCodesandboxLogo } from "react-icons/rx";
 import { TbTargetArrow } from "react-icons/tb";
-import { useFetcher, useNavigate } from "react-router";
+import { Link, useFetcher, useNavigate } from "react-router";
 import {
   EmployeeAvatar,
   Hyperlink,
@@ -133,11 +135,11 @@ const PartsTable = memo(({ data, tags, count }: PartsTableProps) => {
             type: "static",
             options: itemPostingGroups.map((group) => ({
               value: group.value,
-              label: <Enumerable value={group.label} />,
-            })),
+              label: <Enumerable value={group.label} />
+            }))
           },
-          icon: <LuTag />,
-        },
+          icon: <LuGroup />
+        }
       },
       {
         accessorKey: "itemTrackingType",
@@ -502,7 +504,12 @@ const PartsTable = memo(({ data, tags, count }: PartsTableProps) => {
         ]}
         primaryAction={
           permissions.can("create", "parts") && (
-            <New label="Part" to={path.to.newPart} />
+            <div className="flex items-center gap-2">
+              <Button variant="secondary" leftIcon={<LuGroup />} asChild>
+                <Link to={path.to.itemPostingGroups}>Item Groups</Link>
+              </Button>
+              <New label="Part" to={path.to.newPart} />
+            </div>
           )
         }
         renderActions={renderActions}

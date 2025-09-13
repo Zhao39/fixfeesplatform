@@ -51,7 +51,6 @@ export const accountingSyncTask = task({
       );
     }
 
-    // Initialize the provider
     const accountingProvider = await initializeProvider(
       provider,
       companyIntegration.data
@@ -62,7 +61,6 @@ export const accountingSyncTask = task({
       failed: [] as { entity: AccountingEntity; error: string }[],
     };
 
-    // Process each entity
     for (const entity of entities) {
       try {
         const result = await processEntity(
@@ -85,22 +83,6 @@ export const accountingSyncTask = task({
         );
       }
     }
-
-    // Log sync results
-    await client.from("accountingSyncLog").insert({
-      companyId,
-      provider,
-      syncType: payload.syncType,
-      syncDirection,
-      entitiesProcessed: entities.length,
-      entitiesSucceeded: results.success.length,
-      entitiesFailed: results.failed.length,
-      metadata: {
-        ...metadata,
-        results,
-      },
-      createdAt: new Date().toISOString(),
-    });
 
     return results;
   },
@@ -148,12 +130,10 @@ async function processEntity(
 ): Promise<any> {
   const { entityType, entityId, operation, externalId } = entity;
 
-  // Handle sync based on direction
   if (
     syncDirection === "from_accounting" ||
     syncDirection === "bidirectional"
   ) {
-    // Sync from accounting system to Carbon
     if (
       operation === "create" ||
       operation === "update" ||
@@ -178,7 +158,6 @@ async function processEntity(
           );
       }
     } else if (operation === "delete") {
-      // Handle deletion by deactivating in Carbon
       switch (entityType) {
         case "customer":
           return await deactivateCustomer(client, companyId, externalId);
@@ -189,7 +168,6 @@ async function processEntity(
   }
 
   if (syncDirection === "to_accounting" || syncDirection === "bidirectional") {
-    // Sync from Carbon to accounting system
     if (operation === "create" || operation === "update") {
       switch (entityType) {
         case "customer":

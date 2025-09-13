@@ -1,5 +1,6 @@
 import {
   Badge,
+  Button,
   Checkbox,
   DropdownMenuContent,
   DropdownMenuGroup,
@@ -32,6 +33,7 @@ import {
   LuExpand,
   LuGitPullRequestArrow,
   LuGlassWater,
+  LuGroup,
   LuPaintBucket,
   LuPencil,
   LuPuzzle,
@@ -44,7 +46,7 @@ import {
 } from "react-icons/lu";
 import { RxCodesandboxLogo } from "react-icons/rx";
 import { TbTargetArrow } from "react-icons/tb";
-import { useFetcher, useNavigate } from "react-router";
+import { Link, useFetcher, useNavigate } from "react-router";
 import {
   EmployeeAvatar,
   Hyperlink,
@@ -252,11 +254,11 @@ const MaterialsTable = memo(({ data, tags, count }: MaterialsTableProps) => {
             type: "static",
             options: itemPostingGroups.map((group) => ({
               value: group.value,
-              label: <Enumerable value={group.label} />,
-            })),
+              label: <Enumerable value={group.label} />
+            }))
           },
-          icon: <LuTag />,
-        },
+          icon: <LuGroup />
+        }
       },
       {
         accessorKey: "itemTrackingType",
@@ -609,7 +611,12 @@ const MaterialsTable = memo(({ data, tags, count }: MaterialsTableProps) => {
         ]}
         primaryAction={
           permissions.can("create", "parts") && (
-            <New label="Material" to={path.to.newMaterial} />
+            <div className="flex items-center gap-2">
+              <Button variant="secondary" leftIcon={<LuGroup />} asChild>
+                <Link to={path.to.itemPostingGroups}>Item Groups</Link>
+              </Button>
+              <New label="Material" to={path.to.newMaterial} />
+            </div>
           )
         }
         renderActions={renderActions}

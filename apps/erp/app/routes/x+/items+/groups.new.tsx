@@ -15,7 +15,7 @@ import {
 import { ItemPostingGroupForm } from "~/modules/items/ui/ItemPostingGroups";
 import { setCustomFields } from "~/utils/form";
 import { getParams, path } from "~/utils/path";
-import { getCompanyId } from "~/utils/react-query";
+import { getCompanyId, itemPostingGroupsQuery } from "~/utils/react-query";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   await requirePermissions(request, {
@@ -81,15 +81,10 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export async function clientAction({ serverAction }: ClientActionFunctionArgs) {
-  const companyId = getCompanyId();
-
-  window.clientCache?.invalidateQueries({
-    predicate: (query) => {
-      const queryKey = query.queryKey as string[];
-      return queryKey[0] === "itemPostingGroups" && queryKey[1] === companyId;
-    }
-  });
-
+  window.clientCache?.setQueryData(
+    itemPostingGroupsQuery(getCompanyId()).queryKey,
+    null
+  );
   return await serverAction();
 }
 
