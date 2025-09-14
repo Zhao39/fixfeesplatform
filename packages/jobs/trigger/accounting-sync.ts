@@ -788,7 +788,6 @@ async function syncVendorFromAccounting(
           address.country = country.data?.alpha2;
         }
       }
-
       const addressData = {
         companyId,
         addressLine1: address.street,
