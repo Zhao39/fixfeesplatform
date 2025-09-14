@@ -79,7 +79,7 @@ const CustomersTable = memo(
         },
         {
           accessorKey: "status",
-          header: "Customer Status",
+          header: "Status",
           cell: (item) => <Enumerable value={item.getValue<string>()} />,
           meta: {
             filter: {
@@ -89,6 +89,7 @@ const CustomersTable = memo(
                 label: <Enumerable value={status.name ?? ""} />
               }))
             },
+            pluralHeader: "Statuses",
             icon: <LuStar />
           }
         },

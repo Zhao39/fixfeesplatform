@@ -183,7 +183,7 @@ async function handleKanban({
         serviceRole
           .from("job")
           .update({
-            status: "Ready"
+            status: "Ready" as const
           })
           .eq("id", jobReadableId)
       ]);

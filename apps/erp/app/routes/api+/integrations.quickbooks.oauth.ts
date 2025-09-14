@@ -79,8 +79,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
       }
     );
 
-    console.log({ createdQuickBooksIntegration });
-
     if (createdQuickBooksIntegration?.data?.metadata) {
       const requestUrl = new URL(request.url);
 

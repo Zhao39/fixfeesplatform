@@ -5,6 +5,7 @@ import { QuickBooksProvider } from "@carbon/ee/quickbooks";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { task } from "@trigger.dev/sdk/v3";
+import z from "zod";
 
 // Flexible payload interface to support different accounting systems and sync types
 export interface AccountingSyncPayload {
@@ -30,6 +31,13 @@ export interface AccountingEntity {
   data?: any;
 }
 
+const metadataSchema = z.object({
+  refreshToken: z.string().optional(),
+  accessToken: z.string(),
+  expiresAt: z.string().datetime(),
+  tenantId: z.string().optional(),
+});
+
 export const accountingSyncTask = task({
   id: "accounting-sync",
   run: async (payload: AccountingSyncPayload) => {
@@ -51,9 +59,18 @@ export const accountingSyncTask = task({
       );
     }
 
+    const providerConfig: ProviderConfig = metadataSchema.safeParse(
+      companyIntegration.data.metadata
+    );
+
+    if (!providerConfig.success) {
+      console.error(providerConfig.error);
+      throw new Error("Invalid provider config");
+    }
+
     const accountingProvider = await initializeProvider(
       provider,
-      companyIntegration.data
+      providerConfig.data
     );
 
     const results = {
@@ -90,9 +107,9 @@ export const accountingSyncTask = task({
 
 async function initializeProvider(
   provider: string,
-  integration: any
+  config: z.infer<typeof metadataSchema>
 ): Promise<CoreProvider> {
-  const metadata = integration.metadata || {};
+  const { accessToken, refreshToken, tenantId } = config;
 
   switch (provider) {
     case "quickbooks": {
@@ -103,10 +120,11 @@ async function initializeProvider(
         environment:
           (process.env.QUICKBOOKS_ENVIRONMENT as "production" | "sandbox") ||
           "sandbox",
-        accessToken: metadata.accessToken,
-        refreshToken: metadata.refreshToken,
-        tenantId: metadata.tenantId,
+        accessToken,
+        refreshToken,
+        tenantId,
       };
+
       const qbProvider = new QuickBooksProvider(config);
       return qbProvider;
     }
@@ -202,27 +220,23 @@ async function syncCustomerFromAccounting(
   companyId: string,
   operation: "create" | "update" | "sync"
 ): Promise<any> {
-  // Fetch customer from accounting system
   const accountingCustomer = await provider.getCustomer(externalId);
 
-  // Check if customer exists in Carbon (by external ID)
   const existingCustomer = await client
     .from("customer")
     .select("*")
     .eq("companyId", companyId)
-    .eq("customFields->>externalId", externalId)
+    .eq("externalId->>externalId", externalId)
     .single();
 
-  const customerData = {
+  const customerData: Database["public"]["Tables"]["customer"]["Insert"] = {
     companyId,
-    name: accountingCustomer.name,
-    email: accountingCustomer.email || null,
+    name: accountingCustomer.name ?? accountingCustomer.displayName,
     phone: accountingCustomer.phone?.number || null,
     website: accountingCustomer.website || null,
     taxId: accountingCustomer.taxNumber || null,
     currencyCode: accountingCustomer.currency || "USD",
-    active: accountingCustomer.isActive !== false,
-    customFields: {
+    externalId: {
       externalId,
       syncToken: (accountingCustomer as any).syncToken,
       accountingProvider: provider.getProviderInfo().name,
@@ -268,14 +282,25 @@ async function syncCustomerFromAccounting(
   // Sync addresses if available
   if (accountingCustomer.addresses && accountingCustomer.addresses.length > 0) {
     for (const address of accountingCustomer.addresses) {
+      if (address.country) {
+        const country = await client
+          .from("country")
+          .select("alpha2")
+          .eq("name", address.country)
+          .maybeSingle();
+        if (country.data) {
+          address.country = country.data?.alpha2;
+        }
+      }
+
       const addressData = {
         companyId,
         addressLine1: address.street || "",
         addressLine2: address.street2 || null,
         city: address.city || "",
-        state: address.state || null,
+        stateProvince: address.state || null,
         postalCode: address.postalCode || null,
-        country: address.country || null,
+        countryCode: address.country || null,
       };
 
       // Check if address exists
@@ -305,15 +330,19 @@ async function syncCustomerFromAccounting(
       // Link address to customer
       const locationType = address.type === "billing" ? "Billing" : "Shipping";
 
-      await client
-        .from("customerLocation")
-        .upsert({
+      const customerLocation = await client.from("customerLocation").upsert(
+        {
           customerId,
           addressId,
           name: locationType,
-          companyId,
-        })
-        .select();
+        },
+        {
+          onConflict: "addressId,customerId",
+          ignoreDuplicates: true,
+        }
+      );
+
+      if (customerLocation.error) console.error(customerLocation.error);
     }
   }
 
@@ -340,19 +369,17 @@ async function syncVendorFromAccounting(
     .from("supplier")
     .select("*")
     .eq("companyId", companyId)
-    .eq("customFields->>externalId", externalId)
+    .eq("externalId->>externalId", externalId)
     .single();
 
-  const supplierData = {
+  const supplierData: Database["public"]["Tables"]["supplier"]["Insert"] = {
     companyId,
-    name: accountingVendor.name,
-    email: accountingVendor.email || null,
+    name: accountingVendor.name ?? accountingVendor.displayName,
     phone: accountingVendor.phone?.number || null,
     website: accountingVendor.website || null,
     taxId: accountingVendor.taxNumber || null,
     currencyCode: accountingVendor.currency || "USD",
-    active: accountingVendor.isActive !== false,
-    customFields: {
+    externalId: {
       externalId,
       syncToken: (accountingVendor as any).syncToken,
       accountingProvider: provider.getProviderInfo().name,
@@ -394,17 +421,27 @@ async function syncVendorFromAccounting(
     supplierId = result.data.id;
   }
 
-  // Sync addresses if available
   if (accountingVendor.addresses && accountingVendor.addresses.length > 0) {
     for (const address of accountingVendor.addresses) {
+      if (address.country) {
+        const country = await client
+          .from("country")
+          .select("alpha2")
+          .eq("name", address.country)
+          .maybeSingle();
+
+        if (country.data) {
+          address.country = country.data?.alpha2;
+        }
+      }
       const addressData = {
         companyId,
         addressLine1: address.street || "",
         addressLine2: address.street2 || null,
         city: address.city || "",
-        state: address.state || null,
+        stateProvince: address.state || null,
         postalCode: address.postalCode || null,
-        country: address.country || null,
+        countryCode: address.country || null,
       };
 
       // Check if address exists
@@ -434,15 +471,18 @@ async function syncVendorFromAccounting(
       // Link address to supplier
       const locationType = address.type === "billing" ? "Billing" : "Shipping";
 
-      await client
-        .from("supplierLocation")
-        .upsert({
+      const supplierLocation = await client.from("supplierLocation").upsert(
+        {
           supplierId,
           addressId,
           name: locationType,
-          companyId,
-        })
-        .select();
+        },
+        {
+          onConflict: "addressId,supplierId",
+        }
+      );
+
+      if (supplierLocation.error) console.error(supplierLocation.error);
     }
   }
 
@@ -476,14 +516,13 @@ async function syncCustomerToAccounting(
   // Transform Carbon customer to accounting format
   const accountingCustomerData = {
     name: customer.data.name,
-    email: customer.data.email || undefined,
     phone: customer.data.phone
       ? { number: customer.data.phone, type: "work" as any }
       : undefined,
     website: customer.data.website || undefined,
     taxNumber: customer.data.taxId || undefined,
     currency: customer.data.currencyCode || "USD",
-    isActive: customer.data.active,
+    isActive: true,
     addresses: (customer.data.customerLocation || [])
       .map((loc: any) => ({
         type: loc.name === "Billing" ? "billing" : "shipping",
@@ -510,8 +549,8 @@ async function syncCustomerToAccounting(
   await client
     .from("customer")
     .update({
-      customFields: {
-        ...((customer.data.customFields as any) || {}),
+      externalId: {
+        ...((customer.data.externalId as any) || {}),
         externalId: result.id,
         syncToken: (result as any).syncToken,
         accountingProvider: provider.getProviderInfo().name,
@@ -551,14 +590,14 @@ async function syncVendorToAccounting(
   // Transform Carbon supplier to accounting vendor format
   const accountingVendorData = {
     name: supplier.data.name,
-    email: supplier.data.email || undefined,
+    email: undefined,
     phone: supplier.data.phone
       ? { number: supplier.data.phone, type: "work" as any }
       : undefined,
     website: supplier.data.website || undefined,
     taxNumber: supplier.data.taxId || undefined,
     currency: supplier.data.currencyCode || "USD",
-    isActive: supplier.data.active,
+    isActive: true,
     addresses: (supplier.data.supplierLocation || [])
       .map((loc: any) => ({
         type: "billing" as any,
@@ -585,8 +624,8 @@ async function syncVendorToAccounting(
   await client
     .from("supplier")
     .update({
-      customFields: {
-        ...((supplier.data.customFields as any) || {}),
+      externalId: {
+        ...((supplier.data.externalId as any) || {}),
         externalId: result.id,
         syncToken: (result as any).syncToken,
         accountingProvider: provider.getProviderInfo().name,
@@ -620,7 +659,7 @@ async function deactivateCustomer(
       updatedAt: new Date().toISOString(),
     })
     .eq("companyId", companyId)
-    .eq("customFields->>externalId", externalId)
+    .eq("externalId->>externalId", externalId)
     .select()
     .single();
 
@@ -650,7 +689,7 @@ async function deactivateSupplier(
       updatedAt: new Date().toISOString(),
     })
     .eq("companyId", companyId)
-    .eq("customFields->>externalId", externalId)
+    .eq("externalId->>externalId", externalId)
     .select()
     .single();
 

@@ -101,6 +101,11 @@ export abstract class CoreProvider {
 
   constructor(config: ProviderConfig) {
     this.config = config;
+    this.auth = {
+      accessToken: config.accessToken,
+      refreshToken: config.refreshToken,
+      tenantId: config.tenantId,
+    };
   }
 
   protected setAuth(auth: ProviderAuth) {

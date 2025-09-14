@@ -123,7 +123,7 @@ export class QuickBooksProvider extends CoreProvider {
     }
 
     try {
-      const response = await this.request("/v3/company/companyinfo");
+      const response = await this.request("/companyinfo");
       return response.ok;
     } catch {
       return false;
@@ -138,7 +138,7 @@ export class QuickBooksProvider extends CoreProvider {
       throw new Error("No tenant ID available");
     }
 
-    const url = `${this.baseUrl}${endpoint}/${this.auth.tenantId}`;
+    const url = `${this.baseUrl}/v3/company/${this.auth.tenantId}${endpoint}`;
 
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
@@ -530,7 +530,7 @@ export class QuickBooksProvider extends CoreProvider {
 
   // Company Info
   async getCompanyInfo(): Promise<CompanyInfo> {
-    const response = await this.request("/v3/company/companyinfo");
+    const response = await this.request("/companyinfo");
     if (!response.ok) {
       throw new Error(`Failed to get company info: ${response.statusText}`);
     }
@@ -567,9 +567,7 @@ export class QuickBooksProvider extends CoreProvider {
 
   // Account operations
   async getAccounts(options?: SyncOptions): Promise<SyncResult<Account>> {
-    const response = await this.request(
-      "/v3/company/query?query=SELECT * FROM Account"
-    );
+    const response = await this.request("/query?query=SELECT * FROM Account");
     if (!response.ok) {
       throw new Error(`Failed to get accounts: ${response.statusText}`);
     }
@@ -592,7 +590,7 @@ export class QuickBooksProvider extends CoreProvider {
 
   async getAccount(id: string): Promise<Account> {
     const response = await this.request(
-      `/v3/company/query?query=SELECT * FROM Account WHERE Id = '${id}'`
+      `/query?query=SELECT * FROM Account WHERE Id = '${id}'`
     );
     if (!response.ok) {
       throw new Error(`Failed to get account: ${response.statusText}`);
@@ -619,7 +617,7 @@ export class QuickBooksProvider extends CoreProvider {
       Active: account.isActive !== false,
     };
 
-    const response = await this.request("/v3/company/account", {
+    const response = await this.request("/account", {
       method: "POST",
       body: JSON.stringify(qbAccount),
     });
@@ -648,7 +646,7 @@ export class QuickBooksProvider extends CoreProvider {
     if (account.description) qbAccount.Description = account.description;
     if (account.isActive !== undefined) qbAccount.Active = account.isActive;
 
-    const response = await this.request("/v3/company/account", {
+    const response = await this.request("/account", {
       method: "POST",
       body: JSON.stringify(qbAccount),
     });
@@ -674,7 +672,7 @@ export class QuickBooksProvider extends CoreProvider {
     }
 
     const response = await this.request(
-      `/v3/company/query?query=${encodeURIComponent(query)}`
+      `/query?query=${encodeURIComponent(query)}`
     );
     if (!response.ok) {
       throw new Error(`Failed to get customers: ${response.statusText}`);
@@ -699,8 +697,9 @@ export class QuickBooksProvider extends CoreProvider {
 
   async getCustomer(id: string): Promise<Customer> {
     const response = await this.request(
-      `/v3/company/query?query=SELECT * FROM Customer WHERE Id = '${id}'`
+      `/query?query=SELECT * FROM Customer WHERE Id = '${id}'`
     );
+
     if (!response.ok) {
       throw new Error(`Failed to get customer: ${response.statusText}`);
     }
@@ -720,7 +719,7 @@ export class QuickBooksProvider extends CoreProvider {
   ): Promise<Customer> {
     const qbCustomer = this.customerToQB(customer);
 
-    const response = await this.request("/v3/company/customer", {
+    const response = await this.request("/customer", {
       method: "POST",
       body: JSON.stringify(qbCustomer),
     });
@@ -768,7 +767,7 @@ export class QuickBooksProvider extends CoreProvider {
     if (customer.taxNumber) qbCustomer.ResaleNum = customer.taxNumber;
     if (customer.isActive !== undefined) qbCustomer.Active = customer.isActive;
 
-    const response = await this.request("/v3/company/customer", {
+    const response = await this.request("/customer", {
       method: "POST",
       body: JSON.stringify(qbCustomer),
     });
@@ -794,7 +793,7 @@ export class QuickBooksProvider extends CoreProvider {
     }
 
     const response = await this.request(
-      `/v3/company/query?query=${encodeURIComponent(query)}`
+      `/query?query=${encodeURIComponent(query)}`
     );
     if (!response.ok) {
       throw new Error(`Failed to get vendors: ${response.statusText}`);
@@ -818,7 +817,7 @@ export class QuickBooksProvider extends CoreProvider {
 
   async getVendor(id: string): Promise<Vendor> {
     const response = await this.request(
-      `/v3/company/query?query=SELECT * FROM Vendor WHERE Id = '${id}'`
+      `/query?query=SELECT * FROM Vendor WHERE Id = '${id}'`
     );
     if (!response.ok) {
       throw new Error(`Failed to get vendor: ${response.statusText}`);
@@ -839,7 +838,7 @@ export class QuickBooksProvider extends CoreProvider {
   ): Promise<Vendor> {
     const qbVendor = this.vendorToQB(vendor);
 
-    const response = await this.request("/v3/company/vendor", {
+    const response = await this.request("/vendor", {
       method: "POST",
       body: JSON.stringify(qbVendor),
     });
@@ -883,7 +882,7 @@ export class QuickBooksProvider extends CoreProvider {
     if (vendor.taxNumber) qbVendor.TaxIdentifier = vendor.taxNumber;
     if (vendor.isActive !== undefined) qbVendor.Active = vendor.isActive;
 
-    const response = await this.request("/v3/company/vendor", {
+    const response = await this.request("/vendor", {
       method: "POST",
       body: JSON.stringify(qbVendor),
     });
@@ -903,9 +902,7 @@ export class QuickBooksProvider extends CoreProvider {
 
   // Item operations
   async getItems(options?: SyncOptions): Promise<SyncResult<Item>> {
-    const response = await this.request(
-      "/v3/company/query?query=SELECT * FROM Item"
-    );
+    const response = await this.request("/query?query=SELECT * FROM Item");
     if (!response.ok) {
       throw new Error(`Failed to get items: ${response.statusText}`);
     }
@@ -928,7 +925,7 @@ export class QuickBooksProvider extends CoreProvider {
 
   async getItem(id: string): Promise<Item> {
     const response = await this.request(
-      `/v3/company/query?query=SELECT * FROM Item WHERE Id = '${id}'`
+      `/query?query=SELECT * FROM Item WHERE Id = '${id}'`
     );
     if (!response.ok) {
       throw new Error(`Failed to get item: ${response.statusText}`);
@@ -956,7 +953,7 @@ export class QuickBooksProvider extends CoreProvider {
       Active: item.isActive !== false,
     };
 
-    const response = await this.request("/v3/company/item", {
+    const response = await this.request("/item", {
       method: "POST",
       body: JSON.stringify(qbItem),
     });
@@ -984,7 +981,7 @@ export class QuickBooksProvider extends CoreProvider {
     if (item.unitPrice) qbItem.UnitPrice = item.unitPrice;
     if (item.isActive !== undefined) qbItem.Active = item.isActive;
 
-    const response = await this.request("/v3/company/item", {
+    const response = await this.request("/item", {
       method: "POST",
       body: JSON.stringify(qbItem),
     });
@@ -1010,7 +1007,7 @@ export class QuickBooksProvider extends CoreProvider {
     }
 
     const response = await this.request(
-      `/v3/company/query?query=${encodeURIComponent(query)}`
+      `/query?query=${encodeURIComponent(query)}`
     );
     if (!response.ok) {
       throw new Error(`Failed to get invoices: ${response.statusText}`);
@@ -1034,7 +1031,7 @@ export class QuickBooksProvider extends CoreProvider {
 
   async getInvoice(id: string): Promise<Invoice> {
     const response = await this.request(
-      `/v3/company/query?query=SELECT * FROM Invoice WHERE Id = '${id}'`
+      `/query?query=SELECT * FROM Invoice WHERE Id = '${id}'`
     );
     if (!response.ok) {
       throw new Error(`Failed to get invoice: ${response.statusText}`);
@@ -1075,7 +1072,7 @@ export class QuickBooksProvider extends CoreProvider {
         })) || [],
     };
 
-    const response = await this.request("/v3/company/invoice", {
+    const response = await this.request("/invoice", {
       method: "POST",
       body: JSON.stringify(qbInvoice),
     });
@@ -1120,7 +1117,7 @@ export class QuickBooksProvider extends CoreProvider {
       }));
     }
 
-    const response = await this.request("/v3/company/invoice", {
+    const response = await this.request("/invoice", {
       method: "POST",
       body: JSON.stringify(qbInvoice),
     });
@@ -1139,16 +1136,13 @@ export class QuickBooksProvider extends CoreProvider {
       syncToken?: string;
     };
 
-    const response = await this.request(
-      `/v3/company/invoice?operation=delete`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          Id: id,
-          SyncToken: existing.syncToken || "0",
-        }),
-      }
-    );
+    const response = await this.request(`/invoice?operation=delete`, {
+      method: "POST",
+      body: JSON.stringify({
+        Id: id,
+        SyncToken: existing.syncToken || "0",
+      }),
+    });
 
     if (!response.ok) {
       throw new Error(`Failed to delete invoice: ${response.statusText}`);
@@ -1160,7 +1154,7 @@ export class QuickBooksProvider extends CoreProvider {
     options?: { email?: string; subject?: string; message?: string }
   ): Promise<void> {
     const response = await this.request(
-      `/v3/company/invoice/${id}/send?sendTo=${options?.email || ""}`,
+      `/invoice/${id}/send?sendTo=${options?.email || ""}`,
       {
         method: "POST",
       }
@@ -1173,9 +1167,7 @@ export class QuickBooksProvider extends CoreProvider {
 
   // Bill operations
   async getBills(options?: SyncOptions): Promise<SyncResult<Bill>> {
-    const response = await this.request(
-      "/v3/company/query?query=SELECT * FROM Bill"
-    );
+    const response = await this.request("/query?query=SELECT * FROM Bill");
     if (!response.ok) {
       throw new Error(`Failed to get bills: ${response.statusText}`);
     }
@@ -1198,7 +1190,7 @@ export class QuickBooksProvider extends CoreProvider {
 
   async getBill(id: string): Promise<Bill> {
     const response = await this.request(
-      `/v3/company/query?query=SELECT * FROM Bill WHERE Id = '${id}'`
+      `/query?query=SELECT * FROM Bill WHERE Id = '${id}'`
     );
     if (!response.ok) {
       throw new Error(`Failed to get bill: ${response.statusText}`);
@@ -1227,7 +1219,7 @@ export class QuickBooksProvider extends CoreProvider {
       TotalAmt: bill.total,
     };
 
-    const response = await this.request("/v3/company/bill", {
+    const response = await this.request("/bill", {
       method: "POST",
       body: JSON.stringify(qbBill),
     });
@@ -1257,7 +1249,7 @@ export class QuickBooksProvider extends CoreProvider {
     if (bill.notes) qbBill.PrivateNote = bill.notes;
     if (bill.total) qbBill.TotalAmt = bill.total;
 
-    const response = await this.request("/v3/company/bill", {
+    const response = await this.request("/bill", {
       method: "POST",
       body: JSON.stringify(qbBill),
     });
@@ -1274,7 +1266,7 @@ export class QuickBooksProvider extends CoreProvider {
     // First get the existing bill for sync token
     const existing = (await this.getBill(id)) as Bill & { syncToken?: string };
 
-    const response = await this.request(`/v3/company/bill?operation=delete`, {
+    const response = await this.request(`/bill?operation=delete`, {
       method: "POST",
       body: JSON.stringify({
         Id: id,
@@ -1346,7 +1338,7 @@ export class QuickBooksProvider extends CoreProvider {
   // Expense operations
   async getExpenses(options?: SyncOptions): Promise<SyncResult<Expense>> {
     const response = await this.request(
-      '/v3/company/query?query=SELECT * FROM Purchase WHERE PaymentType = "Cash"'
+      '/query?query=SELECT * FROM Purchase WHERE PaymentType = "Cash"'
     );
     if (!response.ok) {
       throw new Error(`Failed to get expenses: ${response.statusText}`);
@@ -1370,7 +1362,7 @@ export class QuickBooksProvider extends CoreProvider {
 
   async getExpense(id: string): Promise<Expense> {
     const response = await this.request(
-      `/v3/company/query?query=SELECT * FROM Purchase WHERE Id = '${id}'`
+      `/query?query=SELECT * FROM Purchase WHERE Id = '${id}'`
     );
     if (!response.ok) {
       throw new Error(`Failed to get expense: ${response.statusText}`);
@@ -1406,7 +1398,7 @@ export class QuickBooksProvider extends CoreProvider {
       ],
     };
 
-    const response = await this.request("/v3/company/purchase", {
+    const response = await this.request("/purchase", {
       method: "POST",
       body: JSON.stringify(qbExpense),
     });
@@ -1446,7 +1438,7 @@ export class QuickBooksProvider extends CoreProvider {
       ];
     }
 
-    const response = await this.request("/v3/company/purchase", {
+    const response = await this.request("/purchase", {
       method: "POST",
       body: JSON.stringify(qbExpense),
     });
@@ -1465,16 +1457,13 @@ export class QuickBooksProvider extends CoreProvider {
       syncToken?: string;
     };
 
-    const response = await this.request(
-      `/v3/company/purchase?operation=delete`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          Id: id,
-          SyncToken: existing.syncToken || "0",
-        }),
-      }
-    );
+    const response = await this.request(`/purchase?operation=delete`, {
+      method: "POST",
+      body: JSON.stringify({
+        Id: id,
+        SyncToken: existing.syncToken || "0",
+      }),
+    });
 
     if (!response.ok) {
       throw new Error(`Failed to delete expense: ${response.statusText}`);
@@ -1501,7 +1490,7 @@ export class QuickBooksProvider extends CoreProvider {
     options?: SyncOptions
   ): Promise<SyncResult<JournalEntry>> {
     const response = await this.request(
-      "/v3/company/query?query=SELECT * FROM JournalEntry"
+      "/query?query=SELECT * FROM JournalEntry"
     );
     if (!response.ok) {
       throw new Error(`Failed to get journal entries: ${response.statusText}`);
@@ -1535,7 +1524,7 @@ export class QuickBooksProvider extends CoreProvider {
 
   async getJournalEntry(id: string): Promise<JournalEntry> {
     const response = await this.request(
-      `/v3/company/query?query=SELECT * FROM JournalEntry WHERE Id = '${id}'`
+      `/query?query=SELECT * FROM JournalEntry WHERE Id = '${id}'`
     );
     if (!response.ok) {
       throw new Error(`Failed to get journal entry: ${response.statusText}`);
@@ -1580,7 +1569,7 @@ export class QuickBooksProvider extends CoreProvider {
         })) || [],
     };
 
-    const response = await this.request("/v3/company/journalentry", {
+    const response = await this.request("/journalentry", {
       method: "POST",
       body: JSON.stringify(qbJournalEntry),
     });
@@ -1635,7 +1624,7 @@ export class QuickBooksProvider extends CoreProvider {
       }));
     }
 
-    const response = await this.request("/v3/company/journalentry", {
+    const response = await this.request("/journalentry", {
       method: "POST",
       body: JSON.stringify(qbJournalEntry),
     });
@@ -1666,16 +1655,13 @@ export class QuickBooksProvider extends CoreProvider {
       syncToken?: string;
     };
 
-    const response = await this.request(
-      `/v3/company/journalentry?operation=delete`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          Id: id,
-          SyncToken: existing.syncToken || "0",
-        }),
-      }
-    );
+    const response = await this.request(`/journalentry?operation=delete`, {
+      method: "POST",
+      body: JSON.stringify({
+        Id: id,
+        SyncToken: existing.syncToken || "0",
+      }),
+    });
 
     if (!response.ok) {
       throw new Error(`Failed to delete journal entry: ${response.statusText}`);
@@ -1689,9 +1675,7 @@ export class QuickBooksProvider extends CoreProvider {
 
   // Payment operations
   async getPayments(options?: SyncOptions): Promise<SyncResult<Payment>> {
-    const response = await this.request(
-      "/v3/company/query?query=SELECT * FROM Payment"
-    );
+    const response = await this.request("/query?query=SELECT * FROM Payment");
     if (!response.ok) {
       throw new Error(`Failed to get payments: ${response.statusText}`);
     }
@@ -1714,7 +1698,7 @@ export class QuickBooksProvider extends CoreProvider {
 
   async getPayment(id: string): Promise<Payment> {
     const response = await this.request(
-      `/v3/company/query?query=SELECT * FROM Payment WHERE Id = '${id}'`
+      `/query?query=SELECT * FROM Payment WHERE Id = '${id}'`
     );
     if (!response.ok) {
       throw new Error(`Failed to get payment: ${response.statusText}`);
@@ -1743,7 +1727,7 @@ export class QuickBooksProvider extends CoreProvider {
       PaymentRefNum: payment.reference,
     };
 
-    const response = await this.request("/v3/company/payment", {
+    const response = await this.request("/payment", {
       method: "POST",
       body: JSON.stringify(qbPayment),
     });
@@ -1775,7 +1759,7 @@ export class QuickBooksProvider extends CoreProvider {
       qbPayment.PaymentMethodRef = { value: payment.paymentMethod };
     if (payment.reference) qbPayment.PaymentRefNum = payment.reference;
 
-    const response = await this.request("/v3/company/payment", {
+    const response = await this.request("/payment", {
       method: "POST",
       body: JSON.stringify(qbPayment),
     });
@@ -1794,16 +1778,13 @@ export class QuickBooksProvider extends CoreProvider {
       syncToken?: string;
     };
 
-    const response = await this.request(
-      `/v3/company/payment?operation=delete`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          Id: id,
-          SyncToken: existing.syncToken || "0",
-        }),
-      }
-    );
+    const response = await this.request(`/payment?operation=delete`, {
+      method: "POST",
+      body: JSON.stringify({
+        Id: id,
+        SyncToken: existing.syncToken || "0",
+      }),
+    });
 
     if (!response.ok) {
       throw new Error(`Failed to delete payment: ${response.statusText}`);
@@ -1822,7 +1803,7 @@ export class QuickBooksProvider extends CoreProvider {
     attachmentType?: string
   ): Promise<Attachment[]> {
     const response = await this.request(
-      `/v3/company/query?query=SELECT * FROM Attachable WHERE AttachableRef.EntityRef.value = '${entityId}'`
+      `/query?query=SELECT * FROM Attachable WHERE AttachableRef.EntityRef.value = '${entityId}'`
     );
 
     if (!response.ok) {
@@ -1850,7 +1831,7 @@ export class QuickBooksProvider extends CoreProvider {
 
   async getAttachment(id: string): Promise<Attachment> {
     const response = await this.request(
-      `/v3/company/query?query=SELECT * FROM Attachable WHERE Id = '${id}'`
+      `/query?query=SELECT * FROM Attachable WHERE Id = '${id}'`
     );
 
     if (!response.ok) {
