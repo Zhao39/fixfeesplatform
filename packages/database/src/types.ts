@@ -52539,8 +52539,7 @@ export const Constants = {
       ],
       paymentTermCalculationMethod: ["Net", "End of Month", "Day of Month"],
       periodType: ["Week", "Day", "Month"],
-      procedureStatus: ["Draft", "Active", "Archived"],
-      procedureStepType: [
+      procedureAttributeType: [
         "Value",
         "Measurement",
         "Checkbox",
@@ -52551,6 +52550,7 @@ export const Constants = {
         "Task",
         "Inspection",
       ],
+      procedureStatus: ["Draft", "Active", "Archived"],
       processType: ["Inside", "Outside", "Inside and Outside"],
       productionEventType: ["Setup", "Labor", "Machine"],
       productionQuantityType: ["Rework", "Scrap", "Production"],

@@ -42669,18 +42669,18 @@ export type Database = {
             referencedColumns: ["userId"]
           },
           {
-            foreignKeyName: "partner_id_fkey";
-            columns: ["supplierLocationId"];
-            isOneToOne: false;
-            referencedRelation: "supplierLocation";
-            referencedColumns: ["id"];
+            foreignKeyName: "partner_id_fkey"
+            columns: ["id"]
+            isOneToOne: false
+            referencedRelation: "supplierLocation"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "partner_id_fkey";
-            columns: ["id"];
-            isOneToOne: false;
-            referencedRelation: "supplierLocation";
-            referencedColumns: ["id"];
+            foreignKeyName: "partner_id_fkey"
+            columns: ["supplierLocationId"]
+            isOneToOne: false
+            referencedRelation: "supplierLocation"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "partner_updatedBy_fkey"
@@ -47119,21 +47119,21 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "address_countryCode_fkey";
-            columns: ["customerCountryCode"];
-            isOneToOne: false;
-            referencedRelation: "country";
-            referencedColumns: ["alpha2"];
+            foreignKeyName: "address_countryCode_fkey"
+            columns: ["paymentCountryCode"]
+            isOneToOne: false
+            referencedRelation: "country"
+            referencedColumns: ["alpha2"]
           },
           {
-            foreignKeyName: "address_countryCode_fkey";
-            columns: ["paymentCountryCode"];
-            isOneToOne: false;
-            referencedRelation: "country";
-            referencedColumns: ["alpha2"];
-          }
-        ];
-      };
+            foreignKeyName: "address_countryCode_fkey"
+            columns: ["customerCountryCode"]
+            isOneToOne: false
+            referencedRelation: "country"
+            referencedColumns: ["alpha2"]
+          },
+        ]
+      }
       salesOrders: {
         Row: {
           assignee: string | null
@@ -49965,37 +49965,37 @@ export type Database = {
       get_consumable_details: {
         Args: { item_id: string }
         Returns: {
-          active: boolean;
-          assignee: string;
-          companyId: string;
-          createdAt: string;
-          createdBy: string;
-          customFields: Json;
-          defaultMethodType: Database["public"]["Enums"]["methodType"];
-          description: string;
-          id: string;
-          itemTrackingType: Database["public"]["Enums"]["itemTrackingType"];
-          modelName: string;
-          modelPath: string;
-          modelSize: number;
-          modelUploadId: string;
-          name: string;
-          notes: Json;
-          readableId: string;
-          readableIdWithRevision: string;
-          replenishmentSystem: Database["public"]["Enums"]["itemReplenishmentSystem"];
-          revision: string;
-          revisions: Json;
-          supplierIds: string;
-          tags: string[];
-          itemPostingGroupId: string;
-          createdBy: string;
-          createdAt: string;
-          updatedBy: string;
-          updatedAt: string;
-          updatedBy: string;
-        }[];
-      };
+          active: boolean
+          assignee: string
+          companyId: string
+          createdAt: string
+          createdBy: string
+          customFields: Json
+          defaultMethodType: Database["public"]["Enums"]["methodType"]
+          description: string
+          id: string
+          itemPostingGroupId: string
+          itemTrackingType: Database["public"]["Enums"]["itemTrackingType"]
+          modelName: string
+          modelPath: string
+          modelSize: number
+          modelUploadId: string
+          name: string
+          notes: Json
+          readableId: string
+          readableIdWithRevision: string
+          replenishmentSystem: Database["public"]["Enums"]["itemReplenishmentSystem"]
+          revision: string
+          revisions: Json
+          supplierIds: string
+          tags: string[]
+          thumbnailPath: string
+          unitOfMeasure: string
+          unitOfMeasureCode: string
+          updatedAt: string
+          updatedBy: string
+        }[]
+      }
       get_custom_field_unique_values: {
         Args: { company_id: string; field_key: string; table_name: string }
         Returns: {
@@ -50353,49 +50353,49 @@ export type Database = {
       get_material_details: {
         Args: { item_id: string }
         Returns: {
-          active: boolean;
-          assignee: string;
-          companyId: string;
-          createdAt: string;
-          createdBy: string;
-          customFields: Json;
-          defaultMethodType: Database["public"]["Enums"]["methodType"];
-          description: string;
-          dimensionId: string;
-          dimensions: string;
-          finish: string;
-          finishId: string;
-          grade: string;
-          gradeId: string;
-          id: string;
-          itemTrackingType: Database["public"]["Enums"]["itemTrackingType"];
-          materialForm: string;
-          materialFormId: string;
-          materialSubstance: string;
-          materialSubstanceId: string;
-          materialType: string;
-          materialTypeId: string;
-          modelName: string;
-          modelPath: string;
-          modelSize: number;
-          modelUploadId: string;
-          name: string;
-          notes: Json;
-          readableId: string;
-          readableIdWithRevision: string;
-          replenishmentSystem: Database["public"]["Enums"]["itemReplenishmentSystem"];
-          revision: string;
-          revisions: Json;
-          supplierIds: string;
-          tags: string[];
-          itemPostingGroupId: string;
-          createdBy: string;
-          createdAt: string;
-          updatedBy: string;
-          updatedAt: string;
-          updatedBy: string;
-        }[];
-      };
+          active: boolean
+          assignee: string
+          companyId: string
+          createdAt: string
+          createdBy: string
+          customFields: Json
+          defaultMethodType: Database["public"]["Enums"]["methodType"]
+          description: string
+          dimensionId: string
+          dimensions: string
+          finish: string
+          finishId: string
+          grade: string
+          gradeId: string
+          id: string
+          itemPostingGroupId: string
+          itemTrackingType: Database["public"]["Enums"]["itemTrackingType"]
+          materialForm: string
+          materialFormId: string
+          materialSubstance: string
+          materialSubstanceId: string
+          materialType: string
+          materialTypeId: string
+          modelName: string
+          modelPath: string
+          modelSize: number
+          modelUploadId: string
+          name: string
+          notes: Json
+          readableId: string
+          readableIdWithRevision: string
+          replenishmentSystem: Database["public"]["Enums"]["itemReplenishmentSystem"]
+          revision: string
+          revisions: Json
+          supplierIds: string
+          tags: string[]
+          thumbnailPath: string
+          unitOfMeasure: string
+          unitOfMeasureCode: string
+          updatedAt: string
+          updatedBy: string
+        }[]
+      }
       get_material_naming_details: {
         Args: { readable_id: string }
         Returns: {
@@ -52488,8 +52488,7 @@ export const Constants = {
       ],
       paymentTermCalculationMethod: ["Net", "End of Month", "Day of Month"],
       periodType: ["Week", "Day", "Month"],
-      procedureStatus: ["Draft", "Active", "Archived"],
-      procedureStepType: [
+      procedureAttributeType: [
         "Value",
         "Measurement",
         "Checkbox",
@@ -52500,6 +52499,7 @@ export const Constants = {
         "Task",
         "Inspection",
       ],
+      procedureStatus: ["Draft", "Active", "Archived"],
       processType: ["Inside", "Outside", "Inside and Outside"],
       productionEventType: ["Setup", "Labor", "Machine"],
       productionQuantityType: ["Rework", "Scrap", "Production"],
