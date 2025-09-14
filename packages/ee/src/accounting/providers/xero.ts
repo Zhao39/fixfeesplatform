@@ -91,6 +91,8 @@ export class XeroProvider extends CoreProvider {
       body: new URLSearchParams({
         grant_type: "refresh_token",
         refresh_token: this.auth.refreshToken,
+        client_id: this.config.clientId,
+        client_secret: this.config.clientSecret,
       }),
     });
 
@@ -104,9 +106,16 @@ export class XeroProvider extends CoreProvider {
       accessToken: data.access_token,
       refreshToken: data.refresh_token,
       expiresAt: new Date(Date.now() + data.expires_in * 1000),
+      tenantId: this.auth.tenantId,
     };
 
     this.setAuth(newAuth);
+
+    // Call the onTokenRefresh callback if provided
+    if (this.config.onTokenRefresh) {
+      await this.config.onTokenRefresh(newAuth);
+    }
+
     return newAuth;
   }
 
@@ -171,12 +180,41 @@ export class XeroProvider extends CoreProvider {
     return response;
   }
 
-  private transformXeroCustomer(xeroCustomer: any): Customer {
+  private extractPrimaryPhone(phones: any[]): string | undefined {
+    if (!phones || phones.length === 0) return undefined;
+
+    // Prioritize DEFAULT, WORK, MOBILE phone types
+    const priorityTypes = ["DEFAULT", "WORK", "MOBILE"];
+    const priorityPhone = phones.find((p: any) =>
+      priorityTypes.includes(p.PhoneType)
+    );
+
+    return priorityPhone?.PhoneNumber || phones[0]?.PhoneNumber;
+  }
+
+  private transformXeroCustomer(
+    xeroCustomer: any
+  ): Customer & { firstName?: string; lastName?: string } {
+    // Extract first and last name from FirstName, LastName, or parse from Name
+    let firstName = xeroCustomer.FirstName || "";
+    let lastName = xeroCustomer.LastName || "";
+
+    // If no FirstName/LastName, try to parse from Name
+    if (!firstName && !lastName) {
+      const fullName = xeroCustomer.Name || "";
+      const nameParts = fullName.split(" ");
+      firstName = nameParts[0] || "";
+      lastName = nameParts.slice(1).join(" ") || "";
+    }
+
+    const phone = this.extractPrimaryPhone(xeroCustomer.Phones);
+
     return {
       id: xeroCustomer.ContactID,
       name: xeroCustomer.Name,
       email: xeroCustomer.EmailAddress,
-      phone: xeroCustomer.Phones?.[0]?.PhoneNumber,
+      phone: phone ? { number: phone, type: "work" as any } : undefined,
+      website: xeroCustomer.Website,
       addresses: xeroCustomer.Addresses?.[0]
         ? [
             {
@@ -193,6 +231,50 @@ export class XeroProvider extends CoreProvider {
       isActive: xeroCustomer.ContactStatus === "ACTIVE",
       createdAt: xeroCustomer.CreatedDateUTC || new Date().toISOString(),
       updatedAt: xeroCustomer.UpdatedDateUTC || new Date().toISOString(),
+      firstName,
+      lastName,
+    };
+  }
+
+  private transformXeroVendor(
+    xeroVendor: any
+  ): Vendor & { firstName?: string; lastName?: string } {
+    let firstName = xeroVendor.FirstName || "";
+    let lastName = xeroVendor.LastName || "";
+
+    if (!firstName && !lastName) {
+      const fullName = xeroVendor.Name || "";
+      const nameParts = fullName.split(" ");
+      firstName = nameParts[0] || "";
+      lastName = nameParts.slice(1).join(" ") || "";
+    }
+
+    const phone = this.extractPrimaryPhone(xeroVendor.Phones);
+
+    return {
+      id: xeroVendor.ContactID,
+      name: xeroVendor.Name,
+      email: xeroVendor.EmailAddress,
+      phone: phone ? { number: phone, type: "work" as any } : undefined,
+      website: xeroVendor.Website,
+      addresses: xeroVendor.Addresses?.[0]
+        ? [
+            {
+              street: xeroVendor.Addresses[0].AddressLine1,
+              city: xeroVendor.Addresses[0].City,
+              state: xeroVendor.Addresses[0].Region,
+              postalCode: xeroVendor.Addresses[0].PostalCode,
+              country: xeroVendor.Addresses[0].Country,
+            },
+          ]
+        : undefined,
+      taxNumber: xeroVendor.TaxNumber,
+      currency: xeroVendor.DefaultCurrency || "USD",
+      isActive: xeroVendor.ContactStatus === "ACTIVE",
+      createdAt: xeroVendor.CreatedDateUTC || new Date().toISOString(),
+      updatedAt: xeroVendor.UpdatedDateUTC || new Date().toISOString(),
+      firstName,
+      lastName,
     };
   }
 
@@ -322,6 +404,15 @@ export class XeroProvider extends CoreProvider {
     return this.transformXeroCustomer(data.Contacts[0]);
   }
 
+  async getContact(id: string): Promise<any> {
+    const response = await this.makeRequest(`/Contacts/${id}`);
+    if (!response.ok) {
+      throw new Error(`Failed to get contact: ${response.statusText}`);
+    }
+    const data = (await response.json()) as any;
+    return data;
+  }
+
   async updateCustomer(
     id: string,
     customer: Partial<Customer>
@@ -341,7 +432,19 @@ export class XeroProvider extends CoreProvider {
   }
 
   async getVendor(id: string): Promise<Vendor> {
-    throw new Error("Not implemented yet");
+    const response = await this.makeRequest(`/Contacts/${id}`);
+
+    if (!response.ok) {
+      const errText = await response.text().catch(() => "");
+      throw new Error(
+        `Failed to get vendor (${response.status}): ${
+          errText || response.statusText
+        }`
+      );
+    }
+
+    const data = (await response.json()) as any;
+    return this.transformXeroVendor(data.Contacts[0]);
   }
 
   async createVendor(
@@ -386,8 +489,20 @@ export class XeroProvider extends CoreProvider {
     throw new Error("Not implemented yet");
   }
 
-  async getInvoice(id: string): Promise<Invoice> {
-    throw new Error("Not implemented yet");
+  async getInvoice(id: string): Promise<any> {
+    const response = await this.makeRequest(`/Invoices/${id}`);
+
+    if (!response.ok) {
+      const errText = await response.text().catch(() => "");
+      throw new Error(
+        `Failed to get invoice (${response.status}): ${
+          errText || response.statusText
+        }`
+      );
+    }
+
+    const data = (await response.json()) as any;
+    return data;
   }
 
   async createInvoice(

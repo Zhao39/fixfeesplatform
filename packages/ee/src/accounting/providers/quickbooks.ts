@@ -114,6 +114,12 @@ export class QuickBooksProvider extends CoreProvider {
     };
 
     this.setAuth(newAuth);
+
+    // Call the onTokenRefresh callback if provided
+    if (this.config.onTokenRefresh) {
+      await this.config.onTokenRefresh(newAuth);
+    }
+
     return newAuth;
   }
 

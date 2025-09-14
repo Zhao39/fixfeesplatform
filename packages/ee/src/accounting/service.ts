@@ -31,6 +31,9 @@ export interface ProviderConfig {
   tenantId?: string;
   apiVersion?: string;
   environment?: "production" | "sandbox";
+  companyId?: string;
+  integrationId?: string;
+  onTokenRefresh?: (auth: ProviderAuth) => Promise<void>;
 }
 
 export interface ProviderAuth {
@@ -399,7 +402,11 @@ export abstract class CoreProvider {
     // Handle auth errors
     if (response.status === 401 && this.auth?.refreshToken) {
       try {
-        await this.refreshAccessToken();
+        const newAuth = await this.refreshAccessToken();
+        // Call the onTokenRefresh callback if provided
+        if (this.config.onTokenRefresh) {
+          await this.config.onTokenRefresh(newAuth);
+        }
         const updatedHeaders: Record<string, string> = { ...requestHeaders };
         updatedHeaders["Authorization"] = `Bearer ${this.auth.accessToken}`;
         return fetch(url.toString(), {
