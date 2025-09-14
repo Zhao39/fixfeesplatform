@@ -53,12 +53,48 @@ export async function loader({ request }: LoaderFunctionArgs) {
       );
     }
 
+    // Fetch tenant ID from Xero connections endpoint
+    const connectionsResponse = await fetch(
+      "https://api.xero.com/connections",
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${auth.accessToken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!connectionsResponse.ok) {
+      return json(
+        { error: "Failed to fetch Xero connections" },
+        { status: 500 }
+      );
+    }
+
+    const connections = await connectionsResponse.json();
+
+    if (!Array.isArray(connections) || connections.length === 0) {
+      return json({ error: "No Xero connections found" }, { status: 500 });
+    }
+
+    // Get the first connection's tenant ID
+    const tenantId = connections[0].tenantId;
+
+    if (!tenantId) {
+      return json(
+        { error: "No tenant ID found in Xero connections" },
+        { status: 500 }
+      );
+    }
+
     const createdXeroIntegration = await upsertCompanyIntegration(client, {
       id: Xero.id,
       active: true,
       // @ts-ignore
       metadata: {
         ...auth,
+        tenantId,
       },
       updatedBy: userId,
       companyId: companyId,

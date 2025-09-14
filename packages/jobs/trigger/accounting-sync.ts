@@ -2,6 +2,7 @@ import { getCarbonServiceRole } from "@carbon/auth";
 import type { Database } from "@carbon/database";
 import type { CoreProvider, ProviderConfig } from "@carbon/ee/accounting";
 import { QuickBooksProvider } from "@carbon/ee/quickbooks";
+import { XeroProvider } from "@carbon/ee/xero";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { task } from "@trigger.dev/sdk/v3";
@@ -128,9 +129,20 @@ async function initializeProvider(
       const qbProvider = new QuickBooksProvider(config);
       return qbProvider;
     }
+    case "xero": {
+      const config: ProviderConfig = {
+        clientId: process.env.XERO_CLIENT_ID!,
+        clientSecret: process.env.XERO_CLIENT_SECRET!,
+        redirectUri: process.env.XERO_REDIRECT_URI,
+        accessToken,
+        refreshToken,
+        tenantId,
+      };
+
+      const xeroProvider = new XeroProvider(config);
+      return xeroProvider;
+    }
     // Add other providers as needed
-    // case "xero":
-    //   return new XeroProvider(config);
     // case "sage":
     //   return new SageProvider(config);
     default:

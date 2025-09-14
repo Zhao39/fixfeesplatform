@@ -52,6 +52,7 @@ declare global {
       VERCEL_URL: string;
       VERCEL_ENV: string;
       XERO_CLIENT_SECRET: string;
+      XERO_WEBHOOK_SECRET: string;
     }
   }
 }
@@ -204,6 +205,10 @@ export const XERO_CLIENT_ID = getEnv("XERO_CLIENT_ID", {
 export const XERO_CLIENT_SECRET = getEnv("XERO_CLIENT_SECRET", {
   isRequired: false,
   isSecret: true
+});
+export const XERO_WEBHOOK_SECRET = getEnv("XERO_WEBHOOK_SECRET", {
+  isRequired: false,
+  isSecret: true,
 });
 
 /**

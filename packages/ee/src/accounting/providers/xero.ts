@@ -132,29 +132,39 @@ export class XeroProvider extends CoreProvider {
     }
 
     const url = `${this.baseUrl}${endpoint}`;
+    const tenantId = this.auth?.tenantId || this.config.tenantId;
+
+    const baseHeaders: Record<string, string> = {
+      Authorization: `Bearer ${this.auth.accessToken}`,
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      ...(options.headers as Record<string, string>),
+    };
+
+    if (tenantId) {
+      baseHeaders["xero-tenant-id"] = tenantId;
+    }
+
     const response = await fetch(url, {
       ...options,
-      headers: {
-        Authorization: `Bearer ${this.auth.accessToken}`,
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        ...options.headers,
-      },
+      headers: baseHeaders,
     });
 
     if (response.status === 401) {
-      // Try to refresh token
       await this.refreshAccessToken();
 
-      // Retry the request
+      const retryHeaders: Record<string, string> = {
+        ...baseHeaders,
+        Authorization: `Bearer ${this.auth.accessToken}`,
+      };
+
+      if (tenantId) {
+        retryHeaders["xero-tenant-id"] = tenantId;
+      }
+
       return fetch(url, {
         ...options,
-        headers: {
-          Authorization: `Bearer ${this.auth.accessToken}`,
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          ...options.headers,
-        },
+        headers: retryHeaders,
       });
     }
 
@@ -189,18 +199,29 @@ export class XeroProvider extends CoreProvider {
   async getCustomers(options?: SyncOptions): Promise<SyncResult<Customer>> {
     const params = new URLSearchParams();
 
-    if (options?.modifiedSince) {
-      params.append("If-Modified-Since", options.modifiedSince.toISOString());
-    }
-
     if (options?.includeArchived) {
       params.append("includeArchived", "true");
     }
 
-    const response = await this.makeRequest(`/Contacts?${params.toString()}`);
+    const headers: Record<string, string> = {};
+    if (options?.modifiedSince) {
+      headers["If-Modified-Since"] = options.modifiedSince.toUTCString();
+    }
+
+    const response = await this.makeRequest(
+      `/Contacts${params.toString() ? `?${params.toString()}` : ""}`,
+      {
+        headers,
+      }
+    );
 
     if (!response.ok) {
-      throw new Error(`Failed to get customers: ${response.statusText}`);
+      const errText = await response.text().catch(() => "");
+      throw new Error(
+        `Failed to get customers (${response.status}): ${
+          errText || response.statusText
+        }`
+      );
     }
 
     const data = (await response.json()) as any;
@@ -208,7 +229,7 @@ export class XeroProvider extends CoreProvider {
 
     return {
       data: customers,
-      hasMore: false, // Xero doesn't use cursor-based pagination in this example
+      hasMore: false,
       pagination: {
         page: 1,
         limit: customers.length,
@@ -248,7 +269,12 @@ export class XeroProvider extends CoreProvider {
     const response = await this.makeRequest(`/Contacts/${id}`);
 
     if (!response.ok) {
-      throw new Error(`Failed to get customer: ${response.statusText}`);
+      const errText = await response.text().catch(() => "");
+      throw new Error(
+        `Failed to get customer (${response.status}): ${
+          errText || response.statusText
+        }`
+      );
     }
 
     const data = (await response.json()) as any;
@@ -284,7 +310,12 @@ export class XeroProvider extends CoreProvider {
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to create customer: ${response.statusText}`);
+      const errText = await response.text().catch(() => "");
+      throw new Error(
+        `Failed to create customer (${response.status}): ${
+          errText || response.statusText
+        }`
+      );
     }
 
     const data = (await response.json()) as any;
