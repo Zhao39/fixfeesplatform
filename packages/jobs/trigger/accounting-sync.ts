@@ -12,7 +12,7 @@ import z from "zod";
 export interface AccountingSyncPayload {
   companyId: string;
   provider: "quickbooks" | "xero" | "sage";
-  syncType: "webhook" | "scheduled" | "manual";
+  syncType: "webhook" | "scheduled" | "trigger";
   syncDirection: "from_accounting" | "to_accounting" | "bidirectional";
   entities: AccountingEntity[];
   metadata?: {
