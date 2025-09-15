@@ -80,7 +80,7 @@ async function triggerAccountingSync(
     companyId,
     provider: "quickbooks" as const,
     syncType: "webhook" as const,
-    syncDirection: "from_accounting" as const,
+    syncDirection: "fromAccounting" as const,
     entities: entities.map((entity) => ({
       entityType: entity.entityType,
       entityId: entity.entityId,

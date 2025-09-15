@@ -8,12 +8,11 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { task } from "@trigger.dev/sdk/v3";
 import z from "zod";
 
-// Flexible payload interface to support different accounting systems and sync types
 export interface AccountingSyncPayload {
   companyId: string;
   provider: "quickbooks" | "xero" | "sage";
   syncType: "webhook" | "scheduled" | "trigger";
-  syncDirection: "from_accounting" | "to_accounting" | "bidirectional";
+  syncDirection: "fromAccounting" | "toAccounting" | "bidirectional";
   entities: AccountingEntity[];
   metadata?: {
     tenantId?: string;
@@ -193,16 +192,13 @@ async function processEntity(
   client: SupabaseClient<Database>,
   provider: CoreProvider,
   entity: AccountingEntity,
-  syncDirection: "from_accounting" | "to_accounting" | "bidirectional",
+  syncDirection: "fromAccounting" | "toAccounting" | "bidirectional",
   companyId: string,
   metadata?: any
 ): Promise<any> {
   const { entityType, entityId, operation, externalId } = entity;
 
-  if (
-    syncDirection === "from_accounting" ||
-    syncDirection === "bidirectional"
-  ) {
+  if (syncDirection === "fromAccounting" || syncDirection === "bidirectional") {
     if (
       operation === "create" ||
       operation === "update" ||
@@ -244,7 +240,7 @@ async function processEntity(
     }
   }
 
-  if (syncDirection === "to_accounting" || syncDirection === "bidirectional") {
+  if (syncDirection === "toAccounting" || syncDirection === "bidirectional") {
     if (operation === "create" || operation === "update") {
       switch (entityType) {
         case "customer":
