@@ -1,6 +1,5 @@
 import {
   assertIsPost,
-  CONTROLLED_ENVIRONMENT,
   callbackValidator,
   carbonClient,
   error,
@@ -52,7 +51,6 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const { refreshToken, userId } = validation.data;
   const serviceRole = getCarbonServiceRole();
-
   const companies = await serviceRole
     .from("userToCompany")
     .select("companyId")
@@ -66,10 +64,6 @@ export async function action({ request }: ActionFunctionArgs) {
     refreshToken,
     companies.data?.[0]?.companyId
   );
-
-  console.log({
-    authSession
-  });
 
   if (!authSession) {
     return redirect(
