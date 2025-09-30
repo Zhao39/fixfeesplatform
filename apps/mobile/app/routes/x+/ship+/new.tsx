@@ -12,7 +12,7 @@ export default function NewShipmentsRoute() {
   const initialValues = {
     id: undefined,
     locationId: defaults.locationId,
-    sourceDocument: "Purchase Order" as const,
+    sourceDocument: "Purchase Order",
     sourceDocumentId: "",
   };
 
@@ -37,18 +37,19 @@ export default function NewShipmentsRoute() {
       <ValidatedForm
         validator={newShipmentValidator}
         // @ts-ignore
-        initialValues={initialValues}
+        defaultValues={initialValues}
         className="w-full"
       >
         <Hidden name="locationId" />
         <VStack spacing={4}>
           <Select
             name="sourceDocument"
-            label="Source Document"
+            label="Document"
             options={shipmentSourceDocumentType.map((v) => ({
               label: v,
               value: v,
             }))}
+            size="lg"
             // onChange={(newValue) => {
             //   if (newValue) {
             //     setSourceDocument(
@@ -60,8 +61,9 @@ export default function NewShipmentsRoute() {
           />
           <Combobox
             name="sourceDocumentId"
-            label="Source Document ID"
+            label="Document ID"
             options={[]}
+            size="lg"
             // options={sourceDocuments.map((d) => ({
             //   label: d.name,
             //   value: d.id,
