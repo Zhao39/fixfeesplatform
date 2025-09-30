@@ -1,5 +1,5 @@
+import { useNanoStore } from "@carbon/remix";
 import { atom } from "nanostores";
-import { useNanoStore } from "~/hooks";
 
 const $totals = atom<{ total: number }>({
   total: 0,

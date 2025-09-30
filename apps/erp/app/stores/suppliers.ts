@@ -1,5 +1,5 @@
+import { useNanoStore } from "@carbon/remix";
 import { atom } from "nanostores";
-import { useNanoStore } from "~/hooks";
 import type { ListItem } from "~/types";
 
 const $suppliersStore = atom<ListItem[]>([]);

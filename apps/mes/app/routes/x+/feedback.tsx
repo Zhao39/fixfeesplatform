@@ -3,7 +3,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { validator } from "@carbon/form";
 import { getSlackClient } from "@carbon/lib/slack.server";
 import { json, type ActionFunctionArgs } from "@vercel/remix";
-import { feedbackValidator } from "~/services/models";
+import { feedbackValidator } from "~/services/shared.models";
 
 export const config = {
   runtime: "nodejs",

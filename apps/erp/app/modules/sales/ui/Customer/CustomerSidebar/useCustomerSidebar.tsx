@@ -1,3 +1,4 @@
+import type { Role } from "@carbon/auth";
 import { useParams } from "@remix-run/react";
 import {
   LuBuilding,
@@ -12,7 +13,6 @@ import {
   RiProgress8Line,
 } from "react-icons/ri";
 import { usePermissions } from "~/hooks";
-import type { Role } from "~/types";
 import { path } from "~/utils/path";
 
 type Props = {

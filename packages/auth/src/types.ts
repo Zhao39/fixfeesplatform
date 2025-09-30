@@ -33,3 +33,5 @@ export type Result = {
   message?: string;
   flash?: "success" | "error";
 };
+
+export type Role = "employee" | "supplier" | "customer";

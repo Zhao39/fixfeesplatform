@@ -1,3 +1,4 @@
+import type { Role } from "@carbon/auth";
 import type { ValidationErrorResponseData } from "@carbon/form";
 import type { FileObject } from "@supabase/storage-js";
 import type { TypedResponse } from "@vercel/remix";
@@ -49,8 +50,6 @@ export type Result = {
   success: boolean;
   message?: string;
 };
-
-export type Role = "employee" | "customer" | "supplier";
 
 export type Route = {
   name: string;

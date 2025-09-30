@@ -45,7 +45,7 @@ import { InProgressStatusIcon } from "~/assets/icons/InProgressStatusIcon";
 import { LowPriorityIcon } from "~/assets/icons/LowPriorityIcon";
 import { MediumPriorityIcon } from "~/assets/icons/MediumPriorityIcon";
 import { TodoStatusIcon } from "~/assets/icons/TodoStatusIcon";
-import type { documentTypes } from "~/services/models";
+import type { documentTypes } from "~/services/shared.models";
 import type { Operation } from "~/services/types";
 
 type FileIconProps = {

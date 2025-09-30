@@ -25,7 +25,7 @@ import type { ChangeEvent } from "react";
 import { useEffect, useRef, useState } from "react";
 import { LuImage, LuMessageCircle } from "react-icons/lu";
 import type { action } from "~/routes/x+/feedback";
-import { feedbackValidator } from "~/services/models";
+import { feedbackValidator } from "~/services/shared.models";
 import { path } from "~/utils/path";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes

@@ -14,6 +14,19 @@ import {
   makePermissionsFromClaims,
 } from "./users";
 
+export async function getUserDefaults(
+  client: SupabaseClient<Database>,
+  userId: string,
+  companyId: string
+) {
+  return client
+    .from("userDefaults")
+    .select("*")
+    .eq("userId", userId)
+    .eq("companyId", companyId)
+    .maybeSingle();
+}
+
 export async function getUserByEmail(email: string) {
   return getCarbonServiceRole()
     .from("user")

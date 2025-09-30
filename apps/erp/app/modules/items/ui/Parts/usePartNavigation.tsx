@@ -1,5 +1,6 @@
 import { useParams } from "@remix-run/react";
 
+import type { Role } from "@carbon/auth";
 import {
   LuBox,
   LuChartLine,
@@ -10,7 +11,6 @@ import {
   LuTags,
 } from "react-icons/lu";
 import { usePermissions, useRouteData } from "~/hooks";
-import type { Role } from "~/types";
 import { path } from "~/utils/path";
 import type { PartSummary } from "../../types";
 

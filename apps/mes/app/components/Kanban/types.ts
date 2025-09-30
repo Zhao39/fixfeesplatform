@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { deadlineTypes, jobOperationStatus } from "~/services/models";
+import { deadlineTypes, jobOperationStatus } from "~/services/shared.models";
 
 export const columnValidator = z.object({
   id: z.string(),

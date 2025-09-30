@@ -3,7 +3,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { FunctionRegion } from "@supabase/supabase-js";
 import type { ActionFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
-import { issueTrackedEntityValidator } from "~/services/models";
+import { issueTrackedEntityValidator } from "~/services/shared.models";
 
 export async function action({ request }: ActionFunctionArgs) {
   assertIsPost(request);

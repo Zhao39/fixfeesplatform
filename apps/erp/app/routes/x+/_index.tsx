@@ -1,5 +1,5 @@
 import { Heading, cn } from "@carbon/react";
-import { getLocalTimeZone } from "@internationalized/date";
+import { getLocalTimeZone, now } from "@internationalized/date";
 import { useLocale } from "@react-aria/i18n";
 import { Link } from "@remix-run/react";
 import { useMemo, type ComponentProps } from "react";
@@ -22,9 +22,23 @@ export default function AppIndexRoute() {
     [locale]
   );
 
+  const greeting = useMemo(() => {
+    const time = now(getLocalTimeZone());
+
+    if (time.hour >= 3 && time.hour < 11) {
+      return "Good Morning";
+    } else if (time.hour >= 11 && time.hour < 16) {
+      return "Good Afternoon";
+    } else {
+      return "Good Evening";
+    }
+  }, []);
+
   return (
     <div className="p-8 w-full h-full bg-muted">
-      <Heading size="h3">Hello, {user.firstName}</Heading>
+      <Heading size="h3">
+        {greeting}, {user.firstName}
+      </Heading>
       <Subheading>{formatter.format(date)}</Subheading>
       <Hr />
       <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,300px),1fr))] gap-6 mb-8">

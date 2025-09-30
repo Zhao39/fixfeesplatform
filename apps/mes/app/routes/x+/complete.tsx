@@ -10,11 +10,8 @@ import { validationError, validator } from "@carbon/form";
 import { FunctionRegion } from "@supabase/supabase-js";
 import type { ActionFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-import { nonScrapQuantityValidator } from "~/services/models";
-import {
-  finishJobOperation,
-  insertProductionQuantity,
-} from "~/services/operations.service";
+import { insertProductionQuantity } from "~/services/operations.service";
+import { nonScrapQuantityValidator } from "~/services/shared.models";
 import { path } from "~/utils/path";
 
 export async function action({ request }: ActionFunctionArgs) {

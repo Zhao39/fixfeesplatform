@@ -1,7 +1,7 @@
+import type { Role } from "@carbon/auth";
 import { useRouteData } from "@carbon/remix";
 import { useCallback } from "react";
 import type { Permission } from "~/modules/users";
-import type { Role } from "~/types";
 import { path } from "~/utils/path";
 import { useUser } from "./useUser";
 

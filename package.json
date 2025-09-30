@@ -53,6 +53,7 @@
     "dev:erp": "turbo run dev --filter=./apps/erp --filter=./packages/ ",
     "dev:jobs": "npm run -w @carbon/jobs dev:jobs",
     "dev:mes": "turbo run dev --filter=./apps/mes",
+    "dev:mobile": "turbo run dev --filter=./apps/mobile",
     "dev:packages": "turbo run dev --filter=./packages/*",
     "dev:starter": "turbo run dev --filter=./apps/starter --filter=./packages/",
     "dev:stripe": "npm run -w @carbon/stripe dev:stripe",

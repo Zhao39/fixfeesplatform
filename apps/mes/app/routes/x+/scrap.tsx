@@ -10,8 +10,8 @@ import { validationError, validator } from "@carbon/form";
 import { FunctionRegion } from "@supabase/supabase-js";
 import type { ActionFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
-import { scrapQuantityValidator } from "~/services/models";
 import { insertScrapQuantity } from "~/services/operations.service";
+import { scrapQuantityValidator } from "~/services/shared.models";
 
 export async function action({ request }: ActionFunctionArgs) {
   assertIsPost(request);

@@ -1,7 +1,7 @@
 import type { Database } from "@carbon/database";
+import { useNanoStore } from "@carbon/remix";
 import { useStore as useValue } from "@nanostores/react";
 import { atom, computed } from "nanostores";
-import { useNanoStore } from "~/hooks";
 import type { ListItem } from "~/types";
 
 export type Item = ListItem & {

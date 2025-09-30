@@ -10,7 +10,7 @@ import type {
   productionEventValidator,
   scrapQuantityValidator,
   stepRecordValidator,
-} from "./models";
+} from "./shared.models";
 import type { BaseOperationWithDetails, Job, StorageItem } from "./types";
 
 export async function deleteAttributeRecord(

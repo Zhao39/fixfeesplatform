@@ -1,3 +1,6 @@
+import type { FileObject } from "@supabase/storage-js";
+import type { ReactElement } from "react";
+import type { IconType } from "react-icons";
 import { z } from "zod";
 
 export enum Edition {
@@ -56,3 +59,75 @@ export interface TrackedActivityAttributes {
   Receipt?: string;
   "Work Center"?: string;
 }
+
+export type Action = {
+  label: string;
+  icon: ReactElement;
+  onClick: () => void;
+};
+
+export type Authenticated<T = {}> = T & {
+  role?: "employee" | "customer" | "supplier";
+  permission?: string;
+  internal?: boolean;
+};
+
+export type AuthenticatedRouteGroup<T = {}> = T & {
+  name: string;
+  icon?: any;
+  routes: Authenticated<Route & T>[];
+};
+
+export type ListItem = {
+  id: string;
+  name: string;
+};
+
+export type ModelUpload = {
+  modelId: string | null;
+  modelName: string | null;
+  modelPath: string | null;
+  modelSize: number | null;
+  thumbnailPath: string | null;
+};
+
+export type NavItem = Omit<Route, "icon"> & {
+  icon: IconType;
+  backgroundColor?: string;
+  foregroundColor?: string;
+};
+
+export type Result = {
+  success: boolean;
+  message?: string;
+};
+
+export type Route = {
+  name: string;
+  to: string;
+  icon?: any;
+  views?: {
+    id: string;
+    name: string;
+    to: string;
+    sortOrder: number;
+  }[];
+  q?: string; // TODO: this is dumb
+  table?: string;
+};
+
+export type RouteGroup = {
+  name: string;
+  icon?: any;
+  routes: Route[];
+};
+
+export interface SelectOption {
+  label: string;
+  value: string;
+  helper?: string;
+}
+
+export type StorageItem = FileObject & {
+  bucket: string;
+};

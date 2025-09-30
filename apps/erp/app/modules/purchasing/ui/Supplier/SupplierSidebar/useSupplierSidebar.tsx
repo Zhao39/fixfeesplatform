@@ -1,15 +1,15 @@
+import type { Role } from "@carbon/auth";
 import { useParams } from "@remix-run/react";
 import {
   LuBuilding,
+  LuCog,
   LuContact,
   LuCreditCard,
   LuLayoutList,
   LuMapPin,
   LuPackageSearch,
-  LuCog,
 } from "react-icons/lu";
 import { usePermissions } from "~/hooks";
-import type { Role } from "~/types";
 import { path } from "~/utils/path";
 
 type Props = {

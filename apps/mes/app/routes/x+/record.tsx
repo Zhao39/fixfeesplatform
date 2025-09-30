@@ -9,8 +9,8 @@ import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
-import { stepRecordValidator } from "~/services/models";
 import { insertAttributeRecord } from "~/services/operations.service";
+import { stepRecordValidator } from "~/services/shared.models";
 
 export async function action({ request }: ActionFunctionArgs) {
   assertIsPost(request);
