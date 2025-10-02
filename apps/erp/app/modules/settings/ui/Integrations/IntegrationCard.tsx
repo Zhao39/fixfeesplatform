@@ -67,10 +67,14 @@ export function IntegrationCard({
         <integration.logo className="h-10 w-auto" />
         {integration.active ? (
           installed ? (
-            <Badge variant="green">Installed</Badge>
+            <Badge className="flex-shrink-0" variant="green">
+              Installed
+            </Badge>
           ) : null
         ) : (
-          <Badge variant="secondary">Coming soon</Badge>
+          <Badge className="flex-shrink-0" variant="secondary">
+            Coming soon
+          </Badge>
         )}
       </div>
       <CardHeader className="pb-0">

@@ -17,10 +17,10 @@ export type Database = {
     Functions: {
       graphql: {
         Args: {
+          extensions?: Json;
           operationName?: string;
           query?: string;
           variables?: Json;
-          extensions?: Json;
         };
         Returns: Json;
       };
@@ -41144,21 +41144,21 @@ export type Database = {
           releasedDate: string | null
           replenishmentSystem:
             | Database["public"]["Enums"]["itemReplenishmentSystem"]
-            | null
-          salesOrderId: string | null
-          salesOrderLineId: string | null
-          salesOrderReadableId: string | null
-          scrapQuantity: number | null
-          secondsToComplete: number | null
-          shelfId: string | null
-          startDate: string | null
-          status: Database["public"]["Enums"]["jobStatus"] | null
-          tags: string[] | null
-          thumbnailPath: string | null
-          unitOfMeasureCode: string | null
-          updatedAt: string | null
-          updatedBy: string | null
-        }
+            | null;
+          salesOrderId: string | null;
+          salesOrderLineId: string | null;
+          salesOrderReadableId: string | null;
+          scrapQuantity: number | null;
+          secondsToComplete: number | null;
+          shelfId: string | null;
+          startDate: string | null;
+          status: Database["public"]["Enums"]["jobStatus"] | null;
+          tags: string[] | null;
+          thumbnailPath: string | null;
+          unitOfMeasureCode: string | null;
+          updatedAt: string | null;
+          updatedBy: string | null;
+        };
         Relationships: [
           {
             foreignKeyName: "job_assignee_fkey";
@@ -46547,14 +46547,14 @@ export type Database = {
           },
           {
             foreignKeyName: "address_countryCode_fkey";
-            columns: ["invoiceCountryCode"];
+            columns: ["customerCountryCode"];
             isOneToOne: false;
             referencedRelation: "country";
             referencedColumns: ["alpha2"];
           },
           {
             foreignKeyName: "address_countryCode_fkey";
-            columns: ["customerCountryCode"];
+            columns: ["invoiceCountryCode"];
             isOneToOne: false;
             referencedRelation: "country";
             referencedColumns: ["alpha2"];
@@ -47090,14 +47090,14 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "address_countryCode_fkey";
-            columns: ["customerCountryCode"];
+            columns: ["paymentCountryCode"];
             isOneToOne: false;
             referencedRelation: "country";
             referencedColumns: ["alpha2"];
           },
           {
             foreignKeyName: "address_countryCode_fkey";
-            columns: ["paymentCountryCode"];
+            columns: ["customerCountryCode"];
             isOneToOne: false;
             referencedRelation: "country";
             referencedColumns: ["alpha2"];
@@ -49653,9 +49653,7 @@ export type Database = {
     Functions: {
       _xid_machine_id: { Args: never; Returns: number }
       check_operation_dependencies: {
-        Args: {
-          operation_id: string;
-        };
+        Args: { operation_id: string };
         Returns: boolean;
       };
       create_rfq_from_model_v1: {
@@ -49664,35 +49662,35 @@ export type Database = {
           customer_part_id: string;
           email: string;
           model_id: string;
+          notes?: Json;
           sequence_number: string;
           unit_of_measure: string;
-          notes?: Json;
         };
         Returns: {
           rfq_id: string;
-          rfq_readable_id: string;
           rfq_line_id: string;
+          rfq_readable_id: string;
         }[];
       };
       create_rfq_from_models_v1: {
         Args: {
           company_id: string;
           email: string;
-          sequence_number: string;
           model_data: Json[];
+          sequence_number: string;
         };
         Returns: {
           rfq_id: string;
-          rfq_readable_id: string;
           rfq_line_ids: string[];
+          rfq_readable_id: string;
         }[];
       };
       create_rfq_from_models_v2: {
         Args: {
           company_id: string;
           email: string;
-          sequence_number: string;
           model_data: Json[];
+          sequence_number: string;
         };
         Returns: {
           rfq_id: string
@@ -49715,56 +49713,47 @@ export type Database = {
         }[]
       }
       get_active_job_count: {
-        Args: {
-          employee_id: string;
-          company_id: string;
-        };
+        Args: { company_id: string; employee_id: string };
         Returns: number;
       };
       get_active_job_operations_by_employee: {
-        Args: {
-          employee_id: string;
-          company_id: string;
-        };
+        Args: { company_id: string; employee_id: string };
         Returns: {
-          id: string;
-          jobId: string;
-          operationOrder: number;
-          processId: string;
-          workCenterId: string;
+          assignee: string;
           description: string;
-          setupTime: number;
-          setupUnit: Database["public"]["Enums"]["factor"];
+          id: string;
+          itemDescription: string;
+          itemReadableId: string;
+          jobCustomerId: string;
+          jobDeadlineType: Database["public"]["Enums"]["deadlineType"];
+          jobDueDate: string;
+          jobId: string;
+          jobReadableId: string;
+          jobStatus: Database["public"]["Enums"]["jobStatus"];
           laborTime: number;
           laborUnit: Database["public"]["Enums"]["factor"];
           machineTime: number;
           machineUnit: Database["public"]["Enums"]["factor"];
+          operationOrder: number;
           operationOrderType: Database["public"]["Enums"]["methodOperationOrder"];
-          jobReadableId: string;
-          jobStatus: Database["public"]["Enums"]["jobStatus"];
-          jobDueDate: string;
-          jobDeadlineType: Database["public"]["Enums"]["deadlineType"];
-          jobCustomerId: string;
-          salesOrderReadableId: string;
-          salesOrderId: string;
-          salesOrderLineId: string;
-          parentMaterialId: string;
-          itemReadableId: string;
-          itemDescription: string;
-          operationStatus: Database["public"]["Enums"]["jobOperationStatus"];
           operationQuantity: number;
+          operationStatus: Database["public"]["Enums"]["jobOperationStatus"];
+          parentMaterialId: string;
+          processId: string;
           quantityComplete: number;
           quantityScrapped: number;
-          thumbnailPath: string;
-          assignee: string;
+          salesOrderId: string;
+          salesOrderLineId: string;
+          salesOrderReadableId: string;
+          setupTime: number;
+          setupUnit: Database["public"]["Enums"]["factor"];
           tags: string[];
+          thumbnailPath: string;
+          workCenterId: string;
         }[];
       };
       get_active_job_operations_by_location: {
-        Args: {
-          location_id: string;
-          work_center_ids: string[];
-        };
+        Args: { location_id: string; work_center_ids: string[] };
         Returns: {
           assignee: string
           customerName: string
@@ -49803,10 +49792,7 @@ export type Database = {
         }[]
       }
       get_assigned_job_operations: {
-        Args: {
-          user_id: string;
-          company_id: string;
-        };
+        Args: { company_id: string; user_id: string };
         Returns: {
           assignee: string
           description: string
@@ -49854,180 +49840,154 @@ export type Database = {
       }
       get_company_id_from_api_key: { Args: never; Returns: string }
       get_company_id_from_foreign_key: {
-        Args: {
-          foreign_key: string;
-          tbl: string;
-        };
+        Args: { foreign_key: string; tbl: string };
         Returns: string;
       };
       get_consumable_details: {
-        Args: {
-          item_id: string;
-        };
+        Args: { item_id: string };
         Returns: {
           active: boolean;
           assignee: string;
+          companyId: string;
+          createdAt: string;
+          createdBy: string;
+          customFields: Json;
           defaultMethodType: Database["public"]["Enums"]["methodType"];
           description: string;
-          itemTrackingType: Database["public"]["Enums"]["itemTrackingType"];
-          name: string;
-          replenishmentSystem: Database["public"]["Enums"]["itemReplenishmentSystem"];
-          unitOfMeasureCode: string;
-          notes: Json;
-          thumbnailPath: string;
-          modelUploadId: string;
-          modelPath: string;
-          modelName: string;
-          modelSize: number;
           id: string;
-          companyId: string;
+          itemTrackingType: Database["public"]["Enums"]["itemTrackingType"];
+          modelName: string;
+          modelPath: string;
+          modelSize: number;
+          modelUploadId: string;
+          name: string;
+          notes: Json;
           readableId: string;
-          revision: string;
           readableIdWithRevision: string;
-          supplierIds: string;
-          unitOfMeasure: string;
+          replenishmentSystem: Database["public"]["Enums"]["itemReplenishmentSystem"];
+          revision: string;
           revisions: Json;
-          customFields: Json;
+          supplierIds: string;
           tags: string[];
-          createdBy: string;
-          createdAt: string;
-          updatedBy: string;
+          thumbnailPath: string;
+          unitOfMeasure: string;
+          unitOfMeasureCode: string;
           updatedAt: string;
+          updatedBy: string;
         }[];
       };
       get_custom_field_unique_values: {
-        Args: {
-          table_name: string;
-          field_key: string;
-          company_id: string;
-        };
+        Args: { company_id: string; field_key: string; table_name: string };
         Returns: {
           value: Json
         }[]
       }
       get_customer_ids_with_customer_permission: {
-        Args: {
-          permission: string;
-        };
+        Args: { permission: string };
         Returns: string[];
       };
       get_direct_ancestors_of_tracked_entity: {
-        Args: {
-          p_tracked_entity_id: string;
-        };
+        Args: { p_tracked_entity_id: string };
         Returns: {
-          trackedActivityId: string;
+          activityAttributes: Json;
+          attributes: Json;
           id: string;
           quantity: number;
-          status: Database["public"]["Enums"]["trackedEntityStatus"];
           sourceDocument: string;
           sourceDocumentId: string;
           sourceDocumentReadableId: string;
-          activityAttributes: Json;
-          attributes: Json;
+          status: Database["public"]["Enums"]["trackedEntityStatus"];
+          trackedActivityId: string;
         }[];
       };
       get_direct_ancestors_of_tracked_entity_strict: {
-        Args: {
-          p_tracked_entity_id: string;
-        };
+        Args: { p_tracked_entity_id: string };
         Returns: {
-          trackedActivityId: string;
+          activityAttributes: Json;
+          attributes: Json;
           id: string;
           quantity: number;
-          status: Database["public"]["Enums"]["trackedEntityStatus"];
           sourceDocument: string;
           sourceDocumentId: string;
           sourceDocumentReadableId: string;
-          activityAttributes: Json;
-          attributes: Json;
+          status: Database["public"]["Enums"]["trackedEntityStatus"];
+          trackedActivityId: string;
         }[];
       };
       get_direct_descendants_of_tracked_entity: {
-        Args: {
-          p_tracked_entity_id: string;
-        };
+        Args: { p_tracked_entity_id: string };
         Returns: {
-          trackedActivityId: string;
+          activityAttributes: Json;
+          attributes: Json;
           id: string;
           quantity: number;
-          status: Database["public"]["Enums"]["trackedEntityStatus"];
           sourceDocument: string;
           sourceDocumentId: string;
           sourceDocumentReadableId: string;
-          activityAttributes: Json;
-          attributes: Json;
+          status: Database["public"]["Enums"]["trackedEntityStatus"];
+          trackedActivityId: string;
         }[];
       };
       get_direct_descendants_of_tracked_entity_strict: {
-        Args: {
-          p_tracked_entity_id: string;
-        };
+        Args: { p_tracked_entity_id: string };
         Returns: {
-          trackedActivityId: string;
+          activityAttributes: Json;
+          attributes: Json;
           id: string;
           quantity: number;
-          status: Database["public"]["Enums"]["trackedEntityStatus"];
           sourceDocument: string;
           sourceDocumentId: string;
           sourceDocumentReadableId: string;
-          activityAttributes: Json;
-          attributes: Json;
+          status: Database["public"]["Enums"]["trackedEntityStatus"];
+          trackedActivityId: string;
         }[];
       };
       get_inventory_quantities: {
-        Args: {
-          company_id: string;
-          location_id: string;
-        };
+        Args: { company_id: string; location_id: string };
         Returns: {
-          id: string;
-          readableId: string;
-          readableIdWithRevision: string;
-          name: string;
           active: boolean;
-          type: Database["public"]["Enums"]["itemType"];
-          itemTrackingType: Database["public"]["Enums"]["itemTrackingType"];
-          replenishmentSystem: Database["public"]["Enums"]["itemReplenishmentSystem"];
-          materialSubstanceId: string;
-          materialFormId: string;
-          dimensionId: string;
-          dimension: string;
-          finishId: string;
-          finish: string;
-          gradeId: string;
-          grade: string;
-          materialType: string;
-          materialTypeId: string;
-          thumbnailPath: string;
-          unitOfMeasureCode: string;
-          leadTime: number;
-          lotSize: number;
-          reorderingPolicy: Database["public"]["Enums"]["itemReorderingPolicy"];
+          daysRemaining: number;
           demandAccumulationPeriod: number;
           demandAccumulationSafetyStock: number;
-          reorderPoint: number;
-          reorderQuantity: number;
-          minimumOrderQuantity: number;
-          maximumOrderQuantity: number;
+          dimension: string;
+          dimensionId: string;
+          finish: string;
+          finishId: string;
+          grade: string;
+          gradeId: string;
+          id: string;
+          itemTrackingType: Database["public"]["Enums"]["itemTrackingType"];
+          leadTime: number;
+          lotSize: number;
+          materialFormId: string;
+          materialSubstanceId: string;
+          materialType: string;
+          materialTypeId: string;
           maximumInventoryQuantity: number;
+          maximumOrderQuantity: number;
+          minimumOrderQuantity: number;
+          name: string;
           orderMultiple: number;
           quantityOnHand: number;
-          quantityOnSalesOrder: number;
-          quantityOnPurchaseOrder: number;
-          quantityOnProductionOrder: number;
           quantityOnProductionDemand: number;
+          quantityOnProductionOrder: number;
+          quantityOnPurchaseOrder: number;
+          quantityOnSalesOrder: number;
+          readableId: string;
+          readableIdWithRevision: string;
+          reorderingPolicy: Database["public"]["Enums"]["itemReorderingPolicy"];
+          reorderPoint: number;
+          reorderQuantity: number;
+          replenishmentSystem: Database["public"]["Enums"]["itemReplenishmentSystem"];
+          thumbnailPath: string;
+          type: Database["public"]["Enums"]["itemType"];
+          unitOfMeasureCode: string;
           usageLast30Days: number;
           usageLast90Days: number;
-          daysRemaining: number;
         }[];
       };
       get_item_quantities_by_tracking_id: {
-        Args: {
-          item_id: string;
-          company_id: string;
-          location_id: string;
-        };
+        Args: { company_id: string; item_id: string; location_id: string };
         Returns: {
           itemId: string
           quantity: number
@@ -50075,9 +50035,7 @@ export type Database = {
         }[]
       }
       get_job_method: {
-        Args: {
-          jid: string;
-        };
+        Args: { jid: string };
         Returns: {
           description: string
           isRoot: boolean
@@ -50100,9 +50058,7 @@ export type Database = {
         }[]
       }
       get_job_methods_by_method_id: {
-        Args: {
-          mid: string;
-        };
+        Args: { mid: string };
         Returns: {
           description: string
           isRoot: boolean
@@ -50124,9 +50080,7 @@ export type Database = {
         }[]
       }
       get_job_operation_by_id: {
-        Args: {
-          operation_id: string;
-        };
+        Args: { operation_id: string };
         Returns: {
           description: string
           id: string
@@ -50190,42 +50144,35 @@ export type Database = {
         }[]
       }
       get_job_operations_by_work_center: {
-        Args: {
-          work_center_id: string;
-          location_id: string;
-        };
+        Args: { location_id: string; work_center_id: string };
         Returns: {
-          id: string;
-          jobId: string;
-          operationOrder: number;
-          processId: string;
-          workCenterId: string;
           description: string;
-          setupTime: number;
-          setupUnit: Database["public"]["Enums"]["factor"];
+          id: string;
+          itemReadableId: string;
+          jobDeadlineType: Database["public"]["Enums"]["deadlineType"];
+          jobDueDate: string;
+          jobId: string;
+          jobReadableId: string;
+          jobStatus: Database["public"]["Enums"]["jobStatus"];
           laborTime: number;
           laborUnit: Database["public"]["Enums"]["factor"];
           machineTime: number;
           machineUnit: Database["public"]["Enums"]["factor"];
+          operationOrder: number;
           operationOrderType: Database["public"]["Enums"]["methodOperationOrder"];
-          jobReadableId: string;
-          jobStatus: Database["public"]["Enums"]["jobStatus"];
-          jobDueDate: string;
-          jobDeadlineType: Database["public"]["Enums"]["deadlineType"];
-          parentMaterialId: string;
-          itemReadableId: string;
-          operationStatus: Database["public"]["Enums"]["jobOperationStatus"];
           operationQuantity: number;
+          operationStatus: Database["public"]["Enums"]["jobOperationStatus"];
+          parentMaterialId: string;
+          processId: string;
           quantityComplete: number;
           quantityScrapped: number;
+          setupTime: number;
+          setupUnit: Database["public"]["Enums"]["factor"];
+          workCenterId: string;
         }[];
       };
       get_job_quantity_on_hand: {
-        Args: {
-          job_id: string;
-          company_id: string;
-          location_id: string;
-        };
+        Args: { company_id: string; job_id: string; location_id: string };
         Returns: {
           description: string
           estimatedQuantity: number
@@ -50284,73 +50231,67 @@ export type Database = {
         }[]
       }
       get_material_details: {
-        Args: {
-          item_id: string;
-        };
+        Args: { item_id: string };
         Returns: {
           active: boolean;
           assignee: string;
+          companyId: string;
+          createdAt: string;
+          createdBy: string;
+          customFields: Json;
           defaultMethodType: Database["public"]["Enums"]["methodType"];
           description: string;
-          itemTrackingType: Database["public"]["Enums"]["itemTrackingType"];
-          name: string;
-          replenishmentSystem: Database["public"]["Enums"]["itemReplenishmentSystem"];
-          unitOfMeasureCode: string;
-          notes: Json;
-          thumbnailPath: string;
-          modelUploadId: string;
-          modelPath: string;
-          modelName: string;
-          modelSize: number;
-          id: string;
-          companyId: string;
-          readableId: string;
-          revision: string;
-          readableIdWithRevision: string;
-          supplierIds: string;
-          unitOfMeasure: string;
-          revisions: Json;
-          materialForm: string;
-          materialSubstance: string;
-          finish: string;
-          grade: string;
-          dimensions: string;
-          materialType: string;
-          materialSubstanceId: string;
-          materialFormId: string;
-          materialTypeId: string;
           dimensionId: string;
-          gradeId: string;
+          dimensions: string;
+          finish: string;
           finishId: string;
-          customFields: Json;
+          grade: string;
+          gradeId: string;
+          id: string;
+          itemTrackingType: Database["public"]["Enums"]["itemTrackingType"];
+          materialForm: string;
+          materialFormId: string;
+          materialSubstance: string;
+          materialSubstanceId: string;
+          materialType: string;
+          materialTypeId: string;
+          modelName: string;
+          modelPath: string;
+          modelSize: number;
+          modelUploadId: string;
+          name: string;
+          notes: Json;
+          readableId: string;
+          readableIdWithRevision: string;
+          replenishmentSystem: Database["public"]["Enums"]["itemReplenishmentSystem"];
+          revision: string;
+          revisions: Json;
+          supplierIds: string;
           tags: string[];
-          createdBy: string;
-          createdAt: string;
-          updatedBy: string;
+          thumbnailPath: string;
+          unitOfMeasure: string;
+          unitOfMeasureCode: string;
           updatedAt: string;
+          updatedBy: string;
         }[];
       };
       get_material_naming_details: {
-        Args: {
-          readable_id: string;
-        };
+        Args: { readable_id: string };
         Returns: {
+          dimensions: string;
+          finish: string;
+          grade: string;
           id: string;
+          materialType: string;
+          materialTypeCode: string;
           shape: string;
           shapeCode: string;
           substance: string;
           substanceCode: string;
-          finish: string;
-          grade: string;
-          dimensions: string;
-          materialType: string;
-          materialTypeCode: string;
         }[];
       };
       get_method_tree: {
-        Args: {
-          uid: string;
-        };
+        Args: { uid: string };
         Returns: {
           description: string
           externalId: Json
@@ -50393,31 +50334,24 @@ export type Database = {
         Returns: string
       }
       get_next_sequence: {
-        Args: {
-          sequence_name: string;
-          company_id: string;
-        };
+        Args: { company_id: string; sequence_name: string };
         Returns: string;
       };
       get_opportunity_with_related_records: {
-        Args: {
-          opportunity_id: string;
-        };
+        Args: { opportunity_id: string };
         Returns: {
-          id: string;
           companyId: string;
           customerId: string;
+          id: string;
           purchaseOrderDocumentPath: string;
-          requestForQuoteDocumentPath: string;
-          salesRfqs: Json;
           quotes: Json;
+          requestForQuoteDocumentPath: string;
           salesOrders: Json;
+          salesRfqs: Json;
         }[];
       };
       get_part_details: {
-        Args: {
-          item_id: string;
-        };
+        Args: { item_id: string };
         Returns: {
           active: boolean;
           assignee: string;
@@ -50451,43 +50385,31 @@ export type Database = {
       };
       get_permission_companies: { Args: { claim: string }; Returns: string[] };
       get_production_planning: {
-        Args: {
-          company_id: string;
-          location_id: string;
-          periods: string[];
-        };
+        Args: { company_id: string; location_id: string; periods: string[] };
         Returns: {
-          id: string;
-          readableIdWithRevision: string;
-          name: string;
           active: boolean;
-          type: Database["public"]["Enums"]["itemType"];
-          itemTrackingType: Database["public"]["Enums"]["itemTrackingType"];
-          replenishmentSystem: Database["public"]["Enums"]["itemReplenishmentSystem"];
-          thumbnailPath: string;
-          unitOfMeasureCode: string;
-          leadTime: number;
-          manufacturingBlocked: boolean;
-          lotSize: number;
-          reorderingPolicy: Database["public"]["Enums"]["itemReorderingPolicy"];
           demandAccumulationPeriod: number;
           demandAccumulationSafetyStock: number;
-          reorderPoint: number;
-          reorderQuantity: number;
-          minimumOrderQuantity: number;
+          id: string;
+          itemTrackingType: Database["public"]["Enums"]["itemTrackingType"];
+          leadTime: number;
+          lotSize: number;
+          manufacturingBlocked: boolean;
+          maximumInventoryQuantity: number;
           maximumOrderQuantity: number;
+          minimumOrderQuantity: number;
+          name: string;
           orderMultiple: number;
           quantityOnHand: number;
-          maximumInventoryQuantity: number;
+          readableIdWithRevision: string;
+          reorderingPolicy: Database["public"]["Enums"]["itemReorderingPolicy"];
+          reorderPoint: number;
+          reorderQuantity: number;
+          replenishmentSystem: Database["public"]["Enums"]["itemReplenishmentSystem"];
+          thumbnailPath: string;
+          type: Database["public"]["Enums"]["itemType"];
+          unitOfMeasureCode: string;
           week1: number;
-          week2: number;
-          week3: number;
-          week4: number;
-          week5: number;
-          week6: number;
-          week7: number;
-          week8: number;
-          week9: number;
           week10: number;
           week11: number;
           week12: number;
@@ -50498,6 +50420,7 @@ export type Database = {
           week17: number;
           week18: number;
           week19: number;
+          week2: number;
           week20: number;
           week21: number;
           week22: number;
@@ -50508,6 +50431,7 @@ export type Database = {
           week27: number;
           week28: number;
           week29: number;
+          week3: number;
           week30: number;
           week31: number;
           week32: number;
@@ -50518,6 +50442,7 @@ export type Database = {
           week37: number;
           week38: number;
           week39: number;
+          week4: number;
           week40: number;
           week41: number;
           week42: number;
@@ -50528,49 +50453,42 @@ export type Database = {
           week47: number;
           week48: number;
           week49: number;
+          week5: number;
           week50: number;
           week51: number;
           week52: number;
+          week6: number;
+          week7: number;
+          week8: number;
+          week9: number;
         }[];
       };
       get_production_projections: {
-        Args: {
-          company_id: string;
-          location_id: string;
-          periods: string[];
-        };
+        Args: { company_id: string; location_id: string; periods: string[] };
         Returns: {
-          id: string;
-          readableIdWithRevision: string;
-          name: string;
           active: boolean;
-          type: Database["public"]["Enums"]["itemType"];
-          itemTrackingType: Database["public"]["Enums"]["itemTrackingType"];
-          replenishmentSystem: Database["public"]["Enums"]["itemReplenishmentSystem"];
-          thumbnailPath: string;
-          unitOfMeasureCode: string;
-          leadTime: number;
-          manufacturingBlocked: boolean;
-          lotSize: number;
-          reorderingPolicy: Database["public"]["Enums"]["itemReorderingPolicy"];
           demandAccumulationPeriod: number;
           demandAccumulationSafetyStock: number;
-          reorderPoint: number;
-          reorderQuantity: number;
-          minimumOrderQuantity: number;
+          id: string;
+          itemTrackingType: Database["public"]["Enums"]["itemTrackingType"];
+          leadTime: number;
+          lotSize: number;
+          manufacturingBlocked: boolean;
+          maximumInventoryQuantity: number;
           maximumOrderQuantity: number;
+          minimumOrderQuantity: number;
+          name: string;
           orderMultiple: number;
           quantityOnHand: number;
-          maximumInventoryQuantity: number;
+          readableIdWithRevision: string;
+          reorderingPolicy: Database["public"]["Enums"]["itemReorderingPolicy"];
+          reorderPoint: number;
+          reorderQuantity: number;
+          replenishmentSystem: Database["public"]["Enums"]["itemReplenishmentSystem"];
+          thumbnailPath: string;
+          type: Database["public"]["Enums"]["itemType"];
+          unitOfMeasureCode: string;
           week1: number;
-          week2: number;
-          week3: number;
-          week4: number;
-          week5: number;
-          week6: number;
-          week7: number;
-          week8: number;
-          week9: number;
           week10: number;
           week11: number;
           week12: number;
@@ -50581,6 +50499,7 @@ export type Database = {
           week17: number;
           week18: number;
           week19: number;
+          week2: number;
           week20: number;
           week21: number;
           week22: number;
@@ -50591,6 +50510,7 @@ export type Database = {
           week27: number;
           week28: number;
           week29: number;
+          week3: number;
           week30: number;
           week31: number;
           week32: number;
@@ -50601,6 +50521,7 @@ export type Database = {
           week37: number;
           week38: number;
           week39: number;
+          week4: number;
           week40: number;
           week41: number;
           week42: number;
@@ -50611,53 +50532,46 @@ export type Database = {
           week47: number;
           week48: number;
           week49: number;
+          week5: number;
           week50: number;
           week51: number;
           week52: number;
+          week6: number;
+          week7: number;
+          week8: number;
+          week9: number;
         }[];
       };
       get_purchasing_planning: {
-        Args: {
-          company_id: string;
-          location_id: string;
-          periods: string[];
-        };
+        Args: { company_id: string; location_id: string; periods: string[] };
         Returns: {
-          id: string;
-          readableIdWithRevision: string;
-          name: string;
           active: boolean;
-          type: Database["public"]["Enums"]["itemType"];
-          itemTrackingType: Database["public"]["Enums"]["itemTrackingType"];
-          replenishmentSystem: Database["public"]["Enums"]["itemReplenishmentSystem"];
-          thumbnailPath: string;
-          unitOfMeasureCode: string;
-          leadTime: number;
-          purchasingBlocked: boolean;
-          lotSize: number;
-          reorderingPolicy: Database["public"]["Enums"]["itemReorderingPolicy"];
+          conversionFactor: number;
           demandAccumulationPeriod: number;
           demandAccumulationSafetyStock: number;
+          id: string;
+          itemTrackingType: Database["public"]["Enums"]["itemTrackingType"];
+          leadTime: number;
+          lotSize: number;
+          maximumInventoryQuantity: number;
+          maximumOrderQuantity: number;
+          minimumOrderQuantity: number;
+          name: string;
+          orderMultiple: number;
+          preferredSupplierId: string;
+          purchasingBlocked: boolean;
+          purchasingUnitOfMeasureCode: string;
+          quantityOnHand: number;
+          readableIdWithRevision: string;
+          reorderingPolicy: Database["public"]["Enums"]["itemReorderingPolicy"];
           reorderPoint: number;
           reorderQuantity: number;
-          minimumOrderQuantity: number;
-          maximumOrderQuantity: number;
-          orderMultiple: number;
-          quantityOnHand: number;
-          maximumInventoryQuantity: number;
+          replenishmentSystem: Database["public"]["Enums"]["itemReplenishmentSystem"];
           suppliers: Json;
-          preferredSupplierId: string;
-          purchasingUnitOfMeasureCode: string;
-          conversionFactor: number;
+          thumbnailPath: string;
+          type: Database["public"]["Enums"]["itemType"];
+          unitOfMeasureCode: string;
           week1: number;
-          week2: number;
-          week3: number;
-          week4: number;
-          week5: number;
-          week6: number;
-          week7: number;
-          week8: number;
-          week9: number;
           week10: number;
           week11: number;
           week12: number;
@@ -50668,6 +50582,7 @@ export type Database = {
           week17: number;
           week18: number;
           week19: number;
+          week2: number;
           week20: number;
           week21: number;
           week22: number;
@@ -50678,6 +50593,7 @@ export type Database = {
           week27: number;
           week28: number;
           week29: number;
+          week3: number;
           week30: number;
           week31: number;
           week32: number;
@@ -50688,6 +50604,7 @@ export type Database = {
           week37: number;
           week38: number;
           week39: number;
+          week4: number;
           week40: number;
           week41: number;
           week42: number;
@@ -50698,15 +50615,18 @@ export type Database = {
           week47: number;
           week48: number;
           week49: number;
+          week5: number;
           week50: number;
           week51: number;
           week52: number;
+          week6: number;
+          week7: number;
+          week8: number;
+          week9: number;
         }[];
       };
       get_quote_methods: {
-        Args: {
-          qid: string;
-        };
+        Args: { qid: string };
         Returns: {
           description: string
           externalId: Json
@@ -50731,9 +50651,7 @@ export type Database = {
         }[]
       }
       get_quote_methods_by_method_id: {
-        Args: {
-          mid: string;
-        };
+        Args: { mid: string };
         Returns: {
           description: string
           externalId: Json
@@ -50760,149 +50678,135 @@ export type Database = {
         }[]
       }
       get_radan_v1: {
-        Args: {
-          company_id: string;
-          processes: string[];
-        };
+        Args: { company_id: string; processes: string[] };
         Returns: {
-          id: string;
-          jobId: string;
-          operationOrder: number;
-          priority: number;
-          processId: string;
-          workCenterId: string;
+          assignee: string;
           description: string;
-          setupTime: number;
-          setupUnit: Database["public"]["Enums"]["factor"];
+          id: string;
+          itemDescription: string;
+          itemId: string;
+          itemReadableId: string;
+          jobCustomerId: string;
+          jobDeadlineType: Database["public"]["Enums"]["deadlineType"];
+          jobDueDate: string;
+          jobId: string;
+          jobLocationName: string;
+          jobMakeMethodId: string;
+          jobReadableId: string;
+          jobStatus: Database["public"]["Enums"]["jobStatus"];
           laborTime: number;
           laborUnit: Database["public"]["Enums"]["factor"];
           machineTime: number;
           machineUnit: Database["public"]["Enums"]["factor"];
-          operationOrderType: Database["public"]["Enums"]["methodOperationOrder"];
-          jobMakeMethodId: string;
-          assignee: string;
-          tags: string[];
-          jobReadableId: string;
-          jobStatus: Database["public"]["Enums"]["jobStatus"];
-          jobDueDate: string;
-          jobDeadlineType: Database["public"]["Enums"]["deadlineType"];
-          jobCustomerId: string;
-          jobLocationName: string;
-          salesOrderReadableId: string;
-          salesOrderId: string;
-          salesOrderLineId: string;
-          parentMaterialId: string;
-          itemId: string;
-          itemReadableId: string;
-          itemDescription: string;
-          operationStatus: Database["public"]["Enums"]["jobOperationStatus"];
-          operationQuantity: number;
-          quantityComplete: number;
-          quantityScrapped: number;
-          materialItemReadableId: string;
-          materialItemDescription: string;
-          materialSubstance: string;
-          materialForm: string;
           materialDimension: string;
           materialFinish: string;
+          materialForm: string;
           materialGrade: string;
+          materialItemDescription: string;
+          materialItemReadableId: string;
+          materialSubstance: string;
+          operationOrder: number;
+          operationOrderType: Database["public"]["Enums"]["methodOperationOrder"];
+          operationQuantity: number;
+          operationStatus: Database["public"]["Enums"]["jobOperationStatus"];
+          parentMaterialId: string;
+          priority: number;
+          processId: string;
+          quantityComplete: number;
+          quantityScrapped: number;
+          salesOrderId: string;
+          salesOrderLineId: string;
+          salesOrderReadableId: string;
+          setupTime: number;
+          setupUnit: Database["public"]["Enums"]["factor"];
+          tags: string[];
+          workCenterId: string;
         }[];
       };
       get_recent_job_operations_by_employee: {
-        Args: {
-          employee_id: string;
-          company_id: string;
-        };
+        Args: { company_id: string; employee_id: string };
         Returns: {
-          id: string;
-          jobId: string;
-          operationOrder: number;
-          processId: string;
-          workCenterId: string;
+          assignee: string;
           description: string;
-          setupTime: number;
-          setupUnit: Database["public"]["Enums"]["factor"];
+          id: string;
+          itemDescription: string;
+          itemReadableId: string;
+          jobCustomerId: string;
+          jobDeadlineType: Database["public"]["Enums"]["deadlineType"];
+          jobDueDate: string;
+          jobId: string;
+          jobReadableId: string;
+          jobStatus: Database["public"]["Enums"]["jobStatus"];
           laborTime: number;
           laborUnit: Database["public"]["Enums"]["factor"];
           machineTime: number;
           machineUnit: Database["public"]["Enums"]["factor"];
+          operationOrder: number;
           operationOrderType: Database["public"]["Enums"]["methodOperationOrder"];
-          jobReadableId: string;
-          jobStatus: Database["public"]["Enums"]["jobStatus"];
-          jobDueDate: string;
-          jobDeadlineType: Database["public"]["Enums"]["deadlineType"];
-          jobCustomerId: string;
-          salesOrderReadableId: string;
-          salesOrderId: string;
-          salesOrderLineId: string;
-          parentMaterialId: string;
-          itemReadableId: string;
-          itemDescription: string;
-          operationStatus: Database["public"]["Enums"]["jobOperationStatus"];
           operationQuantity: number;
+          operationStatus: Database["public"]["Enums"]["jobOperationStatus"];
+          parentMaterialId: string;
+          processId: string;
           quantityComplete: number;
           quantityScrapped: number;
-          thumbnailPath: string;
-          assignee: string;
+          salesOrderId: string;
+          salesOrderLineId: string;
+          salesOrderReadableId: string;
+          setupTime: number;
+          setupUnit: Database["public"]["Enums"]["factor"];
           tags: string[];
+          thumbnailPath: string;
+          workCenterId: string;
         }[];
       };
       get_sales_order_lines_by_customer_id: {
-        Args: {
-          customer_id: string;
-        };
+        Args: { customer_id: string };
         Returns: {
-          customerReference: string;
-          salesOrderId: string;
           customerContactName: string;
           customerEngineeringContactName: string;
-          saleQuantity: number;
-          quantityToSend: number;
-          quantitySent: number;
-          quantityInvoiced: number;
-          unitPrice: number;
-          unitOfMeasureCode: string;
+          customerId: string;
+          customerReference: string;
+          jobOperations: Json;
+          jobProductionQuantity: number;
+          jobQuantityComplete: number;
+          jobQuantityShipped: number;
+          jobStatus: Database["public"]["Enums"]["jobStatus"];
           locationId: string;
           orderDate: string;
           promisedDate: string;
-          receiptRequestedDate: string;
-          receiptPromisedDate: string;
-          salesOrderStatus: Database["public"]["Enums"]["salesOrderStatus"];
+          quantityInvoiced: number;
+          quantitySent: number;
+          quantityToSend: number;
           readableId: string;
-          revision: string;
           readableIdWithRevision: string;
-          customerId: string;
+          receiptPromisedDate: string;
+          receiptRequestedDate: string;
+          revision: string;
+          saleQuantity: number;
+          salesOrderId: string;
+          salesOrderStatus: Database["public"]["Enums"]["salesOrderStatus"];
           thumbnailPath: string;
-          jobOperations: Json;
-          jobQuantityShipped: number;
-          jobQuantityComplete: number;
-          jobProductionQuantity: number;
-          jobStatus: Database["public"]["Enums"]["jobStatus"];
+          unitOfMeasureCode: string;
+          unitPrice: number;
         }[];
       };
       get_supplier_ids_with_supplier_permission: {
-        Args: {
-          permission: string;
-        };
+        Args: { permission: string };
         Returns: string[];
       };
       get_supplier_interaction_with_related_records: {
-        Args: {
-          supplier_interaction_id: string;
-        };
+        Args: { supplier_interaction_id: string };
         Returns: {
-          id: string;
           companyId: string;
+          id: string;
+          purchaseInvoices: Json;
+          purchaseOrders: Json;
           supplierId: string;
           supplierQuotes: Json;
-          purchaseOrders: Json;
-          purchaseInvoices: Json;
         }[];
       };
       get_tool_details: {
-        Args: {
-          item_id: string;
-        };
+        Args: { item_id: string };
         Returns: {
           active: boolean;
           assignee: string;
@@ -50966,10 +50870,7 @@ export type Database = {
       }
       groups_for_user: { Args: { uid: string }; Returns: string[] }
       groups_query: {
-        Args: {
-          _name?: string;
-          _uid?: string;
-        };
+        Args: { _name?: string; _uid?: string };
         Returns: {
           companyId: string
           id: string
@@ -50985,17 +50886,11 @@ export type Database = {
       }
       has_any_company_permission: { Args: { claim: string }; Returns: boolean }
       has_company_permission: {
-        Args: {
-          claim: string;
-          company: string;
-        };
+        Args: { claim: string; company: string };
         Returns: boolean;
       };
       has_role: {
-        Args: {
-          required_role: string;
-          company: string;
-        };
+        Args: { company: string; required_role: string };
         Returns: boolean;
       };
       has_valid_api_key_for_company: {
@@ -51004,9 +50899,7 @@ export type Database = {
       }
       id: { Args: { _prefix?: string }; Returns: string }
       increment_webhook_error: {
-        Args: {
-          webhook_id: string;
-        };
+        Args: { webhook_id: string };
         Returns: undefined;
       };
       increment_webhook_success: {
@@ -51015,31 +50908,26 @@ export type Database = {
       }
       is_claims_admin: { Args: never; Returns: boolean }
       is_last_job_operation: {
-        Args: {
-          operation_id: string;
-        };
+        Args: { operation_id: string };
         Returns: boolean;
       };
       items_search: {
         Args: {
-          query_embedding: string;
-          match_threshold: number;
           match_count: number;
+          match_threshold: number;
           p_company_id: string;
+          query_embedding: string;
         };
         Returns: {
-          id: string;
-          readableId: string;
-          name: string;
           description: string;
+          id: string;
+          name: string;
+          readableId: string;
           similarity: number;
         }[];
       };
       journalLinesByAccountNumber: {
-        Args: {
-          from_date?: string;
-          to_date?: string;
-        };
+        Args: { from_date?: string; to_date?: string };
         Returns: {
           balance: number
           balanceAtDate: number
@@ -51051,28 +50939,23 @@ export type Database = {
       jsonb_to_text_array: { Args: { "": Json }; Returns: string[] }
       nanoid: {
         Args: {
+          additionalbytesfactor?: number;
+          alphabet?: string;
           prefix?: string;
           size?: number;
-          alphabet?: string;
-          additionalbytesfactor?: number;
         };
         Returns: string;
       };
       nanoid_optimized: {
-        Args: {
-          size: number;
-          alphabet: string;
-          mask: number;
-          step: number;
-        };
+        Args: { alphabet: string; mask: number; size: number; step: number };
         Returns: string;
       };
       suppliers_search: {
         Args: {
-          query_embedding: string;
-          match_threshold: number;
           match_count: number;
+          match_threshold: number;
           p_company_id: string;
+          query_embedding: string;
         };
         Returns: {
           id: string
@@ -51082,12 +50965,12 @@ export type Database = {
       }
       update_receipt_line_batch_tracking: {
         Args: {
-          p_receipt_line_id: string;
-          p_receipt_id: string;
           p_batch_number: string;
-          p_quantity: number;
-          p_tracked_entity_id?: string;
           p_properties?: Json;
+          p_quantity: number;
+          p_receipt_id: string;
+          p_receipt_line_id: string;
+          p_tracked_entity_id?: string;
         };
         Returns: undefined;
       };
@@ -51823,10 +51706,7 @@ export type Database = {
     }
     Functions: {
       add_prefixes: {
-        Args: {
-          _bucket_id: string;
-          _name: string;
-        };
+        Args: { _bucket_id: string; _name: string };
         Returns: undefined;
       };
       can_insert_object: {
@@ -51850,33 +51730,33 @@ export type Database = {
       get_size_by_bucket: {
         Args: never
         Returns: {
-          size: number;
           bucket_id: string;
+          size: number;
         }[];
       };
       list_multipart_uploads_with_delimiter: {
         Args: {
           bucket_id: string;
-          prefix_param: string;
           delimiter_param: string;
           max_keys?: number;
           next_key_token?: string;
           next_upload_token?: string;
+          prefix_param: string;
         };
         Returns: {
-          key: string;
-          id: string;
           created_at: string;
+          id: string;
+          key: string;
         }[];
       };
       list_objects_with_delimiter: {
         Args: {
           bucket_id: string;
-          prefix_param: string;
           delimiter_param: string;
           max_keys?: number;
-          start_after?: string;
           next_token?: string;
+          prefix_param: string;
+          start_after?: string;
         };
         Returns: {
           id: string
@@ -51892,62 +51772,62 @@ export type Database = {
       operation: { Args: never; Returns: string }
       search: {
         Args: {
-          prefix: string;
           bucketname: string;
-          limits?: number;
           levels?: number;
+          limits?: number;
           offsets?: number;
+          prefix: string;
           search?: string;
           sortcolumn?: string;
           sortorder?: string;
         };
         Returns: {
-          name: string;
-          id: string;
-          updated_at: string;
           created_at: string;
+          id: string;
           last_accessed_at: string;
           metadata: Json;
+          name: string;
+          updated_at: string;
         }[];
       };
       search_legacy_v1: {
         Args: {
-          prefix: string;
           bucketname: string;
-          limits?: number;
           levels?: number;
+          limits?: number;
           offsets?: number;
+          prefix: string;
           search?: string;
           sortcolumn?: string;
           sortorder?: string;
         };
         Returns: {
-          name: string;
-          id: string;
-          updated_at: string;
           created_at: string;
+          id: string;
           last_accessed_at: string;
           metadata: Json;
+          name: string;
+          updated_at: string;
         }[];
       };
       search_v1_optimised: {
         Args: {
-          prefix: string;
           bucketname: string;
-          limits?: number;
           levels?: number;
+          limits?: number;
           offsets?: number;
+          prefix: string;
           search?: string;
           sortcolumn?: string;
           sortorder?: string;
         };
         Returns: {
-          name: string;
-          id: string;
-          updated_at: string;
           created_at: string;
+          id: string;
           last_accessed_at: string;
           metadata: Json;
+          name: string;
+          updated_at: string;
         }[];
       };
       search_v2: {
@@ -51981,91 +51861,112 @@ export type Database = {
   }
 }
 
-type PublicSchema = Database[Extract<keyof Database, "public">];
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">;
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<
+  keyof Database,
+  "public"
+>];
 
 export type Tables<
-  PublicTableNameOrOptions extends
-    | keyof (PublicSchema["Tables"] & PublicSchema["Views"])
-    | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
-        Database[PublicTableNameOrOptions["schema"]]["Views"])
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
+  }
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
     : never = never
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
-      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals;
+}
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
       Row: infer R;
     }
     ? R
     : never
-  : PublicTableNameOrOptions extends keyof (PublicSchema["Tables"] &
-      PublicSchema["Views"])
-  ? (PublicSchema["Tables"] &
-      PublicSchema["Views"])[PublicTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+      DefaultSchema["Views"])
+  ? (DefaultSchema["Tables"] &
+      DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
       Row: infer R;
     }
     ? R
     : never
 
 export type TablesInsert<
-  PublicTableNameOrOptions extends
-    | keyof PublicSchema["Tables"]
-    | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals;
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I;
     }
     ? I
     : never
-  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
-  ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+  ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
       Insert: infer I;
     }
     ? I
     : never
 
 export type TablesUpdate<
-  PublicTableNameOrOptions extends
-    | keyof PublicSchema["Tables"]
-    | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals;
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U;
     }
     ? U
     : never
-  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
-  ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+  ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
       Update: infer U;
     }
     ? U
     : never
 
 export type Enums<
-  PublicEnumNameOrOptions extends
-    | keyof PublicSchema["Enums"]
-    | { schema: keyof Database },
-  EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
     : never = never
-> = PublicEnumNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
-  : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
-  ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals;
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+  ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
   : never;
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
-    | keyof PublicSchema["CompositeTypes"]
-    | { schema: keyof Database },
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
-    schema: keyof Database;
+    schema: keyof DatabaseWithoutInternals;
   }
     ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
     : never = never
