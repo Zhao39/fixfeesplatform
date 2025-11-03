@@ -11728,7 +11728,10 @@ export default {
             $ref: "#/parameters/rowFilter.jobs.startDate",
           },
           {
-            $ref: "#/parameters/rowFilter.jobs.statusWithDueDate",
+            $ref: "#/parameters/rowFilter.jobs.shelfId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.jobs.jobMakeMethodId",
           },
           {
             $ref: "#/parameters/rowFilter.jobs.name",
@@ -11774,9 +11777,6 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.jobs.quoteReadableId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.jobs.itemPostingGroupId",
           },
           {
             $ref: "#/parameters/select",
@@ -67400,19 +67400,15 @@ export default {
           format: "date",
           type: "string",
         },
-        statusWithDueDate: {
-          enum: [
-            "Draft",
-            "Ready",
-            "In Progress",
-            "Paused",
-            "Completed",
-            "Cancelled",
-            "Overdue",
-            "Due Today",
-            "Planned",
-          ],
-          format: 'public."jobStatus"',
+        shelfId: {
+          description:
+            "Note:\nThis is a Foreign Key to `shelf.id`.<fk table='shelf' column='id'/>",
+          format: "text",
+          type: "string",
+        },
+        jobMakeMethodId: {
+          description: "Note:\nThis is a Primary Key.<pk/>",
+          format: "text",
           type: "string",
         },
         name: {
@@ -67483,12 +67479,6 @@ export default {
           type: "string",
         },
         quoteReadableId: {
-          format: "text",
-          type: "string",
-        },
-        itemPostingGroupId: {
-          description:
-            "Note:\nThis is a Foreign Key to `itemPostingGroup.id`.<fk table='itemPostingGroup' column='id'/>",
           format: "text",
           type: "string",
         },
@@ -95565,8 +95555,14 @@ export default {
       in: "query",
       type: "string",
     },
-    "rowFilter.jobs.statusWithDueDate": {
-      name: "statusWithDueDate",
+    "rowFilter.jobs.shelfId": {
+      name: "shelfId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.jobs.jobMakeMethodId": {
+      name: "jobMakeMethodId",
       required: false,
       in: "query",
       type: "string",
@@ -95657,12 +95653,6 @@ export default {
     },
     "rowFilter.jobs.quoteReadableId": {
       name: "quoteReadableId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.jobs.itemPostingGroupId": {
-      name: "itemPostingGroupId",
       required: false,
       in: "query",
       type: "string",
