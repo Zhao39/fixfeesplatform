@@ -5,7 +5,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
-  TooltipTrigger
+  TooltipTrigger,
 } from "@carbon/react";
 import { LuGlobe } from "react-icons/lu";
 import { useChatStore } from "./lib/store";
@@ -13,8 +13,6 @@ import { useChatStore } from "./lib/store";
 import { AnimatePresence, motion } from "framer-motion";
 import type { ComponentProps } from "react";
 import { useEffect, useState } from "react";
-
-
 
 interface WebSearchSource {
   title?: string;
@@ -153,8 +151,11 @@ const WebSearchSourceAvatar = ({
             window.open(source.url, "_blank", "noopener,noreferrer")
           }
         >
-          <Avatar className="h-5 w-5 cursor-pointer border-2 border-background shadow-sm" src={`https://img.logo.dev/${domain}?token=pk_X-1ZO13GSgeOoUrIuJ6GMQ&size=64&retina=true`} name={domain.split(".")[0]}
-           />
+          <Avatar
+            className="h-5 w-5 cursor-pointer border-2 border-background shadow-sm"
+            src={`https://img.logo.dev/${domain}?token=pk_X-1ZO13GSgeOoUrIuJ6GMQ&size=64&retina=true`}
+            name={domain.split(".")[0]}
+          />
         </motion.div>
       </TooltipTrigger>
       <TooltipContent side="top" className="max-w-xs">
@@ -167,21 +168,16 @@ const WebSearchSourceAvatar = ({
   );
 };
 
-
-
 export function WebSearchButton() {
   const { isWebSearch, setIsWebSearch } = useChatStore();
 
   return (
     <IconButton
-    type="button"
+      type="button"
       variant={isWebSearch ? "primary" : "ghost"}
       icon={<LuGlobe />}
       onClick={() => setIsWebSearch(!isWebSearch)}
       aria-label="Web Search"
-      
     />
-     
-   
   );
 }

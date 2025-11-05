@@ -4,7 +4,6 @@ import { cn } from "@carbon/react";
 import { useRef } from "react";
 import { CommandMenu } from "./CommandMenu";
 import { FollowupQuestions } from "./FollowupQuestions";
-import { useChatInterface } from "./hooks/useChatInterface";
 import { useChatStore } from "./lib/store";
 import {
   PromptInput,
@@ -29,13 +28,13 @@ export interface ChatInputMessage extends PromptInputMessage {
   };
 }
 
-export function ChatInput() {
+export function ChatInput({ hasMessages }: { hasMessages: boolean }) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const status = useChatStatus();
   const { sendMessage } = useChatActions();
   const chatId = useChatId();
-  const { setChatId } = useChatInterface();
+
   const { current } = useArtifacts({
     exclude: ["chat-title", "followup-questions"],
   });
@@ -51,7 +50,6 @@ export function ChatInput() {
     selectedCommandIndex,
     filteredCommands,
     setInput,
-    setIsUploading,
     handleInputChange,
     handleKeyDown,
     resetCommandState,
@@ -86,11 +84,12 @@ export function ChatInput() {
     <>
       <div
         className={cn(
-          "fixed bottom-6 left-[70px] z-20 px-6 transition-all duration-300 ease-in-out",
+          "transition-all duration-300 ease-in-out",
+          hasMessages ? "absolute bottom-6 left-0 z-20" : "",
           isCanvasVisible ? "right-[603px]" : "right-0"
         )}
       >
-        <div className="mx-auto w-full pt-2 max-w-[770px] relative">
+        <div className="mx-auto w-full pt-2 relative">
           <FollowupQuestions />
 
           {/* Command Suggestions Menu */}
@@ -115,8 +114,6 @@ export function ChatInput() {
                       // Execute command through the store
                       if (!chatId) return;
 
-                      setChatId(chatId);
-
                       sendMessage({
                         role: "user",
                         parts: [{ type: "text", text: selectedCommand.title }],
@@ -138,11 +135,6 @@ export function ChatInput() {
                   if (e.key === "Enter" && !showCommands) {
                     e.preventDefault();
                     if (input.trim()) {
-                      // Set chat ID to ensure proper URL routing
-                      if (chatId) {
-                        setChatId(chatId);
-                      }
-
                       sendMessage({
                         text: input,
                         files: [],
@@ -161,7 +153,9 @@ export function ChatInput() {
                   handleKeyDown(e);
                 }}
                 value={input}
-                placeholder={isWebSearch ? "Search the web" : "Ask anything"}
+                placeholder={
+                  isWebSearch ? "Search the web" : "You can just do things"
+                }
               />
             </PromptInputBody>
             <PromptInputToolbar>

@@ -1,9 +1,7 @@
 import { useChatActions, useChatId } from "@ai-sdk-tools/store";
 import { cn, IconButton } from "@carbon/react";
 import { LuZap } from "react-icons/lu";
-import { useChatInterface } from "./hooks/useChatInterface";
 import { useChatStore } from "./lib/store";
-
 
 type SuggestedAction = {
   id: string;
@@ -14,10 +12,7 @@ type SuggestedAction = {
 
 export function SuggestedActions() {
   const { sendMessage } = useChatActions();
-  const { setChatId } = useChatInterface();
   const chatId = useChatId();
-
-
 
   const handleToolCall = (params: {
     toolName: string;
@@ -25,8 +20,6 @@ export function SuggestedActions() {
     text: string;
   }) => {
     if (!chatId) return;
-
-    setChatId(chatId);
 
     sendMessage({
       role: "user",
@@ -48,12 +41,9 @@ export function SuggestedActions() {
       title: string;
       description: string;
     }
-  > = {
-    
-  };
+  > = {};
 
   const suggestedActions: SuggestedAction[] = [];
-
 
   return (
     <div className="w-full px-6 mt-10 mb-8 flex items-center justify-center">
@@ -72,7 +62,7 @@ export function SuggestedActions() {
               className={cn(
                 "border border-border hover:bg-accent hover:border-border-hover",
                 "px-3 py-2 flex items-center gap-2 cursor-pointer",
-                "transition-all duration-300 min-w-fit whitespace-nowrap",
+                "transition-all duration-300 min-w-fit whitespace-nowrap"
               )}
               onClick={() => {
                 handleToolCall({
@@ -82,9 +72,7 @@ export function SuggestedActions() {
                 });
               }}
             >
-              {Icon && (
-                <Icon className="w-4 h-4 text-muted-foreground" />
-              )}
+              {Icon && <Icon className="w-4 h-4 text-muted-foreground" />}
               <span className="text-foreground text-[12px] font-medium">
                 {title}
               </span>
@@ -95,8 +83,6 @@ export function SuggestedActions() {
     </div>
   );
 }
-
-
 
 export function SuggestedActionsButton() {
   const { showCommands, setShowCommands } = useChatStore();
@@ -124,10 +110,9 @@ export function SuggestedActionsButton() {
       type="button"
       onClick={handleClick}
       className={cn(
-       
         showCommands
           ? "text-foreground"
-          : "text-muted-foreground hover:text-foreground",
+          : "text-muted-foreground hover:text-foreground"
       )}
       // Add data attribute to help identify this button for exclusion from outside clicks
       data-suggested-actions-toggle

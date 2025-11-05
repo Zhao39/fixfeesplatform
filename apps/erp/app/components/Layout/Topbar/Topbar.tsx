@@ -1,4 +1,5 @@
-import { HStack } from "@carbon/react";
+import { HStack, IconButton } from "@carbon/react";
+import { LuSquarePen } from "react-icons/lu";
 import { Agent } from "~/components/Agent/Agent.ee";
 import { usePermissions, useUser } from "~/hooks";
 import { useFlags } from "~/hooks/useFlags";
@@ -27,7 +28,15 @@ const Topbar = () => {
       </div>
       <HStack spacing={1} className="flex-1 justify-end py-2">
         <Feedback />
-        <CreateMenu />
+        <CreateMenu
+          trigger={
+            <IconButton
+              aria-label="Create"
+              icon={<LuSquarePen />}
+              variant="ghost"
+            />
+          }
+        />
         {canAccessAgent && <Agent />}
         <Notifications key={notificationsKey} />
         <AvatarMenu />

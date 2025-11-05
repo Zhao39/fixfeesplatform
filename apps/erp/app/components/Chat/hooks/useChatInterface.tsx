@@ -1,34 +1,32 @@
+import { useMount } from "@carbon/react";
 import { useUrlParams } from "@carbon/remix";
-import { useEffect, useState } from "react";
+import { useLocation } from "@remix-run/react";
+import { generateId } from "ai";
+import { useCallback } from "react";
+import { path } from "~/utils/path";
 
 export function useChatInterface() {
   const [params, setParams] = useUrlParams();
+  const location = useLocation();
+  const chatId = params.get("chatId") || null;
 
-  // Initialize state immediately from pathname to avoid blink on refresh
-  const getInitialChatId = () => {
-    return params.get("chatId") || null;
-  };
+  const isChatPage = !!chatId;
+  const isHome = location.pathname === path.to.authenticatedRoot;
 
-  const [chatId, setChatIdState] = useState<string | null>(getInitialChatId);
+  useMount(() => {
+    if (isHome && !chatId) {
+      setParams({ chatId: generateId() });
+    }
+  });
 
-  // Extract chatId from pathname
-  useEffect(() => {
-    setChatIdState(params.get("chatId") || null);
-  }, [params]);
-
-  
-
-  const isHome = !chatId;
-  const isChatPage = Boolean(chatId);
-
-  const setChatId = (id: string) => {
-    // Preserve the locale in the URL
-    setParams({ chatId: id });
-    setChatIdState(id);
-  };
+  const setChatId = useCallback(
+    (id: string) => {
+      setParams({ chatId: id });
+    },
+    [setParams]
+  );
 
   return {
-    isHome,
     isChatPage,
     chatId,
     setChatId,

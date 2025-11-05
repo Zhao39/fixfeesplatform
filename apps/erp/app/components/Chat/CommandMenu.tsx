@@ -4,7 +4,6 @@ import { type RefObject, useEffect, useRef } from "react";
 import { LuArrowRight } from "react-icons/lu";
 import { useOnClickOutside } from "~/hooks/useOnClickOutside";
 import { AnimatedSizeContainer } from "./AnimatedSizeContainer";
-import { useChatInterface } from "./hooks/useChatInterface";
 import { useChatStore } from "./lib/store";
 
 export function CommandMenu() {
@@ -13,7 +12,7 @@ export function CommandMenu() {
     filteredCommands,
     selectedCommandIndex,
     showCommands,
-    handleCommandSelect,
+    // handleCommandSelect,
     resetCommandState,
     setInput,
     setShowCommands,
@@ -21,7 +20,6 @@ export function CommandMenu() {
 
   const { sendMessage } = useChatActions();
   const chatId = useChatId();
-  const { setChatId } = useChatInterface();
 
   // Close command menu when clicking outside (but not on the toggle button)
   useOnClickOutside(commandListRef as RefObject<HTMLElement>, (event) => {
@@ -39,8 +37,6 @@ export function CommandMenu() {
 
   const handleCommandExecution = (command: any) => {
     if (!chatId) return;
-
-    setChatId(chatId);
 
     sendMessage({
       role: "user",
@@ -61,7 +57,7 @@ export function CommandMenu() {
   useEffect(() => {
     if (commandListRef.current && showCommands) {
       const selectedElement = commandListRef.current.querySelector(
-        `[data-index="${selectedCommandIndex}"]`,
+        `[data-index="${selectedCommandIndex}"]`
       );
       if (selectedElement) {
         selectedElement.scrollIntoView({ block: "nearest" });
@@ -99,7 +95,7 @@ export function CommandMenu() {
                   "px-2 py-2 text-sm cursor-pointer transition-colors flex items-center justify-between group",
                   isActive
                     ? "bg-black/5 dark:bg-white/5"
-                    : "hover:bg-black/5 dark:hover:bg-white/5",
+                    : "hover:bg-black/5 dark:hover:bg-white/5"
                 )}
                 onClick={() => handleCommandExecution(command)}
                 data-index={index}

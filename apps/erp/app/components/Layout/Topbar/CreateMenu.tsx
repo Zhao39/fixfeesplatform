@@ -4,7 +4,6 @@ import {
   DropdownMenuIcon,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  IconButton,
 } from "@carbon/react";
 import { Link } from "@remix-run/react";
 
@@ -13,7 +12,6 @@ import {
   LuHardHat,
   LuShieldX,
   LuShoppingCart,
-  LuSquarePen,
   LuSquareStack,
   LuSquareUser,
   LuUsers,
@@ -112,20 +110,14 @@ function useCreate(): Route[] {
   return result.sort((a, b) => a.name.localeCompare(b.name));
 }
 
-const CreateMenu = () => {
+const CreateMenu = ({ trigger }: { trigger: React.ReactNode }) => {
   const createLinks = useCreate();
 
   if (!createLinks.length) return null;
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <IconButton
-          aria-label="Create"
-          icon={<LuSquarePen />}
-          variant="ghost"
-        />
-      </DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
       <DropdownMenuContent align="center" className="w-48">
         {createLinks.map((link) => (
           <DropdownMenuItem key={link.to} asChild>

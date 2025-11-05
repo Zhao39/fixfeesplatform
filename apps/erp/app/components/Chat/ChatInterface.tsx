@@ -4,22 +4,23 @@ import { SUPABASE_URL, useCarbon } from "@carbon/auth";
 import { cn } from "@carbon/react";
 import { DefaultChatTransport, generateId } from "ai";
 import { useMemo } from "react";
+import { Greeting } from "~/components/Greeting";
 import { useUser } from "~/hooks";
-import { useChatInterface } from "./hooks/useChatInterface";
-import { useChatStatus } from "./hooks/useChatStatus";
-import type { UIChatMessage } from "./lib/types";
-
 import { Canvas } from "./Canvas";
 import { ChatHeader } from "./ChatHeader";
 import type { ChatInputMessage } from "./ChatInput";
 import { ChatInput } from "./ChatInput";
 import { ChatMessages } from "./ChatMessages";
 import { ChatStatusIndicators } from "./ChatStatusIndicators";
+import { ChatWidgets } from "./ChatWidgets";
 import {
   Conversation,
   ConversationContent,
   ConversationScrollButton,
 } from "./Conversation";
+import { useChatInterface } from "./hooks/useChatInterface";
+import { useChatStatus } from "./hooks/useChatStatus";
+import type { UIChatMessage } from "./lib/types";
 
 type Props = {
   geo?: {
@@ -29,7 +30,8 @@ type Props = {
 };
 
 export function ChatInterface({ geo }: Props) {
-  const { chatId: routeChatId, isHome } = useChatInterface();
+  const { chatId: routeChatId } = useChatInterface();
+
   const chatId = useMemo(() => routeChatId ?? generateId(), [routeChatId]);
   const { accessToken } = useCarbon();
   const {
@@ -53,7 +55,8 @@ export function ChatInterface({ geo }: Props) {
           });
         }
       ),
-    []
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [accessToken]
   );
 
   const { messages, status } = useChat<UIChatMessage>({
@@ -92,13 +95,7 @@ export function ChatInterface({ geo }: Props) {
   const hasSuggestions = suggestions?.prompts && suggestions.prompts.length > 0;
 
   return (
-    <div
-      className={cn(
-        "relative flex size-full overflow-hidden",
-        isHome && "h-[calc(100vh-764px)]",
-        !isHome && "h-[calc(100vh-88px)]"
-      )}
-    >
+    <div className="relative flex size-full overflow-hidden bg-background h-[calc(100dvh-49px)]">
       {/* Canvas slides in from right when artifacts are present */}
       <div
         className={cn(
@@ -130,12 +127,12 @@ export function ChatInterface({ geo }: Props) {
                   hasArtifacts ? "right-[600px]" : "right-0"
                 )}
               >
-                <div className="bg-background/80 dark:bg-background/50 backdrop-blur-sm p-2 pt-6">
+                <div className="bg-background/80 dark:bg-background/50 backdrop-blur-sm p-2 border-b">
                   <ChatHeader />
                 </div>
               </div>
               <Conversation>
-                <ConversationContent className="pb-48 pt-14">
+                <ConversationContent className="py-4">
                   <div className="max-w-2xl mx-auto w-full">
                     <ChatMessages
                       messages={messages}
@@ -161,14 +158,19 @@ export function ChatInterface({ geo }: Props) {
         {/* Fixed input at bottom - respects parent container boundaries */}
         <div
           className={cn(
-            "fixed bottom-0 left-0",
-            hasMessages && "transition-all duration-300 ease-in-out",
+            "transition-all duration-300 ease-in-out max-w-2xl mx-auto px-6",
+            hasMessages
+              ? "absolute bottom-0 left-0"
+              : "w-full -mt-[20dvh] flex flex-col gap-8 items-center justify-center",
             hasArtifacts ? "right-[600px]" : "right-0"
           )}
         >
-          <div className="w-full pb-4 max-w-2xl mx-auto">
-            <ChatInput />
+          {!hasMessages && <Greeting size="h1" className="font-medium" />}
+          <div className="w-full pb-2">
+            <ChatInput hasMessages={hasMessages} />
           </div>
+
+          {!hasMessages && <ChatWidgets />}
         </div>
       </div>
     </div>

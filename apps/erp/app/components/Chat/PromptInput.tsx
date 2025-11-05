@@ -420,7 +420,7 @@ export const PromptInput = ({
       />
       <form
         className={cn(
-          "w-full overflow-hidden bg-card rounded-lg shadow-button-base",
+          "w-full overflow-hidden bg-card rounded-xl border border-foreground/10 ring-[6px] dark:ring-[#1E1E21] ring-[#DADADA]",
           className
         )}
         onSubmit={handleSubmit}
@@ -444,7 +444,7 @@ export type PromptInputTextareaProps = ComponentProps<typeof Textarea>;
 export const PromptInputTextarea = ({
   onChange,
   className,
-  placeholder = "Ask anything",
+  placeholder = "You can just do things",
   ...props
 }: PromptInputTextareaProps) => {
   const handleKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = (e) => {
@@ -471,8 +471,8 @@ export const PromptInputTextarea = ({
   return (
     <Textarea
       className={cn(
-        "w-full resize-none rounded-none border-none p-3 pt-4 shadow-none outline-none ring-0 text-sm",
-        "field-sizing-content bg-transparent dark:bg-transparent placeholder:text-[rgba(102,102,102,0.5)]",
+        "w-full resize-none rounded-none border-none p-3 pt-4 shadow-none outline-none ring-0 text-base",
+        "field-sizing-content bg-transparent placeholder:text-muted-foreground",
         "max-h-[55px] min-h-[55px]",
         "focus-visible:ring-0",
         className
@@ -620,6 +620,7 @@ export const PromptInputSubmit = ({
     <IconButton
       aria-label="Submit"
       icon={Icon}
+      isRound
       type="submit"
       variant={variant}
       {...props}

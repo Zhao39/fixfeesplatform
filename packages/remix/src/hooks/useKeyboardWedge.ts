@@ -31,6 +31,16 @@ export function useKeyboardWedge(options?: UseKeyboardWedgeOptions) {
     if (!active) return;
 
     const handleKeyDown = (event: KeyboardEvent) => {
+      // Check if the active element is an input or textarea
+      const activeElement = document.activeElement;
+      if (
+        activeElement &&
+        (activeElement.tagName === "INPUT" ||
+          activeElement.tagName === "TEXTAREA")
+      ) {
+        return;
+      }
+
       if (/^[a-zA-Z0-9\-./:?=&_]$/.test(event.key)) {
         setInputBuffer((prev) => prev + event.key);
       } else if (event.key === "Enter") {

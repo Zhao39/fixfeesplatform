@@ -201,6 +201,7 @@ export function RecordButton({
     <IconButton
       aria-label="Record"
       variant="ghost"
+      isRound
       icon={
         isProcessing ? <Spinner /> : <RecordIcon isRecording={isRecording} />
       }
