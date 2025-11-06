@@ -3,7 +3,7 @@ import { useChat, useDataPart } from "@ai-sdk-tools/store";
 import { SUPABASE_URL, useCarbon } from "@carbon/auth";
 import { cn } from "@carbon/react";
 import { DefaultChatTransport, generateId } from "ai";
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import { Greeting } from "~/components/Greeting";
 import { useUser } from "~/hooks";
 import { Canvas } from "./Canvas";
@@ -21,6 +21,7 @@ import {
 import { useChatInterface } from "./hooks/useChatInterface";
 import { useChatStatus } from "./hooks/useChatStatus";
 import type { UIChatMessage } from "./lib/types";
+import type { RecordButtonRef } from "./RecordButton";
 
 type Props = {
   geo?: {
@@ -31,6 +32,7 @@ type Props = {
 
 export function ChatInterface({ geo }: Props) {
   const { chatId: routeChatId } = useChatInterface();
+  const recordButtonRef = useRef<RecordButtonRef>(null);
 
   const chatId = useMemo(() => routeChatId ?? generateId(), [routeChatId]);
   const { accessToken } = useCarbon();
@@ -167,10 +169,10 @@ export function ChatInterface({ geo }: Props) {
         >
           {!hasMessages && <Greeting size="h1" className="font-medium" />}
           <div className="w-full pb-2">
-            <ChatInput hasMessages={hasMessages} />
+            <ChatInput ref={recordButtonRef} hasMessages={hasMessages} />
           </div>
 
-          {!hasMessages && <ChatWidgets />}
+          {!hasMessages && <ChatWidgets recordButtonRef={recordButtonRef} />}
         </div>
       </div>
     </div>

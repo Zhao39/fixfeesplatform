@@ -8,13 +8,25 @@ import { ChatInterface } from "~/components/Chat";
 import { useChatInterface } from "~/components/Chat/hooks/useChatInterface";
 import { Greeting } from "~/components/Greeting";
 import { useModules } from "~/hooks";
+import { useFlags } from "~/hooks/useFlags";
 import type { Authenticated, NavItem } from "~/types";
 
 export default function AppIndexRoute() {
+  const { isCommunity } = useFlags();
+  return isCommunity ? <ChatPage /> : <AppsPage />;
+}
+
+const ChatPage = () => {
   const { chatId: currentChatId } = useChatInterface();
 
-  const isCloud = true;
-  // const permissions = usePermissions();
+  return (
+    <ChatProvider initialMessages={[]} key={currentChatId || "home"}>
+      <ChatInterface />
+    </ChatProvider>
+  );
+};
+
+const AppsPage = () => {
   const modules = useModules();
   const { locale } = useLocale();
   const date = new Date();
@@ -27,14 +39,9 @@ export default function AppIndexRoute() {
       }),
     [locale]
   );
-
-  return isCloud ? (
-    <ChatProvider initialMessages={[]} key={currentChatId || "home"}>
-      <ChatInterface />
-    </ChatProvider>
-  ) : (
+  return (
     <div className="p-8 w-full h-full bg-muted">
-      <Greeting />
+      <Greeting size="h3" />
       <Subheading>{formatter.format(date)}</Subheading>
       <Hr />
       <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,300px),1fr))] gap-6 mb-8">
@@ -55,7 +62,7 @@ export default function AppIndexRoute() {
       </div>
     </div>
   );
-}
+};
 
 const Hr = () => (
   <hr className="h-px my-8 bg-black/10 border-0 dark:bg-white/10" />

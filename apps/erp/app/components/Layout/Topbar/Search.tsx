@@ -16,7 +16,6 @@ import {
   ShortcutKey,
   VStack,
   useDebounce,
-  useDisclosure,
   useMount,
   useShortcutKeys,
 } from "@carbon/react";
@@ -56,6 +55,7 @@ import useResourcesSubmodules from "~/modules/resources/ui/useResourcesSubmodule
 import useSalesSubmodules from "~/modules/sales/ui/useSalesSubmodules";
 import useSettingsSubmodules from "~/modules/settings/ui/useSettingsSubmodules";
 import useUsersSubmodules from "~/modules/users/ui/useUsersSubmodules";
+import { useUIStore } from "~/stores/ui";
 
 import type { Authenticated, Route } from "~/types";
 
@@ -73,17 +73,12 @@ const shortcut: ShortcutDefinition = {
   modifiers: ["mod"],
 };
 
-const SearchModal = ({
-  isOpen,
-  onClose,
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-}) => {
+const SearchModal = () => {
   const { company } = useUser();
   const { carbon } = useCarbon();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const { isSearchModalOpen, closeSearchModal } = useUIStore();
 
   const [input, setInput] = useState("");
   const debounceSearch = useDebounce((q: string) => {
@@ -95,10 +90,10 @@ const SearchModal = ({
   }, 500);
 
   useEffect(() => {
-    if (isOpen) {
+    if (isSearchModalOpen) {
       setInput("");
     }
-  }, [isOpen]);
+  }, [isSearchModalOpen]);
 
   const staticResults = useGroupedSubmodules();
 
@@ -150,7 +145,7 @@ const SearchModal = ({
   const onSelect = async (route: Route) => {
     const { to, name } = route;
     navigate(route.to);
-    onClose();
+    closeSearchModal();
     const newRecentSearches = [
       { to, name },
       ...((await idb.getItem<Route[]>("recentSearches"))?.filter(
@@ -164,10 +159,10 @@ const SearchModal = ({
 
   return (
     <Modal
-      open={isOpen}
+      open={isSearchModalOpen}
       onOpenChange={(open) => {
         setInput("");
-        if (!open) onClose();
+        if (!open) closeSearchModal();
       }}
     >
       <ModalContent
@@ -296,11 +291,11 @@ function ResultIcon({ entity }: { entity: SearchResult["entity"] | "Module" }) {
 }
 
 const SearchButton = () => {
-  const searchModal = useDisclosure();
+  const { openSearchModal } = useUIStore();
 
   useShortcutKeys({
     shortcut: shortcut,
-    action: searchModal.onOpen,
+    action: openSearchModal,
   });
 
   return (
@@ -309,14 +304,14 @@ const SearchButton = () => {
         leftIcon={<LuSearch />}
         variant="secondary"
         className="w-[200px] px-2"
-        onClick={searchModal.onOpen}
+        onClick={openSearchModal}
       >
         <HStack className="w-full">
           <div className="flex flex-grow">Search</div>
           <ShortcutKey variant="small" shortcut={shortcut} />
         </HStack>
       </Button>
-      <SearchModal isOpen={searchModal.isOpen} onClose={searchModal.onClose} />
+      <SearchModal />
     </div>
   );
 };

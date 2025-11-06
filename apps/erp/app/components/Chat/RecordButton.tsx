@@ -1,5 +1,5 @@
 import { cn, IconButton, Spinner } from "@carbon/react";
-import { useCallback } from "react";
+import { forwardRef, useCallback, useImperativeHandle } from "react";
 import { useAudioRecording } from "./hooks/useAudioRecording";
 import { useChatStore } from "./lib/store";
 
@@ -140,80 +140,87 @@ export interface RecordButtonProps {
   size?: number;
 }
 
-export function RecordButton({
-  disabled = false,
-  className,
-  size = 16,
-}: RecordButtonProps) {
-  const {
-    input,
-    setInput,
-    isRecording,
-    isProcessing,
-    setIsRecording,
-    setIsProcessing,
-  } = useChatStore();
-  const { startRecording, stopRecording, transcribeAudio } =
-    useAudioRecording();
-
-  const handleRecordClick = useCallback(async () => {
-    if (isRecording) {
-      // Stop recording and transcribe
-      try {
-        setIsProcessing(true);
-        const audioBlob = await stopRecording();
-
-        if (audioBlob) {
-          const transcribedText = await transcribeAudio(audioBlob);
-
-          if (transcribedText.trim()) {
-            setInput(input ? `${input} ${transcribedText}` : transcribedText);
-          }
-        }
-      } catch (error) {
-        console.error("Failed to process recording:", error);
-      } finally {
-        setIsRecording(false);
-        setIsProcessing(false);
-      }
-    } else {
-      // Start recording and reset input
-      try {
-        setInput(""); // Reset input when starting to record
-        await startRecording();
-        setIsRecording(true);
-      } catch (error) {
-        console.error("Failed to start recording:", error);
-      }
-    }
-  }, [
-    isRecording,
-    stopRecording,
-    startRecording,
-    transcribeAudio,
-    setInput,
-    input,
-    setIsRecording,
-    setIsProcessing,
-  ]);
-
-  return (
-    <IconButton
-      aria-label="Record"
-      variant="ghost"
-      isRound
-      icon={
-        isProcessing ? <Spinner /> : <RecordIcon isRecording={isRecording} />
-      }
-      isDisabled={isProcessing}
-      onClick={handleRecordClick}
-      disabled={disabled}
-      className={cn(
-        isRecording &&
-          "text-red-500 hover:text-red-500 [&_svg]:text-red-500 [&_svg]:hover:text-red-500",
-        disabled && "opacity-50",
-        className
-      )}
-    />
-  );
+export interface RecordButtonRef {
+  handleRecordClick: () => void;
 }
+
+export const RecordButton = forwardRef<RecordButtonRef, RecordButtonProps>(
+  function RecordButton({ disabled = false, className, size = 16 }, ref) {
+    const {
+      input,
+      setInput,
+      isRecording,
+      isProcessing,
+      setIsRecording,
+      setIsProcessing,
+    } = useChatStore();
+    const { startRecording, stopRecording, transcribeAudio } =
+      useAudioRecording();
+
+    const handleRecordClick = useCallback(async () => {
+      if (isRecording) {
+        // Stop recording and transcribe
+        try {
+          setIsProcessing(true);
+          const audioBlob = await stopRecording();
+
+          if (audioBlob) {
+            const transcribedText = await transcribeAudio(audioBlob);
+
+            if (transcribedText.trim()) {
+              setInput(input ? `${input} ${transcribedText}` : transcribedText);
+            }
+          }
+        } catch (error) {
+          console.error("Failed to process recording:", error);
+        } finally {
+          setIsRecording(false);
+          setIsProcessing(false);
+        }
+      } else {
+        // Start recording and reset input
+        try {
+          setInput(""); // Reset input when starting to record
+          await startRecording();
+          setIsRecording(true);
+        } catch (error) {
+          console.error("Failed to start recording:", error);
+        }
+      }
+    }, [
+      isRecording,
+      stopRecording,
+      startRecording,
+      transcribeAudio,
+      setInput,
+      input,
+      setIsRecording,
+      setIsProcessing,
+    ]);
+
+    // Expose the handleRecordClick method via ref
+    useImperativeHandle(ref, () => ({
+      handleRecordClick,
+    }));
+
+    return (
+      <IconButton
+        aria-label="Record"
+        variant="ghost"
+        isRound
+        icon={
+          isProcessing ? <Spinner /> : <RecordIcon isRecording={isRecording} />
+        }
+        isDisabled={isProcessing}
+        onClick={handleRecordClick}
+        disabled={disabled}
+        className={cn(
+          isRecording &&
+            "text-red-500 hover:text-red-500 [&_svg]:text-red-500 [&_svg]:hover:text-red-500",
+          disabled && "opacity-50",
+          className
+        )}
+      />
+    );
+  }
+);
