@@ -1,11 +1,9 @@
-import SupabaseClient from "https://esm.sh/v135/@supabase/supabase-js@2.33.1/dist/module/SupabaseClient.d.ts";
-import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { tool } from "npm:ai@5.0.87";
-import z from "npm:zod@^3.24.1/v3";
-import { Database } from "../../lib/types.ts";
-import { ChatContext } from "../agents/shared/context.ts";
-
-const model = new Supabase.ai.Session("gte-small");
+import type { Database } from "@carbon/database";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import { tool } from "ai";
+import { z } from "zod";
+import { generateEmbedding } from "~/modules/shared/shared.service";
+import type { ChatContext } from "../agents/shared/context";
 
 export const getSupplierSchema = z
   .object({
@@ -14,12 +12,9 @@ export const getSupplierSchema = z
     description: z.string().optional(),
     partIds: z.array(z.string()).optional(),
   })
-  .refine(
-    (data) => data.id || data.name || data.description || data.partIds,
-    {
-      message: "Either id, name, description, or partIds must be provided",
-    }
-  );
+  .refine((data) => data.id || data.name || data.description || data.partIds, {
+    message: "Either id, name, description, or partIds must be provided",
+  });
 
 export const getSupplierTool = tool({
   description:
@@ -66,7 +61,7 @@ export const getSupplierTool = tool({
     }
 
     if (description) {
-      const embedding = await generateEmbedding(description);
+      const embedding = await generateEmbedding(client, description);
       const search = await context.client.rpc("suppliers_search", {
         query_embedding: JSON.stringify(embedding),
         match_threshold: 0.8,
@@ -198,13 +193,3 @@ async function getSuppliersForParts(
   // Return null if no supplier was found
   return null;
 }
-
-async function generateEmbedding(text: string): Promise<number[]> {
-  const embedding = await model.run(text, {
-    mean_pool: true,
-    normalize: true,
-  });
-
-  return embedding as number[];
-}
-

@@ -1,10 +1,8 @@
-"use client";
-
 import type { UIMessage } from "ai";
 import { LuPaperclip } from "react-icons/lu";
 import { Message, MessageContent } from "~/components/Message";
 import { FaviconStack } from "./Favicon";
-import { Response } from "./Response";
+import { Markdown } from "./Markdown/Markdown";
 
 interface ChatMessagesProps {
   messages: UIMessage[];
@@ -93,7 +91,7 @@ export function ChatMessages({
         const allSources = [...aiSdkSources, ...webSearchSources];
         const uniqueSources = allSources.filter(
           (source, index, self) =>
-            index === self.findIndex((s) => s.url === source.url),
+            index === self.findIndex((s) => s.url === source.url)
         );
 
         // Check if this is the last (currently streaming) message
@@ -138,7 +136,6 @@ export function ChatMessages({
                               className="max-w-xs max-h-48 object-cover"
                               width={300}
                               height={192}
-                              
                             />
                           </div>
                         );
@@ -165,7 +162,7 @@ export function ChatMessages({
             {textParts.length > 0 && (
               <Message from={message.role}>
                 <MessageContent className="max-w-[80%]">
-                  <Response>{textContent}</Response>
+                  <Markdown html>{textContent}</Markdown>
                 </MessageContent>
               </Message>
             )}

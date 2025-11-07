@@ -8,14 +8,13 @@ import {
   ConversationContent,
   ConversationScrollButton,
 } from "../Conversation";
-import { Response } from "../Response";
+import { Markdown } from "../Markdown/Markdown";
 import {
   type SupportedToolName,
   ToolCallIndicator,
 } from "../ToolCallIndicator";
 import { WebSearchSources } from "../WebSearch";
 import { MessageActions } from "./MessageActions";
-
 
 export const ThinkingMessage = () => {
   return (
@@ -58,7 +57,7 @@ export function Messages() {
                         <Fragment key={`${message.id}-${i}`}>
                           <Message from={message.role}>
                             <MessageContent>
-                              <Response>{part.text}</Response>
+                              <Markdown limitedMarkdown>{part.text}</Markdown>
                             </MessageContent>
 
                             {message.role === "user" && user && (
@@ -71,11 +70,11 @@ export function Messages() {
 
                           {message.role === "assistant" &&
                             message.parts.filter(
-                              (part) => part.type === "source-url",
+                              (part) => part.type === "source-url"
                             ).length > 0 && (
                               <WebSearchSources
                                 sources={message.parts.filter(
-                                  (part) => part.type === "source-url",
+                                  (part) => part.type === "source-url"
                                 )}
                               />
                             )}
@@ -96,9 +95,9 @@ export function Messages() {
                           <Fragment key={`${message.id}-${i}`}>
                             <Message from={message.role}>
                               <MessageContent>
-                                <Response>
+                                <Markdown>
                                   {(part as any)?.output?.text}
-                                </Response>
+                                </Markdown>
                               </MessageContent>
                             </Message>
                           </Fragment>

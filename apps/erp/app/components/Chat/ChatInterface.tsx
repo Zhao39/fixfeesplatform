@@ -1,11 +1,13 @@
 import { useArtifacts } from "@ai-sdk-tools/artifacts/client";
 import { useChat, useDataPart } from "@ai-sdk-tools/store";
-import { SUPABASE_URL, useCarbon } from "@carbon/auth";
+import { useCarbon } from "@carbon/auth";
 import { cn } from "@carbon/react";
+import { useLocale } from "@react-aria/i18n";
 import { DefaultChatTransport, generateId } from "ai";
 import { useMemo, useRef } from "react";
 import { Greeting } from "~/components/Greeting";
 import { useUser } from "~/hooks";
+import { path } from "~/utils/path";
 import { Canvas } from "./Canvas";
 import { ChatHeader } from "./ChatHeader";
 import type { ChatInputMessage } from "./ChatInput";
@@ -35,10 +37,17 @@ export function ChatInterface({ geo }: Props) {
   const recordButtonRef = useRef<RecordButtonRef>(null);
 
   const chatId = useMemo(() => routeChatId ?? generateId(), [routeChatId]);
+  const { locale } = useLocale();
   const { accessToken } = useCarbon();
   const {
     id: userId,
-    company: { id: companyId },
+    firstName,
+    lastName,
+    company: {
+      id: companyId,
+      name: companyName,
+      baseCurrencyCode: baseCurrency,
+    },
   } = useUser();
 
   const authenticatedFetch = useMemo(
@@ -64,7 +73,7 @@ export function ChatInterface({ geo }: Props) {
   const { messages, status } = useChat<UIChatMessage>({
     id: chatId,
     transport: new DefaultChatTransport({
-      api: `${SUPABASE_URL}/functions/v1/chat`,
+      api: path.to.api.chat,
       fetch: authenticatedFetch,
       prepareSendMessagesRequest({ messages, id }) {
         const lastMessage = messages[messages.length - 1] as ChatInputMessage;
@@ -75,12 +84,16 @@ export function ChatInterface({ geo }: Props) {
         return {
           body: {
             id,
+            fullName: `${firstName} ${lastName}`,
+            companyName,
+            baseCurrency: baseCurrency ?? "USD",
             country: geo?.country,
             city: geo?.city,
             message: lastMessage,
             agentChoice,
             toolChoice,
             timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            locale,
           },
         };
       },
@@ -92,6 +105,8 @@ export function ChatInterface({ geo }: Props) {
   const { artifacts } = useArtifacts();
   const hasArtifacts = artifacts && artifacts.length > 0;
   const hasMessages = messages.length > 0;
+
+  console.log({ messages });
 
   const [suggestions] = useDataPart<{ prompts: string[] }>("suggestions");
   const hasSuggestions = suggestions?.prompts && suggestions.prompts.length > 0;
@@ -134,7 +149,7 @@ export function ChatInterface({ geo }: Props) {
                 </div>
               </div>
               <Conversation>
-                <ConversationContent className="py-4">
+                <ConversationContent className="pb-48 pt-14">
                   <div className="max-w-2xl mx-auto w-full">
                     <ChatMessages
                       messages={messages}

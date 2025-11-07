@@ -1,4 +1,4 @@
-import { ChatContext } from "./context.ts";
+import type { ChatContext } from "./context";
 
 export const PROFILE_PROMPT = `<user_profile>
 Name: [Learn from conversation]

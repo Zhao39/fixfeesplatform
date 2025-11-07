@@ -1,6 +1,5 @@
 import { HStack, IconButton } from "@carbon/react";
 import { LuSquarePen } from "react-icons/lu";
-import { Agent } from "~/components/Agent/Agent.ee";
 import { usePermissions, useUser } from "~/hooks";
 import { useFlags } from "~/hooks/useFlags";
 import AvatarMenu from "../../AvatarMenu";
@@ -37,7 +36,7 @@ const Topbar = () => {
             />
           }
         />
-        {canAccessAgent && <Agent />}
+
         <Notifications key={notificationsKey} />
         <AvatarMenu />
       </HStack>

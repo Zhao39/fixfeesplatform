@@ -10,7 +10,7 @@ export function ChatTitle() {
   const [chatTitle] = useDataPart<ChatTitleData>("chat-title", {
     onData: (dataPart) => {
       if (dataPart.data.title) {
-        document.title = `${dataPart.data.title} - AI SDK Tools`;
+        document.title = `${dataPart.data.title} - Carbon`;
       }
     },
   });
@@ -26,7 +26,7 @@ export function ChatTitle() {
           transition={{ duration: 0.2, ease: "easeOut" }}
           className="overflow-hidden"
         >
-          <div className="text-xs font-medium text-foreground whitespace-nowrap">
+          <div className="text-sm font-medium text-foreground whitespace-nowrap">
             {chatTitle.title}
           </div>
         </motion.div>

@@ -1,9 +1,7 @@
-import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { tool } from "npm:ai@5.0.87";
-import z from "npm:zod@^3.24.1/v3";
-import { ChatContext } from "../agents/shared/context.ts";
-
-const model = new Supabase.ai.Session("gte-small");
+import { tool } from "ai";
+import { z } from "zod";
+import { generateEmbedding } from "~/modules/shared/shared.service";
+import type { ChatContext } from "../agents/shared/context";
 
 export const getPartSchema = z
   .object({
@@ -20,8 +18,12 @@ export const getPartTool = tool({
   execute: async function (args, executionOptions) {
     const context = executionOptions.experimental_context as ChatContext;
     let { readableId, description } = args;
-    
+
+    console.log("[getPartTool] Starting part search with args:", args);
+
     if (readableId) {
+      console.log("[getPartTool] Searching by readableId:", readableId);
+
       const [part, supplierPart] = await Promise.all([
         context.client
           .from("item")
@@ -40,7 +42,17 @@ export const getPartTool = tool({
           .single(),
       ]);
 
+      console.log("[getPartTool] Part query result:", part.data);
+      console.log(
+        "[getPartTool] Supplier part query result:",
+        supplierPart.data
+      );
+
       if (supplierPart.data) {
+        console.log(
+          "[getPartTool] Found supplier part, returning:",
+          supplierPart.data.itemId
+        );
         return {
           id: supplierPart.data.itemId,
           name: supplierPart.data.item?.name,
@@ -49,6 +61,7 @@ export const getPartTool = tool({
         };
       }
       if (part.data?.[0]) {
+        console.log("[getPartTool] Found part, returning:", part.data[0].id);
         return {
           id: part.data[0].id,
           name: part.data[0].name,
@@ -57,14 +70,24 @@ export const getPartTool = tool({
       }
 
       if (!description) {
+        console.log(
+          "[getPartTool] No part found by readableId, using readableId as description"
+        );
         description = readableId;
       } else {
+        console.log(
+          "[getPartTool] No part found by readableId and description provided, returning null"
+        );
         return null;
       }
     }
 
     if (description) {
-      const embedding = await generateEmbedding(description);
+      console.log("[getPartTool] Searching by description:", description);
+
+      const embedding = await generateEmbedding(client, description);
+      console.log("[getPartTool] Generated embedding for description");
+
       const search = await context.client.rpc("items_search", {
         query_embedding: JSON.stringify(embedding),
         match_threshold: 0.7,
@@ -72,21 +95,20 @@ export const getPartTool = tool({
         p_company_id: context.companyId,
       });
 
+      console.log(
+        "[getPartTool] Search results:",
+        search.data?.length || 0,
+        "items found"
+      );
+      console.log("[getPartTool] Search results:", search.data);
+
       if (search.data && search.data.length > 0) {
+        console.log("[getPartTool] Returning search results");
         return search.data;
       }
     }
 
+    console.log("[getPartTool] No parts found, returning null");
     return null;
   },
 });
-
-async function generateEmbedding(text: string): Promise<number[]> {
-  const embedding = await model.run(text, {
-    mean_pool: true,
-    normalize: true,
-  });
-
-  return embedding as number[];
-}
-

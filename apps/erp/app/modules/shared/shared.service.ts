@@ -19,6 +19,30 @@ export async function deleteSavedView(
   return client.from("tableView").delete().eq("id", viewId);
 }
 
+export async function generateEmbedding(
+  client: SupabaseClient<Database>,
+  text: string
+): Promise<number[]> {
+  const response = await client.functions.invoke("embedding", {
+    body: { text },
+    region: FunctionRegion.UsEast1,
+  });
+
+  if (response.error) {
+    throw new Error(
+      `Failed to generate embedding: ${
+        response.error.message || "Unknown error"
+      }`
+    );
+  }
+
+  if (!response.data?.embedding) {
+    throw new Error("No embedding returned from function");
+  }
+
+  return response.data.embedding as number[];
+}
+
 export async function getBase64ImageFromSupabase(
   client: SupabaseClient<Database>,
   path: string

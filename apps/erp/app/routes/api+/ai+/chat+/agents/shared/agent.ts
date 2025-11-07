@@ -1,14 +1,15 @@
-import { Agent, type AgentConfig } from "npm:@ai-sdk-tools/agents@1.0.0";
-import { UpstashProvider } from "npm:@ai-sdk-tools/memory@1.0.0/upstash";
-import { Redis } from "npm:@upstash/redis@1.34.3";
-import { openai } from "../../../lib/ai/openai.ts";
-import type { ChatContext } from "./context.ts";
-import { PROFILE_PROMPT, SUGGESTION_PROMPT, TITLE_PROMPT } from "./prompts.ts";
+import { Agent, type AgentConfig } from "@ai-sdk-tools/agents";
+import { UpstashProvider } from "@ai-sdk-tools/memory/upstash";
+import { openai } from "@ai-sdk/openai";
+import { UPSTASH_REDIS_REST_TOKEN, UPSTASH_REDIS_REST_URL } from "@carbon/auth";
+import { Redis } from "@upstash/redis";
+import type { ChatContext } from "./context";
+import { PROFILE_PROMPT, SUGGESTION_PROMPT, TITLE_PROMPT } from "./prompts";
 
 export const memoryProvider = new UpstashProvider(
   new Redis({
-    url: Deno.env.get("UPSTASH_REDIS_REST_URL") ?? "",
-    token: Deno.env.get("UPSTASH_REDIS_REST_TOKEN") ?? "",
+    url: UPSTASH_REDIS_REST_URL,
+    token: UPSTASH_REDIS_REST_TOKEN,
   })
 );
 

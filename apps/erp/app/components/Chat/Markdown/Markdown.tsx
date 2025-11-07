@@ -1,0 +1,53 @@
+import { CodeBlock } from "@carbon/react";
+import { memo, useMemo } from "react";
+import type { Components } from "react-markdown";
+import ReactMarkdown from "react-markdown";
+import { allowedHTMLElements, rehypePlugins, remarkPlugins } from "./utils";
+
+type MarkdownProps = {
+  children: string;
+  html?: boolean;
+  limitedMarkdown?: boolean;
+};
+
+export const Markdown = memo(
+  ({ children, html = false, limitedMarkdown = false }: MarkdownProps) => {
+    const components = useMemo(() => {
+      return {
+        pre: (props) => {
+          const { children, node, ...rest } = props;
+
+          const [firstChild] = node?.children ?? [];
+
+          if (
+            firstChild &&
+            firstChild.type === "element" &&
+            firstChild.tagName === "code" &&
+            firstChild.children?.[0]?.type === "text"
+          ) {
+            // @ts-ignore
+            const { className, ...rest } = firstChild.properties;
+            const [, language = "plaintext"] =
+              /language-(\w+)/.exec(String(className) || "") ?? [];
+
+            return <CodeBlock className={language}>{children}</CodeBlock>;
+          }
+
+          return <pre {...rest}>{children}</pre>;
+        },
+      } satisfies Components;
+    }, []);
+
+    return (
+      <ReactMarkdown
+        allowedElements={allowedHTMLElements}
+        components={components}
+        remarkPlugins={remarkPlugins(limitedMarkdown)}
+        rehypePlugins={rehypePlugins(html)}
+      >
+        {children}
+      </ReactMarkdown>
+    );
+  }
+);
+Markdown.displayName = "Markdown";

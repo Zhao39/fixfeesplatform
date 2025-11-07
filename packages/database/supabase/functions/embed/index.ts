@@ -1,9 +1,10 @@
-import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { serve } from "https://deno.land/std@0.175.0/http/server.ts";
-import { Kysely } from "https://esm.sh/v135/kysely@0.26.3/dist/cjs/kysely.d.ts";
 import { sql } from "https://esm.sh/kysely@0.26.3";
+import { Kysely } from "https://esm.sh/v135/kysely@0.26.3/dist/cjs/kysely.d.ts";
+import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import z from "npm:zod@^3.24.1";
 import { DB, getConnectionPool, getDatabaseClient } from "../lib/database.ts";
+import { generateEmbedding } from "../lib/ai/embedding.ts";
 
 const pool = getConnectionPool(1);
 const db = getDatabaseClient<DB>(pool);
@@ -98,36 +99,26 @@ serve(async (req: Request) => {
     failedJobs: failedJobs.length,
   });
 
-  return new Response(
-    JSON.stringify({
-      completedJobs,
-      failedJobs,
-    }),
-    {
-      // 200 OK response
-      status: 200,
-
-      // Custom headers to report job status
-      headers: {
-        "content-type": "application/json",
-        "x-completed-jobs": completedJobs.length.toString(),
-        "x-failed-jobs": failedJobs.length.toString(),
-      },
-    }
-  );
-});
-
-/**
- * Generates an embedding for the given text.
- */
-async function generateEmbedding(text: string): Promise<number[]> {
-  const embedding = await model.run(text, {
-    mean_pool: true,
-    normalize: true,
+  const responseBody = JSON.stringify({
+    completedJobs,
+    failedJobs,
   });
 
-  return embedding as number[];
-}
+  return new Response(responseBody, {
+    // 200 OK response
+    status: 200,
+
+    // Custom headers to report job status
+    headers: {
+      "content-type": "application/json",
+      "content-length": new TextEncoder()
+        .encode(responseBody)
+        .length.toString(),
+      "x-completed-jobs": completedJobs.length.toString(),
+      "x-failed-jobs": failedJobs.length.toString(),
+    },
+  });
+});
 
 /**
  * Processes an embedding job.
@@ -135,61 +126,136 @@ async function generateEmbedding(text: string): Promise<number[]> {
 async function processJob(db: Kysely<DB>, job: Job) {
   const { jobId, id, table } = job;
 
+  console.log(`Processing job ${jobId} for ${table} with id ${id}`);
+
   if (table === "item") {
+    console.log("Fetching item from database...");
     const item = await db
       .selectFrom("item")
       .selectAll()
       .where("id", "=", id)
       .executeTakeFirst();
 
-    await db
+    console.log("Item fetched:", {
+      id: item?.id,
+      name: item?.name,
+      description: item?.description,
+    });
+
+    const textParts = [item?.name, item?.description].filter(
+      (part): part is string => typeof part === "string" && part.length > 0
+    );
+
+    const textToEmbed = textParts.join(" ");
+    console.log("Text to embed:", textToEmbed);
+
+    const embedding = await generateEmbedding(textToEmbed);
+    const embeddingString = JSON.stringify(embedding);
+
+    console.log("Updating item with embedding...", {
+      embeddingLength: embedding.length,
+      embeddingStringLength: embeddingString.length,
+    });
+
+    const result = await db
       .updateTable("item")
       .set({
-        embedding: JSON.stringify(
-          await generateEmbedding(`${item?.name} ${item?.description}`)
-        ),
+        embedding: embeddingString,
       })
       .where("id", "=", id)
       .execute();
+
+    console.log("Item update result:", result);
   }
 
   if (table === "supplier") {
+    console.log("Fetching supplier from database...");
     const supplier = await db
       .selectFrom("supplier")
       .selectAll()
       .where("id", "=", id)
       .executeTakeFirst();
+
+    console.log("Supplier fetched:", {
+      id: supplier?.id,
+      name: supplier?.name,
+    });
+
+    const textToEmbed = supplier?.name || "";
+
+    if (!textToEmbed) {
+      throw new Error(`Supplier ${id} has no name to embed`);
+    }
+
+    console.log("Text to embed:", textToEmbed);
+
+    const embedding = await generateEmbedding(textToEmbed);
+    const embeddingString = JSON.stringify(embedding);
+
+    console.log("Updating supplier with embedding...", {
+      embeddingLength: embedding.length,
+      embeddingStringLength: embeddingString.length,
+    });
+
     // TODO: if there is a website, use firecrawl to get some more information
-    await db
+    const result = await db
       .updateTable("supplier")
       .set({
-        embedding: JSON.stringify(
-          await generateEmbedding(supplier?.name ?? "")
-        ),
+        embedding: embeddingString,
       })
       .where("id", "=", id)
       .execute();
+
+    console.log("Supplier update result:", result);
   }
 
   if (table === "customer") {
+    console.log("Fetching customer from database...");
     const customer = await db
       .selectFrom("customer")
       .selectAll()
       .where("id", "=", id)
       .executeTakeFirst();
+
+    console.log("Customer fetched:", {
+      id: customer?.id,
+      name: customer?.name,
+    });
+
+    const textToEmbed = customer?.name || "";
+
+    if (!textToEmbed) {
+      throw new Error(`Customer ${id} has no name to embed`);
+    }
+
+    console.log("Text to embed:", textToEmbed);
+
+    const embedding = await generateEmbedding(textToEmbed);
+    const embeddingString = JSON.stringify(embedding);
+
+    console.log("Updating customer with embedding...", {
+      embeddingLength: embedding.length,
+      embeddingStringLength: embeddingString.length,
+    });
+
     // TODO: if there is a website, use firecrawl to get some more information
-    await db
+    const result = await db
       .updateTable("customer")
       .set({
-        embedding: JSON.stringify(
-          await generateEmbedding(customer?.name ?? "")
-        ),
+        embedding: embeddingString,
       })
       .where("id", "=", id)
       .execute();
+
+    console.log("Customer update result:", result);
   }
 
-  await sql`select pgmq.delete(${QUEUE_NAME}, ${jobId}::bigint)`.execute(db);
+  console.log(`Deleting job ${jobId} from queue...`);
+  const deleteResult =
+    await sql`select pgmq.delete(${QUEUE_NAME}, ${jobId}::bigint)`.execute(db);
+  console.log("Queue delete result:", deleteResult);
+
+  console.log(`Job ${jobId} processing completed successfully`);
 }
 
 /**

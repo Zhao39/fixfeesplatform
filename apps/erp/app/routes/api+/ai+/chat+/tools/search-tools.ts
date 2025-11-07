@@ -1,9 +1,10 @@
-import { generateText, stepCountIs, Tool, tool } from "npm:ai@5.0.87";
-import z from "npm:zod@^3.24.1/v3";
-import { openai } from "../../lib/ai/openai.ts";
-import { ChatContext } from "../agents/shared/context.ts";
+import { openai } from "@ai-sdk/openai";
+import type { Tool } from "ai";
+import { generateText, stepCountIs, tool } from "ai";
+import { z } from "zod";
+import type { ChatContext } from "../agents/shared/context";
 
-interface SourceItem {
+export interface SourceItem {
   url: string;
   title: string;
   publishedDate?: string;

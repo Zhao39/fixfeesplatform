@@ -1,10 +1,7 @@
-import SupabaseClient from "https://esm.sh/v135/@supabase/supabase-js@2.33.1/dist/module/SupabaseClient.d.ts";
-import { Transaction } from "https://esm.sh/v135/kysely@0.26.3/dist/cjs/kysely.d.ts";
-import { DB } from "../../../lib/database.ts";
-import { Database } from "../../../lib/types.ts";
+import type { Database } from "@carbon/database";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
 export interface ChatContext {
-  db: Transaction<DB>;
   client: SupabaseClient<Database>;
   userId: string;
   companyId: string;
@@ -24,7 +21,6 @@ export interface ChatContext {
 export function createChatContext(params: {
   userId: string;
   companyId: string;
-  db: Transaction<DB>;
   client: SupabaseClient<Database>;
   fullName: string;
   companyName: string;
@@ -34,12 +30,10 @@ export function createChatContext(params: {
   baseCurrency?: string;
   locale?: string;
   timezone?: string;
-  
 }) {
   return {
     userId: params.userId,
     companyId: params.companyId,
-    db: params.db,
     client: params.client,
     fullName: params.fullName,
     companyName: params.companyName,
@@ -51,6 +45,5 @@ export function createChatContext(params: {
     currentDateTime: new Date().toISOString(),
     timezone:
       params.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
-    
   };
 }

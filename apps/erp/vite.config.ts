@@ -28,10 +28,13 @@ export default defineConfig({
       "react-tweet",
       "react-dropzone",
       "react-icons",
+      "react-json-view-lite",
       "react-phone-number-input",
       "tailwind-merge",
     ],
+    external: ["@xyflow/react/dist/style.css"],
   },
+
   server: {
     port: 3000,
     allowedHosts: ["8d53c60dbab3.ngrok-free.app"],

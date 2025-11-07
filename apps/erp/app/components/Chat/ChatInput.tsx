@@ -28,12 +28,16 @@ export interface ChatInputMessage extends PromptInputMessage {
   };
 }
 
-export const ChatInput = forwardRef<RecordButtonRef, { hasMessages: boolean }>(
+interface ChatInputProps {
+  hasMessages: boolean;
+}
+
+export const ChatInput = forwardRef<RecordButtonRef, ChatInputProps>(
   function ChatInput({ hasMessages }, ref) {
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     const status = useChatStatus();
-    const { sendMessage } = useChatActions();
+    const { sendMessage, stop } = useChatActions();
     const chatId = useChatId();
 
     const { current } = useArtifacts({

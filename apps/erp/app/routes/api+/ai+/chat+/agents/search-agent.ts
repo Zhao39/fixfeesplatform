@@ -1,10 +1,10 @@
-import { openai } from "../../lib/ai/openai.ts";
-import { webSearchTool } from "../tools/search.ts";
-import { purchasingAgent } from "./purchasing.ts";
-import { createAgent } from "./shared/agent.ts";
-import { COMMON_AGENT_RULES, formatContextForLLM } from "./shared/prompts.ts";
+import { openai } from "@ai-sdk/openai";
+import { webSearchTool } from "../tools/search-tools";
+import { purchasingAgent } from "./purchasing-agent";
+import { createAgent } from "./shared/agent";
+import { COMMON_AGENT_RULES, formatContextForLLM } from "./shared/prompts";
 
-export const generalAgent = createAgent({
+export const searchAgent = createAgent({
   name: "general",
   model: openai("gpt-4o"),
   temperature: 0.8,

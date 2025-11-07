@@ -156,7 +156,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         role={asChild ? undefined : "button"}
         ref={ref}
       >
-        {isLoading && <Spinner className="mr-2" />}
+        {isLoading && <Spinner className="mr-2 size-4" />}
         {!isLoading &&
           leftIcon &&
           cloneElement(leftIcon, {

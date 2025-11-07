@@ -15,11 +15,10 @@ export const getStatusMessage = (status?: AgentStatus | null) => {
   if (state === "executing") {
     const messages: Record<AgentStatus["agent"], string> = {
       triage: "Thinking...",
-      orchestrator: "Coordinating your request...",
-      general: "Getting information for you...",
-      purchasing: "Running purchasing...",
-      parts: "Searching for parts...",
-      suppliers: "Searching for suppliers...",
+      general: "Searching the web...",
+      purchasing: "Purchasing...",
+      parts: "Parts...",
+      suppliers: "Suppliers...",
     };
 
     return messages[agent];

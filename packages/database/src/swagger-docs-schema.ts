@@ -3,7 +3,7 @@ export default {
   info: {
     description: "",
     title: "standard public schema",
-    version: "12.2.8 (4a3936f)",
+    version: "13.0.7",
   },
   host: "0.0.0.0:3000",
   basePath: "/",
@@ -56737,42 +56737,6 @@ export default {
       },
     },
     "/rpc/get_item_shelf_requirements_by_location_and_item": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "company_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "location_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "item_id",
-            required: false,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_item_shelf_requirements_by_location_and_item"],
-      },
       post: {
         parameters: [
           {
@@ -56816,35 +56780,6 @@ export default {
       },
     },
     "/rpc/has_company_permission": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "claim",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "company",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) has_company_permission"],
-      },
       post: {
         parameters: [
           {
@@ -56884,49 +56819,6 @@ export default {
       },
     },
     "/rpc/create_rfq_from_models_v2": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "company_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "email",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "sequence_number",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "json[]",
-            in: "query",
-            name: "model_data",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) create_rfq_from_models_v2"],
-      },
       post: {
         parameters: [
           {
@@ -56980,28 +56872,6 @@ export default {
       },
     },
     "/rpc/get_supplier_interaction_with_related_records": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "supplier_interaction_id",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_supplier_interaction_with_related_records"],
-      },
       post: {
         parameters: [
           {
@@ -57037,28 +56907,6 @@ export default {
       },
     },
     "/rpc/check_operation_dependencies": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "operation_id",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) check_operation_dependencies"],
-      },
       post: {
         parameters: [
           {
@@ -57094,28 +56942,6 @@ export default {
       },
     },
     "/rpc/get_companies_with_employee_permission": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "permission",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_companies_with_employee_permission"],
-      },
       post: {
         parameters: [
           {
@@ -57246,19 +57072,6 @@ export default {
       },
     },
     "/rpc/get_companies_with_any_role": {
-      get: {
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_companies_with_any_role"],
-      },
       post: {
         parameters: [
           {
@@ -57287,28 +57100,6 @@ export default {
       },
     },
     "/rpc/get_direct_ancestors_of_tracked_entity": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "p_tracked_entity_id",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_direct_ancestors_of_tracked_entity"],
-      },
       post: {
         parameters: [
           {
@@ -57344,28 +57135,6 @@ export default {
       },
     },
     "/rpc/get_permission_companies": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "claim",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_permission_companies"],
-      },
       post: {
         parameters: [
           {
@@ -57401,28 +57170,6 @@ export default {
       },
     },
     "/rpc/get_tool_details": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "item_id",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_tool_details"],
-      },
       post: {
         parameters: [
           {
@@ -57458,35 +57205,6 @@ export default {
       },
     },
     "/rpc/get_inventory_quantities": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "company_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "location_id",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_inventory_quantities"],
-      },
       post: {
         parameters: [
           {
@@ -57526,28 +57244,6 @@ export default {
       },
     },
     "/rpc/get_direct_descendants_of_tracked_entity_strict": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "p_tracked_entity_id",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_direct_descendants_of_tracked_entity_strict"],
-      },
       post: {
         parameters: [
           {
@@ -57583,49 +57279,6 @@ export default {
       },
     },
     "/rpc/create_rfq_from_models_v1": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "company_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "email",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "sequence_number",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "json[]",
-            in: "query",
-            name: "model_data",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) create_rfq_from_models_v1"],
-      },
       post: {
         parameters: [
           {
@@ -57679,28 +57332,6 @@ export default {
       },
     },
     "/rpc/get_companies_with_permission": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "permission",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_companies_with_permission"],
-      },
       post: {
         parameters: [
           {
@@ -57736,19 +57367,6 @@ export default {
       },
     },
     "/rpc/get_companies_with_employee_role": {
-      get: {
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_companies_with_employee_role"],
-      },
       post: {
         parameters: [
           {
@@ -57874,28 +57492,6 @@ export default {
       },
     },
     "/rpc/has_any_company_permission": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "claim",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) has_any_company_permission"],
-      },
       post: {
         parameters: [
           {
@@ -57931,19 +57527,6 @@ export default {
       },
     },
     "/rpc/is_claims_admin": {
-      get: {
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) is_claims_admin"],
-      },
       post: {
         parameters: [
           {
@@ -57972,28 +57555,6 @@ export default {
       },
     },
     "/rpc/xid": {
-      get: {
-        parameters: [
-          {
-            format: "timestamp with time zone",
-            in: "query",
-            name: "_at",
-            required: false,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) xid"],
-      },
       post: {
         parameters: [
           {
@@ -58085,56 +57646,6 @@ export default {
       },
     },
     "/rpc/update_receipt_line_serial_tracking": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "p_receipt_line_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "p_receipt_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "p_serial_number",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "integer",
-            in: "query",
-            name: "p_index",
-            required: true,
-            type: "integer",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "p_tracked_entity_id",
-            required: false,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) update_receipt_line_serial_tracking"],
-      },
       post: {
         parameters: [
           {
@@ -58191,42 +57702,6 @@ export default {
       },
     },
     "/rpc/get_production_projections": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "company_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "location_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text[]",
-            in: "query",
-            name: "periods",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_production_projections"],
-      },
       post: {
         parameters: [
           {
@@ -58273,35 +57748,6 @@ export default {
       },
     },
     "/rpc/get_job_operations_by_work_center": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "work_center_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "location_id",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_job_operations_by_work_center"],
-      },
       post: {
         parameters: [
           {
@@ -58341,42 +57787,6 @@ export default {
       },
     },
     "/rpc/get_item_quantities_by_tracking_id": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "item_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "company_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "location_id",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_item_quantities_by_tracking_id"],
-      },
       post: {
         parameters: [
           {
@@ -58534,28 +57944,6 @@ export default {
       },
     },
     "/rpc/xid_time": {
-      get: {
-        parameters: [
-          {
-            format: "public.xid",
-            in: "query",
-            name: "_xid",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) xid_time"],
-      },
       post: {
         parameters: [
           {
@@ -58591,35 +57979,6 @@ export default {
       },
     },
     "/rpc/get_item_shelf_requirements_by_location": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "company_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "location_id",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_item_shelf_requirements_by_location"],
-      },
       post: {
         parameters: [
           {
@@ -58659,28 +58018,6 @@ export default {
       },
     },
     "/rpc/get_sales_order_lines_by_customer_id": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "customer_id",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_sales_order_lines_by_customer_id"],
-      },
       post: {
         parameters: [
           {
@@ -58716,28 +58053,6 @@ export default {
       },
     },
     "/rpc/get_my_permission": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "claim",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_my_permission"],
-      },
       post: {
         parameters: [
           {
@@ -58773,28 +58088,6 @@ export default {
       },
     },
     "/rpc/xid_decode": {
-      get: {
-        parameters: [
-          {
-            format: "public.xid",
-            in: "query",
-            name: "_xid",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) xid_decode"],
-      },
       post: {
         parameters: [
           {
@@ -58830,49 +58123,6 @@ export default {
       },
     },
     "/rpc/nanoid_optimized": {
-      get: {
-        parameters: [
-          {
-            format: "integer",
-            in: "query",
-            name: "size",
-            required: true,
-            type: "integer",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "alphabet",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "integer",
-            in: "query",
-            name: "mask",
-            required: true,
-            type: "integer",
-          },
-          {
-            format: "integer",
-            in: "query",
-            name: "step",
-            required: true,
-            type: "integer",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) nanoid_optimized"],
-      },
       post: {
         parameters: [
           {
@@ -58920,35 +58170,6 @@ export default {
       },
     },
     "/rpc/get_active_job_operations_by_location": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "location_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text[]",
-            in: "query",
-            name: "work_center_ids",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_active_job_operations_by_location"],
-      },
       post: {
         parameters: [
           {
@@ -58991,35 +58212,6 @@ export default {
       },
     },
     "/rpc/get_next_numeric_sequence": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "company_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: '"itemType"',
-            in: "query",
-            name: "item_type",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_next_numeric_sequence"],
-      },
       post: {
         parameters: [
           {
@@ -59059,28 +58251,6 @@ export default {
       },
     },
     "/rpc/get_part_details": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "item_id",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_part_details"],
-      },
       post: {
         parameters: [
           {
@@ -59116,28 +58286,6 @@ export default {
       },
     },
     "/rpc/xid_pid": {
-      get: {
-        parameters: [
-          {
-            format: "public.xid",
-            in: "query",
-            name: "_xid",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) xid_pid"],
-      },
       post: {
         parameters: [
           {
@@ -59173,35 +58321,6 @@ export default {
       },
     },
     "/rpc/get_active_job_count": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "employee_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "company_id",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_active_job_count"],
-      },
       post: {
         parameters: [
           {
@@ -59241,28 +58360,6 @@ export default {
       },
     },
     "/rpc/groups_for_user": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "uid",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) groups_for_user"],
-      },
       post: {
         parameters: [
           {
@@ -59298,70 +58395,6 @@ export default {
       },
     },
     "/rpc/create_rfq_from_model_v1": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "company_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "customer_part_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "email",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "model_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "sequence_number",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "unit_of_measure",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "json",
-            in: "query",
-            name: "notes",
-            required: false,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) create_rfq_from_model_v1"],
-      },
       post: {
         parameters: [
           {
@@ -59427,19 +58460,6 @@ export default {
       },
     },
     "/rpc/get_company_id_from_api_key": {
-      get: {
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_company_id_from_api_key"],
-      },
       post: {
         parameters: [
           {
@@ -59468,35 +58488,6 @@ export default {
       },
     },
     "/rpc/get_radan_v1": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "company_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text[]",
-            in: "query",
-            name: "processes",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_radan_v1"],
-      },
       post: {
         parameters: [
           {
@@ -59539,28 +58530,6 @@ export default {
       },
     },
     "/rpc/uuid_to_base58": {
-      get: {
-        parameters: [
-          {
-            format: "uuid",
-            in: "query",
-            name: "_uuid",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) uuid_to_base58"],
-      },
       post: {
         parameters: [
           {
@@ -59596,35 +58565,6 @@ export default {
       },
     },
     "/rpc/get_assigned_job_operations": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "user_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "company_id",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_assigned_job_operations"],
-      },
       post: {
         parameters: [
           {
@@ -59664,28 +58604,6 @@ export default {
       },
     },
     "/rpc/xid_encode": {
-      get: {
-        parameters: [
-          {
-            format: "integer[]",
-            in: "query",
-            name: "_id",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) xid_encode"],
-      },
       post: {
         parameters: [
           {
@@ -59724,28 +58642,6 @@ export default {
       },
     },
     "/rpc/get_direct_descendants_of_tracked_entity": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "p_tracked_entity_id",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_direct_descendants_of_tracked_entity"],
-      },
       post: {
         parameters: [
           {
@@ -59781,28 +58677,6 @@ export default {
       },
     },
     "/rpc/get_customer_ids_with_customer_permission": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "permission",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_customer_ids_with_customer_permission"],
-      },
       post: {
         parameters: [
           {
@@ -59838,35 +58712,6 @@ export default {
       },
     },
     "/rpc/get_company_id_from_foreign_key": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "foreign_key",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "tbl",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_company_id_from_foreign_key"],
-      },
       post: {
         parameters: [
           {
@@ -59906,28 +58751,6 @@ export default {
       },
     },
     "/rpc/users_for_groups": {
-      get: {
-        parameters: [
-          {
-            format: "text[]",
-            in: "query",
-            name: "groups",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) users_for_groups"],
-      },
       post: {
         parameters: [
           {
@@ -59966,35 +58789,6 @@ export default {
       },
     },
     "/rpc/get_recent_job_operations_by_employee": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "employee_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "company_id",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_recent_job_operations_by_employee"],
-      },
       post: {
         parameters: [
           {
@@ -60034,28 +58828,6 @@ export default {
       },
     },
     "/rpc/get_supplier_ids_with_supplier_permission": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "permission",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_supplier_ids_with_supplier_permission"],
-      },
       post: {
         parameters: [
           {
@@ -60091,28 +58863,6 @@ export default {
       },
     },
     "/rpc/get_job_operation_by_id": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "operation_id",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_job_operation_by_id"],
-      },
       post: {
         parameters: [
           {
@@ -60148,28 +58898,6 @@ export default {
       },
     },
     "/rpc/increment_webhook_error": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "webhook_id",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) increment_webhook_error"],
-      },
       post: {
         parameters: [
           {
@@ -60205,35 +58933,6 @@ export default {
       },
     },
     "/rpc/journalLinesByAccountNumber": {
-      get: {
-        parameters: [
-          {
-            format: "date",
-            in: "query",
-            name: "from_date",
-            required: false,
-            type: "string",
-          },
-          {
-            format: "date",
-            in: "query",
-            name: "to_date",
-            required: false,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) journalLinesByAccountNumber"],
-      },
       post: {
         parameters: [
           {
@@ -60272,28 +58971,6 @@ export default {
       },
     },
     "/rpc/xid_machine": {
-      get: {
-        parameters: [
-          {
-            format: "public.xid",
-            in: "query",
-            name: "_xid",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) xid_machine"],
-      },
       post: {
         parameters: [
           {
@@ -60329,28 +59006,6 @@ export default {
       },
     },
     "/rpc/get_my_claim": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "claim",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_my_claim"],
-      },
       post: {
         parameters: [
           {
@@ -60386,42 +59041,6 @@ export default {
       },
     },
     "/rpc/get_job_quantity_on_hand": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "job_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "company_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "location_id",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_job_quantity_on_hand"],
-      },
       post: {
         parameters: [
           {
@@ -60579,28 +59198,6 @@ export default {
       },
     },
     "/rpc/increment_webhook_success": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "webhook_id",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) increment_webhook_success"],
-      },
       post: {
         parameters: [
           {
@@ -60677,28 +59274,6 @@ export default {
       },
     },
     "/rpc/is_last_job_operation": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "operation_id",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) is_last_job_operation"],
-      },
       post: {
         parameters: [
           {
@@ -60734,35 +59309,6 @@ export default {
       },
     },
     "/rpc/get_next_sequence": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "sequence_name",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "company_id",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_next_sequence"],
-      },
       post: {
         parameters: [
           {
@@ -60859,49 +59405,6 @@ export default {
       },
     },
     "/rpc/nanoid": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "prefix",
-            required: false,
-            type: "string",
-          },
-          {
-            format: "integer",
-            in: "query",
-            name: "size",
-            required: false,
-            type: "integer",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "alphabet",
-            required: false,
-            type: "string",
-          },
-          {
-            format: "double precision",
-            in: "query",
-            name: "additionalbytesfactor",
-            required: false,
-            type: "number",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) nanoid"],
-      },
       post: {
         parameters: [
           {
@@ -60948,35 +59451,6 @@ export default {
       },
     },
     "/rpc/has_role": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "required_role",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "company",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) has_role"],
-      },
       post: {
         parameters: [
           {
@@ -61016,28 +59490,6 @@ export default {
       },
     },
     "/rpc/has_valid_api_key_for_company": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "company",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) has_valid_api_key_for_company"],
-      },
       post: {
         parameters: [
           {
@@ -61130,35 +59582,6 @@ export default {
       },
     },
     "/rpc/groups_query": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "_name",
-            required: false,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "_uid",
-            required: false,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) groups_query"],
-      },
       post: {
         parameters: [
           {
@@ -61197,42 +59620,6 @@ export default {
       },
     },
     "/rpc/get_next_prefixed_sequence": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "company_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: '"itemType"',
-            in: "query",
-            name: "item_type",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "prefix",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_next_prefixed_sequence"],
-      },
       post: {
         parameters: [
           {
@@ -61276,35 +59663,6 @@ export default {
       },
     },
     "/rpc/get_active_job_operations_by_employee": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "employee_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "company_id",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_active_job_operations_by_employee"],
-      },
       post: {
         parameters: [
           {
@@ -61401,28 +59759,6 @@ export default {
       },
     },
     "/rpc/xid_counter": {
-      get: {
-        parameters: [
-          {
-            format: "public.xid",
-            in: "query",
-            name: "_xid",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) xid_counter"],
-      },
       post: {
         parameters: [
           {
@@ -61458,42 +59794,6 @@ export default {
       },
     },
     "/rpc/get_production_planning": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "company_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "location_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text[]",
-            in: "query",
-            name: "periods",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_production_planning"],
-      },
       post: {
         parameters: [
           {
@@ -61540,63 +59840,6 @@ export default {
       },
     },
     "/rpc/update_receipt_line_batch_tracking": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "p_receipt_line_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "p_receipt_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "p_batch_number",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "numeric",
-            in: "query",
-            name: "p_quantity",
-            required: true,
-            type: "number",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "p_tracked_entity_id",
-            required: false,
-            type: "string",
-          },
-          {
-            format: "jsonb",
-            in: "query",
-            name: "p_properties",
-            required: false,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) update_receipt_line_batch_tracking"],
-      },
       post: {
         parameters: [
           {
@@ -61656,42 +59899,6 @@ export default {
       },
     },
     "/rpc/get_purchasing_planning": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "company_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "location_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text[]",
-            in: "query",
-            name: "periods",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_purchasing_planning"],
-      },
       post: {
         parameters: [
           {
@@ -61738,28 +59945,6 @@ export default {
       },
     },
     "/rpc/id": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "_prefix",
-            required: false,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) id"],
-      },
       post: {
         parameters: [
           {
@@ -61794,42 +59979,6 @@ export default {
       },
     },
     "/rpc/get_custom_field_unique_values": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "table_name",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "field_key",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "company_id",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_custom_field_unique_values"],
-      },
       post: {
         parameters: [
           {
@@ -61873,35 +60022,6 @@ export default {
       },
     },
     "/rpc/get_claims": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "uid",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "company",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_claims"],
-      },
       post: {
         parameters: [
           {
@@ -61941,28 +60061,6 @@ export default {
       },
     },
     "/rpc/get_opportunity_with_related_records": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "opportunity_id",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_opportunity_with_related_records"],
-      },
       post: {
         parameters: [
           {
@@ -62093,28 +60191,6 @@ export default {
       },
     },
     "/rpc/get_direct_ancestors_of_tracked_entity_strict": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "p_tracked_entity_id",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_direct_ancestors_of_tracked_entity_strict"],
-      },
       post: {
         parameters: [
           {
@@ -65642,7 +63718,7 @@ export default {
       properties: {
         id: {
           description:
-            "Note:\nThis is a Foreign Key to `supplierLocation.id`.<fk table='supplierLocation' column='id'/>",
+            "Note:\nThis is a Primary Key.<pk/>\nThis is a Foreign Key to `supplierLocation.id`.<fk table='supplierLocation' column='id'/>",
           format: "text",
           type: "string",
         },
@@ -65691,7 +63767,7 @@ export default {
         },
         supplierLocationId: {
           description:
-            "Note:\nThis is a Primary Key.<pk/>\nThis is a Foreign Key to `supplierLocation.id`.<fk table='supplierLocation' column='id'/>",
+            "Note:\nThis is a Foreign Key to `supplierLocation.id`.<fk table='supplierLocation' column='id'/>",
           format: "text",
           type: "string",
         },
@@ -88853,7 +86929,6 @@ export default {
       name: "Prefer",
       description: "Preference",
       required: false,
-      enum: ["params=single-object"],
       in: "header",
       type: "string",
     },
@@ -119036,6 +117111,6 @@ export default {
   },
   externalDocs: {
     description: "PostgREST Documentation",
-    url: "https://postgrest.org/en/v12/references/api.html",
+    url: "https://postgrest.org/en/v13/references/api.html",
   },
 };
