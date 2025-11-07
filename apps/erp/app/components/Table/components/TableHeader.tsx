@@ -52,6 +52,7 @@ import type { ColumnFilter } from "./Filter/types";
 import type { PaginationProps } from "./Pagination";
 import { PaginationButtons } from "./Pagination";
 import Sort from "./Sort";
+import Download from "./Download";
 
 type HeaderProps<T> = {
   renderActions?: (selectedRows: T[]) => ReactNode;
@@ -61,6 +62,7 @@ type HeaderProps<T> = {
   columnVisibility: Record<string, boolean>;
   columns: Column<T, unknown>[];
   compact?: boolean;
+  data: object[];
   editMode: boolean;
   filters: ColumnFilter[];
   importCSV?: {
@@ -88,6 +90,7 @@ const TableHeader = <T extends object>({
   columnPinning,
   columnVisibility,
   columns,
+  data,
   editMode,
   filters,
   importCSV,
@@ -294,6 +297,8 @@ const TableHeader = <T extends object>({
               </TooltipContent>
             </Tooltip>
           )}
+
+          <Download data={data} />
 
           {withPagination &&
             (pagination.canNextPage || pagination.canPreviousPage) && (

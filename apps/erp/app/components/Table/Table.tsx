@@ -675,6 +675,7 @@ const Table = <T extends object>({
         columnVisibility={columnVisibility}
         columns={table.getAllLeafColumns()}
         compact={compact}
+        data={data}
         editMode={editMode}
         filters={filters}
         importCSV={importCSV}
