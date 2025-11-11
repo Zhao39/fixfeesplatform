@@ -8,10 +8,6 @@ import {
   upsertJobMethod,
 } from "~/modules/production";
 
-export const config = {
-  runtime: "nodejs",
-};
-
 export async function action({ request }: ActionFunctionArgs) {
   const { client, companyId, userId } = await requirePermissions(request, {
     update: "production",

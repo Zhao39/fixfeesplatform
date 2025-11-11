@@ -13,13 +13,9 @@ import {
   slackOAuthTokenResponseSchema,
 } from "@carbon/ee/slack.server";
 import { json, redirect, type LoaderFunctionArgs } from "@vercel/remix";
-import { z } from 'zod/v3';
+import { z } from "zod/v3";
 import { upsertCompanyIntegration } from "~/modules/settings/settings.server";
 import { path } from "~/utils/path";
-
-export const config = {
-  runtime: "nodejs",
-};
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client, userId, companyId } = await requirePermissions(request, {

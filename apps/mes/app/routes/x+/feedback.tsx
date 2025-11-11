@@ -5,10 +5,6 @@ import { getSlackClient } from "@carbon/lib/slack.server";
 import { json, type ActionFunctionArgs } from "@vercel/remix";
 import { feedbackValidator } from "~/services/models";
 
-export const config = {
-  runtime: "nodejs",
-};
-
 export async function action({ request }: ActionFunctionArgs) {
   const { userId, companyId } = await requirePermissions(request, {});
 

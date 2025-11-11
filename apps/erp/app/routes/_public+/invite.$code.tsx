@@ -20,10 +20,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { acceptInvite } from "~/modules/users/users.server";
 import { path } from "~/utils/path";
 
-export const config = {
-  runtime: "nodejs",
-};
-
 export const meta: MetaFunction = () => {
   return [{ title: "Accept Invite | Carbon" }];
 };

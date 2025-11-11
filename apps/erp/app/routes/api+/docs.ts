@@ -5,10 +5,6 @@ import type { LoaderFunctionArgs, SerializeFrom } from "@vercel/remix";
 import { json } from "@vercel/remix";
 import { docsQuery } from "~/utils/react-query";
 
-export const config = {
-  runtime: "nodejs",
-};
-
 export async function loader({ request }: LoaderFunctionArgs) {
   await requirePermissions(request, {});
 

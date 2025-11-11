@@ -6,10 +6,6 @@ import { getQuoteMethodTrees } from "~/modules/sales";
 import { calculateTotalQuantity, generateBomIds } from "~/utils/bom";
 import { makeDurations } from "~/utils/duration";
 
-export const config = {
-  runtime: "nodejs",
-};
-
 const bomHeaders = [
   "ID",
   "Item ID",

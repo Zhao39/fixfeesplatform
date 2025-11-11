@@ -23,10 +23,6 @@ import {
 import { createEmployeeAccount } from "~/modules/users/users.server";
 import { path } from "~/utils/path";
 
-export const config = {
-  runtime: "nodejs",
-};
-
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client, companyId } = await requirePermissions(request, {
     create: "users",

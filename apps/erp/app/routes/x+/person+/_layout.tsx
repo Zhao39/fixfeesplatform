@@ -7,10 +7,6 @@ export const meta: MetaFunction = () => {
   return [{ title: "Carbon | People" }];
 };
 
-export const config = {
-  runtime: "nodejs",
-};
-
 export async function loader({ request }: LoaderFunctionArgs) {
   await requirePermissions(request, {
     view: "people",

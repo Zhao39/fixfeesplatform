@@ -26,11 +26,8 @@ import { getMode, setMode } from "~/services/mode.server";
 import Background from "~/styles/background.css?url";
 import NProgress from "~/styles/nprogress.css?url";
 import Tailwind from "~/styles/tailwind.css?url";
-
 import { useMode } from "@carbon/remix";
 import { getTheme } from "./services/theme.server";
-
-export const config = { runtime: "edge", regions: ["iad1"] };
 
 export function links() {
   return [

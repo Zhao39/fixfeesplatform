@@ -41,10 +41,6 @@ import {
   updateCompany,
 } from "~/modules/settings";
 
-export const config = {
-  runtime: "nodejs",
-};
-
 export async function loader({ request }: ActionFunctionArgs) {
   const { client, companyId } = await requirePermissions(request, {});
 

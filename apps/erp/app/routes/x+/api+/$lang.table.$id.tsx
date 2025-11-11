@@ -4,10 +4,6 @@ import { TableDocs, useSelectedLang } from "~/modules/api";
 
 const { SUPABASE_URL } = getBrowserEnv();
 
-export const config = {
-  runtime: "nodejs",
-};
-
 export default function Route() {
   const selectedLang = useSelectedLang();
   const { id } = useParams();

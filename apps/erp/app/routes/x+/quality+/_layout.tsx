@@ -17,10 +17,6 @@ export const handle: Handle = {
   module: "quality",
 };
 
-export const config = {
-  runtime: "nodejs",
-};
-
 export default function QualityRoute() {
   const { groups } = useQualitySubmodules();
 

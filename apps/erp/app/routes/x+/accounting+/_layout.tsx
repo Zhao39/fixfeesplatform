@@ -16,10 +16,6 @@ export const meta: MetaFunction = () => {
   return [{ title: "Carbon | Finance" }];
 };
 
-export const config = {
-  runtime: "nodejs",
-};
-
 export const handle: Handle = {
   breadcrumb: "Finance",
   to: path.to.currencies,

@@ -6,10 +6,6 @@ import { getQuoteMethodTrees } from "~/modules/sales";
 import { calculateTotalQuantity, generateBomIds } from "~/utils/bom";
 import { makeDurations } from "~/utils/duration";
 
-export const config = {
-  runtime: "nodejs",
-};
-
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, companyId } = await requirePermissions(request, {
     view: "sales",

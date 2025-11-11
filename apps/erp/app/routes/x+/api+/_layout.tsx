@@ -16,10 +16,6 @@ export const meta: MetaFunction = () => {
   return [{ title: "Carbon | API Docs" }];
 };
 
-export const config = {
-  runtime: "nodejs",
-};
-
 export const handle: Handle = {
   breadcrumb: "API Docs",
   to: path.to.apiIntroduction,

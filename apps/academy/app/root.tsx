@@ -55,8 +55,6 @@ import AvatarMenu from "./components/AvatarMenu";
 import { useOptionalUser } from "./hooks/useUser";
 import { path } from "./utils/path";
 
-export const config = { runtime: "edge", regions: ["iad1"] };
-
 export function links() {
   return [
     { rel: "stylesheet", href: Tailwind },

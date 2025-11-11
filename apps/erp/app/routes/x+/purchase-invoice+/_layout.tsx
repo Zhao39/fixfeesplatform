@@ -13,10 +13,6 @@ export const handle: Handle = {
   module: "purchasing",
 };
 
-export const config = {
-  runtime: "nodejs",
-};
-
 export default function PurchaseInvoiceRoute() {
   return <Outlet />;
 }

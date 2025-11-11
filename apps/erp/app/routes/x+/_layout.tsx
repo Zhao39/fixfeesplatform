@@ -41,10 +41,6 @@ import { ERP_URL, MES_URL, path } from "~/utils/path";
 
 import { getSavedViews } from "~/modules/shared/shared.service";
 
-export const config = {
-  runtime: "nodejs",
-};
-
 export const shouldRevalidate: ShouldRevalidateFunction = ({
   currentUrl,
   defaultShouldRevalidate,

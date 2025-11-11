@@ -9,7 +9,7 @@ import {
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { FunctionRegion } from "@supabase/supabase-js";
 import { json, type ActionFunctionArgs } from "@vercel/remix";
-import { z } from 'zod/v3';
+import { z } from "zod/v3";
 import {
   getIssueTypesList,
   getIssueWorkflowsList,
@@ -18,10 +18,6 @@ import {
 
 import { getNextSequence } from "~/modules/settings/settings.service";
 import { path } from "~/utils/path";
-
-export const config = {
-  runtime: "nodejs",
-};
 
 const slackInteractivePayloadSchema = z.object({
   type: z.string(),

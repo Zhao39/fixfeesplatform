@@ -31,8 +31,6 @@ import NProgress from "~/styles/nprogress.css?url";
 import Tailwind from "~/styles/tailwind.css?url";
 import { getTheme } from "./services/theme.server";
 
-export const config = { runtime: "edge", regions: ["iad1"] };
-
 export const links: LinksFunction = () => {
   return [
     { rel: "stylesheet", href: Tailwind },

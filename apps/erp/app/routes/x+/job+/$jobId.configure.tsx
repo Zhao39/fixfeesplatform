@@ -7,10 +7,6 @@ import { redirect, type ActionFunctionArgs } from "@vercel/remix";
 import { upsertJobMethod } from "~/modules/production";
 import { path, requestReferrer } from "~/utils/path";
 
-export const config = {
-  runtime: "nodejs",
-};
-
 export async function action({ request, params }: ActionFunctionArgs) {
   const { client, companyId, userId } = await requirePermissions(request, {
     update: "production",

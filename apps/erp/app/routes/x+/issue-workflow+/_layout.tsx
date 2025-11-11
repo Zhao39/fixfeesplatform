@@ -7,10 +7,6 @@ export const meta: MetaFunction = () => {
   return [{ title: "Carbon | Issue Workflows" }];
 };
 
-export const config = {
-  runtime: "nodejs",
-};
-
 export const handle: Handle = {
   breadcrumb: "Quality",
   to: path.to.quality,

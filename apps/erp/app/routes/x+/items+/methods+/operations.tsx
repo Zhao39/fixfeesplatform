@@ -16,10 +16,6 @@ export const handle: Handle = {
   to: path.to.methodOperations,
 };
 
-export const config = {
-  runtime: "nodejs",
-};
-
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client, companyId } = await requirePermissions(request, {
     view: "production",

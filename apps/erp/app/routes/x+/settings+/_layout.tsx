@@ -19,10 +19,6 @@ export const handle: Handle = {
   module: "settings",
 };
 
-export const config = {
-  runtime: "nodejs",
-};
-
 export default function SettingsRoute() {
   const permissions = usePermissions();
   const { groups } = useSettingsSubmodules();

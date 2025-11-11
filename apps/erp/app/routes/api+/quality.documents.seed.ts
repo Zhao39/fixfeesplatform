@@ -4,10 +4,6 @@ import { json, type ActionFunctionArgs } from "@vercel/remix";
 import template from "lodash.template";
 import { documents } from "./data/quality";
 
-export const config = {
-  runtime: "nodejs",
-};
-
 function interpolateContent(
   content: any,
   data: { company: { name: string } }
