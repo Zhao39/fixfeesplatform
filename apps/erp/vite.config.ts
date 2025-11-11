@@ -27,10 +27,7 @@ export default defineConfig({
   },
   ssr: {
     noExternal: [
-      "katex",
-      "novel",
       "react-dropzone",
-      "react-tweet",
       "react-icons",
       "react-json-view-lite",
       "react-phone-number-input",

@@ -26,7 +26,6 @@ export default defineConfig({
   },
   ssr: {
     noExternal: [
-      "react-tweet",
       "react-dropzone",
       "react-icons",
       "react-phone-number-input",
