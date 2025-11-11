@@ -8,6 +8,8 @@ declare module "@tanstack/react-table" {
     filter?: ColumnFilterData;
     pluralHeader?: string;
     icon?: ReactElement;
+    renderTotal?: boolean;
+    formatter?: (val: number | bigint | `${number}` | "Infinity" | "-Infinity" | "+Infinity") => string
   }
 }
 

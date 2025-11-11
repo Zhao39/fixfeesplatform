@@ -305,6 +305,8 @@ const SalesOrdersTable = memo(({ data, count }: SalesOrdersTableProps) => {
         cell: (item) => currencyFormatter.format(item.getValue<number>()),
         meta: {
           icon: <LuDollarSign />,
+          formatter: currencyFormatter.format,
+          renderTotal: true,
         },
       },
 

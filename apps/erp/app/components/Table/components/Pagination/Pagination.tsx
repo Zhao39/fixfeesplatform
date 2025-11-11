@@ -34,7 +34,7 @@ export type PaginationProps = {
 };
 
 const Pagination = (props: PaginationProps) => {
-  const { compact, pageSize, setPageSize } = props;
+  const { pageSize, setPageSize } = props;
 
   const pageSizes = [20, 100, 500, 1000];
   if (!pageSizes.includes(pageSize)) {

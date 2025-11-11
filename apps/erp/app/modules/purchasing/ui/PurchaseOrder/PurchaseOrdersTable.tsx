@@ -200,6 +200,8 @@ const PurchaseOrdersTable = memo(
           cell: (item) => currencyFormatter.format(item.getValue<number>()),
           meta: {
             icon: <LuDollarSign />,
+            formatter: currencyFormatter.format,
+            renderTotal: true,
           },
         },
         {

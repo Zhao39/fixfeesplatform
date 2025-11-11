@@ -61,6 +61,10 @@ const SupplierParts = ({
         accessorKey: "unitPrice",
         header: "Unit Price",
         cell: (item) => formatter.format(item.getValue<number>()),
+        meta: {
+          formatter: formatter.format,
+          renderTotal: true,
+        }
       },
       {
         accessorKey: "supplierUnitOfMeasureCode",

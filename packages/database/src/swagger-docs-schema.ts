@@ -9094,6 +9094,12 @@ export default {
             $ref: "#/parameters/rowFilter.gaugeCalibrationRecords.approvedBy",
           },
           {
+            $ref: "#/parameters/rowFilter.gaugeCalibrationRecords.measurementStandard",
+          },
+          {
+            $ref: "#/parameters/rowFilter.gaugeCalibrationRecords.calibrationAttempts",
+          },
+          {
             $ref: "#/parameters/rowFilter.gaugeCalibrationRecords.gaugeReadableId",
           },
           {
@@ -47119,6 +47125,12 @@ export default {
             $ref: "#/parameters/rowFilter.gaugeCalibrationRecord.approvedBy",
           },
           {
+            $ref: "#/parameters/rowFilter.gaugeCalibrationRecord.measurementStandard",
+          },
+          {
+            $ref: "#/parameters/rowFilter.gaugeCalibrationRecord.calibrationAttempts",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -47232,6 +47244,12 @@ export default {
             $ref: "#/parameters/rowFilter.gaugeCalibrationRecord.approvedBy",
           },
           {
+            $ref: "#/parameters/rowFilter.gaugeCalibrationRecord.measurementStandard",
+          },
+          {
+            $ref: "#/parameters/rowFilter.gaugeCalibrationRecord.calibrationAttempts",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -47297,6 +47315,12 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.gaugeCalibrationRecord.approvedBy",
+          },
+          {
+            $ref: "#/parameters/rowFilter.gaugeCalibrationRecord.measurementStandard",
+          },
+          {
+            $ref: "#/parameters/rowFilter.gaugeCalibrationRecord.calibrationAttempts",
           },
           {
             $ref: "#/parameters/body.gaugeCalibrationRecord",
@@ -66180,6 +66204,13 @@ export default {
           format: "text",
           type: "string",
         },
+        measurementStandard: {
+          format: "text",
+          type: "string",
+        },
+        calibrationAttempts: {
+          format: "jsonb",
+        },
         gaugeReadableId: {
           format: "text",
           type: "string",
@@ -84377,6 +84408,13 @@ export default {
           format: "text",
           type: "string",
         },
+        measurementStandard: {
+          format: "text",
+          type: "string",
+        },
+        calibrationAttempts: {
+          format: "jsonb",
+        },
       },
       type: "object",
     },
@@ -93530,6 +93568,18 @@ export default {
     },
     "rowFilter.gaugeCalibrationRecords.approvedBy": {
       name: "approvedBy",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.gaugeCalibrationRecords.measurementStandard": {
+      name: "measurementStandard",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.gaugeCalibrationRecords.calibrationAttempts": {
+      name: "calibrationAttempts",
       required: false,
       in: "query",
       type: "string",
@@ -114056,6 +114106,18 @@ export default {
     },
     "rowFilter.gaugeCalibrationRecord.approvedBy": {
       name: "approvedBy",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.gaugeCalibrationRecord.measurementStandard": {
+      name: "measurementStandard",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.gaugeCalibrationRecord.calibrationAttempts": {
+      name: "calibrationAttempts",
       required: false,
       in: "query",
       type: "string",

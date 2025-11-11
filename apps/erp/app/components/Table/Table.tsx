@@ -29,7 +29,9 @@ import type {
   ColumnDef,
   ColumnOrderState,
   ColumnPinningState,
+  RowData,
   RowSelectionState,
+  Table as ReactTable,
 } from "@tanstack/react-table";
 import {
   flexRender,
@@ -85,6 +87,29 @@ interface TableProps<T extends object> {
   renderActions?: (selectedRows: T[]) => ReactNode;
   renderContextMenu?: (row: T) => JSX.Element | null;
 }
+
+function numeric(v: unknown): number | null {
+  if (v == null) return null;
+  const n = typeof v === "number" ? v : Number(String(v).replace(/,/g, ""));
+  return Number.isFinite(n) ? n : null;
+}
+
+function aggregateForCol<TData extends RowData>(
+  table: ReactTable<TData>,
+  columnId: string,
+): number {
+
+  const rows = table.getFilteredRowModel().rows;
+
+  const values = rows
+    .map((r) => numeric(r.getValue(columnId)))
+    .filter((v): v is number => v !== null);
+
+  if (!values.length) return 0;
+
+  return values.reduce((a, b) => a + b, 0);
+}
+
 
 const Table = <T extends object>({
   data,
@@ -917,6 +942,34 @@ const Table = <T extends object>({
                     />
                   );
                 })}
+                {table.getFooterGroups().map((footerGroup) => (
+                  <Tr key={footerGroup.id} className="h-10">
+                    {footerGroup.headers.map((footer) => {
+                      const total = aggregateForCol(table, footer.column.id);
+                      return (
+                        <Th
+                          key={footer.id}
+                          colSpan={footer.colSpan}
+                          id={`header-${footer.id}`}
+                          className={cn(
+                            "px-4 py-3 whitespace-nowrap",
+                            editMode && "border-r-1 border-border",
+                          )}
+                          style={{
+                            ...getPinnedStyles(footer.column),
+                            width: footer.getSize(),
+                          }}
+                        >
+                          {!footer.isPlaceholder && footer.column.columnDef.meta?.renderTotal &&
+                            <div className="flex justify-start items-center gap-2">
+                              {footer.column.columnDef.meta?.formatter ? footer.column.columnDef.meta.formatter(total) : total}
+                            </div>
+                          }
+                        </Th>
+                      );
+                    })}
+                  </Tr>
+                ))}
               </Tbody>
             </TableBase>
           )}

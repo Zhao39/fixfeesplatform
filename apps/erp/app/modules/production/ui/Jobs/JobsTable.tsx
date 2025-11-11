@@ -252,6 +252,7 @@ const JobsTable = memo(({ data, count, tags }: JobsTableProps) => {
         },
         meta: {
           icon: <LuHash />,
+          renderTotal: true,
         },
       },
 
@@ -436,6 +437,7 @@ const JobsTable = memo(({ data, count, tags }: JobsTableProps) => {
         cell: (item) => item.getValue<number>(),
         meta: {
           icon: <LuHash />,
+          renderTotal: true,
         },
       },
       {
@@ -444,6 +446,7 @@ const JobsTable = memo(({ data, count, tags }: JobsTableProps) => {
         cell: (item) => item.getValue<number>(),
         meta: {
           icon: <LuHash />,
+          renderTotal: true,
         },
       },
       {
@@ -452,6 +455,7 @@ const JobsTable = memo(({ data, count, tags }: JobsTableProps) => {
         cell: (item) => item.getValue<number>(),
         meta: {
           icon: <LuHash />,
+          renderTotal: true,
         },
       },
       {
@@ -460,6 +464,7 @@ const JobsTable = memo(({ data, count, tags }: JobsTableProps) => {
         cell: (item) => item.getValue<number>(),
         meta: {
           icon: <LuHash />,
+          renderTotal: true,
         },
       },
       {
@@ -468,6 +473,7 @@ const JobsTable = memo(({ data, count, tags }: JobsTableProps) => {
         cell: (item) => item.getValue<number>(),
         meta: {
           icon: <LuHash />,
+          renderTotal: true,
         },
       },
       {
@@ -476,6 +482,7 @@ const JobsTable = memo(({ data, count, tags }: JobsTableProps) => {
         cell: (item) => item.getValue<number>(),
         meta: {
           icon: <LuHash />,
+          renderTotal: true,
         },
       },
       {
@@ -484,6 +491,7 @@ const JobsTable = memo(({ data, count, tags }: JobsTableProps) => {
         cell: (item) => item.getValue<number>(),
         meta: {
           icon: <LuHash />,
+          renderTotal: true,
         },
       },
       {
