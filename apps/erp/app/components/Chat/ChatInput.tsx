@@ -3,6 +3,7 @@ import { useChatActions, useChatId, useChatStatus } from "@ai-sdk-tools/store";
 import { cn } from "@carbon/react";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { CommandMenu } from "./CommandMenu";
+import { useChatInterface } from "./hooks/useChatInterface";
 import { useChatStore } from "./lib/store";
 import {
   PromptInput,
@@ -58,6 +59,8 @@ export const ChatInput = forwardRef<RecordButtonRef, ChatInputProps>(
     });
     const isCanvasVisible = !!current;
 
+    const { isChatPage } = useChatInterface();
+
     const {
       input,
       isWebSearch,
@@ -75,6 +78,11 @@ export const ChatInput = forwardRef<RecordButtonRef, ChatInputProps>(
 
     // Animated placeholder effect
     useEffect(() => {
+      if (!isChatPage) {
+        setCurrentPlaceholder("");
+        return;
+      }
+
       if (isWebSearch || isRecording || hasMessages) {
         setCurrentPlaceholder("Ask anything");
         return;
@@ -112,6 +120,7 @@ export const ChatInput = forwardRef<RecordButtonRef, ChatInputProps>(
       isWebSearch,
       isRecording,
       hasMessages,
+      isChatPage,
     ]);
 
     const handleSubmit = (message: ChatInputMessage) => {
