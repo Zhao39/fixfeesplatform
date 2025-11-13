@@ -74,7 +74,7 @@ export const ${agentName}Agent = createAgent({
     // exampleTool: exampleToolTool,
   },
   handoffs: [],
-  maxTurns: 5,
+  maxTurns: 10,
 });
 `;
 
@@ -86,7 +86,9 @@ try {
   console.log(`2. Add tools to the tools object`);
   console.log(`3. Update the instructions and capabilities`);
   console.log(`4. Configure handoffs to other agents if needed`);
-  console.log(`5. Add the agent to the AgentStatus type in app/components/Chat/lib/types.ts`);
+  console.log(
+    `5. Add the agent to the AgentStatus type in app/components/Chat/lib/types.ts`
+  );
   console.log(
     `6. Import and add the agent to handoffs in orchestration-agent.ts if needed`
   );

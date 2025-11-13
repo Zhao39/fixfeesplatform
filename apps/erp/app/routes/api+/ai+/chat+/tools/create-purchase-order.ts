@@ -11,6 +11,7 @@ import {
 
 import { getAppUrl, getCarbonServiceRole } from "@carbon/auth";
 import { LuShoppingCart } from "react-icons/lu";
+import { getEmployeeJob } from "~/modules/people/people.service";
 import { getNextSequence } from "~/modules/settings";
 import { path } from "~/utils/path";
 import type { ChatContext } from "../agents/shared/context";
@@ -50,6 +51,7 @@ export const createPurchaseOrderTool = tool({
       supplier,
       supplierPayment,
       supplierShipping,
+      employeeJob,
       // purchaser
     ] = await Promise.all([
       getNextSequence(
@@ -65,7 +67,7 @@ export const createPurchaseOrderTool = tool({
       getSupplierById(context.client, args.supplierId),
       getSupplierPayment(context.client, args.supplierId),
       getSupplierShipping(context.client, args.supplierId),
-      // getEmployeeJob(client, context.userId, context.companyId),
+      getEmployeeJob(context.client, context.userId, context.companyId),
     ]);
 
     if (!supplierInteraction.data) {
@@ -133,7 +135,7 @@ export const createPurchaseOrderTool = tool({
     }
 
     const purchaseOrderId = order.data?.[0]?.id ?? "";
-    const locationId = null; // TODO
+    const locationId = employeeJob.data?.locationId ?? null;
 
     if (!purchaseOrderId) {
       return {
