@@ -2,7 +2,7 @@ import { fetchAllFromTable, type Database, type Json } from "@carbon/database";
 import type { JSONContent } from "@carbon/react";
 import { parseDate } from "@internationalized/date";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { z } from 'zod/v3';
+import type { z } from "zod/v3";
 import type { GenericQueryFilters } from "~/utils/query";
 import { setGenericQueryFilters } from "~/utils/query";
 import { sanitize } from "~/utils/supabase";
@@ -390,7 +390,9 @@ export async function getIssueActionTasks(
 ) {
   return client
     .from("nonConformanceActionTask")
-    .select("*, ...nonConformanceRequiredAction(name)")
+    .select(
+      "*, ...nonConformanceRequiredAction(name), nonConformanceActionProcess(processId, ...process(name))"
+    )
     .eq("nonConformanceId", id)
     .eq("companyId", companyId);
 }
@@ -974,6 +976,41 @@ export async function insertIssueReviewer(
   return client.from("nonConformanceReviewer").insert(reviewer);
 }
 
+export async function updateIssueActionProcesses(
+  client: SupabaseClient<Database>,
+  args: {
+    actionTaskId: string;
+    processIds: string[];
+    companyId: string;
+    createdBy: string;
+  }
+) {
+  const { actionTaskId, processIds, companyId, createdBy } = args;
+  // Delete all existing process associations
+  const deleteResult = await client
+    .from("nonConformanceActionProcess")
+    .delete()
+    .eq("actionTaskId", actionTaskId);
+
+  if (deleteResult.error) {
+    return deleteResult;
+  }
+
+  // Insert new process associations
+  if (processIds.length > 0) {
+    return client.from("nonConformanceActionProcess").insert(
+      processIds.map((processId) => ({
+        actionTaskId: actionTaskId,
+        processId,
+        companyId: companyId,
+        createdBy: createdBy,
+      }))
+    );
+  } else {
+    return deleteResult;
+  }
+}
+
 export async function updateIssueStatus(
   client: SupabaseClient<Database>,
   update: {
@@ -986,6 +1023,7 @@ export async function updateIssueStatus(
 ) {
   return client.from("nonConformance").update(update).eq("id", update.id);
 }
+
 export async function updateIssueTaskStatus(
   client: SupabaseClient<Database>,
   args: {
