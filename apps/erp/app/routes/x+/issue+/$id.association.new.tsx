@@ -26,7 +26,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     });
   }
 
-  const { type, id, lineId } = validation.data;
+  const { type, id, lineId, rootCause, correctiveAction } = validation.data;
 
   switch (type) {
     case "items":
@@ -94,6 +94,18 @@ export async function action({ request, params }: ActionFunctionArgs) {
           message: "Failed to create issue job operation",
         });
       }
+      const user = await client
+        .from("user")
+        .select("email, firstName, lastName")
+        .eq("id", userId)
+        .single();
+      if (user.error) {
+        console.error(user.error);
+        return json({
+          success: false,
+          message: "Failed to create issue job operation",
+        });
+      }
 
       const jobOperation = await client
         .from("nonConformanceJobOperation")
@@ -102,6 +114,14 @@ export async function action({ request, params }: ActionFunctionArgs) {
           jobId: job.data?.id,
           jobReadableId: job.data?.jobId,
           nonConformanceId,
+          rootCause: rootCause ?? "",
+          correctiveAction: correctiveAction ?? "",
+          updatedByEmail:
+            rootCause || correctiveAction ? user.data?.email : null,
+          updatedByName:
+            rootCause || correctiveAction
+              ? `${user.data?.firstName ?? ""} ${user.data?.lastName ?? ""}`
+              : null,
           createdBy: userId,
           companyId: companyId,
         });

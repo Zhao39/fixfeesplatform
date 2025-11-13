@@ -111,6 +111,8 @@ export const issueAssociationValidator = z
     type: z.enum(nonConformanceAssociationType),
     id: z.string(),
     lineId: zfd.text(z.string().optional()),
+    rootCause: z.string().optional(),
+    correctiveAction: z.string().optional(),
   })
   .refine(
     (data) => {

@@ -1,5 +1,11 @@
 import { useCarbon } from "@carbon/auth";
-import { Combobox, Hidden, Submit, ValidatedForm } from "@carbon/form";
+import {
+  Combobox,
+  Hidden,
+  Submit,
+  TextArea,
+  ValidatedForm,
+} from "@carbon/form";
 import {
   Button,
   cn,
@@ -415,6 +421,8 @@ function NewJobOperationAssociation({ items }: { items?: string[] }) {
         options={jobOperations}
         isLoading={jobOperationsAreLoading}
       />
+      <TextArea name="rootCause" label="Root Cause"></TextArea>
+      <TextArea name="correctiveAction" label="Corrective Action"></TextArea>
     </>
   );
 }
