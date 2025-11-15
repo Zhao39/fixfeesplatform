@@ -125,17 +125,22 @@ function NewAction({ isDisabled }: { isDisabled: boolean }) {
             <ModalTitle>Add Required Actions</ModalTitle>
           </ModalHeader>
           <ModalBody>
-            <VStack spacing={3}>
+            <VStack spacing={2}>
               {routeData?.requiredActions.map((action) => (
-                <HStack key={action.id}>
+                <label
+                  key={action.id}
+                  htmlFor={action.id}
+                  className="flex items-center gap-2 w-full px-4 py-3 rounded-lg hover:bg-accent hover:text-accent-foreground border border-border cursor-pointer"
+                >
                   <Checkbox
+                    id={action.id}
                     isChecked={selectedActionIds.includes(action.id)}
                     onCheckedChange={(checked) =>
                       handleCheckboxChange(action.id, !!checked)
                     }
                   />
-                  <span>{action.name}</span>
-                </HStack>
+                  <span className="text-sm font-medium">{action.name}</span>
+                </label>
               ))}
             </VStack>
           </ModalBody>

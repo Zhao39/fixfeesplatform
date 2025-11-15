@@ -38,6 +38,7 @@ import {
   LuCircleCheck,
   LuCirclePlay,
   LuCog,
+  LuContainer,
   LuLoaderCircle,
 } from "react-icons/lu";
 import { RxCheck } from "react-icons/rx";
@@ -233,13 +234,14 @@ export function TaskItem({
               />
             </>
           )}
-          <Assignee
-            table={getTable(type)}
-            id={task.id}
+          <Button
+            variant="secondary"
             size="sm"
-            value={task.assignee ?? undefined}
-            disabled={isDisabled}
-          />
+            leftIcon={<LuContainer />}
+            isDisabled
+          >
+            Supplier
+          </Button>
         </HStack>
         <HStack>
           <Button

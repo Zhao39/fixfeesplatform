@@ -127,17 +127,22 @@ function NewInvestigation({ isDisabled }: { isDisabled: boolean }) {
             <ModalTitle>Add Investigation Types</ModalTitle>
           </ModalHeader>
           <ModalBody>
-            <VStack spacing={3}>
+            <VStack spacing={2}>
               {routeData?.investigationTypes.map((type) => (
-                <HStack key={type.id}>
+                <label
+                  key={type.id}
+                  htmlFor={type.id}
+                  className="flex items-center gap-2 w-full px-4 py-3 rounded-lg hover:bg-accent hover:text-accent-foreground border border-border cursor-pointer"
+                >
                   <Checkbox
+                    id={type.id}
                     isChecked={selectedTypeIds.includes(type.id)}
                     onCheckedChange={(checked) =>
                       handleCheckboxChange(type.id, !!checked)
                     }
                   />
-                  <span>{type.name}</span>
-                </HStack>
+                  <span className="text-sm font-medium">{type.name}</span>
+                </label>
               ))}
             </VStack>
           </ModalBody>

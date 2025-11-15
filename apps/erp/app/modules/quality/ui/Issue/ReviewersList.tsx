@@ -191,14 +191,18 @@ function NewApprovalRequirement({ isDisabled }: { isDisabled: boolean }) {
             <ModalTitle>Add Approval Requirement</ModalTitle>
           </ModalHeader>
           <ModalBody>
-            <VStack spacing={3}>
-              <HStack>
+            <VStack spacing={2}>
+              <label
+                htmlFor="mrb-checkbox"
+                className="flex items-center gap-2 w-full px-4 py-3 rounded-lg hover:bg-accent hover:text-accent-foreground border border-border cursor-pointer"
+              >
                 <Checkbox
+                  id="mrb-checkbox"
                   isChecked={isMRBChecked}
                   onCheckedChange={(checked) => setIsMRBChecked(!!checked)}
                 />
-                <span>MRB</span>
-              </HStack>
+                <span className="text-sm font-medium">MRB</span>
+              </label>
             </VStack>
           </ModalBody>
           <ModalFooter>
