@@ -707,7 +707,7 @@ export const path = {
     externalCustomerFile: (id: string, path: string) =>
       generatePath(`/share/customer/${id}/${path}`),
     externalQuote: (id: string) => generatePath(`/share/quote/${id}`),
-    externalScar: (id: string) => generatePath(`/share/issue/${id}`),
+    externalScar: (id: string) => generatePath(`/share/scar/${id}`),
     feedback: `${x}/feedback`,
     fiscalYears: `${x}/accounting/years`,
     gauge: (id: string) => generatePath(`${x}/quality/gauges/${id}`),

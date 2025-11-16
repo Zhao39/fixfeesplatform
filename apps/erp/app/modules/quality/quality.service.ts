@@ -1089,8 +1089,8 @@ export async function updateIssueTaskStatus(
     id: string;
     status: "Pending" | "Completed" | "Skipped" | "In Progress";
     type: "investigation" | "action" | "approval" | "review";
-    userId: string;
-    assignee: string | null;
+    userId?: string;
+    assignee?: string | null;
   }
 ) {
   const { id, status, type, userId, assignee } = args;
@@ -1108,6 +1108,32 @@ export async function updateIssueTaskStatus(
   return client
     .from(table)
     .update({ status, updatedBy: userId, assignee: finalAssignee })
+    .eq("id", id)
+    .select("nonConformanceId")
+    .single();
+}
+
+export async function updateIssueTaskContent(
+  client: SupabaseClient<Database>,
+  args: {
+    id: string;
+    type: "investigation" | "action" | "approval" | "review";
+    content: JSONContent;
+  }
+) {
+  const { id, content, type } = args;
+  const table =
+    type === "investigation"
+      ? "nonConformanceInvestigationTask"
+      : type === "action"
+      ? "nonConformanceActionTask"
+      : type === "review"
+      ? "nonConformanceReviewer"
+      : "nonConformanceApprovalTask";
+
+  return client
+    .from(table)
+    .update({ notes: content })
     .eq("id", id)
     .select("nonConformanceId")
     .single();

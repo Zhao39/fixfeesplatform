@@ -8,6 +8,7 @@ import type {
   getIssueActionTasks,
   getIssueApprovalTasks,
   getIssueAssociations,
+  getIssueFromExternalLink,
   getIssueInvestigationTasks,
   getIssueItems,
   getIssueReviewers,
@@ -55,6 +56,10 @@ export type IssueStatus = Database["public"]["Enums"]["nonConformanceStatus"];
 export type Issue = NonNullable<
   Awaited<ReturnType<typeof getIssues>>["data"]
 >[number];
+
+export type ExternalIssue = NonNullable<
+  Awaited<ReturnType<typeof getIssueFromExternalLink>>["data"]
+>;
 
 export type Associations = NonNullable<
   Awaited<ReturnType<typeof getIssueAssociations>>

@@ -56,7 +56,6 @@ import type {
 } from "~/modules/quality";
 import { nonConformanceTaskStatus } from "~/modules/quality";
 import { useSuppliers } from "~/stores";
-import type { Permissions } from "~/types";
 import { getPrivateUrl, path } from "~/utils/path";
 
 export function TaskProgress({
@@ -95,7 +94,7 @@ export function ItemProgress({ items }: { items: IssueItem[] }) {
   );
 }
 
-const statusActions = {
+export const statusActions = {
   Completed: {
     action: "Reopen",
     icon: <LuLoaderCircle />,
@@ -249,7 +248,6 @@ export function TaskItem({
   type: "investigation" | "action" | "review";
   suppliers: { supplierId: string; externalLinkId: string | null }[];
   isDisabled?: boolean;
-  permissionsOverride?: Permissions;
 }) {
   const permissions = usePermissions();
   const disclosure = useDisclosure({
@@ -391,23 +389,15 @@ function useTaskNotes({
   initialContent,
   taskId,
   type,
-  permissionsOverride,
 }: {
   initialContent: JSONContent;
   taskId: string;
   type: "investigation" | "action" | "approval" | "review";
-  permissionsOverride?: Permissions;
 }) {
-  const user = useUser();
   const {
     id: userId,
     company: { id: companyId },
-  } = user || {
-    id: "",
-    company: {
-      id: "",
-    },
-  };
+  } = useUser();
   const { carbon } = useCarbon();
 
   const [content, setContent] = useState(initialContent ?? {});
@@ -471,7 +461,6 @@ function useTaskStatus({
   task,
   type,
   onChange,
-  permissionsOverride,
 }: {
   disabled?: boolean;
   task: {
@@ -481,7 +470,6 @@ function useTaskStatus({
   };
   type: "investigation" | "action" | "approval" | "review";
   onChange?: (status: IssueInvestigationTask["status"]) => void;
-  permissionsOverride?: Permissions;
 }) {
   const submit = useSubmit();
   const permissions = usePermissions();
