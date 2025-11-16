@@ -57,7 +57,7 @@ import { path } from "~/utils/path";
 import { ErrorMessage } from "./quote.$id";
 
 export const meta = () => {
-  return [{ title: "Digital Quote" }];
+  return [{ title: "SCAR Report" }];
 };
 
 enum IssueState {
