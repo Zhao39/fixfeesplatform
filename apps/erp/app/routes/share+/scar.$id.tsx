@@ -381,27 +381,6 @@ function useTaskNotes({
   const fetcher = useFetcher<typeof action>();
   const [content, setContent] = useState(initialContent ?? {});
 
-  const onUploadImage = async (file: File) => {
-    // const fileType = file.name.split(".").pop();
-    // const fileName = `${companyId}/parts/${nanoid()}.${fileType}`;
-
-    // const result = await carbon?.storage.from("private").upload(fileName, file);
-
-    // if (result?.error) {
-    //   toast.error("Failed to upload image");
-    //   throw new Error(result.error.message);
-    // }
-
-    // if (!result?.data) {
-    //   throw new Error("Failed to upload image");
-    // }
-
-    // return getPrivateUrl(result.data.path);
-    return "";
-  };
-
-  // const table = getTable(type);
-
   const onUpdateContent = useDebounce(
     async (content: JSONContent) => {
       fetcher.submit(
@@ -417,7 +396,6 @@ function useTaskNotes({
     content,
     setContent,
     onUpdateContent,
-    onUploadImage,
   };
 }
 
@@ -440,7 +418,7 @@ export function TaskItem({
     type,
   });
   const statusAction = statusActions[currentStatus];
-  const { content, setContent, onUpdateContent, onUploadImage } = useTaskNotes({
+  const { content, setContent, onUpdateContent } = useTaskNotes({
     initialContent: (task.notes ?? {}) as JSONContent,
     taskId: task.id!,
     type,
@@ -476,7 +454,7 @@ export function TaskItem({
             <Editor
               className="w-full min-h-[100px]"
               initialValue={content}
-              onUpload={onUploadImage}
+              disableFileUpload
               onChange={(value) => {
                 setContent(value);
                 onUpdateContent(value);

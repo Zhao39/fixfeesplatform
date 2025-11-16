@@ -34,6 +34,7 @@ interface EditorProp {
   initialValue?: JSONContent;
   onChange: (value: JSONContent) => void;
   onUpload?: (file: File) => Promise<string>;
+  disableFileUpload?: boolean;
 }
 
 const defaultOnUpload = async (file: File) => {
@@ -48,6 +49,7 @@ const Editor = ({
   initialValue,
   onChange,
   onUpload,
+  disableFileUpload,
 }: EditorProp) => {
   const [openNode, setOpenNode] = useState(false);
   const [openColor, setOpenColor] = useState(false);
@@ -58,6 +60,10 @@ const Editor = ({
     return createImageUpload({
       onUpload: uploadHandler,
       validateFn: (file) => {
+        if (disableFileUpload) {
+          toast.error("File upload is not supported for external scars");
+          return false;
+        }
         if (!file.type.includes("image/")) {
           toast.error(`File type ${file.type} not supported.`);
           return false;
@@ -68,7 +74,7 @@ const Editor = ({
         return true;
       },
     });
-  }, [onUpload]);
+  }, [onUpload, disableFileUpload]);
 
   const suggestionItems = useMemo(
     () => getSuggestionItems(uploadFn),
