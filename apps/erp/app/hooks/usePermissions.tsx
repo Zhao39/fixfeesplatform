@@ -1,41 +1,26 @@
 import { useRouteData } from "@carbon/remix";
 import { useCallback } from "react";
 import type { Permission } from "~/modules/users";
-import type { Role, Permissions } from "~/types";
+import type { Role } from "~/types";
 import { path } from "~/utils/path";
 import { useUser } from "./useUser";
 
-export function usePermissions(permissionsOverride?: Permissions) {
+export function usePermissions() {
   const data = useRouteData<{
     permissions: Record<string, Permission>;
     role: "employee" | "supplier" | "customer";
   }>(path.to.authenticatedRoot);
 
-  const user = useUser(!!permissionsOverride);
-
-  if (!user && !permissionsOverride) {
-    throw new Error(
-      "usePermissions must be used within an authenticated route. If you are seeing this error, you are likely in development and have changed the session variables. Try deleting the cookies."
-    );
-  }
-
   const {
     id: userId,
     company: { id: companyId, ownerId },
-  } = user ?? {
-    id: "",
-    company: {
-      id: "",
-    },
-  };
+  } = useUser();
 
-  if (!permissionsOverride) {
-    if (!isPermissions(data?.permissions) || !isRole(data?.role)) {
-      // TODO: force logout -- the likely cause is development changes
-      throw new Error(
-        "usePermissions must be used within an authenticated route. If you are seeing this error, you are likely in development and have changed the session variables. Try deleting the cookies."
-      );
-    }
+  if (!isPermissions(data?.permissions) || !isRole(data?.role)) {
+    // TODO: force logout -- the likely cause is development changes
+    throw new Error(
+      "usePermissions must be used within an authenticated route. If you are seeing this error, you are likely in development and have changed the session variables. Try deleting the cookies."
+    );
   }
 
   const can = useCallback(
@@ -66,14 +51,12 @@ export function usePermissions(permissionsOverride?: Permissions) {
     return ownerId === userId;
   }, [ownerId, userId]);
 
-  return (
-    permissionsOverride ?? {
-      can,
-      has,
-      is,
-      isOwner,
-    }
-  );
+  return {
+    can,
+    has,
+    is,
+    isOwner,
+  };
 }
 
 function isPermissions(value: unknown): value is Record<string, Permission> {

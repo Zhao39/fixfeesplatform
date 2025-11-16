@@ -13,18 +13,13 @@ import type { LoaderFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
 import { getSupplier } from "~/modules/purchasing";
 import {
-  getIssue,
   getIssueActionTasks,
+  getIssueFromExternalLink,
   getIssueInvestigationTasks,
 } from "~/modules/quality";
 import { getCompany } from "~/modules/settings";
 import { getExternalLink } from "~/modules/shared";
 import { ErrorMessage } from "./quote.$id";
-import {
-  ActionTasksList,
-  InvestigationTasksList,
-} from "~/modules/quality/ui/Issue";
-import { useSupplierPermissions } from "~/hooks/useSupplierPermissions";
 
 export const meta = () => {
   return [{ title: "Digital Quote" }];
@@ -71,11 +66,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
   const serviceRole = getCarbonServiceRole();
   const externalLink = await getExternalLink(serviceRole, id);
-  if (
-    !externalLink.data ||
-    !externalLink.data?.supplierId ||
-    !externalLink.data?.documentId
-  ) {
+  if (!externalLink.data || !externalLink.data?.documentId) {
     return json({
       state: IssueState.NotFound,
       data: null,
@@ -83,7 +74,10 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     });
   }
 
-  const issue = await getIssue(serviceRole, externalLink.data.documentId);
+  const issue = await getIssueFromExternalLink(
+    serviceRole,
+    externalLink.data.documentId
+  );
   if (!issue.data) {
     return json({
       state: IssueState.NotFound,
@@ -95,25 +89,25 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   const [company, supplier, actionTasks, investigationTasks] =
     await Promise.all([
       getCompany(serviceRole, externalLink.data.companyId),
-      getSupplier(serviceRole, externalLink.data.supplierId),
+      getSupplier(serviceRole, issue.data.supplierId),
       getIssueActionTasks(
         serviceRole,
-        externalLink.data.documentId,
+        issue.data.nonConformanceId,
         externalLink.data.companyId,
-        externalLink.data.supplierId
+        issue.data.supplierId
       ),
       getIssueInvestigationTasks(
         serviceRole,
-        externalLink.data.documentId,
+        issue.data.nonConformanceId,
         externalLink.data.companyId,
-        externalLink.data.supplierId
+        issue.data.supplierId
       ),
     ]);
 
   return json({
     state: IssueState.Valid,
     data: {
-      issue: issue.data,
+      issue: issue.data.nonConformance,
       company: company.data,
       supplier: supplier.data,
       actionTasks: actionTasks.data,
@@ -160,7 +154,6 @@ const Issue = ({
   strings: (typeof translations)["en"];
 }) => {
   const { company, issue, actionTasks, investigationTasks, supplier } = data;
-  const permissions = useSupplierPermissions();
 
   const { id } = useParams();
   if (!id) throw new Error("Could not find external quote id");
@@ -181,20 +174,12 @@ const Issue = ({
         <Header company={company} issue={issue} supplier={supplier} />
         <CardContent className="gap-4">
           {investigationTasks?.length ? (
-            <InvestigationTasksList
-              tasks={investigationTasks ?? []}
-              suppliers={[]}
-              isDisabled={issue?.status === "Closed"}
-              permissionsOverride={permissions}
-            />
+            // TODO: implement reduced Editor that saves to local storage
+            <pre>{JSON.stringify(investigationTasks, null, 2)}</pre>
           ) : null}
           {actionTasks?.length ? (
-            <ActionTasksList
-              tasks={actionTasks ?? []}
-              suppliers={[]}
-              isDisabled={issue?.status === "Closed"}
-              permissionsOverride={permissions}
-            />
+            // TODO: implement reduced Editor that saves to local storage
+            <pre>{JSON.stringify(actionTasks, null, 2)}</pre>
           ) : null}
         </CardContent>
       </Card>

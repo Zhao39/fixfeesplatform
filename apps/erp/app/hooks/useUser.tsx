@@ -34,10 +34,7 @@ type User = PersonalData & {
   defaults: Defaults;
 };
 
-export function useUser(): User;
-export function useUser(skipError: boolean): User | null;
-
-export function useUser(skipError?: boolean) {
+export function useUser(): User {
   const data = useRouteData<{
     company: unknown;
     user: unknown;
@@ -60,10 +57,6 @@ export function useUser(skipError?: boolean) {
       groups: data.groups,
       defaults: data.defaults ?? { locationId: null },
     };
-  }
-
-  if (skipError) {
-    return null;
   }
 
   // TODO: force logout -- the likely cause is development changes

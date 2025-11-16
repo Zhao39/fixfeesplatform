@@ -189,6 +189,17 @@ export async function deleteQualityDocumentStep(
     .eq("companyId", companyId);
 }
 
+export async function getIssueFromExternalLink(
+  client: SupabaseClient<Database>,
+  id: string
+) {
+  return client
+    .from("nonConformanceSupplier")
+    .select("*, nonConformance(*)")
+    .eq("id", id)
+    .single();
+}
+
 export async function getGauge(
   client: SupabaseClient<Database>,
   gaugeId: string
@@ -377,16 +388,16 @@ export async function getIssueInvestigationTasks(
   companyId: string,
   supplierId?: string
 ) {
-  const ret = client
+  let query = client
     .from("nonConformanceInvestigationTask")
     .select("*, ...nonConformanceInvestigationType(name)")
     .eq("nonConformanceId", id)
     .eq("companyId", companyId);
 
-  if (!supplierId) {
-    return ret;
+  if (supplierId) {
+    query = query.eq("supplierId", supplierId);
   }
-  return ret.eq("supplierId", supplierId);
+  return query;
 }
 
 export async function getIssueActionTasks(
@@ -395,7 +406,7 @@ export async function getIssueActionTasks(
   companyId: string,
   supplierId?: string
 ) {
-  const ret = client
+  let query = client
     .from("nonConformanceActionTask")
     .select(
       "*, ...nonConformanceRequiredAction(name), nonConformanceActionProcess(processId, ...process(name))"
@@ -403,10 +414,10 @@ export async function getIssueActionTasks(
     .eq("nonConformanceId", id)
     .eq("companyId", companyId);
 
-  if (!supplierId) {
-    return ret;
+  if (supplierId) {
+    query = query.eq("supplierId", supplierId);
   }
-  return ret.eq("supplierId", supplierId);
+  return query;
 }
 
 export async function getIssueApprovalTasks(
