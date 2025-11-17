@@ -91,8 +91,8 @@ serve(async (req: Request) => {
           } else {
             record[key] = enumMapping["Default"];
           }
-        } else if (value && value !== "N/A" && row[value]) {
-          record[key] = row[value];
+        } else if (value && value !== "N/A") {
+          record[key] = row[value] || "";
         }
       }
       return record;
@@ -375,13 +375,13 @@ serve(async (req: Request) => {
           const materialValidator = itemValidator.extend({
             materialSubstanceId: z.string().optional(),
             materialFormId: z.string().optional(),
-            finish: z.string().optional(),
-            dimensions: z.string().optional(),
-            grade: z.string().optional(),
+            finishId: z.string().optional(),
+            dimensionId: z.string().optional(),
+            gradeId: z.string().optional(),
           });
 
           for (const record of mappedRecords) {
-            let item = itemValidator.safeParse(record);
+            const item = itemValidator.safeParse(record);
 
             if (!item.success) {
               console.error(item.error.message);
@@ -407,6 +407,10 @@ serve(async (req: Request) => {
                   ...rest,
                   revision: rest.revision ?? "0",
                   active: rest.active?.toLowerCase() !== "false" ?? true,
+                  unitOfMeasureCode: rest.unitOfMeasureCode || undefined,
+                  description: rest.description || undefined,
+                  replenishmentSystem: rest.replenishmentSystem || undefined,
+                  defaultMethodType: rest.defaultMethodType || undefined,
                   updatedAt: new Date().toISOString(),
                   updatedBy: userId,
                   externalId: {
@@ -421,11 +425,12 @@ serve(async (req: Request) => {
                   materialUpdates.push({
                     id: material.data.readableId,
                     data: {
-                      materialSubstanceId: material.data.materialSubstanceId,
-                      materialFormId: material.data.materialFormId,
-                      dimensions: material.data.dimensions,
-                      grade: material.data.grade,
-                      finish: material.data.finish,
+                      materialSubstanceId:
+                        material.data.materialSubstanceId || undefined,
+                      materialFormId: material.data.materialFormId || undefined,
+                      dimensionId: material.data.dimensionId || undefined,
+                      gradeId: material.data.gradeId || undefined,
+                      finishId: material.data.finishId || undefined,
                       companyId,
                       updatedAt: new Date().toISOString(),
                       updatedBy: userId,
@@ -439,6 +444,9 @@ serve(async (req: Request) => {
                 ...rest,
                 replenishmentSystem: rest.replenishmentSystem ?? "Buy",
                 active: rest.active?.toLowerCase() !== "false" ?? true,
+                unitOfMeasureCode: rest.unitOfMeasureCode || undefined,
+                description: rest.description || undefined,
+                defaultMethodType: rest.defaultMethodType || undefined,
                 type: capitalize(table) as
                   | "Part"
                   | "Service"
@@ -500,17 +508,19 @@ serve(async (req: Request) => {
               .execute();
 
             if (["part", "fixture", "tool", "consumable"].includes(table)) {
-              const specificInserts: Database["public"]["Tables"]["part"]["Insert"][] =
-                insertedItems.map((item) => ({
-                  id: item.readableId,
-                  approved: true,
-                  externalId: item.externalId,
-                  companyId,
-                  createdAt: new Date().toISOString(),
-                  createdBy: userId,
-                }));
+              const specificInserts = insertedItems.map((item) => ({
+                id: item.readableId,
+                approved: true,
+                externalId: item.externalId,
+                companyId,
+                createdAt: new Date().toISOString(),
+                createdBy: userId,
+              }));
 
-              await trx.insertInto(table).values(specificInserts).execute();
+              await trx
+                .insertInto(table)
+                .values(specificInserts as unknown as never)
+                .execute();
             }
 
             if (
@@ -524,11 +534,12 @@ serve(async (req: Request) => {
                 if (materialData) {
                   acc.push({
                     id: item.readableId,
-                    materialSubstanceId: materialData.materialSubstanceId,
-                    materialFormId: materialData.materialFormId,
-                    dimensions: materialData.dimensions,
-                    grade: materialData.grade,
-                    finish: materialData.finish,
+                    materialSubstanceId:
+                      materialData.materialSubstanceId || undefined,
+                    materialFormId: materialData.materialFormId || undefined,
+                    dimensionId: materialData.dimensionId || undefined,
+                    gradeId: materialData.gradeId || undefined,
+                    finishId: materialData.finishId || undefined,
                     externalId: item.externalId,
                     companyId,
                     createdAt: new Date().toISOString(),
@@ -857,7 +868,6 @@ serve(async (req: Request) => {
       }
       case "methodMaterial": {
         throw new Error("Not implemented");
-        break;
       }
       default: {
         throw new Error(`Invalid table: ${table}`);
