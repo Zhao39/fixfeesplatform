@@ -10,4 +10,3 @@ export * from "./IssuesTable";
 export * from "./IssueStatus";
 export * from "./IssueTask";
 export * from "./ReviewersList";
-export * from "./useIssueNavigation";

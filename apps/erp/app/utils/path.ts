@@ -743,9 +743,8 @@ export const path = {
     issue: (id: string) => generatePath(`${x}/issue/${id}`),
     issueDetails: (id: string) => generatePath(`${x}/issue/${id}/details`),
     issueStatus: (id: string) => generatePath(`${x}/issue/${id}/status`),
-    issueInvestigations: (id: string) =>
-      generatePath(`${x}/issue/${id}/investigations`),
-    issueActions: (id: string) => generatePath(`${x}/issue/${id}/actions`),
+
+    issueActions: (id: string) => generatePath(`${x}/issue/${id}`),
     issueDispositions: (id: string) =>
       generatePath(`${x}/issue/${id}/dispositions`),
     issueTaskStatus: (id: string) =>
