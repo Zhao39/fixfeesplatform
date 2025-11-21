@@ -121,6 +121,10 @@ const IssuePDF = ({
               value: nonConformance.status,
             },
             {
+              label: "Initiated By",
+              value: assignees[nonConformance.createdBy] || "Unknown",
+            },
+            {
               label: "Started",
               value: nonConformance.openDate,
             },
@@ -367,19 +371,23 @@ const IssuePDF = ({
                                   width: 12,
                                   height: 12,
                                   border: "1px solid #000",
-                                  display: "flex",
-                                  alignItems: "center",
-                                  justifyContent: "center",
                                   marginTop: 2,
+                                  position: "relative",
                                 }}
                               >
-                                {record.booleanValue && (
-                                  <Text
-                                    style={{ fontSize: 10, fontWeight: "bold" }}
-                                  >
-                                    ✓
-                                  </Text>
-                                )}
+                                <Text
+                                  style={{
+                                    position: "absolute",
+                                    fontSize: 12,
+                                    fontWeight: "bold",
+                                    lineHeight: 1,
+                                    textAlign: "center",
+                                    top: -3,
+                                    left: -2,
+                                  }}
+                                >
+                                  {record.booleanValue ? "✓" : ""}
+                                </Text>
                               </View>
                               <View style={tw("flex flex-col")}>
                                 <Text style={tw("font-medium")}>
@@ -412,7 +420,7 @@ const IssuePDF = ({
         {reviewers.length > 0 && (
           <View style={tw("mb-5")}>
             <Text style={[tw("font-bold mb-2"), { letterSpacing: -0.5 }]}>
-              Reviewers
+              MRB
             </Text>
             {reviewers.map((reviewer) => (
               <View key={reviewer.id} style={tw("flex flex-col gap-2 py-2")}>

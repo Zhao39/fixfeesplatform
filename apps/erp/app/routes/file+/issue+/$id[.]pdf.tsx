@@ -82,6 +82,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   // Build assignee and record creator lookup map
   const uniqueUsers = new Set<string>();
+
+  // Add non-conformance creator
+  if (nonConformance.data?.createdBy) {
+    uniqueUsers.add(nonConformance.data.createdBy);
+  }
+
   actionTasks.data?.forEach((task) => {
     if (task.assignee) uniqueUsers.add(task.assignee);
   });
