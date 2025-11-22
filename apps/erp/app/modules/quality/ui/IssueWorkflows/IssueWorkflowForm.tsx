@@ -174,9 +174,8 @@ const IssueWorkflowForm = ({
               <span className="hidden md:inline">Issue</span> Workflow
             </Heading>
             <p className="text-sm text-muted-foreground">
-              Issue workflows are used as a starting point for issues. Each
-              issue workflow uses a workflow to create the issue. A single
-              workflow can be used in multiple workflows.
+              Issue workflows defined the preset values for an issue. For
+              example, you can have an 8D workflow or a containment workflow.
             </p>
           </VStack>
         </HStack>

@@ -1,4 +1,3 @@
-import { useArtifacts } from "@ai-sdk-tools/artifacts/client";
 import {
   useChatActions,
   useChatId,
@@ -49,10 +48,10 @@ export const ChatInput = forwardRef<RecordButtonRef, ChatInputProps>(
       "suggestions"
     );
 
-    const { current } = useArtifacts({
-      exclude: ["chat-title", "followup-questions"],
-    });
-    const isCanvasVisible = !!current;
+    // const { } = useArtifacts({
+    //   exclude: ["chat-title", "followup-questions"],
+    // });
+    // const isCanvasVisible = false;
 
     const {
       input,
@@ -99,8 +98,8 @@ export const ChatInput = forwardRef<RecordButtonRef, ChatInputProps>(
         <div
           className={cn(
             "transition-all duration-300 ease-in-out",
-            hasMessages ? "absolute bottom-6 left-0 z-20" : "",
-            isCanvasVisible ? "right-[603px]" : "right-0"
+            hasMessages ? "absolute bottom-6 left-0 z-20" : ""
+            // isCanvasVisible ? "right-[603px]" : "right-0"
           )}
         >
           <div className="mx-auto w-full pt-2 relative">

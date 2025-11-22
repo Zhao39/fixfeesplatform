@@ -51,7 +51,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       path.to.processes,
       await flash(
         request,
-        error(deleteProcessError, "Failed to delete process")
+        error(deleteProcessError, deleteProcessError.details)
       )
     );
   }

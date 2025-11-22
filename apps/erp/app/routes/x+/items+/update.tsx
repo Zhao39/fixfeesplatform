@@ -18,6 +18,8 @@ export async function action({ request }: ActionFunctionArgs) {
     return json({ error: { message: "Invalid form data" }, data: null });
   }
 
+  console.log({ field, value });
+
   switch (field) {
     case "defaultMethodType":
     case "itemTrackingType":
@@ -83,16 +85,17 @@ export async function action({ request }: ActionFunctionArgs) {
           const materialSubstance = await client
             .from("materialSubstance")
             .select("name, code")
-            .eq("code", value)
+            .eq("id", value)
             .single();
           name = materialSubstance.data?.name ?? "";
           code = materialSubstance.data?.code ?? "";
+          console.log({ materialSubstance });
         }
         if (field === "materialFormId") {
           const materialForm = await client
             .from("materialForm")
             .select("name, code")
-            .eq("code", value)
+            .eq("id", value)
             .single();
           name = materialForm.data?.name ?? "";
           code = materialForm.data?.code ?? "";
@@ -101,7 +104,7 @@ export async function action({ request }: ActionFunctionArgs) {
           const materialType = await client
             .from("materialType")
             .select("name, code")
-            .eq("code", value)
+            .eq("id", value)
             .single();
           name = materialType.data?.name ?? "";
           code = materialType.data?.code ?? "";
@@ -133,6 +136,8 @@ export async function action({ request }: ActionFunctionArgs) {
         }
 
         for await (const id of items as string[]) {
+          console.log(`Processing item ID: ${id}`);
+
           const item = await client
             .from("item")
             .select("readableId")
@@ -140,9 +145,12 @@ export async function action({ request }: ActionFunctionArgs) {
             .eq("companyId", companyId)
             .single();
 
+          console.log(`Item query result:`, item);
           const readableId = item.data?.readableId;
 
           if (readableId) {
+            console.log(`Found readableId: ${readableId}`);
+
             const [materialDetails, relatedItems] = await Promise.all([
               client
                 .rpc("get_material_naming_details", { readable_id: readableId })
@@ -154,8 +162,13 @@ export async function action({ request }: ActionFunctionArgs) {
                 .eq("companyId", companyId),
             ]);
 
+            console.log(`Material details result:`, materialDetails);
+            console.log(`Related items result:`, relatedItems);
+
             if (materialDetails.data) {
               const namingDetails = materialDetails.data;
+              console.log(`Original naming details:`, namingDetails);
+
               if (field === "materialSubstanceId") {
                 namingDetails.substance = name;
                 namingDetails.substanceCode = code;
@@ -178,19 +191,30 @@ export async function action({ request }: ActionFunctionArgs) {
                 namingDetails.dimensions = name;
               }
 
+              console.log(`Updated naming details:`, namingDetails);
+
               const newMaterialId = getMaterialId(namingDetails);
               const newDescription = getMaterialDescription(namingDetails);
 
+              console.log(`New material ID: ${newMaterialId}`);
+              console.log(`New description: ${newDescription}`);
+
               const relatedItemIds = relatedItems.data?.map((item) => item.id);
+              console.log(`Related item IDs:`, relatedItemIds);
 
               if (relatedItemIds) {
+                console.log(`Updating ${relatedItemIds.length} related items`);
+
                 const itemUpdateResult = await client
                   .from("item")
                   .update({ readableId: newMaterialId, name: newDescription })
                   .in("id", relatedItemIds as string[])
                   .eq("companyId", companyId);
 
+                console.log(`Item update result:`, itemUpdateResult);
+
                 if (itemUpdateResult.error) {
+                  console.error(`Item update error:`, itemUpdateResult.error);
                   return json(itemUpdateResult);
                 }
               }
@@ -216,19 +240,31 @@ export async function action({ request }: ActionFunctionArgs) {
                 updateData.materialTypeId = null;
               }
 
+              console.log(`Material update data:`, updateData);
+              console.log(`Updating material with readableId: ${readableId}`);
+
               const update = await client
                 .from("material")
                 .update(updateData)
                 .eq("id", readableId)
                 .eq("companyId", companyId);
 
+              console.log(`Material update result:`, update);
+
               if (update.error) {
+                console.error(`Material update error:`, update.error);
                 return json({
                   error: { message: update.error.message },
                   data: null,
                 });
               }
+            } else {
+              console.log(
+                `No material details found for readableId: ${readableId}`
+              );
             }
+          } else {
+            console.log(`No readableId found for item ID: ${id}`);
           }
         }
 

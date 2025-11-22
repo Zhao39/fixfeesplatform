@@ -27,7 +27,7 @@ export async function action({ request, params }: LoaderFunctionArgs) {
       path.to.workCenters,
       await flash(
         request,
-        error(deactivateWorkCenter.error, "Failed to deactivate work center")
+        error(deactivateWorkCenter.error, deactivateWorkCenter.error.details)
       )
     );
   }

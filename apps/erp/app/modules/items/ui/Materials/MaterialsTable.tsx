@@ -77,6 +77,8 @@ const MaterialsTable = memo(({ data, tags, count }: MaterialsTableProps) => {
   const navigate = useNavigate();
   const permissions = usePermissions();
 
+  console.log(data);
+
   const deleteItemModal = useDisclosure();
   const [selectedItem, setSelectedItem] = useState<Material | null>(null);
 
@@ -129,7 +131,9 @@ const MaterialsTable = memo(({ data, tags, count }: MaterialsTableProps) => {
       {
         accessorKey: "materialSubstanceId",
         header: "Substance",
-        cell: (item) => <Enumerable value={item.getValue<string>()} />,
+        cell: ({ row }) => (
+          <Enumerable value={row.original.materialSubstance} />
+        ),
         meta: {
           filter: {
             type: "fetcher",
@@ -146,7 +150,7 @@ const MaterialsTable = memo(({ data, tags, count }: MaterialsTableProps) => {
       {
         accessorKey: "materialFormId",
         header: "Shape",
-        cell: (item) => <Enumerable value={item.getValue<string>()} />,
+        cell: ({ row }) => <Enumerable value={row.original.materialForm} />,
         meta: {
           filter: {
             type: "fetcher",
