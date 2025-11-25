@@ -11,7 +11,7 @@ import {
 import { useFetcher, useParams } from "@remix-run/react";
 import { useCallback, useEffect } from "react";
 import { LuCopy, LuKeySquare, LuLink } from "react-icons/lu";
-import { z } from 'zod/v3';
+import { z } from "zod/v3";
 import Assignee, { useOptimisticAssignment } from "~/components/Assignee";
 import { usePermissions, useRouteData } from "~/hooks";
 import type { action } from "~/routes/x+/items+/update";
@@ -20,6 +20,8 @@ import { copyToClipboard } from "~/utils/string";
 import { qualityDocumentStatus } from "../../quality.models";
 import type { QualityDocument } from "../../types";
 import QualityDocumentStatus from "./QualityDocumentStatus";
+import { Tags } from "~/components/Form";
+import { useTags } from "~/hooks/useTags";
 
 const QualityDocumentProperties = () => {
   const { id } = useParams();
@@ -27,6 +29,7 @@ const QualityDocumentProperties = () => {
 
   const routeData = useRouteData<{
     document: QualityDocument;
+    tags: Array<{ name: string }>;
   }>(path.to.qualityDocument(id));
 
   const fetcher = useFetcher<typeof action>();
@@ -37,13 +40,13 @@ const QualityDocumentProperties = () => {
   }, [fetcher.data]);
 
   const onUpdate = useCallback(
-    (field: "name" | "status", value: string | null) => {
+    (field: "name" | "status" | "tags", value: string | null) => {
       const formData = new FormData();
 
       formData.append("ids", id);
       formData.append("field", field);
-
       formData.append("value", value?.toString() ?? "");
+
       fetcher.submit(formData, {
         method: "post",
         action: path.to.bulkUpdateQualityDocument,
@@ -63,6 +66,10 @@ const QualityDocumentProperties = () => {
       : routeData?.document?.assignee;
 
   const permissions = usePermissions();
+
+  const { onUpdateTags } = useTags({ id, table: "qualityDocument" });
+
+  const availableTags = routeData?.tags ?? [];
 
   return (
     <VStack
@@ -170,6 +177,23 @@ const QualityDocumentProperties = () => {
             }}
           />
         </span>
+      </ValidatedForm>
+      <ValidatedForm
+        defaultValues={{
+          tags: routeData?.document?.tags ?? [],
+        }}
+        validator={z.object({
+          tags: z.array(z.string()).optional(),
+        })}
+        className="w-full"
+      >
+        <Tags
+          label="Tags"
+          name="tags"
+          table="qualityDocument"
+          availableTags={availableTags}
+          onChange={(value) => onUpdateTags(value)}
+        />
       </ValidatedForm>
     </VStack>
   );

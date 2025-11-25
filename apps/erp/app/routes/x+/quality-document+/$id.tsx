@@ -19,6 +19,7 @@ import {
 import QualityDocumentExplorer from "~/modules/quality/ui/Documents/QualityDocumentExplorer";
 import QualityDocumentHeader from "~/modules/quality/ui/Documents/QualityDocumentHeader";
 import QualityDocumentProperties from "~/modules/quality/ui/Documents/QualityDocumentProperties";
+import { getTagsList } from "~/modules/shared";
 import type { action } from "~/routes/x+/quality-document+/update";
 import type { Handle } from "~/utils/handle";
 import { getPrivateUrl, path } from "~/utils/path";
@@ -38,7 +39,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const { id } = params;
   if (!id) throw new Error("Could not find id");
 
-  const [document] = await Promise.all([getQualityDocument(client, id)]);
+  const [document, tags] = await Promise.all([
+    getQualityDocument(client, id),
+    getTagsList(client, companyId, "qualityDocument"),
+  ]);
 
   if (document.error) {
     throw redirect(
@@ -50,6 +54,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   return defer({
     document: document.data,
     versions: getQualityDocumentVersions(client, document.data, companyId),
+    tags: tags.data ?? [],
   });
 }
 

@@ -29,6 +29,17 @@ export async function action({ request }: ActionFunctionArgs) {
           })
           .in("id", ids as string[])
       );
+    case "tags":
+      return json(
+        await client
+          .from("qualityDocument")
+          .update({
+            [field]: formData.getAll("value") as string[],
+            updatedBy: userId,
+            updatedAt: new Date().toISOString(),
+          })
+          .in("id", ids as string[])
+      );
 
     default:
       return json({ error: { message: "Invalid field" }, data: null });
