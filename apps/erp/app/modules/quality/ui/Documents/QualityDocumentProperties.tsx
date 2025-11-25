@@ -40,7 +40,7 @@ const QualityDocumentProperties = () => {
   }, [fetcher.data]);
 
   const onUpdate = useCallback(
-    (field: "name" | "status" | "tags", value: string | null) => {
+    (field: "name" | "status", value: string | null) => {
       const formData = new FormData();
 
       formData.append("ids", id);
