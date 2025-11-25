@@ -41815,14 +41815,14 @@ export type Database = {
           },
           {
             foreignKeyName: "partner_id_fkey"
-            columns: ["id"]
+            columns: ["supplierLocationId"]
             isOneToOne: false
             referencedRelation: "supplierLocation"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "partner_id_fkey"
-            columns: ["supplierLocationId"]
+            columns: ["id"]
             isOneToOne: false
             referencedRelation: "supplierLocation"
             referencedColumns: ["id"]
@@ -45705,14 +45705,14 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["invoiceCountryCode"]
+            columns: ["customerCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
           },
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["customerCountryCode"]
+            columns: ["invoiceCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
@@ -46248,14 +46248,14 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["customerCountryCode"]
+            columns: ["paymentCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
           },
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["paymentCountryCode"]
+            columns: ["customerCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
@@ -49898,6 +49898,35 @@ export type Database = {
           unitOfMeasureCode: string
           updatedAt: string
           updatedBy: string
+        }[]
+      }
+      get_unscheduled_jobs: {
+        Args: { location_id: string }
+        Returns: {
+          assignee: string
+          completedDate: string
+          completedOperationCount: number
+          customerId: string
+          customerName: string
+          deadlineType: Database["public"]["Enums"]["deadlineType"]
+          dueDate: string
+          hasConflict: boolean
+          id: string
+          itemDescription: string
+          itemId: string
+          itemReadableId: string
+          jobId: string
+          operationCount: number
+          priority: number
+          quantity: number
+          quantityComplete: number
+          quantityShipped: number
+          salesOrderId: string
+          salesOrderLineId: string
+          salesOrderReadableId: string
+          status: Database["public"]["Enums"]["jobStatus"]
+          tags: string[]
+          thumbnailPath: string
         }[]
       }
       groups_for_user: { Args: { uid: string }; Returns: string[] }
