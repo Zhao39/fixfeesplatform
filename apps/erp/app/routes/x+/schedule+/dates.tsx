@@ -43,7 +43,7 @@ import { useLocations } from "~/components/Form/Location";
 import { ActiveFilters, Filter } from "~/components/Table/components/Filter";
 import type { ColumnFilter } from "~/components/Table/components/Filter/types";
 import { useUrlParams } from "~/hooks";
-import { getJobsByDateRange } from "~/modules/production";
+import { getJobsByDateRange, getUnscheduledJobs } from "~/modules/production";
 import type { Column, JobItem } from "~/modules/production/ui/Schedule";
 import type { DisplaySettings } from "~/modules/production/ui/Schedule/Kanban";
 import { DateKanban } from "~/modules/production/ui/Schedule/Kanban/DateKanban";
@@ -151,18 +151,21 @@ export async function loader({ request }: LoaderFunctionArgs) {
     endDate = lastWeekEnd.toString();
   }
 
-  const [jobs, tags] = await Promise.all([
+  const [jobs, unscheduledJobs, tags] = await Promise.all([
     getJobsByDateRange(client, locationId ?? "", startDate, endDate),
+    getUnscheduledJobs(client, locationId ?? ""),
     getTagsList(client, companyId, "job"),
   ]);
 
-  console.log(jobs);
-
   // Filter jobs
   let filteredJobs = jobs.data ?? [];
+  let filteredUnscheduledJobs = unscheduledJobs.data ?? [];
 
   if (selectedSalesOrderIds.length) {
     filteredJobs = filteredJobs.filter((job) =>
+      selectedSalesOrderIds.includes(job.salesOrderId)
+    );
+    filteredUnscheduledJobs = filteredUnscheduledJobs.filter((job) =>
       selectedSalesOrderIds.includes(job.salesOrderId)
     );
   }
@@ -174,16 +177,32 @@ export async function loader({ request }: LoaderFunctionArgs) {
       }
       return false;
     });
+    filteredUnscheduledJobs = filteredUnscheduledJobs.filter((job) => {
+      if (job.tags) {
+        return selectedTags.some((tag) => job.tags.includes(tag));
+      }
+      return false;
+    });
   }
 
   if (selectedAssignee.length) {
     filteredJobs = filteredJobs.filter((job) =>
       selectedAssignee.includes(job.assignee)
     );
+    filteredUnscheduledJobs = filteredUnscheduledJobs.filter((job) =>
+      selectedAssignee.includes(job.assignee)
+    );
   }
 
   if (search) {
     filteredJobs = filteredJobs.filter(
+      (job) =>
+        job.jobId.toLowerCase().includes(search.toLowerCase()) ||
+        job.itemReadableId?.toLowerCase().includes(search.toLowerCase()) ||
+        job.customerName?.toLowerCase().includes(search.toLowerCase()) ||
+        job.itemDescription?.toLowerCase().includes(search.toLowerCase())
+    );
+    filteredUnscheduledJobs = filteredUnscheduledJobs.filter(
       (job) =>
         job.jobId.toLowerCase().includes(search.toLowerCase()) ||
         job.itemReadableId?.toLowerCase().includes(search.toLowerCase()) ||
@@ -197,6 +216,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
   // Create columns based on view type
   let columns: Column[] = [];
   const todayDate = toCalendarDate(now(timezone));
+
+  // Always add Unscheduled column first
+  columns.push({
+    id: "unscheduled",
+    title: "Unscheduled",
+    type: [],
+    active: false,
+  });
 
   if (view === "week") {
     const weekStart = startOfWeek(currentDate, "en-GB"); // en-GB uses Monday as first day
@@ -278,96 +305,138 @@ export async function loader({ request }: LoaderFunctionArgs) {
     });
   }
 
-  return json({
-    columns,
-    items: (filteredJobs.map((job) => {
-      // Determine which column this item belongs to
-      let columnId = view === "week" ? "next-week" : "next-month";
+  // Map scheduled jobs to items
+  const scheduledItems = filteredJobs.map((job) => {
+    // Determine which column this item belongs to
+    let columnId = view === "week" ? "next-week" : "next-month";
 
-      if (job.dueDate) {
-        const dueDate = parseDate(job.dueDate.split("T")[0]);
+    if (job.dueDate) {
+      const dueDate = parseDate(job.dueDate.split("T")[0]);
 
-        if (view === "week") {
-          const weekStart = startOfWeek(currentDate, "en-GB"); // en-GB uses Monday as first day
-          const weekEnd = endOfWeek(currentDate, "en-GB");
+      if (view === "week") {
+        const weekStart = startOfWeek(currentDate, "en-GB"); // en-GB uses Monday as first day
+        const weekEnd = endOfWeek(currentDate, "en-GB");
 
-          if (
-            dueDate.compare(weekStart) >= 0 &&
-            dueDate.compare(weekEnd) <= 0
-          ) {
-            columnId = dueDate.toString();
-          }
-        } else {
-          const monthStart = startOfMonth(currentDate);
-          const monthEnd = endOfMonth(currentDate);
+        if (
+          dueDate.compare(weekStart) >= 0 &&
+          dueDate.compare(weekEnd) <= 0
+        ) {
+          columnId = dueDate.toString();
+        }
+      } else {
+        const monthStart = startOfMonth(currentDate);
+        const monthEnd = endOfMonth(currentDate);
 
-          if (
-            dueDate.compare(monthStart) >= 0 &&
-            dueDate.compare(monthEnd) <= 0
-          ) {
-            // Find which week column this date belongs to
-            // Weeks start on the 1st, 8th, 15th, 22nd, etc.
-            let weekStart = monthStart;
-            while (weekStart.compare(monthEnd) <= 0) {
-              const weekEnd = weekStart.add({ days: 6 });
-              if (
-                dueDate.compare(weekStart) >= 0 &&
-                dueDate.compare(weekEnd) <= 0
-              ) {
-                columnId = weekStart.toString();
-                break;
-              }
-              weekStart = weekStart.add({ weeks: 1 });
+        if (
+          dueDate.compare(monthStart) >= 0 &&
+          dueDate.compare(monthEnd) <= 0
+        ) {
+          // Find which week column this date belongs to
+          // Weeks start on the 1st, 8th, 15th, 22nd, etc.
+          let weekStart = monthStart;
+          while (weekStart.compare(monthEnd) <= 0) {
+            const weekEnd = weekStart.add({ days: 6 });
+            if (
+              dueDate.compare(weekStart) >= 0 &&
+              dueDate.compare(weekEnd) <= 0
+            ) {
+              columnId = weekStart.toString();
+              break;
             }
+            weekStart = weekStart.add({ weeks: 1 });
           }
         }
       }
+    }
 
-      return {
-        id: job.id,
-        columnId,
-        columnType: "", // Jobs don't have a specific process type
-        priority: job.priority ?? 0,
-        title: job.jobId,
-        link: path.to.job(job.id),
-        subtitle: job.itemReadableId ?? "",
-        assignee: job.assignee,
-        tags: job.tags,
-        description: job.itemDescription,
-        dueDate: job.dueDate,
-        completedDate: job.completedDate,
-        duration: 0, // Jobs don't have duration, only operations do
-        jobId: job.id,
-        jobReadableId: job.jobId,
-        itemReadableId: job.itemReadableId ?? "",
-        itemDescription: job.itemDescription,
-        progress: job.completedOperationCount / Math.max(job.operationCount, 1),
-        deadlineType: job.deadlineType,
-        customerId: job.customerId,
-        quantity: job.quantity,
-        quantityCompleted: job.quantityComplete,
-        quantityScrapped: 0,
-        salesOrderReadableId: job.salesOrderReadableId,
-        salesOrderId: job.salesOrderId,
-        salesOrderLineId: job.salesOrderLineId,
-        status: job.status,
-        setupDuration: 0,
-        laborDuration: 0,
-        machineDuration: 0,
-        thumbnailPath: job.thumbnailPath,
-        hasConflict: job.hasConflict,
-      };
-    }) ?? []) satisfies JobItem[],
+    return {
+      id: job.id,
+      columnId,
+      columnType: "", // Jobs don't have a specific process type
+      priority: job.priority ?? 0,
+      title: job.jobId,
+      link: path.to.job(job.id),
+      subtitle: job.itemReadableId ?? "",
+      assignee: job.assignee,
+      tags: job.tags,
+      description: job.itemDescription,
+      dueDate: job.dueDate,
+      completedDate: job.completedDate,
+      duration: 0, // Jobs don't have duration, only operations do
+      jobId: job.id,
+      jobReadableId: job.jobId,
+      itemReadableId: job.itemReadableId ?? "",
+      itemDescription: job.itemDescription,
+      progress: job.completedOperationCount / Math.max(job.operationCount, 1),
+      deadlineType: job.deadlineType,
+      customerId: job.customerId,
+      quantity: job.quantity,
+      quantityCompleted: job.quantityComplete,
+      quantityScrapped: 0,
+      salesOrderReadableId: job.salesOrderReadableId,
+      salesOrderId: job.salesOrderId,
+      salesOrderLineId: job.salesOrderLineId,
+      status: job.status,
+      setupDuration: 0,
+      laborDuration: 0,
+      machineDuration: 0,
+      thumbnailPath: job.thumbnailPath,
+      hasConflict: job.hasConflict,
+    };
+  });
+
+  // Map unscheduled jobs to items
+  const unscheduledItems = filteredUnscheduledJobs.map((job) => ({
+    id: job.id,
+    columnId: "unscheduled",
+    columnType: "",
+    priority: job.priority ?? 0,
+    title: job.jobId,
+    link: path.to.job(job.id),
+    subtitle: job.itemReadableId ?? "",
+    assignee: job.assignee,
+    tags: job.tags,
+    description: job.itemDescription,
+    dueDate: job.dueDate,
+    completedDate: job.completedDate,
+    duration: 0,
+    jobId: job.id,
+    jobReadableId: job.jobId,
+    itemReadableId: job.itemReadableId ?? "",
+    itemDescription: job.itemDescription,
+    progress: job.completedOperationCount / Math.max(job.operationCount, 1),
+    deadlineType: job.deadlineType,
+    customerId: job.customerId,
+    quantity: job.quantity,
+    quantityCompleted: job.quantityComplete,
+    quantityScrapped: 0,
+    salesOrderReadableId: job.salesOrderReadableId,
+    salesOrderId: job.salesOrderId,
+    salesOrderLineId: job.salesOrderLineId,
+    status: job.status,
+    setupDuration: 0,
+    laborDuration: 0,
+    machineDuration: 0,
+    thumbnailPath: job.thumbnailPath,
+    hasConflict: job.hasConflict,
+  }));
+
+  // Combine all jobs for sales orders and tags
+  const allJobs = [...filteredJobs, ...filteredUnscheduledJobs];
+
+  return json({
+    columns,
+    items: [...unscheduledItems, ...scheduledItems] satisfies JobItem[],
     salesOrders: Object.entries(
-      filteredJobs?.reduce((acc, job) => {
+      allJobs.reduce((acc, job) => {
         if (job.salesOrderId) {
           acc[job.salesOrderId] = job.salesOrderReadableId;
         }
         return acc;
-      }, {} as Record<string, string>) ?? {}
+      }, {} as Record<string, string>)
     ).map(([id, readableId]) => ({ id, readableId })),
     availableTags: Object.entries(
-      filteredJobs.reduce((acc, job) => {
+      allJobs.reduce((acc, job) => {
         if (job.tags) {
           job.tags.forEach((tag: string) => (acc[tag] = true));
         }

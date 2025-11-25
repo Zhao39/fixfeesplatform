@@ -592,6 +592,15 @@ export async function getJobsByDateRange(
   });
 }
 
+export async function getUnscheduledJobs(
+  client: SupabaseClient<Database>,
+  locationId: string
+) {
+  return client.rpc("get_unscheduled_jobs", {
+    location_id: locationId,
+  });
+}
+
 export async function getActiveProductionEvents(
   client: SupabaseClient<Database>,
   companyId: string

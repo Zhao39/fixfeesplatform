@@ -303,7 +303,7 @@ function KanbanSchedule() {
     workCenters,
     availableTags,
   } = useLoaderData<typeof loader>();
-  const [items, setItems] = useState(initialItems);
+  const [items, setItems] = useState<Item[]>(initialItems);
   const [displaySettings, setDisplaySettings] = useLocalStorage(
     DISPLAY_SETTINGS_KEY,
     defaultDisplaySettings
