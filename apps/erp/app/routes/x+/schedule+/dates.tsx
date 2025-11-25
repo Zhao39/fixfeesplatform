@@ -8,6 +8,11 @@ import {
   Button,
   ClientOnly,
   Combobox,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
   HStack,
   IconButton,
   Popover,
@@ -469,6 +474,102 @@ function DateKanbanSchedule() {
   }, [salesOrders, people, availableTags]);
 
   const parsedDate = parseDate(currentDate);
+  const timezone = getLocalTimeZone();
+  const todayDate = toCalendarDate(now(timezone));
+
+  const getDateSpanLabel = useCallback(
+    (date: typeof parsedDate, viewType: ViewType) => {
+      const tz = getLocalTimeZone();
+      if (viewType === "week") {
+        const weekStart = startOfWeek(date, "en-GB");
+        const weekEnd = endOfWeek(date, "en-GB");
+        return `${weekStart.toDate(tz).toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+        })} - ${weekEnd.toDate(tz).toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+        })}`;
+      } else {
+        return date.toDate(tz).toLocaleDateString("en-US", {
+          month: "short",
+          year: "numeric",
+        });
+      }
+    },
+    []
+  );
+
+  const getSpanStartDate = useCallback(
+    (date: typeof parsedDate, viewType: ViewType) => {
+      if (viewType === "week") {
+        return startOfWeek(date, "en-GB");
+      } else {
+        return startOfMonth(date);
+      }
+    },
+    []
+  );
+
+  const currentDateSpanLabel = useMemo(
+    () => getDateSpanLabel(parsedDate, view),
+    [parsedDate, view, getDateSpanLabel]
+  );
+
+  const dateSpanOptions = useMemo(() => {
+    const spans: { date: string; label: string }[] = [];
+    const todaySpanStart = getSpanStartDate(todayDate, view);
+
+    // Add up to 4 previous spans (only if they are not in the past)
+    for (let i = 4; i >= 1; i--) {
+      const prevDate =
+        view === "week"
+          ? parsedDate.add({ weeks: -i })
+          : parsedDate.add({ months: -i });
+      const prevSpanStart = getSpanStartDate(prevDate, view);
+
+      // Only add if the span start is not before today's span start
+      if (prevSpanStart.compare(todaySpanStart) >= 0) {
+        spans.push({
+          date: prevDate.toString(),
+          label: getDateSpanLabel(prevDate, view),
+        });
+      }
+    }
+
+    // Add current span
+    spans.push({
+      date: parsedDate.toString(),
+      label: currentDateSpanLabel,
+    });
+
+    // Add next 4 spans
+    for (let i = 1; i <= 4; i++) {
+      const nextDate =
+        view === "week"
+          ? parsedDate.add({ weeks: i })
+          : parsedDate.add({ months: i });
+      spans.push({
+        date: nextDate.toString(),
+        label: getDateSpanLabel(nextDate, view),
+      });
+    }
+
+    return spans;
+  }, [
+    parsedDate,
+    view,
+    todayDate,
+    getDateSpanLabel,
+    getSpanStartDate,
+    currentDateSpanLabel,
+  ]);
+
+  const navigateToDate = (dateStr: string) => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("date", dateStr);
+    navigate(`?${newParams.toString()}`);
+  };
 
   const navigateDate = (direction: "prev" | "next") => {
     const newDate =
@@ -507,7 +608,25 @@ function DateKanbanSchedule() {
               icon={<LuChevronLeft />}
               aria-label="Previous Date"
             />
-
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="secondary" className="min-w-[140px]">
+                  {currentDateSpanLabel}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuRadioGroup
+                  value={parsedDate.toString()}
+                  onValueChange={navigateToDate}
+                >
+                  {dateSpanOptions.map((span) => (
+                    <DropdownMenuRadioItem key={span.date} value={span.date}>
+                      {span.label}
+                    </DropdownMenuRadioItem>
+                  ))}
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <IconButton
               variant="secondary"
               onClick={() => navigateDate("next")}
