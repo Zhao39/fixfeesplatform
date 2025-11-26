@@ -1,3 +1,4 @@
+DROP VIEW IF EXISTS "materials";
 CREATE OR REPLACE VIEW "materials" WITH (SECURITY_INVOKER=true) AS 
 WITH latest_items AS (
   SELECT DISTINCT ON (i."readableId", i."companyId") 
