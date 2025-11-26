@@ -5,6 +5,7 @@ import type { LoaderFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
 import { getQualityDocuments } from "~/modules/quality";
 import QualityDocumentsTable from "~/modules/quality/ui/Documents/QualityDocumentsTable";
+import { getTagsList } from "~/modules/shared";
 import type { Handle } from "~/utils/handle";
 import { path } from "~/utils/path";
 import { getGenericQueryFilters } from "~/utils/query";
@@ -26,26 +27,34 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const { limit, offset, sorts, filters } =
     getGenericQueryFilters(searchParams);
 
-  const qualityDocuments = await getQualityDocuments(client, companyId, {
-    search,
-    limit,
-    offset,
-    sorts,
-    filters,
-  });
+  const [qualityDocuments, tags] = await Promise.all([
+    getQualityDocuments(client, companyId, {
+      search,
+      limit,
+      offset,
+      sorts,
+      filters,
+    }),
+    getTagsList(client, companyId, "qualityDocument"),
+  ]);
 
   return json({
     qualityDocuments: qualityDocuments.data ?? [],
     count: qualityDocuments.count ?? 0,
+    tags: tags.data ?? [],
   });
 }
 
 export default function QualityDocumentsRoute() {
-  const { qualityDocuments, count } = useLoaderData<typeof loader>();
+  const { qualityDocuments, count, tags } = useLoaderData<typeof loader>();
 
   return (
     <VStack spacing={0} className="h-full">
-      <QualityDocumentsTable data={qualityDocuments} count={count} />
+      <QualityDocumentsTable
+        data={qualityDocuments}
+        count={count}
+        tags={tags}
+      />
       <Outlet />
     </VStack>
   );

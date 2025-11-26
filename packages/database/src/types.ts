@@ -23125,6 +23125,7 @@ export type Database = {
           id: string
           name: string
           status: Database["public"]["Enums"]["qualityDocumentStatus"]
+          tags: string[] | null
           updatedAt: string | null
           updatedBy: string | null
           version: number
@@ -23139,6 +23140,7 @@ export type Database = {
           id?: string
           name: string
           status?: Database["public"]["Enums"]["qualityDocumentStatus"]
+          tags?: string[] | null
           updatedAt?: string | null
           updatedBy?: string | null
           version?: number
@@ -23153,6 +23155,7 @@ export type Database = {
           id?: string
           name?: string
           status?: Database["public"]["Enums"]["qualityDocumentStatus"]
+          tags?: string[] | null
           updatedAt?: string | null
           updatedBy?: string | null
           version?: number
@@ -43761,6 +43764,7 @@ export type Database = {
           id: string | null
           name: string | null
           status: Database["public"]["Enums"]["qualityDocumentStatus"] | null
+          tags: string[] | null
           version: number | null
           versions: Json | null
         }

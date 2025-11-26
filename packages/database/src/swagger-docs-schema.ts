@@ -22105,6 +22105,9 @@ export default {
             $ref: "#/parameters/rowFilter.qualityDocument.updatedBy",
           },
           {
+            $ref: "#/parameters/rowFilter.qualityDocument.tags",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -22200,6 +22203,9 @@ export default {
             $ref: "#/parameters/rowFilter.qualityDocument.updatedBy",
           },
           {
+            $ref: "#/parameters/rowFilter.qualityDocument.tags",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -22247,6 +22253,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.qualityDocument.updatedBy",
+          },
+          {
+            $ref: "#/parameters/rowFilter.qualityDocument.tags",
           },
           {
             $ref: "#/parameters/body.qualityDocument",
@@ -40529,6 +40538,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.qualityDocuments.versions",
+          },
+          {
+            $ref: "#/parameters/rowFilter.qualityDocuments.tags",
           },
           {
             $ref: "#/parameters/select",
@@ -70524,6 +70536,13 @@ export default {
           format: "text",
           type: "string",
         },
+        tags: {
+          format: "text[]",
+          items: {
+            type: "string",
+          },
+          type: "array",
+        },
       },
       type: "object",
     },
@@ -79267,6 +79286,13 @@ export default {
         },
         versions: {
           format: "jsonb",
+        },
+        tags: {
+          format: "text[]",
+          items: {
+            type: "string",
+          },
+          type: "array",
         },
       },
       type: "object",
@@ -98638,6 +98664,12 @@ export default {
       in: "query",
       type: "string",
     },
+    "rowFilter.qualityDocument.tags": {
+      name: "tags",
+      required: false,
+      in: "query",
+      type: "string",
+    },
     "body.postingGroupSales": {
       name: "postingGroupSales",
       description: "postingGroupSales",
@@ -108633,6 +108665,12 @@ export default {
     },
     "rowFilter.qualityDocuments.versions": {
       name: "versions",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.qualityDocuments.tags": {
+      name: "tags",
       required: false,
       in: "query",
       type: "string",

@@ -4,6 +4,7 @@ import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
+  HStack,
   MenuIcon,
   MenuItem,
   toast,
@@ -19,6 +20,7 @@ import {
   LuFolderUp,
   LuGitPullRequest,
   LuPencil,
+  LuTag,
   LuTrash,
   LuUser,
 } from "react-icons/lu";
@@ -34,10 +36,11 @@ import QualityDocumentStatus from "./QualityDocumentStatus";
 type QualityDocumentsTableProps = {
   data: QualityDocuments[];
   count: number;
+  tags: Array<{ name: string }>;
 };
 
 const QualityDocumentsTable = memo(
-  ({ data, count }: QualityDocumentsTableProps) => {
+  ({ data, count, tags }: QualityDocumentsTableProps) => {
     const navigate = useNavigate();
     const permissions = usePermissions();
     const seedFetcher = useFetcher<{ success: boolean; message: string }>();
@@ -96,6 +99,30 @@ const QualityDocumentsTable = memo(
           },
         },
         {
+          accessorKey: "tags",
+          header: "Tags",
+          cell: ({ row }) => (
+            <HStack spacing={0} className="gap-1">
+              {row.original.tags?.map((tag) => (
+                <Badge key={tag} variant="secondary">
+                  {tag}
+                </Badge>
+              ))}
+            </HStack>
+          ),
+          meta: {
+            filter: {
+              type: "static",
+              options: tags.map((tag) => ({
+                value: tag.name,
+                label: <Badge variant="secondary">{tag.name}</Badge>,
+              })),
+              isArray: true,
+            },
+            icon: <LuTag />,
+          },
+        },
+        {
           id: "versions",
           header: "Versions",
           cell: ({ row }) => {
@@ -145,7 +172,7 @@ const QualityDocumentsTable = memo(
         },
       ];
       return [...defaultColumns];
-    }, []);
+    }, [tags]);
 
     const renderContextMenu = useCallback(
       (row: QualityDocuments) => {
