@@ -193,6 +193,7 @@ const QualityDocumentProperties = () => {
           table="qualityDocument"
           availableTags={availableTags}
           onChange={(value) => onUpdateTags(value)}
+          inline
         />
       </ValidatedForm>
     </VStack>
