@@ -1,4 +1,5 @@
 import { ExchangeRates } from "./exchange-rates/config";
+import { Linear } from "./linear/config";
 import { Onshape } from "./onshape/config";
 import { PaperlessParts } from "./paperless-parts/config";
 import { QuickBooks } from "./quickbooks/config";
@@ -23,6 +24,7 @@ export const integrations = [
   Sage,
   Xero,
   Zapier,
+  Linear,
 ];
 
 export { Onshape, Logo as OnshapeLogo } from "./onshape/config";

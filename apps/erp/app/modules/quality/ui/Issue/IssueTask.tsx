@@ -46,9 +46,10 @@ import {
 import { RxCheck } from "react-icons/rx";
 import { Assignee } from "~/components";
 import { useProcesses } from "~/components/Form/Process";
-import { IssueTaskStatusIcon } from "~/components/Icons";
+import { IssueTaskStatusIcon, LinearIcon } from "~/components/Icons";
 import SupplierAvatar from "~/components/SupplierAvatar";
 import { usePermissions, useRouteData, useUser } from "~/hooks";
+import { useIntegrations } from "~/hooks/useIntegrations";
 import type {
   Issue,
   IssueActionTask,
@@ -59,6 +60,7 @@ import type {
 import { nonConformanceTaskStatus } from "~/modules/quality";
 import { useSuppliers } from "~/stores";
 import { getPrivateUrl, path } from "~/utils/path";
+import { LinearIssueDialog } from "./Linear/IssueDialog";
 
 export function TaskProgress({
   tasks,
@@ -257,10 +259,14 @@ export function TaskItem({
   showDragHandle?: boolean;
   dragControls?: DragControls;
 }) {
+  const integrations = useIntegrations();
   const permissions = usePermissions();
   const disclosure = useDisclosure({
     defaultIsOpen: true,
   });
+
+  const linearDisclosure = useDisclosure({});
+
   const { currentStatus, onOperationStatusChange } = useTaskStatus({
     task,
     type,
@@ -304,6 +310,17 @@ export function TaskItem({
               <LuGripVertical size={16} />
             </button>
           )}
+
+          {integrations.has("linear") && (
+            <IconButton
+              icon={<LinearIcon />}
+              variant="ghost"
+              onClick={linearDisclosure.onToggle}
+              aria-label="Open task details"
+              className={cn(linearDisclosure.isOpen && "rotate-90")}
+            />
+          )}
+
           <IconButton
             icon={<LuChevronRight />}
             variant="ghost"
@@ -353,6 +370,9 @@ export function TaskItem({
           )}
         </div>
       )}
+
+      {linearDisclosure.isOpen && <LinearIssueDialog {...linearDisclosure} />}
+
       <div className="bg-muted/30 border-t px-4 py-2 flex justify-between w-full">
         <HStack>
           <IssueTaskStatus
