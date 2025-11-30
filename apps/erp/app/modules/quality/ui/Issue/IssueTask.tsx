@@ -371,7 +371,7 @@ export function TaskItem({
         </div>
       )}
 
-      {linearDisclosure.isOpen && <LinearIssueDialog {...linearDisclosure} />}
+      {linearDisclosure.isOpen && <LinearIssueDialog {...linearDisclosure} task={task} />}
 
       <div className="bg-muted/30 border-t px-4 py-2 flex justify-between w-full">
         <HStack>

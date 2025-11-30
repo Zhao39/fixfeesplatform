@@ -14,17 +14,17 @@ export { Resend } from "./resend/config";
 export type { IntegrationConfig } from "./types";
 
 export const integrations = [
-  ExchangeRates,
-  PaperlessParts,
-  Onshape,
-  QuickBooks,
-  Resend,
-  // Radan,
-  Slack,
-  Sage,
-  Xero,
-  Zapier,
-  Linear,
+	ExchangeRates,
+	PaperlessParts,
+	Onshape,
+	Linear,
+	QuickBooks,
+	Resend,
+	// Radan,
+	Slack,
+	Sage,
+	Xero,
+	Zapier,
 ];
 
 export { Onshape, Logo as OnshapeLogo } from "./onshape/config";
