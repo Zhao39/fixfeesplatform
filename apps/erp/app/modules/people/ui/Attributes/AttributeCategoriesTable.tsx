@@ -131,7 +131,7 @@ const AttributeCategoriesTable = memo(
               }}
             >
               <MenuIcon icon={<LuPencil />} />
-              Edit Attribute Category
+              Edit Category
             </MenuItem>
             <MenuItem
               destructive
@@ -156,11 +156,11 @@ const AttributeCategoriesTable = memo(
           count={count ?? 0}
           primaryAction={
             permissions.can("update", "people") && (
-              <New label="Attribute Category" to={`new?${params.toString()}`} />
+              <New label="Category" to={`new?${params.toString()}`} />
             )
           }
           renderContextMenu={renderContextMenu}
-          title="Attribute Categories"
+          title="Attributes"
         />
         {selectedCategory && selectedCategory.id && (
           <ConfirmDelete
