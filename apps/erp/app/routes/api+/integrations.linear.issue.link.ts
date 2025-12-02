@@ -1,6 +1,7 @@
+import { getAppUrl } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { LinearClient, linkActionToLinearIssue } from "@carbon/ee/linear";
-import type { ActionFunction, LoaderFunction } from "@vercel/remix";
+import { type ActionFunction, type LoaderFunction, json } from "@vercel/remix";
 
 const linear = new LinearClient();
 
@@ -15,9 +16,18 @@ export const action: ActionFunction = async ({ request }) => {
 		return { success: false, message: "Missing required fields" };
 	}
 
-	await linkActionToLinearIssue(client, companyId, actionId as string, issueId as string);
+	const linked = await linkActionToLinearIssue(client, companyId, actionId as string, issueId as string);
+	const nonConformanceId = linked.data?.[0].nonConformanceId;
 
-	return { success: true, message: "Linked successfully" };
+	const url = getAppUrl() + `/x/issue/${nonConformanceId}/details`;
+
+	await linear.createAttachmentLink(companyId, {
+		issueId: issueId as string,
+		url,
+		title: "Linked Carbon Issue",
+	});
+
+	return json({ success: true, message: "Linked successfully" });
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -37,9 +47,10 @@ export const loader: LoaderFunction = async ({ request }) => {
 	const externalId = result.data?.externalId as { linear?: string } | null;
 	const issues = await linear.listIssues(companyId, query);
 
-	if (!externalId?.linear)  return { issues, linked: null };
+	if (!externalId?.linear) return { issues, linked: null };
 
 	const linked = await linear.getIssueById(companyId, externalId.linear);
 
-	return { issues, linked };
+
+	return json({ issues, linked });
 };

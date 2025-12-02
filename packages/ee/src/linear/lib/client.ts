@@ -20,8 +20,10 @@ export interface LinearTeam {
 	name: string;
 }
 
-interface LinearUser {
+export interface LinearUser {
+	id: string;
 	email: string;
+	name: string;
 }
 export class LinearClient {
 	instance: AxiosInstance;
@@ -51,65 +53,6 @@ export class LinearClient {
 		return {
 			Authorization: metadata.apiKey,
 		};
-	}
-
-	async createIssue(
-		companyId: string,
-		data: {
-			title: string;
-			description?: string;
-			teamId: string;
-			assigneeId?: string;
-		}
-	) {
-		const query = `
-         mutation CreateIssue($teamId: String!, $title: String!, $description: String, $assigneeId: String) {
-            issueCreate(input: {
-              teamId: $teamId
-              title: $title
-              description: $description
-              assigneeId: $assigneeId
-            }) {
-              success
-              issue {
-                id
-                identifier
-                title
-                description
-                state {
-                  name
-                  type
-                }
-                assignee {
-                  name
-                  email
-                  avatarUrl
-                }
-                dueDate
-                cycle {
-                  endsAt
-                }
-              }
-            }
-          }
-      `;
-
-		const variables = {
-			...data,
-			assigneeId: data.assigneeId || null,
-		};
-
-		// TODO: Type responses and improve error checking
-		const response = await this.instance.request({
-			method: "POST",
-			headers: await this.getAuthHeaders(companyId),
-			data: {
-				query,
-				variables,
-			},
-		});
-
-		return response.data;
 	}
 
 	async listTeams(companyId: string) {
@@ -158,5 +101,59 @@ export class LinearClient {
 		});
 
 		return response.data.data.issues.nodes.at(0) || null;
+	}
+
+	async createAttachmentLink(companyId: string, input: { issueId: string; title: string; url: string }) {
+		const query = `mutation AttachmentCreate($input: AttachmentCreateInput!) { attachmentCreate(input: $input) { attachment { id } } }`;
+
+		const response = await this.instance.request<{ data: { issues: { nodes: LinearIssue[] } } }>({
+			method: "POST",
+			headers: await this.getAuthHeaders(companyId),
+			data: {
+				query,
+				variables: {
+					input,
+				},
+			},
+		});
+
+		return response.data;
+	}
+
+	async listTeamMembers(companyId: string, teamId: string) {
+		const query = `query Team($teamId: String!) { team(id: $teamId) { members { nodes { id email name } } } }`;
+
+		const response = await this.instance.request<{ data: { team: { members: { nodes: LinearUser[] } } } }>({
+			method: "POST",
+			headers: await this.getAuthHeaders(companyId),
+			data: {
+				query,
+				variables: { teamId },
+			},
+		});
+
+		return response.data.data.team.members.nodes.map((el) => el);
+	}
+
+	async createIssue(
+		companyId: string,
+		data: { title: string; description?: string; teamId: string; assigneeId?: string }
+	) {
+		const query = `mutation IssueCreate($input: IssueCreateInput!) { issueCreate(input: $input) { issue { id assignee { id } } } }`;
+
+		const response = await this.instance.request<{
+			data: { issueCreate: { issue: { id: string; assignee: { id: string } | null } } };
+		}>({
+			method: "POST",
+			headers: await this.getAuthHeaders(companyId),
+			data: {
+				query,
+				variables: {
+					input: data,
+				},
+			},
+		});
+
+		return response.data.data.issueCreate.issue;
 	}
 }

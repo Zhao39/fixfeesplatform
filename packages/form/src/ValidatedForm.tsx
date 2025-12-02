@@ -387,6 +387,7 @@ export function ValidatedForm<
     }
 
     const result = await zodValidator(validator).validate(formData);
+    console.log(result.error)
     if (result.error) {
       setFieldErrors(result.error.fieldErrors);
       endSubmit();
