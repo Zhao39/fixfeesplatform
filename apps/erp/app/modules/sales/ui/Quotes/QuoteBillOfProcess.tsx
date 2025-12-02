@@ -108,7 +108,7 @@ import UnitOfMeasure, {
   useUnitOfMeasure,
 } from "~/components/Form/UnitOfMeasure";
 import { ProcedureStepTypeIcon } from "~/components/Icons";
-import { useTools } from "~/stores";
+import { useItems, useTools } from "~/stores";
 import { getPrivateUrl, path } from "~/utils/path";
 import { quoteOperationValidator } from "../../sales.models";
 import type { Quotation } from "../../types";
@@ -122,8 +122,13 @@ type ItemWithData = Item & {
   data: Operation;
 };
 
+type QuoteMaterial = {
+  itemId: string;
+};
+
 type QuoteBillOfProcessProps = {
   quoteMakeMethodId: string;
+  materials: QuoteMaterial[];
   operations: (Operation & {
     quoteOperationTool: OperationTool[];
     quoteOperationParameter: OperationParameter[];
@@ -266,6 +271,7 @@ const usePendingOperations = () => {
 
 const QuoteBillOfProcess = ({
   quoteMakeMethodId,
+  materials,
   operations: initialOperations,
   tags,
 }: QuoteBillOfProcessProps) => {
@@ -277,6 +283,25 @@ const QuoteBillOfProcess = ({
     id: userId,
     company: { id: companyId },
   } = useUser();
+
+  const [allItems] = useItems();
+
+  const materialItemIds = useMemo(
+    () => new Set((materials ?? []).map((m) => m.itemId)),
+    [materials]
+  );
+
+  const itemMentions = useMemo(
+    () =>
+      allItems
+        .filter((item) => materialItemIds.has(item.id))
+        .map((item) => ({
+          id: item.id,
+          label: item.name ?? item.readableIdWithRevision,
+          helper: item.name ? item.readableIdWithRevision : undefined,
+        })),
+    [allItems, materialItemIds]
+  );
 
   const addOperationButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -581,6 +606,7 @@ const QuoteBillOfProcess = ({
                     }));
                     onUpdateWorkInstruction(content);
                   }}
+                  mentions={[{ char: "@", items: itemMentions }]}
                   className="py-8"
                 />
               ) : (
@@ -672,6 +698,7 @@ const QuoteBillOfProcess = ({
                 selectedItemId === null || !!temporaryItems[selectedItemId!]
               }
               temporaryItems={temporaryItems}
+              itemMentions={itemMentions}
             />
           </div>
         ),
@@ -840,11 +867,13 @@ function AttributesForm({
   isDisabled,
   steps,
   temporaryItems,
+  itemMentions,
 }: {
   operationId: string;
   isDisabled: boolean;
   steps: OperationStep[];
   temporaryItems: TemporaryItems;
+  itemMentions: { id: string; label: string }[];
 }) {
   const fetcher = useFetcher<typeof newQuoteOperationParameterAction>();
   const sortOrderFetcher = useFetcher<{ success: boolean }>();
@@ -1002,6 +1031,7 @@ function AttributesForm({
                 onChange={(value) => {
                   setDescription(value);
                 }}
+                mentions={[{ char: "@", items: itemMentions }]}
                 className="[&_.is-empty]:text-muted-foreground min-h-[120px] p-4 rounded-lg border w-full"
               />
             </VStack>
@@ -1089,6 +1119,7 @@ function AttributesForm({
                     operationId={operationId}
                     typeOptions={typeOptions}
                     isDisabled={isDisabled}
+                    itemMentions={itemMentions}
                     className={
                       index === sortOrder.length - 1 ? "border-none" : ""
                     }
@@ -1108,12 +1139,14 @@ function AttributesListItem({
   operationId,
   typeOptions,
   isDisabled = false,
+  itemMentions,
   className,
 }: {
   attribute: OperationStep;
   operationId: string;
   typeOptions: { label: JSX.Element; value: string }[];
   isDisabled?: boolean;
+  itemMentions: { id: string; label: string }[];
   className?: string;
 }) {
   const {
@@ -1236,6 +1269,7 @@ function AttributesListItem({
                 onChange={(value) => {
                   setDescription(value);
                 }}
+                mentions={[{ char: "@", items: itemMentions }]}
                 className="[&_.is-empty]:text-muted-foreground min-h-[120px] p-4 rounded-lg border w-full"
               />
             </VStack>

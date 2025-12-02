@@ -122,7 +122,7 @@ import Procedure from "~/components/Form/Procedure";
 import { SupplierProcessPreview } from "~/components/Form/SupplierProcess";
 import { useUnitOfMeasure } from "~/components/Form/UnitOfMeasure";
 import { ProcedureStepTypeIcon } from "~/components/Icons";
-import { useTools } from "~/stores";
+import { useItems, useTools } from "~/stores";
 import { getPrivateUrl, path } from "~/utils/path";
 import { methodOperationValidator } from "../../items.models";
 import type {
@@ -140,10 +140,15 @@ type ItemWithData = Item & {
   data: Operation;
 };
 
+type MethodMaterialType = {
+  itemId: string;
+};
+
 type BillOfProcessProps = {
   configurable?: boolean;
   configurationRules?: ConfigurationRule[];
   makeMethod: MakeMethod;
+  materials: MethodMaterialType[];
   operations: (Operation & {
     methodOperationTool: OperationTool[];
     methodOperationParameter: OperationParameter[];
@@ -196,6 +201,7 @@ const BillOfProcess = ({
   configurable = false,
   configurationRules,
   makeMethod,
+  materials,
   operations: initialOperations,
   parameters,
   tags,
@@ -211,6 +217,25 @@ const BillOfProcess = ({
   const sortOrderFetcher = useFetcher<{}>();
   const deleteOperationFetcher = useFetcher<{ success: boolean }>();
   const { id: userId } = useUser();
+
+  const [allItems] = useItems();
+
+  const materialItemIds = useMemo(
+    () => new Set((materials ?? []).map((m) => m.itemId)),
+    [materials]
+  );
+
+  const itemMentions = useMemo(
+    () =>
+      allItems
+        .filter((item) => materialItemIds.has(item.id))
+        .map((item) => ({
+          id: item.id,
+          label: item.name ?? item.readableIdWithRevision,
+          helper: item.name ? item.readableIdWithRevision : undefined,
+        })),
+    [allItems, materialItemIds]
+  );
 
   const addOperationButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -530,6 +555,7 @@ const BillOfProcess = ({
                     }));
                     onUpdateWorkInstruction(item.id, content);
                   }}
+                  mentions={[{ char: "@", items: itemMentions }]}
                   className="py-8"
                 />
               ) : (
@@ -630,6 +656,7 @@ const BillOfProcess = ({
               configurable={configurable}
               rulesByField={rulesByField}
               onConfigure={onConfigure}
+              itemMentions={itemMentions}
             />
           </div>
         ),
@@ -1676,6 +1703,7 @@ function AttributesForm({
   temporaryItems,
   rulesByField,
   onConfigure,
+  itemMentions,
 }: {
   operationId: string;
   configurable: boolean;
@@ -1684,6 +1712,7 @@ function AttributesForm({
   temporaryItems: TemporaryItems;
   rulesByField: Map<string, ConfigurationRule>;
   onConfigure?: (c: Configuration) => void;
+  itemMentions: { id: string; label: string }[];
 }) {
   const fetcher = useFetcher<typeof newMethodOperationParameterAction>();
   const sortOrderFetcher = useFetcher<{ success: boolean }>();
@@ -1841,6 +1870,7 @@ function AttributesForm({
                   onChange={(value) => {
                     setDescription(value);
                   }}
+                  mentions={[{ char: "@", items: itemMentions }]}
                   className="[&_.is-empty]:text-muted-foreground min-h-[120px] p-4 rounded-lg border w-full"
                 />
               </VStack>
@@ -1935,6 +1965,7 @@ function AttributesForm({
                     configurable={configurable}
                     rulesByField={rulesByField}
                     onConfigure={onConfigure}
+                    itemMentions={itemMentions}
                   />
                 </Reorder.Item>
               );
@@ -1960,6 +1991,7 @@ function AttributesListItem({
   rulesByField,
   onConfigure,
   isDisabled = false,
+  itemMentions,
 }: {
   attribute: OperationStep;
   operationId: string;
@@ -1969,6 +2001,7 @@ function AttributesListItem({
   rulesByField: Map<string, ConfigurationRule>;
   onConfigure?: (c: Configuration) => void;
   isDisabled?: boolean;
+  itemMentions: { id: string; label: string }[];
 }) {
   const {
     name,
@@ -2092,6 +2125,7 @@ function AttributesListItem({
                 onChange={(value) => {
                   setDescription(value);
                 }}
+                mentions={[{ char: "@", items: itemMentions }]}
                 className="[&_.is-empty]:text-muted-foreground min-h-[120px] p-4 rounded-lg border w-full"
               />
             </VStack>
