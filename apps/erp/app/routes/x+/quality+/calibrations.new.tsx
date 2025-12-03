@@ -9,7 +9,7 @@ import type { FileObject } from "@supabase/storage-js";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
 import { nanoid } from "nanoid";
-import { useLayoutEffect } from "react";
+import { useEffect } from "react";
 import {
   gaugeCalibrationRecordValidator,
   getQualityFiles,
@@ -94,7 +94,7 @@ export default function GaugeCalibrationRecordNewRoute() {
   const { files, id } = useLoaderData<typeof loader>();
   const [params, setParams] = useUrlParams();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (params.get("id") !== id) {
       setParams({
         id,
