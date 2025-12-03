@@ -9,10 +9,9 @@ import {
 	TabsContent,
 	TabsList,
 	TabsTrigger,
-	type useDisclosure
+	type useDisclosure,
 } from "@carbon/react";
-import type { FC } from "react";
-import React from "react";
+import { useState } from "react";
 import type { IssueActionTask } from "~/modules/quality/types";
 
 import { CreateIssue } from "./CreateIssue";
@@ -22,8 +21,8 @@ interface Props extends ReturnType<typeof useDisclosure> {
 	task: IssueActionTask;
 }
 
-export const LinearIssueDialog: FC<Props> = (props) => {
-	const [tab, setTab] = React.useState("link");
+export const LinearIssueDialog = (props: Props) => {
+	const [tab, setTab] = useState("link");
 
 	return (
 		<Modal

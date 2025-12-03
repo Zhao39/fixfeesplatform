@@ -1,159 +1,175 @@
-import axios, { type AxiosInstance } from "axios";
 import { getCarbonServiceRole } from "@carbon/auth";
+import axios, { type AxiosInstance } from "axios";
 import { getLinearIntegration } from "./service";
 
 export interface LinearIssue {
-	id: string;
-	identifier: string;
-	title: string;
-	description?: string;
-	state: {
-		name: string;
-		type: string;
-	};
-	assignee?: LinearUser;
-	url?: string;
+  id: string;
+  identifier: string;
+  title: string;
+  description?: string;
+  dueDate: string | null;
+  state: {
+    name: string;
+    type: string;
+  };
+  assignee?: LinearUser;
+  url?: string;
 }
 
 export interface LinearTeam {
-	id: string;
-	name: string;
+  id: string;
+  name: string;
 }
 
 export interface LinearUser {
-	id: string;
-	email: string;
-	name: string;
+  id: string;
+  email: string;
+  name: string;
 }
 export class LinearClient {
-	instance: AxiosInstance;
+  instance: AxiosInstance;
 
-	constructor() {
-		this.instance = axios.create({
-			baseURL: "https://api.linear.app/graphql",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
-	}
+  constructor() {
+    this.instance = axios.create({
+      baseURL: "https://api.linear.app/graphql",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
 
-	async getAuthHeaders(companyId: string) {
-		const serviceRole = getCarbonServiceRole();
+  async getAuthHeaders(companyId: string) {
+    const serviceRole = getCarbonServiceRole();
 
-		const { data } = await getLinearIntegration(serviceRole, companyId);
+    const { data } = await getLinearIntegration(serviceRole, companyId);
 
-		const integration = data?.[0];
+    const integration = data?.[0];
 
-		if (!integration) {
-			throw new Error("Linear integration not found for company");
-		}
+    if (!integration) {
+      throw new Error("Linear integration not found for company");
+    }
 
-		const metadata = integration.metadata as { apiKey: string };
+    const metadata = integration.metadata as { apiKey: string };
 
-		return {
-			Authorization: metadata.apiKey,
-		};
-	}
+    return {
+      Authorization: metadata.apiKey,
+    };
+  }
 
-	async listTeams(companyId: string) {
-		const query = `query Teams { teams { nodes { id name } } }`;
+  async listTeams(companyId: string) {
+    const query = `query Teams { teams { nodes { id name } } }`;
 
-		const response = await this.instance.request<{ data: { teams: { nodes: LinearTeam[] } } }>({
-			method: "POST",
-			headers: await this.getAuthHeaders(companyId),
-			data: {
-				query,
-			},
-		});
+    const response = await this.instance.request<{ data: { teams: { nodes: LinearTeam[] } } }>({
+      method: "POST",
+      headers: await this.getAuthHeaders(companyId),
+      data: {
+        query,
+      },
+    });
 
-		return response.data.data.teams.nodes.map((el) => el);
-	}
+    return response.data.data.teams.nodes.map((el) => el);
+  }
 
-	async listIssues(companyId: string, input: string) {
-		const query = `query SearchIssues($filter: IssueFilter!) { issues( filter: $filter first: 5 orderBy: updatedAt ) { nodes { id identifier title description state { name type color } assignee { email } } } }`;
+  async listIssues(companyId: string, input: string) {
+    const query = `query SearchIssues($filter: IssueFilter!) { issues( filter: $filter first: 5 orderBy: updatedAt ) { nodes { id identifier title description state { name type color } assignee { email } } } }`;
 
-		const response = await this.instance.request<{ data: { issues: { nodes: LinearIssue[] } } }>({
-			method: "POST",
-			headers: await this.getAuthHeaders(companyId),
-			data: {
-				query,
-				variables: {
-					filter: {
-						title: { containsIgnoreCase: input },
-					},
-				},
-			},
-		});
+    const response = await this.instance.request<{ data: { issues: { nodes: LinearIssue[] } } }>({
+      method: "POST",
+      headers: await this.getAuthHeaders(companyId),
+      data: {
+        query,
+        variables: {
+          filter: {
+            title: { containsIgnoreCase: input },
+          },
+        },
+      },
+    });
 
-		return response.data.data.issues.nodes.map((el) => el);
-	}
+    return response.data.data.issues.nodes.map((el) => el);
+  }
 
-	async getIssueById(companyId: string, issueId: string) {
-		const query = `query SearchIssues($filter: IssueFilter!) { issues( filter: $filter first: 1 orderBy: updatedAt ) { nodes { id identifier title description state { name type color } assignee { email } } } }`;
+  async getIssueById(companyId: string, issueId: string) {
+    const query = `query SearchIssues($filter: IssueFilter!) { issues( filter: $filter first: 1 orderBy: updatedAt ) { nodes { id identifier title dueDate description state { name type color } assignee { email } } } }`;
 
-		const response = await this.instance.request<{ data: { issues: { nodes: LinearIssue[] } } }>({
-			method: "POST",
-			headers: await this.getAuthHeaders(companyId),
-			data: {
-				query,
-				variables: { filter: { id: { eq: issueId } } },
-			},
-		});
+    const response = await this.instance.request<{ data: { issues: { nodes: LinearIssue[] } } }>({
+      method: "POST",
+      headers: await this.getAuthHeaders(companyId),
+      data: {
+        query,
+        variables: { filter: { id: { eq: issueId } } },
+      },
+    });
 
-		return response.data.data.issues.nodes.at(0) || null;
-	}
+    return response.data.data.issues.nodes.at(0) || null;
+  }
 
-	async createAttachmentLink(companyId: string, input: { issueId: string; title: string; url: string }) {
-		const query = `mutation AttachmentCreate($input: AttachmentCreateInput!) { attachmentCreate(input: $input) { attachment { id } } }`;
+  async createAttachmentLink(companyId: string, input: { issueId: string; title: string; url: string }) {
+    const query = `mutation AttachmentCreate($input: AttachmentCreateInput!) { attachmentCreate(input: $input) { attachment { id } } }`;
 
-		const response = await this.instance.request<{ data: { issues: { nodes: LinearIssue[] } } }>({
-			method: "POST",
-			headers: await this.getAuthHeaders(companyId),
-			data: {
-				query,
-				variables: {
-					input,
-				},
-			},
-		});
+    const response = await this.instance.request<{ data: { issues: { nodes: LinearIssue[] } } }>({
+      method: "POST",
+      headers: await this.getAuthHeaders(companyId),
+      data: {
+        query,
+        variables: {
+          input,
+        },
+      },
+    });
 
-		return response.data;
-	}
+    return response.data;
+  }
 
-	async listTeamMembers(companyId: string, teamId: string) {
-		const query = `query Team($teamId: String!) { team(id: $teamId) { members { nodes { id email name } } } }`;
+  async listTeamMembers(companyId: string, teamId: string) {
+    const query = `query Team($teamId: String!) { team(id: $teamId) { members { nodes { id email name } } } }`;
 
-		const response = await this.instance.request<{ data: { team: { members: { nodes: LinearUser[] } } } }>({
-			method: "POST",
-			headers: await this.getAuthHeaders(companyId),
-			data: {
-				query,
-				variables: { teamId },
-			},
-		});
+    const response = await this.instance.request<{ data: { team: { members: { nodes: LinearUser[] } } } }>({
+      method: "POST",
+      headers: await this.getAuthHeaders(companyId),
+      data: {
+        query,
+        variables: { teamId },
+      },
+    });
 
-		return response.data.data.team.members.nodes.map((el) => el);
-	}
+    return response.data.data.team.members.nodes.map((el) => el);
+  }
 
-	async createIssue(
-		companyId: string,
-		data: { title: string; description?: string; teamId: string; assigneeId?: string }
-	) {
-		const query = `mutation IssueCreate($input: IssueCreateInput!) { issueCreate(input: $input) { issue { id assignee { id } } } }`;
+  async createIssue(
+    companyId: string,
+    data: { title: string; description?: string; teamId: string; assigneeId?: string | null }
+  ) {
+    const query = `mutation IssueCreate($input: IssueCreateInput!) { issueCreate(input: $input) { issue { id assignee { id, email } } } }`;
 
-		const response = await this.instance.request<{
-			data: { issueCreate: { issue: { id: string; assignee: { id: string } | null } } };
-		}>({
-			method: "POST",
-			headers: await this.getAuthHeaders(companyId),
-			data: {
-				query,
-				variables: {
-					input: data,
-				},
-			},
-		});
+    const response = await this.instance.request<{
+      data: { issueCreate: { issue: { id: string; assignee: { id: string; email: string } | null } } };
+    }>({
+      method: "POST",
+      headers: await this.getAuthHeaders(companyId),
+      data: {
+        query,
+        variables: {
+          input: data,
+        },
+      },
+    });
 
-		return response.data.data.issueCreate.issue;
-	}
+    return response.data.data.issueCreate.issue;
+  }
+
+  async getUserById(companyId: string, userId: string) {
+    const query = `query User($id: String!) { user(id: $id) { id email name } }`;
+
+    const response = await this.instance.request<{ data: { user: LinearUser } }>({
+      method: "POST",
+      headers: await this.getAuthHeaders(companyId),
+      data: {
+        query,
+        variables: { id: userId },
+      },
+    });
+
+    return response.data.data.user;
+  }
 }

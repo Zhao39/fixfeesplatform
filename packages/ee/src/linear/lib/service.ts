@@ -2,35 +2,38 @@ import type { Database } from "@carbon/database";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 export async function getLinearIntegration(client: SupabaseClient<Database>, companyId: string) {
-	return await client.from("companyIntegration").select("*").eq("companyId", companyId).eq("id", "linear").limit(1);
+  return await client.from("companyIntegration").select("*").eq("companyId", companyId).eq("id", "linear").limit(1);
 }
 
 export function linkActionToLinearIssue(
-	client: SupabaseClient<Database>,
-	companyId: string,
-	actionId: string,
-	issueId: string
+  client: SupabaseClient<Database>,
+  companyId: string,
+  input: {
+    actionId: string;
+    issueId: string;
+    assignee?: string | null;
+    dueDate?: string | null;
+  }
 ) {
-	return client
-		.from("nonConformanceActionTask")
-		.update({
-			externalId: { linear: issueId },
-		})
-		.eq("companyId", companyId)
-		.eq("id", actionId)
-		.select("nonConformanceId");
+  return client
+    .from("nonConformanceActionTask")
+    .update({
+      externalId: { linear: input.issueId },
+      assignee: input.assignee,
+      dueDate: input.dueDate,
+    })
+    .eq("companyId", companyId)
+    .eq("id", input.actionId)
+    .select("nonConformanceId");
 }
 
-export const getCompanyEmployees = async (client: SupabaseClient<Database>, companyId: string) => {
-	const userToCompany = await client
-		.from("userToCompany")
-		.select("userId")
-		.eq("companyId", companyId)
-		.eq("role", "employee");
+export const getCompanyEmployees = async (client: SupabaseClient<Database>, companyId: string, emails: string[]) => {
+  const users = await client
+    .from("userToCompany")
+    .select("userId,user(email)")
+    .eq("companyId", companyId)
+    .eq("role", "employee")
+    .in("user.email", emails);
 
-	const userIds = userToCompany.data?.map((utc) => utc.userId) || [];
-
-	const employees = await client.from("user").select("id,email").in("id", userIds);
-
-	return employees.data || [];
+  return users.data ?? [];
 };

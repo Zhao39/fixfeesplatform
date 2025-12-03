@@ -6,51 +6,62 @@ import { type ActionFunction, type LoaderFunction, json } from "@vercel/remix";
 const linear = new LinearClient();
 
 export const action: ActionFunction = async ({ request }) => {
-	const { companyId, client } = await requirePermissions(request, {});
-	const form = await request.formData();
+  const { companyId, client } = await requirePermissions(request, {});
+  const form = await request.formData();
 
-	const actionId = form.get("actionId");
-	const issueId = form.get("issueId");
+  const actionId = form.get("actionId") as string;
+  const issueId = form.get("issueId") as string;
 
-	if (!actionId || !issueId) {
-		return { success: false, message: "Missing required fields" };
-	}
+  if (!actionId || !issueId) {
+    return { success: false, message: "Missing required fields" };
+  }
 
-	const linked = await linkActionToLinearIssue(client, companyId, actionId as string, issueId as string);
-	const nonConformanceId = linked.data?.[0].nonConformanceId;
+  const issue = await linear.getIssueById(companyId, issueId);
 
-	const url = getAppUrl() + `/x/issue/${nonConformanceId}/details`;
+  const email = issue?.assignee?.email ?? "";
 
-	await linear.createAttachmentLink(companyId, {
-		issueId: issueId as string,
-		url,
-		title: "Linked Carbon Issue",
-	});
+  const assignee = await client.from("user").select("id").eq("email", email).single();
 
-	return json({ success: true, message: "Linked successfully" });
+  const linked = await linkActionToLinearIssue(client, companyId, {
+    actionId,
+    issueId,
+    assignee: assignee.data ? assignee.data.id : null,
+    dueDate: issue?.dueDate,
+  });
+
+  const nonConformanceId = linked.data?.[0].nonConformanceId;
+
+  const url = getAppUrl() + `/x/issue/${nonConformanceId}/details`;
+
+  await linear.createAttachmentLink(companyId, {
+    issueId: issueId as string,
+    url,
+    title: "Linked Carbon Issue",
+  });
+
+  return json({ success: true, message: "Linked successfully" });
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-	const { companyId, client } = await requirePermissions(request, {});
-	const url = new URL(request.url);
+  const { companyId, client } = await requirePermissions(request, {});
+  const url = new URL(request.url);
 
-	const query = url.searchParams.get("linear-query") as string;
-	const actionId = url.searchParams.get("actionId") as string;
+  const query = url.searchParams.get("search") as string;
+  const actionId = url.searchParams.get("actionId") as string;
 
-	const result = await client
-		.from("nonConformanceActionTask")
-		.select("externalId")
-		.eq("companyId", companyId)
-		.eq("id", actionId)
-		.single();
+  const result = await client
+    .from("nonConformanceActionTask")
+    .select("externalId")
+    .eq("companyId", companyId)
+    .eq("id", actionId)
+    .single();
 
-	const externalId = result.data?.externalId as { linear?: string } | null;
-	const issues = await linear.listIssues(companyId, query);
+  const externalId = result.data?.externalId as { linear?: string } | null;
+  const issues = await linear.listIssues(companyId, query);
 
-	if (!externalId?.linear) return { issues, linked: null };
+  if (!externalId?.linear) return { issues, linked: null };
 
-	const linked = await linear.getIssueById(companyId, externalId.linear);
+  const linked = await linear.getIssueById(companyId, externalId.linear);
 
-
-	return json({ issues, linked });
+  return json({ issues, linked });
 };
