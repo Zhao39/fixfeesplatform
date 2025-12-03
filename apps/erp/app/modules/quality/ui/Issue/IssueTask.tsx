@@ -259,8 +259,6 @@ export function TaskItem({
     taskTitle = `Supplier ${taskTitle}`;
   }
 
-  console.log(task.externalId);
-
   return (
     <div className="rounded-lg border w-full flex flex-col bg-card">
       <div className="flex w-full justify-between px-4 py-2 items-center">
