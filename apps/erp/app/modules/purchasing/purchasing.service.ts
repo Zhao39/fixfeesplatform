@@ -1,11 +1,12 @@
 import { fetchAllFromTable, type Database, type Json } from "@carbon/database";
+import { getPurchaseOrderStatus } from "@carbon/utils";
 import { getLocalTimeZone, today } from "@internationalized/date";
 import {
   FunctionRegion,
   type PostgrestSingleResponse,
   type SupabaseClient,
 } from "@supabase/supabase-js";
-import type { z } from 'zod/v3';
+import type { z } from "zod/v3";
 import { getEmployeeJob } from "~/modules/people";
 import type { GenericQueryFilters } from "~/utils/query";
 import { setGenericQueryFilters } from "~/utils/query";
@@ -900,10 +901,13 @@ export async function finalizePurchaseOrder(
   purchaseOrderId: string,
   userId: string
 ) {
+  const lines = await getPurchaseOrderLines(client, purchaseOrderId);
+  const { status } = getPurchaseOrderStatus(lines.data || []);
+
   return client
     .from("purchaseOrder")
     .update({
-      status: "To Receive and Invoice",
+      status,
       orderDate: today(getLocalTimeZone()).toString(),
       updatedAt: today(getLocalTimeZone()).toString(),
       updatedBy: userId,
