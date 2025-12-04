@@ -22,6 +22,7 @@ import {
   ModalTitle,
   NumberField,
   NumberInput,
+  Status,
   Table,
   Tbody,
   Td,
@@ -173,11 +174,10 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   });
 }
 
-
 // rounded icon in badge class name "rounded-full"
 const EditableBadge = () => {
   return (
-    <Badge  variant="green">
+    <Badge variant="green">
       <LuPencil className="w-3 h-3" />
     </Badge>
   );
@@ -201,7 +201,8 @@ const Header = ({ company, quote }: { company: any; quote: any }) => (
       </div>
 
       <span className="text-base font-semibold text-blue-900 dark:text-blue-100">
-        Please fill the columns marked with the <EditableBadge /> icon to update pricing
+        Please fill the columns marked with the <EditableBadge /> icon to update
+        pricing
       </span>
     </VStack>
   </CardHeader>
@@ -218,7 +219,9 @@ const LineItems = ({
   currencyCode: string;
   locale: string;
   selectedLines: Record<string, Record<number, SelectedLine>>;
-  setSelectedLines: Dispatch<SetStateAction<Record<string, Record<number, SelectedLine>>>>;
+  setSelectedLines: Dispatch<
+    SetStateAction<Record<string, Record<number, SelectedLine>>>
+  >;
   quoteStatus: SupplierQuote["status"];
   quoteLinePrices: SupplierQuoteLinePrice[];
 }) => {
@@ -271,12 +274,20 @@ const LineItems = ({
                     <HStack spacing={4}>
                       {(() => {
                         const lineSelections = selectedLines[line.id!] || {};
-                        const total = Object.values(lineSelections).reduce((acc, sel) => {
-                          if (sel.quantity > 0) {
-                            return acc + sel.supplierUnitPrice * sel.quantity + sel.supplierShippingCost + sel.supplierTaxAmount;
-                          }
-                          return acc;
-                        }, 0);
+                        const total = Object.values(lineSelections).reduce(
+                          (acc, sel) => {
+                            if (sel.quantity > 0) {
+                              return (
+                                acc +
+                                sel.supplierUnitPrice * sel.quantity +
+                                sel.supplierShippingCost +
+                                sel.supplierTaxAmount
+                              );
+                            }
+                            return acc;
+                          },
+                          0
+                        );
                         return total > 0 ? (
                           <MotionNumber
                             className="font-bold text-xl"
@@ -354,7 +365,9 @@ const LinePricing = ({
   currencyCode: string;
   locale: string;
   selectedLines: Record<number, SelectedLine>;
-  setSelectedLines: Dispatch<SetStateAction<Record<string, Record<number, SelectedLine>>>>;
+  setSelectedLines: Dispatch<
+    SetStateAction<Record<string, Record<number, SelectedLine>>>
+  >;
   quoteStatus: SupplierQuote["status"];
   quoteLinePrices: SupplierQuoteLinePrice[];
 }) => {
@@ -364,11 +377,12 @@ const LinePricing = ({
       .sort((a, b) => a.quantity - b.quantity) ?? [];
 
   // Get quantities from line or use pricing options, always show at least one row
-  const quantities = Array.isArray(line.quantity) && line.quantity.length > 0
-    ? line.quantity
-    : pricingOptions.length > 0
-    ? pricingOptions.map((opt) => opt.quantity)
-    : [1]; // Default to showing at least one row with quantity 1
+  const quantities =
+    Array.isArray(line.quantity) && line.quantity.length > 0
+      ? line.quantity
+      : pricingOptions.length > 0
+      ? pricingOptions.map((opt) => opt.quantity)
+      : [1]; // Default to showing at least one row with quantity 1
 
   const isDisabled = [
     "Ordered",
@@ -383,7 +397,6 @@ const LinePricing = ({
     currency: currencyCode,
   });
 
-
   // Get pricing data for a specific quantity
   const getPricingForQuantity = (qty: number) => {
     return pricingOptions.find((opt) => opt.quantity === qty) ?? null;
@@ -391,19 +404,25 @@ const LinePricing = ({
 
   // Store pricing for all quantities, not just selected
   const [pricingByQuantity, setPricingByQuantity] = useState<
-    Record<number, {
-      supplierUnitPrice: number;
-      leadTime: number;
-      supplierShippingCost: number;
-      supplierTaxAmount: number;
-    }>
+    Record<
+      number,
+      {
+        supplierUnitPrice: number;
+        leadTime: number;
+        supplierShippingCost: number;
+        supplierTaxAmount: number;
+      }
+    >
   >(() => {
-    const initial: Record<number, {
-      supplierUnitPrice: number;
-      leadTime: number;
-      supplierShippingCost: number;
-      supplierTaxAmount: number;
-    }> = {};
+    const initial: Record<
+      number,
+      {
+        supplierUnitPrice: number;
+        leadTime: number;
+        supplierShippingCost: number;
+        supplierTaxAmount: number;
+      }
+    > = {};
     quantities.forEach((qty) => {
       const pricing = getPricingForQuantity(qty);
       initial[qty] = {
@@ -419,7 +438,11 @@ const LinePricing = ({
   // Update pricing for a specific quantity
   const updatePricing = (
     quantity: number,
-    field: "supplierUnitPrice" | "leadTime" | "supplierShippingCost" | "supplierTaxAmount",
+    field:
+      | "supplierUnitPrice"
+      | "leadTime"
+      | "supplierShippingCost"
+      | "supplierTaxAmount",
     value: number
   ) => {
     const newValue = isNaN(value) ? 0 : value;
@@ -465,12 +488,21 @@ const LinePricing = ({
           ...(prev[line.id!] || {}),
           [quantity]: {
             quantity: quantity,
-            supplierUnitPrice: storedPricing?.supplierUnitPrice ?? pricing?.supplierUnitPrice ?? 0,
+            supplierUnitPrice:
+              storedPricing?.supplierUnitPrice ??
+              pricing?.supplierUnitPrice ??
+              0,
             unitPrice: pricing?.unitPrice ?? 0,
             leadTime: storedPricing?.leadTime ?? pricing?.leadTime ?? 0,
             shippingCost: pricing?.shippingCost ?? 0,
-            supplierShippingCost: storedPricing?.supplierShippingCost ?? pricing?.supplierShippingCost ?? 0,
-            supplierTaxAmount: storedPricing?.supplierTaxAmount ?? pricing?.supplierTaxAmount ?? 0,
+            supplierShippingCost:
+              storedPricing?.supplierShippingCost ??
+              pricing?.supplierShippingCost ??
+              0,
+            supplierTaxAmount:
+              storedPricing?.supplierTaxAmount ??
+              pricing?.supplierTaxAmount ??
+              0,
           },
         },
       }));
@@ -485,7 +517,6 @@ const LinePricing = ({
       });
     }
   };
-
 
   return (
     <VStack spacing={4}>
@@ -508,7 +539,7 @@ const LinePricing = ({
             </Th>
             <Th className="w-[150px]">
               <HStack spacing={4}>
-                <span >Shipping Cost</span>
+                <span>Shipping Cost</span>
                 <EditableBadge />
               </HStack>
             </Th>
@@ -527,10 +558,19 @@ const LinePricing = ({
             const pricing = getPricingForQuantity(qty);
             const selectedLine = selectedLines[qty];
             const isSelected = !!selectedLine && selectedLine.quantity === qty;
-            const unitPrice = storedPricing?.supplierUnitPrice ?? pricing?.supplierUnitPrice ?? 0;
+            const unitPrice =
+              storedPricing?.supplierUnitPrice ??
+              pricing?.supplierUnitPrice ??
+              0;
             const leadTime = storedPricing?.leadTime ?? pricing?.leadTime ?? 0;
-            const shippingCost = storedPricing?.supplierShippingCost ?? pricing?.supplierShippingCost ?? 0;
-            const taxAmount = storedPricing?.supplierTaxAmount ?? pricing?.supplierTaxAmount ?? 0;
+            const shippingCost =
+              storedPricing?.supplierShippingCost ??
+              pricing?.supplierShippingCost ??
+              0;
+            const taxAmount =
+              storedPricing?.supplierTaxAmount ??
+              pricing?.supplierTaxAmount ??
+              0;
             const total = unitPrice * qty + shippingCost + taxAmount;
 
             return (
@@ -552,102 +592,105 @@ const LinePricing = ({
                   </label>
                 </Td>
                 {!isSelected ? (
-                  <Td colSpan={6} className="bg-muted/20 text-center text-muted-foreground">
+                  <Td
+                    colSpan={6}
+                    className="bg-muted/20 text-center text-muted-foreground"
+                  >
                     No item selected
                   </Td>
                 ) : (
                   <>
                     <Td className=" bg-muted/30">{qty}</Td>
                     <Td className="">
-                        <NumberField
-                          value={unitPrice}
-                          formatOptions={{
-                            style: "currency",
-                            currency: currencyCode,
-                          }}
-                          isDisabled={isDisabled}
-                          minValue={0}
-                          onChange={(value) => {
-                            if (Number.isFinite(value) && value !== unitPrice) {
-                              updatePricing(qty, "supplierUnitPrice", value);
-                            }
-                          }}
-                        >
-                          <NumberInput
-                            className="border-0 -ml-3 shadow-none disabled:bg-transparent disabled:opacity-100"
-                            size="sm"
-                            min={0}
-                          />
-                        </NumberField>
-
+                      <NumberField
+                        value={unitPrice}
+                        formatOptions={{
+                          style: "currency",
+                          currency: currencyCode,
+                        }}
+                        isDisabled={isDisabled}
+                        minValue={0}
+                        onChange={(value) => {
+                          if (Number.isFinite(value) && value !== unitPrice) {
+                            updatePricing(qty, "supplierUnitPrice", value);
+                          }
+                        }}
+                      >
+                        <NumberInput
+                          className="border-0 -ml-3 shadow-none disabled:bg-transparent disabled:opacity-100"
+                          size="sm"
+                          min={0}
+                        />
+                      </NumberField>
                     </Td>
                     <Td className="w-[150px]">
-                        <NumberField
-                          value={leadTime}
-                          formatOptions={{
-                            style: "unit",
-                            unit: "day",
-                            unitDisplay: "long",
-                          }}
-                          minValue={0}
-
-                          onChange={(value) => {
-                            if (Number.isFinite(value) && value !== leadTime) {
-                              updatePricing(qty, "leadTime", value);
-                            }
-                          }}
-                        >
-                          <NumberInput
-                            className="border-0 -ml-3 shadow-none disabled:bg-transparent disabled:opacity-100"
-                            size="sm"
-                            min={0}
-                          />
-                        </NumberField>
-
+                      <NumberField
+                        value={leadTime}
+                        formatOptions={{
+                          style: "unit",
+                          unit: "day",
+                          unitDisplay: "long",
+                        }}
+                        minValue={0}
+                        onChange={(value) => {
+                          if (Number.isFinite(value) && value !== leadTime) {
+                            updatePricing(qty, "leadTime", value);
+                          }
+                        }}
+                      >
+                        <NumberInput
+                          className="border-0 -ml-3 shadow-none disabled:bg-transparent disabled:opacity-100"
+                          size="sm"
+                          min={0}
+                        />
+                      </NumberField>
                     </Td>
                     <Td className="w-[150px]">
-                        <NumberField
-                          value={shippingCost}
-                          formatOptions={{
-                            style: "currency",
-                            currency: currencyCode,
-                          }}
-                          isDisabled={isDisabled}
-                          minValue={0}
-                          onChange={(value) => {
-                            if (Number.isFinite(value) && value !== shippingCost) {
-                              updatePricing(qty, "supplierShippingCost", value);
-                            }
-                          }}
-                        >
-                          <NumberInput
-                            className="border-0 -ml-3 shadow-none disabled:bg-transparent disabled:opacity-100"
-                            size="sm"
-                            min={0}
-                          />
-                        </NumberField>
+                      <NumberField
+                        value={shippingCost}
+                        formatOptions={{
+                          style: "currency",
+                          currency: currencyCode,
+                        }}
+                        isDisabled={isDisabled}
+                        minValue={0}
+                        onChange={(value) => {
+                          if (
+                            Number.isFinite(value) &&
+                            value !== shippingCost
+                          ) {
+                            updatePricing(qty, "supplierShippingCost", value);
+                          }
+                        }}
+                      >
+                        <NumberInput
+                          className="border-0 -ml-3 shadow-none disabled:bg-transparent disabled:opacity-100"
+                          size="sm"
+                          min={0}
+                        />
+                      </NumberField>
                     </Td>
                     <Td className="w-[120px]">
-                        <NumberField
-                          value={taxAmount}
-                          formatOptions={{
-                            style: "currency",
-                            currency: currencyCode,
-                          }}
-                          isDisabled={isDisabled}
-                          minValue={0}
-                          onChange={(value) => {
-                            if (Number.isFinite(value) && value !== taxAmount) {
-                              updatePricing(qty, "supplierTaxAmount", value);
-                            }
-                          }}
-                        >
-                          <NumberInput
-                            className="border-0 -ml-3 shadow-none disabled:bg-transparent disabled:opacity-100"
-                            size="sm"
-                            min={0}
-                          />
-                        </NumberField>
+                      <NumberField
+                        value={taxAmount}
+                        formatOptions={{
+                          style: "currency",
+                          currency: currencyCode,
+                        }}
+                        isDisabled={isDisabled}
+                        minValue={0}
+                        onChange={(value) => {
+                          if (Number.isFinite(value) && value !== taxAmount) {
+                            updatePricing(qty, "supplierTaxAmount", value);
+                          }
+                        }}
+                      >
+                        <NumberInput
+                          className="border-0 -ml-3 shadow-none disabled:bg-transparent disabled:opacity-100"
+                          size="sm"
+                          min={0}
+                        />
+                      </NumberField>
                     </Td>
                     <Td className="w-[150px] bg-muted/30">
                       {total > 0 ? formatter.format(total) : "—"}
@@ -705,11 +748,15 @@ const Quote = ({
           }
 
           // Get all quantities for this line
-          const quantities = Array.isArray(line.quantity) && line.quantity.length > 0
-            ? line.quantity
-            : quoteLinePrices
-                ?.filter((p: SupplierQuoteLinePrice) => p.supplierQuoteLineId === line.id)
-                .map((p) => p.quantity) ?? [1];
+          const quantities =
+            Array.isArray(line.quantity) && line.quantity.length > 0
+              ? line.quantity
+              : quoteLinePrices
+                  ?.filter(
+                    (p: SupplierQuoteLinePrice) =>
+                      p.supplierQuoteLineId === line.id
+                  )
+                  .map((p) => p.quantity) ?? [1];
 
           // Select all quantities by default
           const lineSelections: Record<number, SelectedLine> = {};
@@ -739,17 +786,23 @@ const Quote = ({
   });
 
   // Calculate grand total for display (all selected quantities across all lines)
-  const grandTotal = Object.values(selectedLines).reduce((acc, lineSelections) => {
-    return acc + Object.values(lineSelections).reduce((lineAcc, line) => {
-      if (line.quantity === 0) return lineAcc;
+  const grandTotal = Object.values(selectedLines).reduce(
+    (acc, lineSelections) => {
       return (
-        lineAcc +
-        line.supplierUnitPrice * line.quantity +
-        line.supplierShippingCost +
-        line.supplierTaxAmount
+        acc +
+        Object.values(lineSelections).reduce((lineAcc, line) => {
+          if (line.quantity === 0) return lineAcc;
+          return (
+            lineAcc +
+            line.supplierUnitPrice * line.quantity +
+            line.supplierShippingCost +
+            line.supplierTaxAmount
+          );
+        }, 0)
       );
-    }, 0);
-  }, 0);
+    },
+    0
+  );
 
   return (
     <VStack spacing={8} className="w-full items-center p-2 md:p-8">
@@ -762,7 +815,25 @@ const Quote = ({
       )}
       <Card className="w-full max-w-5xl mx-auto">
         <div className="w-full text-center">
-          {quote?.status === "Expired" && <Badge variant="red">Expired</Badge>}
+          {quote?.status !== "Sent" && quote?.status && (
+            <Status
+              color={
+                quote.status === "Expired" || quote.status === "Cancelled"
+                  ? "orange"
+                  : quote.status === "Declined"
+                  ? "red"
+                  : quote.status === "Ordered" ||
+                    quote.status === "Partial" ||
+                    quote.status === "Submitted"
+                  ? "green"
+                  : quote.status === "Active"
+                  ? "blue"
+                  : "gray"
+              }
+            >
+              {quote.status}
+            </Status>
+          )}
         </div>
         <Header company={company} quote={quote} />
         <CardContent>
