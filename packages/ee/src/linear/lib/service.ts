@@ -1,8 +1,36 @@
 import type { Database } from "@carbon/database";
 import type { SupabaseClient } from "@supabase/supabase-js";
+import z from "zod";
+import { LinearWorkStateType, mapLinearStatusToCarbonStatus } from "./utils";
 
-export async function getLinearIntegration(client: SupabaseClient<Database>, companyId: string) {
-  return await client.from("companyIntegration").select("*").eq("companyId", companyId).eq("id", "linear").limit(1);
+export const LinearIssueSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  description: z.string(),
+  state: z.object({
+    name: z.string(),
+    color: z.string(),
+    type: z.nativeEnum(LinearWorkStateType),
+  }),
+  identifier: z.string(),
+  dueDate: z.string().nullish(),
+  assignee: z
+    .object({
+      email: z.string(),
+    })
+    .nullish(),
+});
+
+export async function getLinearIntegration(
+  client: SupabaseClient<Database>,
+  companyId: string
+) {
+  return await client
+    .from("companyIntegration")
+    .select("*")
+    .eq("companyId", companyId)
+    .eq("id", "linear")
+    .limit(1);
 }
 
 export function linkActionToLinearIssue(
@@ -10,24 +38,36 @@ export function linkActionToLinearIssue(
   companyId: string,
   input: {
     actionId: string;
-    issueId: string;
+    issue: z.infer<typeof LinearIssueSchema>;
     assignee?: string | null;
-    dueDate?: string | null;
   }
 ) {
+  const { data, success } = LinearIssueSchema.safeParse(input.issue);
+
+  if (!success) {
+    throw new Error("Invalid Linear issue data");
+  }
+
   return client
     .from("nonConformanceActionTask")
     .update({
-      externalId: { linear: input.issueId },
+      externalId: {
+        linear: data,
+      },
       assignee: input.assignee,
-      dueDate: input.dueDate,
+      status: mapLinearStatusToCarbonStatus(data.state.type!),
+      dueDate: data.dueDate,
     })
     .eq("companyId", companyId)
     .eq("id", input.actionId)
     .select("nonConformanceId");
 }
 
-export const getCompanyEmployees = async (client: SupabaseClient<Database>, companyId: string, emails: string[]) => {
+export const getCompanyEmployees = async (
+  client: SupabaseClient<Database>,
+  companyId: string,
+  emails: string[]
+) => {
   const users = await client
     .from("userToCompany")
     .select("userId,user(email)")

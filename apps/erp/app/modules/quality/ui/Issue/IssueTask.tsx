@@ -46,11 +46,17 @@ import {
 import { RxCheck } from "react-icons/rx";
 import { Assignee } from "~/components";
 import { useProcesses } from "~/components/Form/Process";
-import { IssueTaskStatusIcon, LinearIcon } from "~/components/Icons";
+import { IssueTaskStatusIcon } from "~/components/Icons";
 import SupplierAvatar from "~/components/SupplierAvatar";
 import { usePermissions, useRouteData, useUser } from "~/hooks";
 import { useIntegrations } from "~/hooks/useIntegrations";
-import type { Issue, IssueActionTask, IssueInvestigationTask, IssueItem, IssueReviewer } from "~/modules/quality";
+import type {
+  Issue,
+  IssueActionTask,
+  IssueInvestigationTask,
+  IssueItem,
+  IssueReviewer,
+} from "~/modules/quality";
 import { nonConformanceTaskStatus } from "~/modules/quality";
 import { useSuppliers } from "~/stores";
 import { getPrivateUrl, path } from "~/utils/path";
@@ -79,7 +85,9 @@ export function TaskProgress({
 }
 
 export function ItemProgress({ items }: { items: IssueItem[] }) {
-  const completedOrSkippedItems = items.filter((item) => item.disposition).length;
+  const completedOrSkippedItems = items.filter(
+    (item) => item.disposition
+  ).length;
   const progressPercentage = (completedOrSkippedItems / items.length) * 100;
 
   return (
@@ -136,13 +144,20 @@ function SupplierAssignment({
 
   // Check for optimistic update
   const pendingUpdate = fetchers.find(
-    (f) => f.formData?.get("id") === task.id && f.key === `supplierAssignment:${task.id}`
+    (f) =>
+      f.formData?.get("id") === task.id &&
+      f.key === `supplierAssignment:${task.id}`
   );
 
-  const currentSupplierId = (pendingUpdate?.formData?.get("supplierId") as string | null) ?? task.supplierId;
+  const currentSupplierId =
+    (pendingUpdate?.formData?.get("supplierId") as string | null) ??
+    task.supplierId;
 
   const handleChange = (supplierId: string) => {
-    const table = type === "investigation" ? "nonConformanceInvestigationTask" : "nonConformanceActionTask";
+    const table =
+      type === "investigation"
+        ? "nonConformanceInvestigationTask"
+        : "nonConformanceActionTask";
 
     submit(
       {
@@ -185,23 +200,39 @@ function SupplierAssignment({
           isLoading={isPending}
         >
           {currentSupplierId ? (
-            <SupplierAvatar supplierId={currentSupplierId} size="xxs" className="text-sm" />
+            <SupplierAvatar
+              supplierId={currentSupplierId}
+              size="xxs"
+              className="text-sm"
+            />
           ) : (
             <span>Supplier</span>
           )}
         </Button>
       </PopoverTrigger>
       {canEdit && (
-        <PopoverContent align="start" className="min-w-[--radix-popover-trigger-width] p-0">
+        <PopoverContent
+          align="start"
+          className="min-w-[--radix-popover-trigger-width] p-0"
+        >
           <Command>
             <CommandInput placeholder="Search suppliers..." className="h-9" />
             <CommandEmpty>No supplier found.</CommandEmpty>
             <CommandGroup className="max-h-[300px] overflow-y-auto">
               {options.map((option) => (
-                <CommandItem value={option.label} key={option.value} onSelect={() => handleChange(option.value)}>
+                <CommandItem
+                  value={option.label}
+                  key={option.value}
+                  onSelect={() => handleChange(option.value)}
+                >
                   {option.label}
                   <RxCheck
-                    className={cn("ml-auto h-4 w-4", option.value === currentSupplierId ? "opacity-100" : "opacity-0")}
+                    className={cn(
+                      "ml-auto h-4 w-4",
+                      option.value === currentSupplierId
+                        ? "opacity-100"
+                        : "opacity-0"
+                    )}
                   />
                 </CommandItem>
               ))}
@@ -234,8 +265,6 @@ export function TaskItem({
     defaultIsOpen: true,
   });
 
-  const linearDisclosure = useDisclosure({});
-
   const { currentStatus, onOperationStatusChange } = useTaskStatus({
     task,
     type,
@@ -253,17 +282,24 @@ export function TaskItem({
   const submit = useSubmit();
   const hasStartedRef = useRef(false);
 
-  let taskTitle = type === "action" ? (task as IssueActionTask).name : (task as IssueReviewer).title;
+  let taskTitle =
+    type === "action"
+      ? (task as IssueActionTask).name
+      : (task as IssueReviewer).title;
 
   if (task.supplierId) {
     taskTitle = `Supplier ${taskTitle}`;
   }
 
+  console.log({ task: task.externalId });
+
   return (
     <div className="rounded-lg border w-full flex flex-col bg-card">
       <div className="flex w-full justify-between px-4 py-2 items-center">
         <div className="flex flex-col flex-1">
-          <span className="text-base font-semibold tracking-tight">{taskTitle}</span>
+          <span className="text-base font-semibold tracking-tight">
+            {taskTitle}
+          </span>
         </div>
         <div className="flex items-center gap-1">
           {showDragHandle && !isDisabled && dragControls && (
@@ -275,21 +311,7 @@ export function TaskItem({
             </button>
           )}
 
-          {integrations.has("linear") && (
-            <IconButton
-              icon={
-                <LinearIcon
-                  style={{
-                    filter: task.externalId?.linear ? "none" : "grayscale(100)",
-                  }}
-                />
-              }
-              variant="ghost"
-              onClick={linearDisclosure.onToggle}
-              aria-label="Open task details"
-              className={cn(linearDisclosure.isOpen && "rotate-90")}
-            />
-          )}
+          {integrations.has("linear") && <LinearIssueDialog task={task} />}
 
           <IconButton
             icon={<LuChevronRight />}
@@ -341,11 +363,13 @@ export function TaskItem({
         </div>
       )}
 
-      {linearDisclosure.isOpen && <LinearIssueDialog {...linearDisclosure} task={task} />}
-
       <div className="bg-muted/30 border-t px-4 py-2 flex justify-between w-full">
         <HStack>
-          <IssueTaskStatus task={task} type="investigation" isDisabled={isDisabled} />
+          <IssueTaskStatus
+            task={task}
+            type="investigation"
+            isDisabled={isDisabled}
+          />
           <Assignee
             table={getTable(type)}
             id={task.id}
@@ -355,8 +379,14 @@ export function TaskItem({
           />
           {type === "action" && (
             <>
-              <TaskDueDate task={task as IssueActionTask} isDisabled={isDisabled} />
-              <TaskProcesses task={task as IssueActionTask} isDisabled={isDisabled} />
+              <TaskDueDate
+                task={task as IssueActionTask}
+                isDisabled={isDisabled}
+              />
+              <TaskProcesses
+                task={task as IssueActionTask}
+                isDisabled={isDisabled}
+              />
             </>
           )}
           {(type === "investigation" || type === "action") && (
@@ -448,9 +478,13 @@ function useTaskNotes({
 function useOptimisticTaskStatus(taskId: string) {
   const fetchers = useFetchers();
   const pendingUpdate = fetchers.find(
-    (f) => f.formData?.get("id") === taskId && f.key === `nonConformanceTask:${taskId}`
+    (f) =>
+      f.formData?.get("id") === taskId &&
+      f.key === `nonConformanceTask:${taskId}`
   );
-  return pendingUpdate?.formData?.get("status") as IssueInvestigationTask["status"] | undefined;
+  return pendingUpdate?.formData?.get("status") as
+    | IssueInvestigationTask["status"]
+    | undefined;
 }
 
 function useTaskStatus({
@@ -544,11 +578,18 @@ export function IssueTaskStatus({
         <DropdownMenuContent align="start">
           <DropdownMenuRadioGroup
             value={currentStatus}
-            onValueChange={(status) => onOperationStatusChange(task.id!, status as IssueInvestigationTask["status"])}
+            onValueChange={(status) =>
+              onOperationStatusChange(
+                task.id!,
+                status as IssueInvestigationTask["status"]
+              )
+            }
           >
             {nonConformanceTaskStatus.map((status) => (
               <DropdownMenuRadioItem key={status} value={status}>
-                <DropdownMenuIcon icon={<IssueTaskStatusIcon status={status} />} />
+                <DropdownMenuIcon
+                  icon={<IssueTaskStatusIcon status={status} />}
+                />
                 <span>{status}</span>
               </DropdownMenuRadioItem>
             ))}
@@ -572,7 +613,13 @@ function getTable(type: "investigation" | "action" | "approval" | "review") {
   }
 }
 
-function TaskDueDate({ task, isDisabled }: { task: IssueActionTask; isDisabled: boolean }) {
+function TaskDueDate({
+  task,
+  isDisabled,
+}: {
+  task: IssueActionTask;
+  isDisabled: boolean;
+}) {
   const submit = useSubmit();
   const [isOpen, setIsOpen] = useState(false);
   const permissions = usePermissions();
@@ -580,7 +627,9 @@ function TaskDueDate({ task, isDisabled }: { task: IssueActionTask; isDisabled: 
   const canEdit = permissions.can("update", "quality") && !isDisabled;
   const fetchers = useFetchers();
   const pendingUpdate = fetchers.find(
-    (f) => f.formData?.get("id") === task.id && f.key === `nonConformanceTask:${task.id}`
+    (f) =>
+      f.formData?.get("id") === task.id &&
+      f.key === `nonConformanceTask:${task.id}`
   );
 
   const pendingValue = pendingUpdate?.formData?.get("dueDate") ?? task.dueDate;
@@ -602,7 +651,12 @@ function TaskDueDate({ task, isDisabled }: { task: IssueActionTask; isDisabled: 
 
   if (!canEdit) {
     return (
-      <Button variant="secondary" size="sm" leftIcon={<LuCalendar />} isDisabled>
+      <Button
+        variant="secondary"
+        size="sm"
+        leftIcon={<LuCalendar />}
+        isDisabled
+      >
         <span>{task.dueDate ? formatDate(task.dueDate) : "No due date"}</span>
       </Button>
     );
@@ -611,7 +665,12 @@ function TaskDueDate({ task, isDisabled }: { task: IssueActionTask; isDisabled: 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger disabled={isDisabled} asChild>
-        <Button variant="secondary" size="sm" leftIcon={<LuCalendar />} isDisabled={isDisabled}>
+        <Button
+          variant="secondary"
+          size="sm"
+          leftIcon={<LuCalendar />}
+          isDisabled={isDisabled}
+        >
           {pendingValue ? formatDate(String(pendingValue)) : "Due Date"}
         </Button>
       </PopoverTrigger>
@@ -622,7 +681,12 @@ function TaskDueDate({ task, isDisabled }: { task: IssueActionTask; isDisabled: 
             onChange={(date) => handleDateChange(date?.toString() || null)}
           />
           {pendingValue && (
-            <Button variant="secondary" size="sm" onClick={() => handleDateChange(null)} className="w-full">
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => handleDateChange(null)}
+              className="w-full"
+            >
               Clear due date
             </Button>
           )}
@@ -632,7 +696,13 @@ function TaskDueDate({ task, isDisabled }: { task: IssueActionTask; isDisabled: 
   );
 }
 
-function TaskProcesses({ task, isDisabled }: { task: IssueActionTask; isDisabled: boolean }) {
+function TaskProcesses({
+  task,
+  isDisabled,
+}: {
+  task: IssueActionTask;
+  isDisabled: boolean;
+}) {
   const submit = useSubmit();
   const [isOpen, setIsOpen] = useState(false);
   const permissions = usePermissions();
@@ -645,7 +715,8 @@ function TaskProcesses({ task, isDisabled }: { task: IssueActionTask; isDisabled
   );
 
   // Local state for immediate UI updates
-  const [localProcessIds, setLocalProcessIds] = useState<string[]>(currentProcessIds);
+  const [localProcessIds, setLocalProcessIds] =
+    useState<string[]>(currentProcessIds);
 
   // Sync local state when task data changes (after revalidation)
   useEffect(() => {
@@ -655,10 +726,13 @@ function TaskProcesses({ task, isDisabled }: { task: IssueActionTask; isDisabled
   const canEdit = permissions.can("update", "quality") && !isDisabled;
   const fetchers = useFetchers();
   const pendingUpdate = fetchers.find(
-    (f) => (f.json as { id?: string })?.id === task.id && f.key === `nonConformanceTaskProcesses:${task.id}`
+    (f) =>
+      (f.json as { id?: string })?.id === task.id &&
+      f.key === `nonConformanceTaskProcesses:${task.id}`
   );
 
-  const pendingProcessIds = (pendingUpdate?.json as { processIds?: string[] })?.processIds;
+  const pendingProcessIds = (pendingUpdate?.json as { processIds?: string[] })
+    ?.processIds;
 
   const activeProcessIds = pendingProcessIds ?? localProcessIds;
 
@@ -685,7 +759,9 @@ function TaskProcesses({ task, isDisabled }: { task: IssueActionTask; isDisabled
     );
   };
 
-  const selectedProcesses = processOptions.filter((p) => activeProcessIds.includes(p.value));
+  const selectedProcesses = processOptions.filter((p) =>
+    activeProcessIds.includes(p.value)
+  );
 
   const buttonLabel =
     selectedProcesses.length === 0
@@ -705,7 +781,12 @@ function TaskProcesses({ task, isDisabled }: { task: IssueActionTask; isDisabled
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger disabled={isDisabled} asChild>
-        <Button variant="secondary" size="sm" leftIcon={<LuCog />} isDisabled={isDisabled}>
+        <Button
+          variant="secondary"
+          size="sm"
+          leftIcon={<LuCog />}
+          isDisabled={isDisabled}
+        >
           {buttonLabel}
         </Button>
       </PopoverTrigger>
@@ -715,7 +796,11 @@ function TaskProcesses({ task, isDisabled }: { task: IssueActionTask; isDisabled
           <CommandEmpty>No process found.</CommandEmpty>
           <CommandGroup className="max-h-[300px] overflow-y-auto">
             {processOptions.map((option) => (
-              <CommandItem key={option.value} value={option.label} onSelect={() => handleProcessToggle(option.value)}>
+              <CommandItem
+                key={option.value}
+                value={option.label}
+                onSelect={() => handleProcessToggle(option.value)}
+              >
                 <div
                   className={cn(
                     "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",

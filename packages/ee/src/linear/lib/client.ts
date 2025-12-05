@@ -1,20 +1,10 @@
 import { getCarbonServiceRole } from "@carbon/auth";
-import axios, { type AxiosInstance } from "axios";
+import axios, { isAxiosError, type AxiosInstance } from "axios";
+import type z from "zod";
+import type { LinearIssueSchema } from "./service";
 import { getLinearIntegration } from "./service";
 
-export interface LinearIssue {
-  id: string;
-  identifier: string;
-  title: string;
-  description?: string;
-  dueDate: string | null;
-  state: {
-    name: string;
-    type: string;
-  };
-  assignee?: LinearUser;
-  url?: string;
-}
+export type LinearIssue = z.infer<typeof LinearIssueSchema>;
 
 export interface LinearTeam {
   id: string;
@@ -59,7 +49,9 @@ export class LinearClient {
   async listTeams(companyId: string) {
     const query = `query Teams { teams { nodes { id name } } }`;
 
-    const response = await this.instance.request<{ data: { teams: { nodes: LinearTeam[] } } }>({
+    const response = await this.instance.request<{
+      data: { teams: { nodes: LinearTeam[] } };
+    }>({
       method: "POST",
       headers: await this.getAuthHeaders(companyId),
       data: {
@@ -73,7 +65,9 @@ export class LinearClient {
   async listIssues(companyId: string, input: string) {
     const query = `query SearchIssues($filter: IssueFilter!) { issues( filter: $filter first: 5 orderBy: updatedAt ) { nodes { id identifier title description state { name type color } assignee { email } } } }`;
 
-    const response = await this.instance.request<{ data: { issues: { nodes: LinearIssue[] } } }>({
+    const response = await this.instance.request<{
+      data: { issues: { nodes: LinearIssue[] } };
+    }>({
       method: "POST",
       headers: await this.getAuthHeaders(companyId),
       data: {
@@ -90,24 +84,38 @@ export class LinearClient {
   }
 
   async getIssueById(companyId: string, issueId: string) {
-    const query = `query SearchIssues($filter: IssueFilter!) { issues( filter: $filter first: 1 orderBy: updatedAt ) { nodes { id identifier title dueDate description state { name type color } assignee { email } } } }`;
+    try {
+      const query = `query SearchIssues($filter: IssueFilter!) { issues( filter: $filter first: 1 orderBy: updatedAt ) { nodes { id identifier title dueDate description state { name type color } assignee { email } } } }`;
 
-    const response = await this.instance.request<{ data: { issues: { nodes: LinearIssue[] } } }>({
-      method: "POST",
-      headers: await this.getAuthHeaders(companyId),
-      data: {
-        query,
-        variables: { filter: { id: { eq: issueId } } },
-      },
-    });
+      const response = await this.instance.request<{
+        data: { issues: { nodes: LinearIssue[] } };
+      }>({
+        method: "POST",
+        headers: await this.getAuthHeaders(companyId),
+        data: {
+          query,
+          variables: { filter: { id: { eq: issueId } } },
+        },
+      });
 
-    return response.data.data.issues.nodes.at(0) || null;
+      return response.data.data.issues.nodes.at(0) || null;
+    } catch (error) {
+      if (isAxiosError(error)) {
+        console.dir(error.response.data, { depth: null });
+        console.dir(error.config.data, { depth: null });
+      }
+    }
   }
 
-  async createAttachmentLink(companyId: string, input: { issueId: string; title: string; url: string }) {
+  async createAttachmentLink(
+    companyId: string,
+    input: { issueId: string; title: string; url: string }
+  ) {
     const query = `mutation AttachmentCreate($input: AttachmentCreateInput!) { attachmentCreate(input: $input) { attachment { id } } }`;
 
-    const response = await this.instance.request<{ data: { issues: { nodes: LinearIssue[] } } }>({
+    const response = await this.instance.request<{
+      data: { issues: { nodes: LinearIssue[] } };
+    }>({
       method: "POST",
       headers: await this.getAuthHeaders(companyId),
       data: {
@@ -124,7 +132,9 @@ export class LinearClient {
   async listTeamMembers(companyId: string, teamId: string) {
     const query = `query Team($teamId: String!) { team(id: $teamId) { members { nodes { id email name } } } }`;
 
-    const response = await this.instance.request<{ data: { team: { members: { nodes: LinearUser[] } } } }>({
+    const response = await this.instance.request<{
+      data: { team: { members: { nodes: LinearUser[] } } };
+    }>({
       method: "POST",
       headers: await this.getAuthHeaders(companyId),
       data: {
@@ -138,12 +148,21 @@ export class LinearClient {
 
   async createIssue(
     companyId: string,
-    data: { title: string; description?: string; teamId: string; assigneeId?: string | null }
+    data: {
+      title: string;
+      description?: string;
+      teamId: string;
+      assigneeId?: string | null;
+    }
   ) {
     const query = `mutation IssueCreate($input: IssueCreateInput!) { issueCreate(input: $input) { issue { id assignee { id, email } } } }`;
 
     const response = await this.instance.request<{
-      data: { issueCreate: { issue: { id: string; assignee: { id: string; email: string } | null } } };
+      data: {
+        issueCreate: {
+          issue: { id: string; assignee: { id: string; email: string } | null };
+        };
+      };
     }>({
       method: "POST",
       headers: await this.getAuthHeaders(companyId),
@@ -161,7 +180,9 @@ export class LinearClient {
   async getUserById(companyId: string, userId: string) {
     const query = `query User($id: String!) { user(id: $id) { id email name } }`;
 
-    const response = await this.instance.request<{ data: { user: LinearUser } }>({
+    const response = await this.instance.request<{
+      data: { user: LinearUser };
+    }>({
       method: "POST",
       headers: await this.getAuthHeaders(companyId),
       data: {

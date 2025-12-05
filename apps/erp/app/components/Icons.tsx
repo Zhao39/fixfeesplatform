@@ -54,7 +54,13 @@ export const ModuleIcon = ({ icon }: { icon: ReactNode }) => {
   );
 };
 
-export const MethodItemTypeIcon = ({ type, className }: { type: string; className?: string }) => {
+export const MethodItemTypeIcon = ({
+  type,
+  className,
+}: {
+  type: string;
+  className?: string;
+}) => {
   switch (type) {
     case "Part":
       return <AiOutlinePartition className={className} />;
@@ -71,10 +77,20 @@ export const MethodItemTypeIcon = ({ type, className }: { type: string; classNam
   return <LuSquare className={cn("text-muted-foreground", className)} />;
 };
 
-export const MethodIcon = ({ type, className, isKit }: { type: string; className?: string; isKit?: boolean }) => {
+export const MethodIcon = ({
+  type,
+  className,
+  isKit,
+}: {
+  type: string;
+  className?: string;
+  isKit?: boolean;
+}) => {
   switch (type) {
     case "Method":
-      return <AiOutlinePartition className={cn(className, "text-foreground")} />;
+      return (
+        <AiOutlinePartition className={cn(className, "text-foreground")} />
+      );
     case "Buy":
       return <LuShoppingCart className={cn("text-blue-500", className)} />;
     case "Make":
@@ -103,7 +119,10 @@ export function MethodBadge({ type, text, to, className }: MethodBadgeProps) {
   return (
     <Link to={to} prefetch="intent" className="group flex items-center gap-1">
       <Badge style={style} className={className}>
-        <MethodIcon type={type === "Make Inactive" ? "Make" : type} className="w-3 h-3 mr-1 " />
+        <MethodIcon
+          type={type === "Make Inactive" ? "Make" : type}
+          className="w-3 h-3 mr-1 "
+        />
         {text}
       </Badge>
       <span className="group-hover:opacity-100 opacity-0 transition-opacity duration-200 w-4 h-4 text-foreground">
@@ -113,7 +132,10 @@ export function MethodBadge({ type, text, to, className }: MethodBadgeProps) {
   );
 }
 
-function getReplenishmentBadgeColor(type: MethodType | "Make Inactive", mode: "light" | "dark") {
+function getReplenishmentBadgeColor(
+  type: MethodType | "Make Inactive",
+  mode: "light" | "dark"
+) {
   return type === "Buy"
     ? getColor("blue", mode)
     : type === "Make"
@@ -123,7 +145,13 @@ function getReplenishmentBadgeColor(type: MethodType | "Make Inactive", mode: "l
     : getColor("orange", mode);
 }
 
-export const OnshapeStatus = ({ status, className }: { status: string; className?: string }) => {
+export const OnshapeStatus = ({
+  status,
+  className,
+}: {
+  status: string;
+  className?: string;
+}) => {
   switch (status) {
     case "In progress":
       return <AlmostDoneIcon className={className} />;
@@ -138,7 +166,13 @@ export const OnshapeStatus = ({ status, className }: { status: string; className
   }
 };
 
-export function OperationStatusIcon({ status, className }: { status: JobOperation["status"]; className?: string }) {
+export function OperationStatusIcon({
+  status,
+  className,
+}: {
+  status: JobOperation["status"];
+  className?: string;
+}) {
   switch (status) {
     case "Todo":
       return <TodoStatusIcon className={cn("text-foreground", className)} />;
@@ -179,7 +213,11 @@ export const IssueTaskStatusIcon = ({
   }
 };
 
-export const QuoteLineStatusIcon = ({ status }: { status: Database["public"]["Enums"]["quoteLineStatus"] }) => {
+export const QuoteLineStatusIcon = ({
+  status,
+}: {
+  status: Database["public"]["Enums"]["quoteLineStatus"];
+}) => {
   switch (status) {
     case "Not Started":
       return <LuCircle size={12} className="text-blue-600" />;
@@ -223,12 +261,20 @@ export const ProcedureStepTypeIcon = ({
   }
 };
 
-export const ReplenishmentSystemIcon = ({ type, className }: { type: string; className?: string }) => {
+export const ReplenishmentSystemIcon = ({
+  type,
+  className,
+}: {
+  type: string;
+  className?: string;
+}) => {
   switch (type) {
     case "Buy":
       return <LuShoppingCart className={cn("text-blue-500", className)} />;
     case "Make":
-      return <RxCodesandboxLogo className={cn("text-emerald-500", className)} />;
+      return (
+        <RxCodesandboxLogo className={cn("text-emerald-500", className)} />
+      );
     case "Buy and Make":
       return <LuSwords className={cn("text-yellow-500", className)} />;
   }
@@ -236,7 +282,13 @@ export const ReplenishmentSystemIcon = ({ type, className }: { type: string; cla
   return <LuSquare className={cn("text-muted-foreground", className)} />;
 };
 
-export const TrackingTypeIcon = ({ type, className }: { type: string; className?: string }) => {
+export const TrackingTypeIcon = ({
+  type,
+  className,
+}: {
+  type: string;
+  className?: string;
+}) => {
   switch (type) {
     case "Serial":
       return <LuBarcode className={cn("text-foreground", className)} />;
@@ -251,7 +303,13 @@ export const TrackingTypeIcon = ({ type, className }: { type: string; className?
   }
 };
 
-export const TimeTypeIcon = ({ type, className }: { type: string; className?: string }) => {
+export const TimeTypeIcon = ({
+  type,
+  className,
+}: {
+  type: string;
+  className?: string;
+}) => {
   switch (type) {
     case "Setup":
       return <LuTimer className={className} />;
@@ -272,27 +330,32 @@ export const LinearIcon = (props: React.SVGProps<SVGSVGElement>) => {
       xmlns="http://www.w3.org/2000/svg"
       stroke="#717ce2"
       transform="matrix(1, 0, 0, 1, 0, 0)"
+      className={props.className}
       {...props}
     >
       <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-      <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+      <g
+        id="SVGRepo_tracerCarrier"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      ></g>
       <g id="SVGRepo_iconCarrier">
         {" "}
         <path
           d="M3.03509 12.9431C3.24245 14.9227 4.10472 16.8468 5.62188 18.364C7.13904 19.8811 9.0631 20.7434 11.0428 20.9508L3.03509 12.9431Z"
-          fill="#ffffff"
+          fill="currentColor"
         ></path>{" "}
         <path
           d="M3 11.4938L12.4921 20.9858C13.2976 20.9407 14.0981 20.7879 14.8704 20.5273L3.4585 9.11548C3.19793 9.88771 3.0451 10.6883 3 11.4938Z"
-          fill="#ffffff"
+          fill="currentColor"
         ></path>{" "}
         <path
           d="M3.86722 8.10999L15.8758 20.1186C16.4988 19.8201 17.0946 19.4458 17.6493 18.9956L4.99021 6.33659C4.54006 6.89125 4.16573 7.487 3.86722 8.10999Z"
-          fill="#ffffff"
+          fill="currentColor"
         ></path>{" "}
         <path
           d="M5.66301 5.59517C9.18091 2.12137 14.8488 2.135 18.3498 5.63604C21.8508 9.13708 21.8645 14.8049 18.3907 18.3228L5.66301 5.59517Z"
-          fill="#ffffff"
+          fill="currentColor"
         ></path>{" "}
       </g>
     </svg>

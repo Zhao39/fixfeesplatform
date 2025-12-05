@@ -1,5 +1,10 @@
 import { getCarbonServiceRole } from "@carbon/auth";
-import { getCompanyEmployees, LinearClient, linkActionToLinearIssue } from "@carbon/ee/linear";
+import {
+  getCompanyEmployees,
+  LinearClient,
+  LinearIssueSchema,
+  linkActionToLinearIssue,
+} from "@carbon/ee/linear";
 import { task } from "@trigger.dev/sdk";
 import { z } from "zod/v3";
 
@@ -9,9 +14,9 @@ export const linearEventSchema = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("Issue"),
     action: z.literal("update"),
-    data: z.object({
-      id: z.string(),
-      dueDate: z.string().optional(),
+    data: LinearIssueSchema.omit({
+      assignee: true,
+    }).extend({
       assigneeId: z.string().optional(),
     }),
   }),
@@ -38,7 +43,12 @@ export const linearTask = task({
 
     const [company, integration] = await Promise.all([
       carbon.from("company").select("*").eq("id", payload.companyId).single(),
-      carbon.from("companyIntegration").select("*").eq("companyId", payload.companyId).eq("id", "linear").single(),
+      carbon
+        .from("companyIntegration")
+        .select("*")
+        .eq("companyId", payload.companyId)
+        .eq("id", "linear")
+        .single(),
     ]);
 
     if (company.error || !company.data) {
@@ -52,7 +62,7 @@ export const linearTask = task({
     const action = await carbon
       .from("nonConformanceActionTask")
       .select("id")
-      .eq("externalId->>linear", payload.event.data.id)
+      .eq("externalId->>linear.id", payload.event.data.id)
       .eq("companyId", payload.companyId)
       .maybeSingle();
 
@@ -65,16 +75,20 @@ export const linearTask = task({
     let assignee = null;
 
     if (payload.event.data.assigneeId) {
-      const linearUser = await linear.getUserById(payload.companyId, payload.event.data.assigneeId);
-      const employees = await getCompanyEmployees(carbon, payload.companyId, [linearUser?.email]);
+      const linearUser = await linear.getUserById(
+        payload.companyId,
+        payload.event.data.assigneeId
+      );
+      const employees = await getCompanyEmployees(carbon, payload.companyId, [
+        linearUser?.email,
+      ]);
       assignee = employees.length > 0 ? employees[0].userId : null;
     }
 
     await linkActionToLinearIssue(carbon, payload.companyId, {
       actionId: action.data.id,
-      issueId: payload.event.data.id,
+      issue: payload.event.data,
       assignee,
-      dueDate: payload.event.data.dueDate ?? null,
     });
 
     result = {
@@ -85,7 +99,9 @@ export const linearTask = task({
     if (result.success) {
       console.info(`✅ Successfully processed ${payload.event.type} event`);
     } else {
-      console.error(`❌ Failed to process ${payload.event.type} event: ${result.message}`);
+      console.error(
+        `❌ Failed to process ${payload.event.type} event: ${result.message}`
+      );
     }
 
     return result;

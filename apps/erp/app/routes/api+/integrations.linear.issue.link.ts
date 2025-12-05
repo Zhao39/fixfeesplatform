@@ -18,15 +18,22 @@ export const action: ActionFunction = async ({ request }) => {
 
   const issue = await linear.getIssueById(companyId, issueId);
 
-  const email = issue?.assignee?.email ?? "";
+  if (!issue) {
+    return { success: false, message: "Issue not found" };
+  }
 
-  const assignee = await client.from("user").select("id").eq("email", email).single();
+  const email = issue.assignee?.email ?? "";
+
+  const assignee = await client
+    .from("user")
+    .select("id")
+    .eq("email", email)
+    .single();
 
   const linked = await linkActionToLinearIssue(client, companyId, {
     actionId,
-    issueId,
+    issue,
     assignee: assignee.data ? assignee.data.id : null,
-    dueDate: issue?.dueDate,
   });
 
   const nonConformanceId = linked.data?.[0].nonConformanceId;
@@ -34,7 +41,7 @@ export const action: ActionFunction = async ({ request }) => {
   const url = getAppUrl() + `/x/issue/${nonConformanceId}/details`;
 
   await linear.createAttachmentLink(companyId, {
-    issueId: issueId as string,
+    issueId: issue.id as string,
     url,
     title: "Linked Carbon Issue",
   });
@@ -43,25 +50,12 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const { companyId, client } = await requirePermissions(request, {});
+  const { companyId } = await requirePermissions(request, {});
   const url = new URL(request.url);
 
   const query = url.searchParams.get("search") as string;
-  const actionId = url.searchParams.get("actionId") as string;
 
-  const result = await client
-    .from("nonConformanceActionTask")
-    .select("externalId")
-    .eq("companyId", companyId)
-    .eq("id", actionId)
-    .single();
-
-  const externalId = result.data?.externalId as { linear?: string } | null;
   const issues = await linear.listIssues(companyId, query);
 
-  if (!externalId?.linear) return { issues, linked: null };
-
-  const linked = await linear.getIssueById(companyId, externalId.linear);
-
-  return json({ issues, linked });
+  return json({ issues });
 };
