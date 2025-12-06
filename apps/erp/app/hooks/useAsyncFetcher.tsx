@@ -1,9 +1,12 @@
 import type { Fetcher } from "@remix-run/react";
 import { useFetcher } from "@remix-run/react";
 import { noop } from "@tanstack/react-query";
-import React from "react";
+import { useCallback, useEffect, useRef } from "react";
 
-type FetcherOptions = { key?: string; onStateChange?: (state: Fetcher["state"]) => Promise<void> | void };
+type FetcherOptions = {
+  key?: string;
+  onStateChange?: (state: Fetcher["state"]) => Promise<void> | void;
+};
 
 export function useAsyncFetcher<TData>(options?: FetcherOptions) {
   const onStateChange = options?.onStateChange || noop;
@@ -12,13 +15,13 @@ export function useAsyncFetcher<TData>(options?: FetcherOptions) {
     key: options?.key,
   });
 
-  const instance = React.useRef<PromiseWithResolvers<TData>>();
+  const instance = useRef<PromiseWithResolvers<TData>>();
 
   if (!instance.current) {
     instance.current = Promise.withResolvers<TData>();
   }
 
-  const submit = React.useCallback(
+  const submit = useCallback(
     (...args: Parameters<typeof fetcher.submit>) => {
       fetcher.submit(...args);
       return instance.current!.promise;
@@ -26,7 +29,7 @@ export function useAsyncFetcher<TData>(options?: FetcherOptions) {
     [fetcher, instance]
   );
 
-  const load = React.useCallback(
+  const load = useCallback(
     (...args: Parameters<typeof fetcher.load>) => {
       fetcher.load(...args);
       return instance.current!.promise;
@@ -34,7 +37,7 @@ export function useAsyncFetcher<TData>(options?: FetcherOptions) {
     [fetcher, instance]
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     onStateChange(fetcher.state);
     if (fetcher.state === "idle") {
       if (fetcher.data) {
