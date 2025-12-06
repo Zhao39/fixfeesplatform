@@ -63,7 +63,7 @@ export class LinearClient {
   }
 
   async listIssues(companyId: string, input: string) {
-    const query = `query SearchIssues($filter: IssueFilter!) { issues( filter: $filter first: 5 orderBy: updatedAt ) { nodes { id identifier title description state { name type color } assignee { email } } } }`;
+    const query = `query SearchIssues($filter: IssueFilter!) { issues( filter: $filter first: 5 orderBy: updatedAt ) { nodes { id identifier title description state { name type color } url assignee { email } } } }`;
 
     const response = await this.instance.request<{
       data: { issues: { nodes: LinearIssue[] } };
@@ -85,7 +85,7 @@ export class LinearClient {
 
   async getIssueById(companyId: string, issueId: string) {
     try {
-      const query = `query SearchIssues($filter: IssueFilter!) { issues( filter: $filter first: 1 orderBy: updatedAt ) { nodes { id identifier title dueDate description state { name type color } assignee { email } } } }`;
+      const query = `query SearchIssues($filter: IssueFilter!) { issues( filter: $filter first: 1 orderBy: updatedAt ) { nodes { id identifier title dueDate description state { name type color } url assignee { email } } } }`;
 
       const response = await this.instance.request<{
         data: { issues: { nodes: LinearIssue[] } };
@@ -155,12 +155,12 @@ export class LinearClient {
       assigneeId?: string | null;
     }
   ) {
-    const query = `mutation IssueCreate($input: IssueCreateInput!) { issueCreate(input: $input) { issue { id assignee { id, email } } } }`;
+    const query = `mutation IssueCreate($input: IssueCreateInput!) { issueCreate(input: $input) { issue { id identifier title dueDate description state { name type color } url assignee { email } } } }`;
 
     const response = await this.instance.request<{
       data: {
         issueCreate: {
-          issue: { id: string; assignee: { id: string; email: string } | null };
+          issue: LinearIssue;
         };
       };
     }>({

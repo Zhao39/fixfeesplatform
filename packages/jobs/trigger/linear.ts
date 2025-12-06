@@ -62,15 +62,16 @@ export const linearTask = task({
     const action = await carbon
       .from("nonConformanceActionTask")
       .select("id")
-      .eq("externalId->>linear.id", payload.event.data.id)
+      .eq("externalId->linear->>id", payload.event.data.id)
       .eq("companyId", payload.companyId)
       .maybeSingle();
 
-    if (!action.data)
+    if (!action.data) {
       return {
         success: false,
         message: `No linked action found for Linear issue ID ${payload.event.data.id} in company ${company.data.name}`,
       };
+    }
 
     let assignee = null;
 
@@ -85,11 +86,18 @@ export const linearTask = task({
       assignee = employees.length > 0 ? employees[0].userId : null;
     }
 
-    await linkActionToLinearIssue(carbon, payload.companyId, {
+    const updated = await linkActionToLinearIssue(carbon, payload.companyId, {
       actionId: action.data.id,
       issue: payload.event.data,
       assignee,
     });
+
+    if (!updated || updated.error) {
+      return {
+        success: false,
+        message: `Failed to update action for Linear issue ID ${payload.event.data.id} in company ${company.data.name}`,
+      };
+    }
 
     result = {
       success: true,

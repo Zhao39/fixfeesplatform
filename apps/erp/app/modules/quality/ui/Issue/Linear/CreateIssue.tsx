@@ -1,5 +1,12 @@
 import type { LinearTeam, LinearUser } from "@carbon/ee/linear";
-import { Hidden, Input, Select, Submit, TextArea, ValidatedForm } from "@carbon/form";
+import {
+  Hidden,
+  Input,
+  Select,
+  Submit,
+  TextArea,
+  ValidatedForm,
+} from "@carbon/form";
 import { Button, ModalFooter, VStack } from "@carbon/react";
 import { useEffect, useId, useMemo, useState } from "react";
 import z from "zod";
@@ -23,10 +30,18 @@ export const CreateIssue = (props: Props) => {
   const id = useId();
   const [team, setTeam] = useState<string | undefined>();
 
-  const { teams, members, fetcher, isSearching } = useLinearTeams(team);
+  const { teams, members, fetcher } = useLinearTeams(team);
 
-  const teamOptions = useMemo(() => teams.map((el) => ({ label: el.name, value: el.id })), [teams]);
-  const membersOptions = useMemo(() => members.map((el) => ({ label: el.email, value: el.id })), [members]);
+  const teamOptions = useMemo(
+    () => teams.map((el) => ({ label: el.name, value: el.id })),
+    [teams]
+  );
+  const membersOptions = useMemo(
+    () => members.map((el) => ({ label: el.email, value: el.id })),
+    [members]
+  );
+
+  const isSearching = fetcher.state === "loading";
 
   return (
     <ValidatedForm
@@ -36,7 +51,7 @@ export const CreateIssue = (props: Props) => {
       validator={createIssueValidator}
       fetcher={fetcher}
       resetAfterSubmit
-      onSubmit={() => props.onClose()}
+      onAfterSubmit={() => props.onClose()}
     >
       <VStack spacing={4}>
         <Hidden name="actionId" value={props.task.id} />
@@ -50,8 +65,19 @@ export const CreateIssue = (props: Props) => {
           options={teamOptions}
         />
         <Input label="Title" name="title" placeholder="Issue title" required />
-        <TextArea label="Description" name="description" placeholder="Issue description" required />
-        <Select label="Assign To" name="assignee" placeholder="Select a assignee" isOptional options={membersOptions} />
+        <TextArea
+          label="Description"
+          name="description"
+          placeholder="Issue description"
+          required
+        />
+        <Select
+          label="Assign To"
+          name="assignee"
+          placeholder="Select a assignee"
+          isOptional
+          options={membersOptions}
+        />
       </VStack>
       <ModalFooter>
         <Button
@@ -71,16 +97,20 @@ export const CreateIssue = (props: Props) => {
 CreateIssue.displayName = "CreateIssue";
 
 const useLinearTeams = (teamId?: string) => {
-  const fetcher = useAsyncFetcher<{ teams: LinearTeam[]; members: LinearUser[] }>();
+  const fetcher = useAsyncFetcher<{
+    teams: LinearTeam[];
+    members: LinearUser[];
+  }>();
 
   useEffect(() => {
-    fetcher.load(path.to.api.linearCreateIssue + (teamId ? `?teamId=${teamId}` : ""));
+    fetcher.load(
+      path.to.api.linearCreateIssue + (teamId ? `?teamId=${teamId}` : "")
+    );
   }, [teamId]);
 
   return {
     teams: fetcher.data?.teams || [],
     members: fetcher.data?.members || [],
-    isSearching: fetcher.state === "loading",
     fetcher,
   };
 };

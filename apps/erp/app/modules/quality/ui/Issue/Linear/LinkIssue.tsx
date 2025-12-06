@@ -12,14 +12,18 @@ import {
   useDebounce,
   VStack,
 } from "@carbon/react";
+import { Link } from "@remix-run/react";
 import { useId, useState } from "react";
+import { LuExternalLink } from "react-icons/lu";
 import z from "zod";
+import { LinearIssueStateBadge } from "~/components/Icons";
 import { useAsyncFetcher } from "~/hooks/useAsyncFetcher";
 import type { IssueActionTask } from "~/modules/quality";
 import { path } from "~/utils/path";
 
 type Props = {
   task: IssueActionTask;
+  linked?: LinearIssue;
   onClose: () => void;
 };
 
@@ -32,13 +36,18 @@ export const LinkIssue = (props: Props) => {
   const id = useId();
   const [issueId, setIssueId] = useState<string | undefined>();
 
-  const { issues, linked, fetcher, isSearching } = useLinearIssues();
+  const { issues, fetcher } = useLinearIssues();
 
   const onSearch = useDebounce((e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.value || e.target.value.trim().length < 3) return;
 
-    fetcher.load(path.to.api.linearLinkExistingIssue + `?actionId=${props.task.id}&search=${e.target.value}`);
+    fetcher.load(
+      path.to.api.linearLinkExistingIssue +
+        `?actionId=${props.task.id}&search=${e.target.value}`
+    );
   }, 300);
+
+  const isSearching = fetcher.state === "loading";
 
   return (
     <ValidatedForm
@@ -48,7 +57,7 @@ export const LinkIssue = (props: Props) => {
       validator={linkIssueValidator}
       fetcher={fetcher}
       resetAfterSubmit
-      onSubmit={() => props.onClose()}
+      onAfterSubmit={() => props.onClose()}
     >
       <Hidden name="actionId" value={props.task.id} />
       <Hidden name="issueId" value={issueId} />
@@ -63,7 +72,9 @@ export const LinkIssue = (props: Props) => {
             onChange={onSearch}
             disabled={isSearching}
           />
-          {isSearching && <Spinner className="w-5 h-5 absolute right-3.5 text-primary animate-spin" />}
+          {isSearching && (
+            <Spinner className="w-5 h-5 absolute right-3.5  text-primary animate-spin" />
+          )}
         </div>
         <ToggleGroup
           orientation="vertical"
@@ -77,24 +88,41 @@ export const LinkIssue = (props: Props) => {
               key={issue.id}
               name="issueId"
               value={issue.id}
+              disabled={issue.id === props.linked?.id}
               variant={"outline"}
               className={cn(
-                "w-full rounded-lg p-3 text-left transition-colors hover:bg-transparent block h-auto data-[state=on]:bg-accent hover:data-[state=on]:bg-accent",
-                issue.id === linked?.id && "ring-primary ring-2"
+                "w-full rounded-lg p-3 text-left transition-colors hover:bg-transparent block h-auto data-[state=on]:bg-accent hover:data-[state=on]:bg-accent"
               )}
             >
               <div className="flex items-start justify-between gap-2">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 justify-between">
-                    <span>
-                      <span className="mr-2">{issue.title}</span>
-                      <span className="font-mono text-sm text-muted-foreground">- {issue.identifier}</span>
+                    <span className="flex items-center">
+                      <span className="mr-2 text-foreground">
+                        {issue.title}
+                      </span>
+                      <Link to={issue.url} target="_blank" rel="noreferrer">
+                        <Badge
+                          variant={"outline"}
+                          className="font-normal text-xs text-muted-foreground flex items-center"
+                        >
+                          {issue.identifier}
+                          <LuExternalLink className="size-3 ml-2" />
+                        </Badge>
+                      </Link>
                     </span>
-                    <Badge variant="blue">{issue.state.name}</Badge>
+                    <LinearIssueStateBadge
+                      state={issue.state}
+                      className="size-3.5"
+                    />
                   </div>
 
-                  <div className="mt-2 text-sm text-muted-foreground">
-                    <span>{issue.assignee?.email ? `Assigned to ${issue.assignee?.email}` : "Unassigned"}</span>
+                  <div className="mt-2 text-sm text-muted-foreground flex justify-between items-center">
+                    <span>
+                      {issue.assignee?.email
+                        ? `Assigned to ${issue.assignee?.email}`
+                        : "Unassigned"}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -102,7 +130,9 @@ export const LinkIssue = (props: Props) => {
           ))}
 
           {issues.length === 0 && !isSearching && (
-            <p className="text-sm text-muted-foreground">No Linear issues found</p>
+            <p className="text-sm text-muted-foreground">
+              No Linear issues found
+            </p>
           )}
         </ToggleGroup>
       </VStack>
@@ -124,12 +154,14 @@ export const LinkIssue = (props: Props) => {
 LinkIssue.displayName = "LinkIssue";
 
 const useLinearIssues = () => {
-  const fetcher = useAsyncFetcher<{ issues: LinearIssue[]; linked?: LinearIssue }>();
+  const fetcher = useAsyncFetcher<{
+    issues: LinearIssue[];
+    linked?: LinearIssue;
+  }>();
 
   return {
     issues: fetcher.data?.issues || [],
     linked: fetcher.data?.linked || null,
-    isSearching: fetcher.state !== "idle",
     fetcher,
   };
 };

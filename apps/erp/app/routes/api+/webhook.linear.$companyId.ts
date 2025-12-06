@@ -1,5 +1,8 @@
 import { getCarbonServiceRole } from "@carbon/auth";
-import { linearEventSchema, type linearTask } from "@carbon/jobs/trigger/linear";
+import {
+  linearEventSchema,
+  type linearTask,
+} from "@carbon/jobs/trigger/linear";
 import { tasks } from "@trigger.dev/sdk";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
@@ -34,7 +37,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const parsed = linearEventSchema.safeParse(body);
 
   if (!parsed.success) {
-    return json({ success: false, error: parsed.error.format() }, { status: 400 });
+    return json(
+      { success: false, error: parsed.error.format() },
+      { status: 400 }
+    );
   }
 
   try {

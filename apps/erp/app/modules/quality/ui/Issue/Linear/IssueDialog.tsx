@@ -19,7 +19,12 @@ import { useState } from "react";
 import type { IssueActionTask } from "~/modules/quality/types";
 
 import { LinearIssueSchema, type LinearIssue } from "@carbon/ee/linear";
-import { LinearIcon } from "~/components/Icons";
+import { Link, useRevalidator } from "@remix-run/react";
+import { LuExternalLink } from "react-icons/lu";
+import { PiLinkBreak } from "react-icons/pi";
+import { LinearIcon, LinearIssueStateBadge } from "~/components/Icons";
+import { useAsyncFetcher } from "~/hooks/useAsyncFetcher";
+import { path } from "~/utils/path";
 import { CreateIssue } from "./CreateIssue";
 import { LinkIssue } from "./LinkIssue";
 
@@ -28,17 +33,33 @@ interface Props {
 }
 
 export const LinearIssueDialog = ({ task }: Props) => {
-  const disclosure = useDisclosure();
   const [tab, setTab] = useState("link");
+  const revalidator = useRevalidator();
+
+  const disclosure = useDisclosure({
+    onClose() {
+      revalidator.revalidate();
+    },
+  });
 
   const externalId = task.externalId as { linear: LinearIssue } | undefined;
 
   const { data: linked } = LinearIssueSchema.safeParse(externalId?.linear);
+  const fetcher = useAsyncFetcher();
+
+  const onUnlink = async () => {
+    await fetcher.submit(
+      { actionId: task.id },
+      { method: "DELETE", action: path.to.api.linearLinkExistingIssue }
+    );
+    disclosure.onClose();
+  };
 
   return (
     <Modal
       open={disclosure.isOpen}
       onOpenChange={(open) => {
+        console.log("ON open changed");
         if (!open) {
           disclosure.onClose();
         }
@@ -74,27 +95,48 @@ export const LinearIssueDialog = ({ task }: Props) => {
             {linked && (
               <div
                 className={cn(
-                  "w-full bg-secondary rounded-lg p-3 mb-3 text-left transition-colors hover:bg-transparent block h-auto data-[state=on]:bg-accent hover:data-[state=on]:bg-accent"
+                  "w-full rounded-lg p-3 mb-3 text-left transition-colors block h-auto border border-secondary"
                 )}
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 justify-between">
-                      <span>
-                        <span className="mr-2">{linked.title}</span>
-                        <span className="font-mono text-sm text-muted-foreground">
-                          - {linked.identifier}
+                      <span className="flex items-center">
+                        <span className="mr-2 text-foreground">
+                          {linked.title}
                         </span>
+                        <Link to={linked.url} target="_blank" rel="noreferrer">
+                          <Badge
+                            variant={"outline"}
+                            className="font-normal text-xs text-muted-foreground flex items-center"
+                          >
+                            {linked.identifier}
+                            <LuExternalLink className="size-3 ml-2" />
+                          </Badge>
+                        </Link>
                       </span>
-                      <Badge variant="blue">{linked.state.name}</Badge>
+                      <LinearIssueStateBadge
+                        state={linked.state}
+                        className="size-3.5"
+                      />
                     </div>
 
-                    <div className="mt-2 text-sm text-muted-foreground">
+                    <div className="mt-2 text-sm text-muted-foreground flex justify-between items-center">
                       <span>
                         {linked.assignee?.email
                           ? `Assigned to ${linked.assignee?.email}`
                           : "Unassigned"}
                       </span>
+
+                      <Button
+                        onClick={onUnlink}
+                        isLoading={fetcher.state === "submitting"}
+                        leftIcon={<PiLinkBreak />}
+                        size="sm"
+                        variant={"destructive"}
+                      >
+                        Unlink
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -102,7 +144,11 @@ export const LinearIssueDialog = ({ task }: Props) => {
             )}
 
             <TabsContent value="link" className="relative mt-0">
-              <LinkIssue task={task} onClose={disclosure.onClose} />
+              <LinkIssue
+                task={task}
+                onClose={disclosure.onClose}
+                linked={linked}
+              />
             </TabsContent>
             <TabsContent value="create" className="relative mt-0">
               <CreateIssue task={task} onClose={disclosure.onClose} />

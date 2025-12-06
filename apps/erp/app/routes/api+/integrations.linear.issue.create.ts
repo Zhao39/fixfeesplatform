@@ -1,7 +1,11 @@
 import { getAppUrl } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
-import { getCompanyEmployees, LinearClient, linkActionToLinearIssue } from "@carbon/ee/linear";
-import type { ActionFunction, LoaderFunction } from "@vercel/remix";
+import {
+  getCompanyEmployees,
+  LinearClient,
+  linkActionToLinearIssue,
+} from "@carbon/ee/linear";
+import { json, type ActionFunction, type LoaderFunction } from "@vercel/remix";
 
 const linear = new LinearClient();
 
@@ -23,10 +27,18 @@ export const action: ActionFunction = async ({ request }) => {
     assigneeId: assigneeId || null,
   });
 
+  if (!issue) {
+    return { success: false, message: "Issue not found" };
+  }
+
   const linked = await linkActionToLinearIssue(client, companyId, {
     actionId,
-    issueId: issue.id,
+    issue: issue,
   });
+
+  if (!linked || linked.data?.length === 0) {
+    return json({ success: false, message: "Failed to link issue" });
+  }
 
   const nonConformanceId = linked.data?.[0].nonConformanceId;
 
@@ -50,7 +62,9 @@ export const loader: LoaderFunction = async ({ request }) => {
   const teams = await linear.listTeams(companyId);
 
   if (teamId) {
-    const members = teamId ? await linear.listTeamMembers(companyId, teamId) : [];
+    const members = teamId
+      ? await linear.listTeamMembers(companyId, teamId)
+      : [];
     const employees = await getCompanyEmployees(
       client,
       companyId,
@@ -58,7 +72,12 @@ export const loader: LoaderFunction = async ({ request }) => {
     );
 
     // I am sure we can improve this filtering step
-    return { teams, members: members.filter((m) => employees.some((v) => v.user.email === m.email)) };
+    return {
+      teams,
+      members: members.filter((m) =>
+        employees.some((v) => v.user.email === m.email)
+      ),
+    };
   }
 
   return { teams };

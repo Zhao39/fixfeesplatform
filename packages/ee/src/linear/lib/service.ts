@@ -7,6 +7,7 @@ export const LinearIssueSchema = z.object({
   id: z.string(),
   title: z.string(),
   description: z.string(),
+  url: z.string(),
   state: z.object({
     name: z.string(),
     color: z.string(),
@@ -44,9 +45,7 @@ export function linkActionToLinearIssue(
 ) {
   const { data, success } = LinearIssueSchema.safeParse(input.issue);
 
-  if (!success) {
-    throw new Error("Invalid Linear issue data");
-  }
+  if (!success) return null;
 
   return client
     .from("nonConformanceActionTask")
@@ -77,3 +76,23 @@ export const getCompanyEmployees = async (
 
   return users.data ?? [];
 };
+
+export function unlinkActionFromLinearIssue(
+  client: SupabaseClient<Database>,
+  companyId: string,
+  input: {
+    actionId: string;
+    assignee?: string | null;
+  }
+) {
+  return client
+    .from("nonConformanceActionTask")
+    .update({
+      externalId: {
+        linear: undefined,
+      },
+    })
+    .eq("companyId", companyId)
+    .eq("id", input.actionId)
+    .select("nonConformanceId");
+}
