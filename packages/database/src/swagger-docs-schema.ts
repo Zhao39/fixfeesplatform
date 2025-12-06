@@ -27289,6 +27289,9 @@ export default {
             $ref: "#/parameters/rowFilter.userAttributeCategory.updatedBy",
           },
           {
+            $ref: "#/parameters/rowFilter.userAttributeCategory.emoji",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -27378,6 +27381,9 @@ export default {
             $ref: "#/parameters/rowFilter.userAttributeCategory.updatedBy",
           },
           {
+            $ref: "#/parameters/rowFilter.userAttributeCategory.emoji",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -27419,6 +27425,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.userAttributeCategory.updatedBy",
+          },
+          {
+            $ref: "#/parameters/rowFilter.userAttributeCategory.emoji",
           },
           {
             $ref: "#/parameters/body.userAttributeCategory",
@@ -73059,6 +73068,10 @@ export default {
           format: "text",
           type: "string",
         },
+        emoji: {
+          format: "text",
+          type: "string",
+        },
       },
       type: "object",
     },
@@ -101447,6 +101460,12 @@ export default {
     },
     "rowFilter.userAttributeCategory.updatedBy": {
       name: "updatedBy",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.userAttributeCategory.emoji": {
+      name: "emoji",
       required: false,
       in: "query",
       type: "string",

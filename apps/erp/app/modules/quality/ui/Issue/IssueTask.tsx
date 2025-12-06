@@ -270,7 +270,8 @@ export function TaskItem({
     type,
     disabled: isDisabled,
   });
-  const statusAction = statusActions[currentStatus];
+  const statusAction =
+    statusActions[currentStatus as keyof typeof statusActions];
   const { content, setContent, onUpdateContent, onUploadImage } = useTaskNotes({
     initialContent: (task.notes ?? {}) as JSONContent,
     taskId: task.id!,
@@ -290,9 +291,6 @@ export function TaskItem({
   if (task.supplierId) {
     taskTitle = `Supplier ${taskTitle}`;
   }
-
-  const isLinearManaged =
-    integrations.has("linear") && !!task.externalId?.linear;
 
   return (
     <div className="rounded-lg border w-full flex flex-col bg-card">
@@ -457,6 +455,7 @@ function useTaskNotes({
   const onUpdateContent = useDebounce(
     async (content: JSONContent) => {
       await carbon
+        // @ts-expect-error -
         ?.from(table)
         .update({
           notes: content,
