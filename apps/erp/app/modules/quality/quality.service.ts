@@ -370,6 +370,17 @@ export async function getIssueWorkflow(
     .single();
 }
 
+export async function getIssueAction(
+  client: SupabaseClient<Database>,
+  id: string
+) {
+  return client
+    .from("nonConformanceActionTask")
+    .select("id, ...nonConformance(nonConformanceId)")
+    .eq("id", id)
+    .single();
+}
+
 export async function getIssueActionTasks(
   client: SupabaseClient<Database>,
   id: string,

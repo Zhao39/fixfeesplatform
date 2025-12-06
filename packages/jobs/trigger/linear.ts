@@ -2,7 +2,6 @@ import { getCarbonServiceRole } from "@carbon/auth";
 import {
   getCompanyEmployees,
   LinearClient,
-  LinearIssueSchema,
   linkActionToLinearIssue,
 } from "@carbon/ee/linear";
 import { task } from "@trigger.dev/sdk";
@@ -10,15 +9,15 @@ import { z } from "zod";
 
 const linear = new LinearClient();
 
+// Schema for webhook payload - we only need the issue ID since we fetch full details from Linear
 export const syncIssueFromLinearSchema = z.object({
   companyId: z.string(),
   event: z.discriminatedUnion("type", [
     z.object({
       type: z.literal("Issue"),
       action: z.literal("update"),
-      data: LinearIssueSchema.omit({
-        assignee: true,
-      }).extend({
+      data: z.object({
+        id: z.string(),
         assigneeId: z.string().optional(),
       }),
     }),
@@ -65,7 +64,19 @@ export const syncIssueFromLinear = task({
     if (!action.data) {
       return {
         success: false,
-        message: `No linked action found for Linear issue ID ${payload.event.data.id} in company ${company.data.name}`,
+        message: `No linked action found for Linear issue ID ${payload.event.data.id}`,
+      };
+    }
+
+    const fullIssue = await linear.getIssueById(
+      payload.companyId,
+      payload.event.data.id
+    );
+
+    if (!fullIssue) {
+      return {
+        success: false,
+        message: `Failed to fetch issue ${payload.event.data.id} from Linear`,
       };
     }
 
@@ -84,20 +95,21 @@ export const syncIssueFromLinear = task({
 
     const updated = await linkActionToLinearIssue(carbon, payload.companyId, {
       actionId: action.data.id,
-      issue: payload.event.data,
+      issue: fullIssue,
       assignee,
+      syncNotes: true,
     });
 
     if (!updated || updated.error) {
       return {
         success: false,
-        message: `Failed to update action for Linear issue ID ${payload.event.data.id} in company ${company.data.name}`,
+        message: `Failed to update action for Linear issue ID ${payload.event.data.id}`,
       };
     }
 
     return {
       success: true,
-      message: `Processed ${payload.event.type} event for company ${company.data.name}`,
+      message: `Synced Linear issue ${payload.event.data.id}`,
     };
   },
 });

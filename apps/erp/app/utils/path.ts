@@ -101,6 +101,7 @@ export const path = {
       onShapeSync: `${api}/integrations/onshape/sync`,
       linearCreateIssue: `${api}/integrations/linear/issue/create`,
       linearLinkExistingIssue: `${api}/integrations/linear/issue/link`,
+      linearSyncNotes: `${api}/integrations/linear/issue/sync-notes`,
       outsideOperations: (jobId: string) =>
         generatePath(`${api}/production/outside-operations/${jobId}`),
       purchasingKpi: (key: string) =>

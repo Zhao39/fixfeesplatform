@@ -5,6 +5,8 @@ import {
   getLinearIssueFromExternalId,
   LinearClient,
   mapCarbonStatusToLinearStatus,
+  tiptapToMarkdown,
+  type TiptapDocument,
 } from "../../linear/lib";
 import type { NotificationEvent, NotificationService } from "../types";
 
@@ -75,6 +77,34 @@ export class LinearNotificationService implements NotificationService {
           id: issue.id,
           assigneeId: linearUser.id,
         });
+        break;
+      }
+
+      case "task.notes.changed": {
+        if (event.data.table !== "nonConformanceActionTask") return;
+
+        const issue = await getLinearIssueFromExternalId(
+          context.serviceRole,
+          event.companyId,
+          event.data.id
+        );
+
+        if (!issue) return; // No linked Linear issue
+
+        // Convert Tiptap notes to markdown for Linear
+        const notes = event.data.notes as TiptapDocument | null | undefined;
+        if (!notes) return;
+
+        try {
+          const description = tiptapToMarkdown(notes);
+
+          await linear.updateIssue(event.companyId, {
+            id: issue.id,
+            description,
+          });
+        } catch (e) {
+          console.error("Failed to sync notes to Linear:", e);
+        }
         break;
       }
     }

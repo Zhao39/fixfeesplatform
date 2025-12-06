@@ -1,12 +1,13 @@
 import type { Database } from "@carbon/database";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { z } from "zod";
+import { markdownToTiptap } from "./richtext";
 import { LinearWorkStateType, mapLinearStatusToCarbonStatus } from "./utils";
 
 export const LinearIssueSchema = z.object({
   id: z.string(),
   title: z.string(),
-  description: z.string(),
+  description: z.string().nullish(),
   url: z.string(),
   state: z.object({
     name: z.string(),
@@ -41,22 +42,40 @@ export function linkActionToLinearIssue(
     actionId: string;
     issue: z.infer<typeof LinearIssueSchema>;
     assignee?: string | null;
+    syncNotes?: boolean;
   }
 ) {
   const { data, success } = LinearIssueSchema.safeParse(input.issue);
 
   if (!success) return null;
 
+  // Convert Linear description (markdown) to Tiptap format for notes
+  let notes: any = undefined;
+  if (input.syncNotes && data.description) {
+    try {
+      notes = markdownToTiptap(data.description);
+    } catch (e) {
+      console.error("Failed to convert Linear description to Tiptap:", e);
+    }
+  }
+
+  const updateData: Record<string, any> = {
+    externalId: {
+      linear: data,
+    },
+    assignee: input.assignee,
+    status: mapLinearStatusToCarbonStatus(data.state.type!),
+    dueDate: data.dueDate,
+  };
+
+  // Only update notes if we successfully converted the description
+  if (notes !== undefined) {
+    updateData.notes = notes;
+  }
+
   return client
     .from("nonConformanceActionTask")
-    .update({
-      externalId: {
-        linear: data,
-      },
-      assignee: input.assignee,
-      status: mapLinearStatusToCarbonStatus(data.state.type!),
-      dueDate: data.dueDate,
-    })
+    .update(updateData)
     .eq("companyId", companyId)
     .eq("id", input.actionId)
     .select("nonConformanceId");

@@ -272,10 +272,18 @@ export function TaskItem({
   });
   const statusAction =
     statusActions[currentStatus as keyof typeof statusActions];
+
+  // Check if this action task has a linked Linear issue
+  const hasLinearLink =
+    type === "action" &&
+    !!(task as IssueActionTask & { externalId?: { linear?: unknown } })
+      .externalId?.linear;
+
   const { content, setContent, onUpdateContent, onUploadImage } = useTaskNotes({
     initialContent: (task.notes ?? {}) as JSONContent,
     taskId: task.id!,
     type,
+    hasLinearLink,
   });
 
   const { id } = useParams();
@@ -419,10 +427,12 @@ function useTaskNotes({
   initialContent,
   taskId,
   type,
+  hasLinearLink = false,
 }: {
   initialContent: JSONContent;
   taskId: string;
   type: "investigation" | "action" | "approval" | "review";
+  hasLinearLink?: boolean;
 }) {
   const {
     id: userId,
@@ -454,6 +464,7 @@ function useTaskNotes({
 
   const onUpdateContent = useDebounce(
     async (content: JSONContent) => {
+      // Update notes in Carbon database
       await carbon
         // @ts-expect-error -
         ?.from(table)
@@ -462,6 +473,23 @@ function useTaskNotes({
           updatedBy: userId,
         })
         .eq("id", taskId!);
+
+      // Sync to Linear if this is an action task with a linked Linear issue
+      if (type === "action" && hasLinearLink) {
+        try {
+          await fetch(path.to.api.linearSyncNotes, {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({
+              actionId: taskId,
+              notes: JSON.stringify(content),
+            }),
+          });
+        } catch (e) {
+          // Silently fail Linear sync - not critical
+          console.error("Failed to sync notes to Linear:", e);
+        }
+      }
     },
     2500,
     true

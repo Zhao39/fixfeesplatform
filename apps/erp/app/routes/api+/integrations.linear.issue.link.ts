@@ -27,7 +27,10 @@ export const action: ActionFunction = async ({ request }) => {
         return { success: false, message: "Missing required fields: issueId" };
       }
 
-      const issue = await linear.getIssueById(companyId, issueId);
+      const [carbonIssue, issue] = await Promise.all([
+        getIssueAction(client, actionId),
+        linear.getIssueById(companyId, issueId),
+      ]);
 
       if (!issue) {
         return { success: false, message: "Issue not found" };
@@ -58,7 +61,9 @@ export const action: ActionFunction = async ({ request }) => {
       await linear.createAttachmentLink(companyId, {
         issueId: issue.id as string,
         url,
-        title: "Linked Carbon Issue",
+        title: `Linked Carbon Issue: ${
+          carbonIssue.data?.nonConformanceId ?? ""
+        }`,
       });
 
       return json({ success: true, message: "Linked successfully" });

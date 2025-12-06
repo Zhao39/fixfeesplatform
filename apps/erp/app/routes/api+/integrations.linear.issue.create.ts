@@ -6,6 +6,7 @@ import {
   linkActionToLinearIssue,
 } from "@carbon/ee/linear";
 import { json, type ActionFunction, type LoaderFunction } from "@vercel/remix";
+import { getIssueAction } from "~/modules/quality/quality.service";
 
 const linear = new LinearClient();
 
@@ -20,12 +21,15 @@ export const action: ActionFunction = async ({ request }) => {
   const description = data.get("description") as string;
   const assigneeId = data.get("assignee") as string;
 
-  const issue = await linear.createIssue(companyId, {
-    teamId,
-    title,
-    description,
-    assigneeId: assigneeId || null,
-  });
+  const [carbonIssue, issue] = await Promise.all([
+    getIssueAction(client, actionId),
+    linear.createIssue(companyId, {
+      teamId,
+      title,
+      description: description || undefined,
+      assigneeId: assigneeId || null,
+    }),
+  ]);
 
   if (!issue) {
     return { success: false, message: "Issue not found" };
@@ -47,7 +51,7 @@ export const action: ActionFunction = async ({ request }) => {
   await linear.createAttachmentLink(companyId, {
     issueId: issue.id,
     url,
-    title: "Linked Carbon Issue",
+    title: `Linked Carbon Issue: ${carbonIssue.data?.nonConformanceId ?? ""}`,
   });
 
   return new Response("Linear issue created");

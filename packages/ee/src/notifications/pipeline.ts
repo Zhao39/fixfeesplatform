@@ -172,3 +172,31 @@ export async function notifyTaskAssigned(
     integrations
   );
 }
+
+export async function notifyTaskNotesChanged(
+  context: NotificationContext,
+  integrations: CompanyIntegration[],
+  data: {
+    companyId: string;
+    userId: string;
+    carbonUrl: string;
+    task: {
+      id: string;
+      table: string;
+      notes: any; // Tiptap JSONContent
+      title?: string;
+    };
+  }
+): Promise<void> {
+  const pipeline = createNotificationPipeline(context);
+  await pipeline.send(
+    {
+      type: "task.notes.changed",
+      companyId: data.companyId,
+      userId: data.userId,
+      carbonUrl: data.carbonUrl,
+      data: data.task,
+    },
+    integrations
+  );
+}
