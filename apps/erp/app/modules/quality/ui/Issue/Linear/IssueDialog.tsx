@@ -2,6 +2,7 @@ import {
   Badge,
   Button,
   cn,
+  IconButton,
   Modal,
   ModalBody,
   ModalContent,
@@ -29,7 +30,9 @@ import { CreateIssue } from "./CreateIssue";
 import { LinkIssue } from "./LinkIssue";
 
 interface Props {
-  task: IssueActionTask;
+  task: IssueActionTask & {
+    externalId: { linear: LinearIssue } | undefined;
+  };
 }
 
 export const LinearIssueDialog = ({ task }: Props) => {
@@ -42,9 +45,7 @@ export const LinearIssueDialog = ({ task }: Props) => {
     },
   });
 
-  const externalId = task.externalId as { linear: LinearIssue } | undefined;
-
-  const { data: linked } = LinearIssueSchema.safeParse(externalId?.linear);
+  const { data: linked } = LinearIssueSchema.safeParse(task.externalId?.linear);
   const fetcher = useAsyncFetcher();
 
   const onUnlink = async () => {
@@ -66,15 +67,21 @@ export const LinearIssueDialog = ({ task }: Props) => {
       }}
     >
       <ModalTrigger onClick={() => disclosure.onToggle()}>
-        <Button
-          leftIcon={
-            <LinearIcon className={cn(linked ? "" : "grayscale", "size-4")} />
-          }
-          variant="ghost"
-          aria-label="Connect Linear issue"
-        >
-          {linked ? `${linked.identifier}` : "Link to Linear"}
-        </Button>
+        {linked ? (
+          <Button
+            leftIcon={<LinearIcon className={"size-4"} />}
+            variant="ghost"
+            aria-label="Update Linear issue"
+          >
+            {linked.identifier}
+          </Button>
+        ) : (
+          <IconButton
+            icon={<LinearIcon className={"size-4 grayscale"} />}
+            variant="ghost"
+            aria-label="Connect Linear issue"
+          />
+        )}
       </ModalTrigger>
       <ModalContent size={"xlarge"}>
         <Tabs value={tab} onValueChange={setTab} defaultValue="link">

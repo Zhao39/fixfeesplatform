@@ -291,6 +291,9 @@ export function TaskItem({
     taskTitle = `Supplier ${taskTitle}`;
   }
 
+  const isLinearManaged =
+    integrations.has("linear") && !!task.externalId?.linear;
+
   return (
     <div className="rounded-lg border w-full flex flex-col bg-card">
       <div className="flex w-full justify-between px-4 py-2 items-center">
@@ -366,20 +369,20 @@ export function TaskItem({
           <IssueTaskStatus
             task={task}
             type="investigation"
-            isDisabled={isDisabled}
+            isDisabled={isDisabled || isLinearManaged}
           />
           <Assignee
             table={getTable(type)}
             id={task.id}
             size="sm"
             value={task.assignee ?? undefined}
-            disabled={isDisabled}
+            disabled={isDisabled || isLinearManaged}
           />
           {type === "action" && (
             <>
               <TaskDueDate
                 task={task as IssueActionTask}
-                isDisabled={isDisabled}
+                isDisabled={isDisabled || isLinearManaged}
               />
               <TaskProcesses
                 task={task as IssueActionTask}
