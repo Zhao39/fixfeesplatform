@@ -35,6 +35,8 @@ import {
 import { RxCodesandboxLogo } from "react-icons/rx";
 import { TbTargetOff } from "react-icons/tb";
 
+import type { LinearIssue } from "@carbon/ee/linear";
+import { mapLinearStatusToCarbonStatus } from "@carbon/ee/linear";
 import { useMode } from "@carbon/remix";
 import { getColor } from "@carbon/utils";
 import { Link } from "@remix-run/react";
@@ -359,5 +361,35 @@ export const LinearIcon = (props: React.SVGProps<SVGSVGElement>) => {
         ></path>{" "}
       </g>
     </svg>
+  );
+};
+
+export const LinearIssueStateBadge = (props: {
+  state: LinearIssue["state"];
+  className?: string;
+}) => {
+  const status = mapLinearStatusToCarbonStatus(props.state.type);
+  let className = props.className;
+
+  let icon: React.ReactNode = (
+    <TodoStatusIcon className={cn("text-foreground", className)} />
+  );
+
+  switch (status) {
+    case "Pending":
+      icon = <TodoStatusIcon className={cn("text-foreground", className)} />;
+    case "Skipped":
+      icon = <LuCircleX className={cn("text-muted-foreground", className)} />;
+    case "Completed":
+      icon = <LuCircleCheck className={cn("text-emerald-600", className)} />;
+    case "In Progress":
+      icon = <AlmostDoneIcon className={className} />;
+  }
+
+  return (
+    <Badge variant={"secondary"} className="py-1 bg-transparent">
+      {icon}
+      <span className="ml-1">{props.state.name}</span>
+    </Badge>
   );
 };
