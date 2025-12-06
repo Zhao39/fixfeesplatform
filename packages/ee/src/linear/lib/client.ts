@@ -177,20 +177,53 @@ export class LinearClient {
     return response.data.data.issueCreate.issue;
   }
 
-  async getUserById(companyId: string, userId: string) {
-    const query = `query User($id: String!) { user(id: $id) { id email name } }`;
+  async getUsers(companyId: string, filter: { email?: string; id?: string }) {
+    const query = `query Users($filter: UserFilter) { users(filter: $filter) { edges { node { id email } } } }`;
 
     const response = await this.instance.request<{
-      data: { user: LinearUser };
+      data: { users: { edges: Array<{ node: LinearUser }> } };
     }>({
       method: "POST",
       headers: await this.getAuthHeaders(companyId),
       data: {
         query,
-        variables: { id: userId },
+        variables: { input: filter },
       },
     });
 
-    return response.data.data.user;
+    return response.data.data.users.edges.map((el) => el.node);
+  }
+
+  async updateIssue(
+    companyId: string,
+    data: {
+      id: string;
+      title?: string;
+      description?: string;
+      assigneeId?: string | null;
+      stateId?: string;
+    }
+  ) {
+    const query = `mutation IssueUpdate($issueUpdateId: String!, $input: IssueUpdateInput!) { issueUpdate(id: $issueUpdateId, input: $input) { issue { id } } }`;
+
+    const response = await this.instance.request<{
+      data: {
+        issueUpdate: {
+          issue: { id: string };
+        };
+      };
+    }>({
+      method: "POST",
+      headers: await this.getAuthHeaders(companyId),
+      data: {
+        query,
+        variables: {
+          issueUpdateId: data.id,
+          input: data,
+        },
+      },
+    });
+
+    return response.data.data.issueUpdate.issue;
   }
 }

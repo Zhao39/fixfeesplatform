@@ -1007,7 +1007,7 @@ export async function updateIssueTaskStatus(
   args: {
     id: string;
     status: "Pending" | "Completed" | "Skipped" | "In Progress";
-    type: "action" | "approval" | "review";
+    type: "investigation" | "action" | "approval" | "review";
     userId?: string;
     assignee?: string | null;
   }
@@ -1023,21 +1023,18 @@ export async function updateIssueTaskStatus(
   const finalAssignee = assignee || userId;
 
   // Set completedDate to today when status is "Completed"
-  const updateData: {
-    status: string;
-    updatedBy?: string;
-    assignee?: string | null;
-    completedDate?: string;
-  } = {
+  const updateData = {
     status,
     updatedBy: userId,
     assignee: finalAssignee,
   };
 
   if (status === "Completed") {
+    // @ts-expect-error
     updateData.completedDate = new Date().toISOString().split("T")[0];
   }
 
+  console.log("Updating task:", table, id, updateData);
   return client
     .from(table)
     .update(updateData)

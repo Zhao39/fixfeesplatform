@@ -27,3 +27,20 @@ export const mapLinearStatusToCarbonStatus = (
       throw new Error(`Unknown Linear status: ${status}`);
   }
 };
+
+export const mapCarbonStatusToLinearStatus = (
+  status: string
+): LinearWorkStateType => {
+  switch (status) {
+    case "Pending":
+      return LinearWorkStateType.Unstarted;
+    case "In Progress":
+      return LinearWorkStateType.Started;
+    case "Completed":
+      return LinearWorkStateType.Completed;
+    case "Skipped":
+      return LinearWorkStateType.Canceled;
+    default:
+      throw new Error(`Unknown Carbon task status: ${status}`);
+  }
+};

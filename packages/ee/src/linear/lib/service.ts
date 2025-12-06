@@ -1,6 +1,6 @@
 import type { Database } from "@carbon/database";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import z from "zod";
+import { z } from "zod";
 import { LinearWorkStateType, mapLinearStatusToCarbonStatus } from "./utils";
 
 export const LinearIssueSchema = z.object({
@@ -96,3 +96,13 @@ export function unlinkActionFromLinearIssue(
     .eq("id", input.actionId)
     .select("nonConformanceId");
 }
+
+export const getLinearIssueFromExternalId = async (
+  externalId: Record<string, any> | undefined
+) => {
+  const { data } = LinearIssueSchema.safeParse(externalId?.linear);
+
+  if (!data) return null;
+
+  return data;
+};

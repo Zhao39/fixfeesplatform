@@ -6,36 +6,32 @@ import {
   linkActionToLinearIssue,
 } from "@carbon/ee/linear";
 import { task } from "@trigger.dev/sdk";
-import { z } from "zod/v3";
+import { z } from "zod";
 
 const linear = new LinearClient();
 
-export const linearEventSchema = z.discriminatedUnion("type", [
-  z.object({
-    type: z.literal("Issue"),
-    action: z.literal("update"),
-    data: LinearIssueSchema.omit({
-      assignee: true,
-    }).extend({
-      assigneeId: z.string().optional(),
-    }),
-  }),
-]);
-
-const linearSchema = z.object({
+export const syncIssueFromLinearSchema = z.object({
   companyId: z.string(),
-  event: linearEventSchema,
+  event: z.discriminatedUnion("type", [
+    z.object({
+      type: z.literal("Issue"),
+      action: z.literal("update"),
+      data: LinearIssueSchema.omit({
+        assignee: true,
+      }).extend({
+        assigneeId: z.string().optional(),
+      }),
+    }),
+  ]),
 });
 
-export const linearTask = task({
-  id: "linear",
+export const syncIssueFromLinear = task({
+  id: "sync-issue-from-linear",
   retry: {
     maxAttempts: 1,
   },
   maxDuration: 5 * 60,
-  run: async (payload: z.infer<typeof linearSchema>) => {
-    let result: { success: boolean; message: string };
-
+  run: async (payload: z.infer<typeof syncIssueFromLinearSchema>) => {
     console.info(`🔰 Linear webhook received: ${payload}`);
     console.info(`📦 Payload:`, payload);
 
@@ -76,10 +72,10 @@ export const linearTask = task({
     let assignee = null;
 
     if (payload.event.data.assigneeId) {
-      const linearUser = await linear.getUserById(
-        payload.companyId,
-        payload.event.data.assigneeId
-      );
+      const [linearUser] = await linear.getUsers(payload.companyId, {
+        id: payload.event.data.assigneeId,
+      });
+
       const employees = await getCompanyEmployees(carbon, payload.companyId, [
         linearUser?.email,
       ]);
@@ -99,19 +95,9 @@ export const linearTask = task({
       };
     }
 
-    result = {
+    return {
       success: true,
       message: `Processed ${payload.event.type} event for company ${company.data.name}`,
     };
-
-    if (result.success) {
-      console.info(`✅ Successfully processed ${payload.event.type} event`);
-    } else {
-      console.error(
-        `❌ Failed to process ${payload.event.type} event: ${result.message}`
-      );
-    }
-
-    return result;
   },
 });

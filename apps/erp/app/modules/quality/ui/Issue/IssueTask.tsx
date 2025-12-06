@@ -369,20 +369,20 @@ export function TaskItem({
           <IssueTaskStatus
             task={task}
             type="investigation"
-            isDisabled={isDisabled || isLinearManaged}
+            isDisabled={isDisabled}
           />
           <Assignee
             table={getTable(type)}
             id={task.id}
             size="sm"
             value={task.assignee ?? undefined}
-            disabled={isDisabled || isLinearManaged}
+            disabled={isDisabled}
           />
           {type === "action" && (
             <>
               <TaskDueDate
                 task={task as IssueActionTask}
-                isDisabled={isDisabled || isLinearManaged}
+                isDisabled={isDisabled}
               />
               <TaskProcesses
                 task={task as IssueActionTask}
