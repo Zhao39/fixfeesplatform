@@ -23,6 +23,8 @@ export const mapLinearStatusToCarbonStatus = (
       return "In Progress";
     case LinearWorkStateType.Canceled:
       return "Skipped";
+    case LinearWorkStateType.Completed:
+      return "Completed";
     default:
       throw new Error(`Unknown Linear status: ${status}`);
   }

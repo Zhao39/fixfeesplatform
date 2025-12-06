@@ -22,21 +22,26 @@ export class LinearNotificationService implements NotificationService {
     event: NotificationEvent,
     context: { serviceRole: SupabaseClient<Database> }
   ): Promise<void> {
-    // Currently, we have no notifications to send via Linear
-
     switch (event.type) {
       case "task.status.changed": {
-        if (event.data.type !== "action") return;
+        if (!["action", "investigation"].includes(event.data.type)) return;
 
         const issue = await getLinearIssueFromExternalId(
-          (event.data as any).externalId
+          context.serviceRole,
+          event.companyId,
+          event.data.id
         );
 
         if (!issue) return;
 
+        const state = await linear.getWorkflowState(
+          event.companyId,
+          mapCarbonStatusToLinearStatus(event.data.status)
+        );
+
         await linear.updateIssue(event.companyId, {
           id: issue.id,
-          stateId: mapCarbonStatusToLinearStatus(event.data.status),
+          stateId: state.id,
         });
 
         break;
@@ -46,7 +51,9 @@ export class LinearNotificationService implements NotificationService {
         if (event.data.table !== "nonConformanceActionTask") return;
 
         const issue = await getLinearIssueFromExternalId(
-          (event.data as any).externalId
+          context.serviceRole,
+          event.companyId,
+          event.data.id
         );
 
         if (!issue) return; // No linked Linear issue

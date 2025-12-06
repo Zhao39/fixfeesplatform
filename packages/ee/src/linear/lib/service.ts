@@ -98,9 +98,22 @@ export function unlinkActionFromLinearIssue(
 }
 
 export const getLinearIssueFromExternalId = async (
-  externalId: Record<string, any> | undefined
+  client: SupabaseClient<Database>,
+  companyId: string,
+  actionId: string
 ) => {
-  const { data } = LinearIssueSchema.safeParse(externalId?.linear);
+  const { data: action } = await client
+    .from("nonConformanceActionTask")
+    .select("externalId")
+    .eq("companyId", companyId)
+    .eq("id", actionId)
+    .maybeSingle();
+
+  if (!action) return null;
+
+  const { data } = LinearIssueSchema.safeParse(
+    (action.externalId as any)?.linear
+  );
 
   if (!data) return null;
 

@@ -35,7 +35,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const parsed = syncIssueFromLinearSchema.safeParse({
     companyId,
-    ...body,
+    event: body,
   });
 
   if (!parsed.success) {

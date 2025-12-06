@@ -48,7 +48,7 @@ export class NotificationPipeline {
   }
 
   private isNotificationService(integrationId: string): boolean {
-    const notificationServiceIds = ["slack"];
+    const notificationServiceIds = ["slack", "linear"];
     return notificationServiceIds.includes(integrationId);
   }
 }

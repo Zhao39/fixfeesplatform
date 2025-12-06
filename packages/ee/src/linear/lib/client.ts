@@ -3,6 +3,7 @@ import axios, { isAxiosError, type AxiosInstance } from "axios";
 import type z from "zod";
 import type { LinearIssueSchema } from "./service";
 import { getLinearIntegration } from "./service";
+import type { LinearWorkStateType } from "./utils";
 
 export type LinearIssue = z.infer<typeof LinearIssueSchema>;
 
@@ -204,12 +205,48 @@ export class LinearClient {
       stateId?: string;
     }
   ) {
-    const query = `mutation IssueUpdate($issueUpdateId: String!, $input: IssueUpdateInput!) { issueUpdate(id: $issueUpdateId, input: $input) { issue { id } } }`;
+    try {
+      const query = `mutation IssueUpdate($issueUpdateId: String!, $input: IssueUpdateInput!) { issueUpdate(id: $issueUpdateId, input: $input) { issue { id } } }`;
+      const { id, ...input } = data;
 
-    const response = await this.instance.request<{
+      const response = await this.instance.request<{
+        data: {
+          issueUpdate: {
+            issue: { id: string };
+          };
+        };
+      }>({
+        method: "POST",
+        headers: await this.getAuthHeaders(companyId),
+        data: {
+          query,
+          variables: {
+            issueUpdateId: id,
+            input,
+          },
+        },
+      });
+
+      return response.data.data.issueUpdate.issue;
+    } catch (error) {
+      if (isAxiosError(error)) {
+        console.dir(error.response.data, { depth: null });
+        console.dir(error.config.data, { depth: null });
+      }
+    }
+  }
+
+  async getWorkflowState(companyId: string, type: LinearWorkStateType) {
+    const query = `query GetWorkflowState($filter: WorkflowStateFilter) { workflowStates(filter: $filter ) { nodes { id name color type } } }`;
+    const res = await this.instance.request<{
       data: {
-        issueUpdate: {
-          issue: { id: string };
+        workflowStates: {
+          nodes: Array<{
+            id: string;
+            name: string;
+            color: string;
+            type: string;
+          }>;
         };
       };
     }>({
@@ -218,12 +255,13 @@ export class LinearClient {
       data: {
         query,
         variables: {
-          issueUpdateId: data.id,
-          input: data,
+          filter: {
+            type: { eq: type },
+          },
         },
       },
     });
 
-    return response.data.data.issueUpdate.issue;
+    return res.data.data.workflowStates.nodes.at(0) || null;
   }
 }

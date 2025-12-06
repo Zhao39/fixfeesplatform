@@ -1014,7 +1014,7 @@ export async function updateIssueTaskStatus(
 ) {
   const { id, status, type, userId, assignee } = args;
   const table =
-    type === "action"
+    type === "action" || type === "investigation"
       ? "nonConformanceActionTask"
       : type === "review"
       ? "nonConformanceReviewer"
@@ -1034,7 +1034,6 @@ export async function updateIssueTaskStatus(
     updateData.completedDate = new Date().toISOString().split("T")[0];
   }
 
-  console.log("Updating task:", table, id, updateData);
   return client
     .from(table)
     .update(updateData)
