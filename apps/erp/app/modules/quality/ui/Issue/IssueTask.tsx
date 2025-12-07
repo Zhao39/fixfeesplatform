@@ -50,6 +50,7 @@ import { IssueTaskStatusIcon } from "~/components/Icons";
 import SupplierAvatar from "~/components/SupplierAvatar";
 import { usePermissions, useRouteData, useUser } from "~/hooks";
 import { useIntegrations } from "~/hooks/useIntegrations";
+import { useRealtime } from "~/hooks/useRealtime";
 import type {
   Issue,
   IssueActionTask,
@@ -259,6 +260,8 @@ export function TaskItem({
   showDragHandle?: boolean;
   dragControls?: DragControls;
 }) {
+  useRealtime("nonConformanceActionTask", `id=eq.${task.id}`);
+
   const integrations = useIntegrations();
   const permissions = usePermissions();
   const disclosure = useDisclosure({
