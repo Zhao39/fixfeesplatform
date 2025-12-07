@@ -6,6 +6,7 @@ import {
   unlinkActionFromLinearIssue,
 } from "@carbon/ee/linear";
 import { type ActionFunction, type LoaderFunction, json } from "@vercel/remix";
+import { getIssueAction } from "~/modules/quality/quality.service";
 
 const linear = new LinearClient();
 

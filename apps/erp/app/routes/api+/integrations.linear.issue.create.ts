@@ -79,7 +79,12 @@ export const loader: LoaderFunction = async ({ request }) => {
     return {
       teams,
       members: members.filter((m) =>
-        employees.some((v) => v.user.email === m.email)
+        employees.some((v) => {
+          if (!v.user?.email || !m.email) {
+            return false;
+          }
+          return v.user.email.toLowerCase() === m.email.toLowerCase();
+        })
       ),
     };
   }

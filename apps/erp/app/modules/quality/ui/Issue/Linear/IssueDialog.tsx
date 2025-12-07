@@ -83,7 +83,7 @@ export const LinearIssueDialog = ({ task }: Props) => {
           />
         )}
       </ModalTrigger>
-      <ModalContent size={"xlarge"}>
+      <ModalContent size={"large"}>
         <Tabs value={tab} onValueChange={setTab} defaultValue="link">
           <ModalHeader className="mb-1 flex-row justify-between py-3">
             <div className="space-y-1">

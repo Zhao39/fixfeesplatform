@@ -1,10 +1,15 @@
 import type { LinearTeam, LinearUser } from "@carbon/ee/linear";
-import { tiptapToMarkdown } from "@carbon/ee/linear";
-import { Hidden, Input, Select } from "@carbon/form";
-import type { JSONContent } from "@carbon/react";
-import { Button, Label, ModalFooter, VStack } from "@carbon/react";
-import { Editor } from "@carbon/react/Editor";
+import {
+  Hidden,
+  Input,
+  Select,
+  Submit,
+  TextArea,
+  ValidatedForm,
+} from "@carbon/form";
+import { Button, ModalFooter, VStack } from "@carbon/react";
 import { useEffect, useId, useMemo, useState } from "react";
+import z from "zod";
 import { useAsyncFetcher } from "~/hooks/useAsyncFetcher";
 import type { IssueActionTask } from "~/modules/quality";
 import { path } from "~/utils/path";
@@ -14,17 +19,18 @@ type Props = {
   onClose: () => void;
 };
 
+const createIssueValidator = z.object({
+  actionId: z.string(),
+  teamId: z.string(),
+  title: z.string().min(1, "Title is required"),
+  description: z.string().min(1, "Description is required"),
+});
+
 export const CreateIssue = (props: Props) => {
   const id = useId();
   const [team, setTeam] = useState<string | undefined>();
-  const [assignee, setAssignee] = useState<string | undefined>();
-  const [title, setTitle] = useState(props.task.name ?? "");
-  const [description, setDescription] = useState<JSONContent>(
-    (props.task.notes as JSONContent) ?? { type: "doc", content: [] }
-  );
 
-  const { teams, members, fetcher: teamFetcher } = useLinearTeams(team);
-  const submitFetcher = useAsyncFetcher();
+  const { teams, members, fetcher } = useLinearTeams(team);
 
   const teamOptions = useMemo(
     () => teams.map((el) => ({ label: el.name, value: el.id })),
@@ -35,36 +41,18 @@ export const CreateIssue = (props: Props) => {
     [members]
   );
 
-  const isSearching = teamFetcher.state === "loading";
-  const isSubmitting = submitFetcher.state === "submitting";
-
-  const handleSubmit = async () => {
-    if (!team || !title.trim()) return;
-
-    // Convert Tiptap JSON to markdown for Linear
-    const descriptionMarkdown = tiptapToMarkdown(
-      description as { type: "doc"; content: any[] }
-    );
-
-    await submitFetcher.submit(
-      {
-        actionId: props.task.id,
-        teamId: team,
-        title: title.trim(),
-        description: descriptionMarkdown,
-        assignee: assignee ?? "",
-      },
-      {
-        method: "POST",
-        action: path.to.api.linearCreateIssue,
-      }
-    );
-
-    props.onClose();
-  };
+  const isSearching = fetcher.state === "loading";
 
   return (
-    <form id={id} onSubmit={(e) => e.preventDefault()}>
+    <ValidatedForm
+      id={id}
+      method="post"
+      action={path.to.api.linearCreateIssue}
+      validator={createIssueValidator}
+      fetcher={fetcher}
+      resetAfterSubmit
+      onAfterSubmit={() => props.onClose()}
+    >
       <VStack spacing={4}>
         <Hidden name="actionId" value={props.task.id} />
         <Select
@@ -76,29 +64,18 @@ export const CreateIssue = (props: Props) => {
           onChange={(e) => setTeam(e?.value)}
           options={teamOptions}
         />
-        <Input
-          label="Title"
-          name="title"
-          placeholder="Issue title"
+        <Input label="Title" name="title" placeholder="Issue title" required />
+        <TextArea
+          label="Description"
+          name="description"
+          placeholder="Issue description"
           required
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
         />
-        <div className="w-full">
-          <Label className="mb-2">Description</Label>
-          <Editor
-            className="min-h-[150px] border rounded-md"
-            initialValue={description}
-            onChange={setDescription}
-          />
-        </div>
         <Select
           label="Assign To"
           name="assignee"
-          placeholder="Select an assignee"
+          placeholder="Select a assignee"
           isOptional
-          value={assignee}
-          onChange={(e) => setAssignee(e?.value)}
           options={membersOptions}
         />
       </VStack>
@@ -111,16 +88,9 @@ export const CreateIssue = (props: Props) => {
         >
           Cancel
         </Button>
-        <Button
-          type="submit"
-          onClick={handleSubmit}
-          isLoading={isSubmitting}
-          isDisabled={!team || !title.trim()}
-        >
-          Create
-        </Button>
+        <Submit>Create</Submit>
       </ModalFooter>
-    </form>
+    </ValidatedForm>
   );
 };
 
