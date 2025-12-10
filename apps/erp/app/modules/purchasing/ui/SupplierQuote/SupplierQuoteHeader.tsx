@@ -91,13 +91,11 @@ const SupplierQuoteHeader = () => {
 
   const hasLines = routeData?.lines && routeData.lines.length > 0;
   const quoteStatus: string = routeData?.quote?.status ?? "";
-  const editableStatuses = ["Draft", "Active", "Declined"];
+  const editableStatuses = ["Draft", "Declined"];
   const isEditableStatus = editableStatuses.includes(quoteStatus);
 
   const canShare = routeData?.quote.externalLinkId && isEditableStatus;
-  const canPreview =
-    routeData?.quote.externalLinkId &&
-    ["Draft", "Declined"].includes(quoteStatus);
+  const canPreview = routeData?.quote.externalLinkId && isEditableStatus;
 
   const canSend =
     isEditableStatus && permissions.can("update", "purchasing") && hasLines;

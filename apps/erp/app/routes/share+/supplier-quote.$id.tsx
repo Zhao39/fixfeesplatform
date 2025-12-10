@@ -345,9 +345,7 @@ const LinePricing = ({
       ? pricingOptions.map((opt) => opt.quantity)
       : [1]; // Default to showing at least one row with quantity 1
 
-  const isDisabled = ["Expired", "Cancelled", "Declined"].includes(
-    quoteStatus || ""
-  );
+  const isDisabled = !["Draft"].includes(quoteStatus || "");
 
   const formatter = new Intl.NumberFormat(locale, {
     style: "currency",
@@ -729,7 +727,10 @@ const Quote = ({
       <Card className="w-full max-w-5xl mx-auto">
         <div className="w-full text-center">
           {quote?.status && (quote?.status as string) !== "Draft" && (
-            <Status color={quote.status === "Active" ? "green" : "gray"}>
+            <Status
+              className="inline-flex"
+              color={quote.status === "Active" ? "green" : "gray"}
+            >
               {quote.status}
             </Status>
           )}
