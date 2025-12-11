@@ -1,13 +1,8 @@
 import { VStack, cn, useDisclosure } from "@carbon/react";
 import { Link, useMatches } from "@remix-run/react";
-import { forwardRef, type AnchorHTMLAttributes, memo } from "react";
-import { z } from "zod/v3";
+import { forwardRef, memo, type AnchorHTMLAttributes } from "react";
 import { useModules, useOptimisticLocation } from "~/hooks";
 import type { Authenticated, NavItem } from "~/types";
-
-export const ModuleHandle = z.object({
-  module: z.string(),
-});
 
 const PrimaryNavigation = () => {
   const navigationPanel = useDisclosure();
@@ -15,11 +10,10 @@ const PrimaryNavigation = () => {
   const currentModule = getModule(location.pathname);
   const links = useModules();
   const matchedModules = useMatches().reduce((acc, match) => {
-    if (match.handle) {
-      const result = ModuleHandle.safeParse(match.handle);
-      if (result.success) {
-        acc.add(result.data.module);
-      }
+    const handle = match.handle as { module?: string } | undefined;
+
+    if (handle && typeof handle.module === "string") {
+      acc.add(handle.module);
     }
 
     return acc;
