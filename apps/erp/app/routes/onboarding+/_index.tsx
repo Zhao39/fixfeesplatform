@@ -3,8 +3,8 @@ import { useNavigate } from "@remix-run/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { onboardingSequence } from "~/utils/path";
 
-const Heading = motion(_Heading);
-const Button = motion(_Button);
+const Heading = motion.create(_Heading);
+const Button = motion.create(_Button);
 
 const fade = {
   initial: { opacity: 0 },
