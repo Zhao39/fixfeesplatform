@@ -23,19 +23,19 @@
     "test": "jest"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^2.0.80",
     "@carbon/auth": "*",
     "@carbon/react": "*",
     "@carbon/utils": "*",
-    "@ai-sdk/openai": "^2.0.60",
     "@slack/bolt": "~4.4.0",
-    "@slack/oauth": "~3.0.3",
+    "@slack/oauth": "~3.0.4",
     "@slack/web-api": "~7.10.0",
     "@trigger.dev/sdk": "4.0.6",
-    "ai": "^5.0.88",
+    "ai": "^5.0.110",
     "zod": "^3.25.76"
   },
   "devDependencies": {
     "@carbon/tsconfig": "*",
-    "typescript": "^5.2.2"
+    "typescript": "^5.9.3"
   }
 }

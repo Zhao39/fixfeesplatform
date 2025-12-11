@@ -1,20 +1,20 @@
 {
   "devDependencies": {
     "@types/aws-lambda": "8.10.152",
-    "csv-parse": "^5.5.0",
+    "csv-parse": "^5.6.0",
     "eslint": "^8.23.1",
     "eslint-config-carbon": "*",
     "husky": "^8.0.3",
-    "lint-staged": "^13.1.2",
+    "lint-staged": "^13.3.0",
     "npm-run-all": "^4.1.5",
     "patch-package": "^8.0.1",
     "postcss-nesting": "12.1.5",
-    "prettier": "^2.8.0",
-    "rimraf": "^5.0.5",
+    "prettier": "^2.8.8",
+    "rimraf": "^5.0.10",
     "supabase": "2.54.11",
     "ts-morph": "^22.0.0",
-    "tsx": "^4.13.2",
-    "turbo": "^1.13.2"
+    "tsx": "^4.21.0",
+    "turbo": "^1.13.4"
   },
   "lint-staged": {
     "(apps|packages)/**/*.{js,ts,jsx,tsx}": [
@@ -78,7 +78,7 @@
     "examples/*",
     "packages/*"
   ],
-  "packageManager": "npm@10.8.2",
+  "packageManager": "npm@10.9.4",
   "dependencies": {
     "sst": "3.17.14"
   }

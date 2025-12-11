@@ -3,11 +3,11 @@
   "dependencies": {
     "@babel/eslint-parser": "7.22.9",
     "@babel/preset-react": "7.22.5",
-    "@typescript-eslint/eslint-plugin": "^5.38.0",
-    "@typescript-eslint/parser": "^5.38.0",
-    "eslint-config-prettier": "^8.5.0",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "eslint-config-prettier": "^8.10.2",
     "eslint-import-resolver-node": "0.3.6",
-    "eslint-import-resolver-typescript": "^3.5.1"
+    "eslint-import-resolver-typescript": "^3.10.1"
   },
   "main": "index.js",
   "peerDependencies": {

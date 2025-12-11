@@ -9,27 +9,27 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@ai-sdk/openai": "^2.0.60",
-    "@trigger.dev/sdk": "4.0.6",
+    "@ai-sdk/openai": "^2.0.80",
     "@carbon/auth": "*",
     "@carbon/database": "*",
     "@carbon/documents": "*",
-    "@carbon/lib": "*",
     "@carbon/ee": "*",
+    "@carbon/lib": "*",
     "@carbon/notifications": "*",
-    "@internationalized/date": "^3.5.2",
+    "@internationalized/date": "^3.10.0",
     "@novu/node": "^2.0.1",
     "@react-email/components": "0.3.3",
     "@slack/web-api": "~7.10.0",
     "@supabase/functions-js": "2.1.5",
-    "@supabase/supabase-js": "^2.40.0",
-    "ai": "^5.0.88",
+    "@supabase/supabase-js": "^2.87.1",
+    "@trigger.dev/sdk": "4.0.6",
+    "ai": "^5.0.110",
     "nanoid": "5.0.4",
-    "resend": "^3.1.0",
+    "resend": "^3.5.0",
     "zod": "^3.25.76"
   },
   "devDependencies": {
     "@carbon/tsconfig": "*",
-    "typescript": "^5.2.2"
+    "typescript": "^5.9.3"
   }
 }
