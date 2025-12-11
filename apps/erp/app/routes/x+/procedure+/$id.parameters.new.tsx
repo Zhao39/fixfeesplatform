@@ -1,12 +1,11 @@
-import { json } from "@remix-run/react";
-
 import { assertIsPost, error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validator } from "@carbon/form";
+import { json } from "@remix-run/react";
 import type { ActionFunctionArgs } from "@vercel/remix";
-import { upsertProcedureParameter } from "~/modules/production/production.service";
 import { procedureParameterValidator } from "~/modules/production/production.models";
+import { upsertProcedureParameter } from "~/modules/production/production.service";
 
 export async function action({ request, params }: ActionFunctionArgs) {
   assertIsPost(request);
@@ -31,6 +30,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     );
   }
 
+  // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   const { id, ...data } = validation.data;
 
   const create = await upsertProcedureParameter(client, {

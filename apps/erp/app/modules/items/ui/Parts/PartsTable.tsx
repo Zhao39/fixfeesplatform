@@ -285,6 +285,7 @@ const PartsTable = memo(({ data, tags, count }: PartsTableProps) => {
     }
   }, [fetcher.data]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const onBulkUpdate = useCallback(
     (
       selectedRows: typeof data,

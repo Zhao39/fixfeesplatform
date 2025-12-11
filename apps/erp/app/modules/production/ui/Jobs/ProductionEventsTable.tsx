@@ -188,6 +188,7 @@ const ProductionEventsTable = memo(
 
     const navigate = useNavigate();
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
     const renderContextMenu = useCallback<
       (row: ProductionEvent) => JSX.Element
     >(

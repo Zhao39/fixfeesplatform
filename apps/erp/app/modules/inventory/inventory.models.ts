@@ -294,6 +294,7 @@ export const stockTransferValidator = z.object({
         )
         .min(1, { message: "At least one line is required" })
         .parse(parsed);
+      // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
     } catch (e) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,

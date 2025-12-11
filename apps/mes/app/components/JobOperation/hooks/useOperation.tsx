@@ -44,9 +44,11 @@ export function useOperation({
 }) {
   const [params] = useUrlParams();
   const trackedEntityParam = params.get("trackedEntityId");
+  // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   const { carbon, accessToken } = useCarbon();
   const user = useUser();
   const revalidator = useRevalidator();
+  // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   const channelRef = useRef<RealtimeChannel | null>(null);
 
   const scrapModal = useDisclosure();
@@ -252,6 +254,7 @@ export function useOperation({
     []
   );
   // show the serial selector with the remaining serial numbers for the operation
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (trackedEntityParam) return;
     const uncompletedEntities = trackedEntities.filter(

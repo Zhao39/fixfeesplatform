@@ -17,6 +17,7 @@ export const Markdown = memo(
     const components = useMemo(() => {
       return {
         a: (props) => {
+          // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
           const { children, node, href, ...rest } = props;
           if (href?.startsWith("/")) {
             return (

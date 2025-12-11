@@ -2249,8 +2249,11 @@ export async function getOrCreatePart(
   const {
     companyId,
     component,
+    // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
     defaultMethodType,
+    // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
     defaultTrackingType,
+    // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
     billOfProcessBlackList = []
   } = args;
 

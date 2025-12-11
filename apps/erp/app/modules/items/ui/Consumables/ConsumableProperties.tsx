@@ -10,19 +10,20 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
   HStack,
-  toast,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  toast,
   VStack
 } from "@carbon/react";
 import { Await, useFetcher, useParams } from "@remix-run/react";
 import { Suspense, useCallback, useEffect } from "react";
 import { LuCopy, LuLink } from "react-icons/lu";
-import { zfd } from "zod-form-data";
 import { z } from "zod/v3";
+import { zfd } from "zod-form-data";
 import { MethodBadge, MethodIcon, TrackingTypeIcon } from "~/components";
 import { Enumerable } from "~/components/Enumerable";
+// biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
 import { Boolean, Tags } from "~/components/Form";
 import CustomFormInlineFields from "~/components/Form/CustomFormInlineFields";
 import { ItemThumbnailUpload } from "~/components/ItemThumnailUpload";
@@ -76,6 +77,7 @@ const ConsumableProperties = () => {
       toast.error(fetcher.data.error.message);
     }
   }, [fetcher.data]);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const onUpdate = useCallback(
     (
       field:
@@ -101,6 +103,7 @@ const ConsumableProperties = () => {
     [itemId]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const onUpdateTags = useCallback(
     (value: string[]) => {
       const formData = new FormData();
@@ -121,6 +124,7 @@ const ConsumableProperties = () => {
     [routeData?.consumableSummary?.readableId]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const onUpdateCustomFields = useCallback(
     (value: string) => {
       const formData = new FormData();

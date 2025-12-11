@@ -1,9 +1,11 @@
 import { useCarbon } from "@carbon/auth";
 import type { Database } from "@carbon/database";
 import {
+  // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
   Boolean,
   DatePicker,
   Input,
+  // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
   Number,
   ValidatedForm
 } from "@carbon/form";
@@ -36,8 +38,8 @@ import {
   Table,
   Tbody,
   Td,
-  toast,
   Tr,
+  toast,
   useDisclosure,
   VStack
 } from "@carbon/react";
@@ -105,6 +107,7 @@ const GaugeCalibrationRecordForm = ({
   const { carbon } = useCarbon();
   const { options: gaugeOptions, gaugeTypes } = useGauges();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (initialValues.gaugeId) {
       onGaugeSelected(initialValues.gaugeId);

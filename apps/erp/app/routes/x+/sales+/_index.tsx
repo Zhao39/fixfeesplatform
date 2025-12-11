@@ -8,8 +8,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  cn,
   Combobox,
+  cn,
   DateRangePicker,
   DropdownMenu,
   DropdownMenuContent,
@@ -231,6 +231,7 @@ export default function SalesDashboard() {
     chartIntervals.find((i) => i.key === interval) || chartIntervals[1];
   const selectedKpiData = KPIs.find((k) => k.key === selectedKpi) || KPIs[0];
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     kpiFetcher.load(
       `${path.to.api.salesKpi(

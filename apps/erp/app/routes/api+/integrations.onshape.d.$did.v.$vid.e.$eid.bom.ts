@@ -98,7 +98,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       const uniquePartNumbers = new Set(
         flattenedData.map((row) =>
           getReadableIdWithRevision(
+            // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
             row["Part number"] || row["Name"],
+            // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
             row["Revision"]
           )
         )
@@ -137,7 +139,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       const flattenedDataWithMetadata = flattenedData.map((row) => {
         const item = itemsMap?.get(
           getReadableIdWithRevision(
+            // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
             row["Part number"] || row["Name"],
+            // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
             row["Revision"]
           )
         );
@@ -158,18 +162,24 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         }
 
         return {
+          // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
           index: row["Item"],
           readableId: row["Part number"],
+          // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
           revision: row["Revision"],
           readableIdWithRevision: getReadableIdWithRevision(
             row["Part number"],
+            // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
             row["Revision"]
           ),
+          // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
           name: row["Name"],
           id: item?.itemId ?? undefined,
           replenishmentSystem,
           defaultMethodType,
+          // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
           quantity: row["Quantity"],
+          // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
           level: row["Item"].toString().split(".").length,
           data: row
         };

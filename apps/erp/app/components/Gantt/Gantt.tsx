@@ -2,6 +2,7 @@ import type { Shortcut } from "@carbon/react";
 import {
   Badge,
   Button,
+  cn,
   Input,
   InputGroup,
   InputLeftElement,
@@ -16,7 +17,6 @@ import {
   ShortcutKey,
   Slider,
   Switch,
-  cn,
   shortcutKeyVariants,
   useDebounce,
   useInitialDimensions,
@@ -40,18 +40,17 @@ import {
   ShowParentIconSelected
 } from "~/assets/icons/ShowParentIcon";
 import tileBgPath from "~/assets/images/error-banner-tile@2x.png";
-import { GanttIcon } from "./components/GanttIcon";
-
 import type { GanttEvent } from "~/components/Gantt/types";
 import * as Timeline from "~/components/Timeline";
 import type { NodesState, UseTreeStateOutput } from "~/components/TreeView";
 import { LevelLine, TreeView, useTree } from "~/components/TreeView";
 import { setResizableGanttSettings } from "~/utils/resizable-panels";
+import { GanttIcon } from "./components/GanttIcon";
 import {
   GanttTaskStatusIcon,
   runStatusClassNameColor
 } from "./components/GanttTaskStatus";
-import { SpanTitle, eventBackgroundClassName } from "./components/SpanTitle";
+import { eventBackgroundClassName, SpanTitle } from "./components/SpanTitle";
 
 type GanttProps = {
   events: GanttEvent[];
@@ -359,6 +358,7 @@ const GanttTimeline = ({
 
   //we want to live-update the duration if the root span is still in progress
   const [duration, setDuration] = useState(totalDuration);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (rootSpanStatus !== "inprogress" || !rootStartedAt) {
       setDuration(totalDuration);

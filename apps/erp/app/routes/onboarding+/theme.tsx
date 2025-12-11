@@ -83,6 +83,7 @@ export default function OnboardingTheme() {
     });
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     const t = themes.find((t) => t.name === theme);
     if (t) {

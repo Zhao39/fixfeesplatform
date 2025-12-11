@@ -182,6 +182,7 @@ function useFormControlProvider(props: FormControlContextType) {
       "data-invalid": dataAttr(isInvalid),
       "data-readonly": dataAttr(isReadOnly)
     }),
+    // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
     [htmlProps, isDisabled, isFocused, isInvalid, isReadOnly]
   );
 

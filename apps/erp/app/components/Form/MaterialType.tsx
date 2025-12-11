@@ -93,6 +93,7 @@ export const useMaterialTypes = (substanceId?: string, formId?: string) => {
     }
   });
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (substanceId && formId) {
       materialTypes.load(path.to.api.materialTypes(substanceId, formId));

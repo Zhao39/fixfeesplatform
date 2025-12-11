@@ -1,7 +1,7 @@
-import { BubbleMenu, isNodeSelection, useCurrentEditor } from "@tiptap/react";
 import type { BubbleMenuProps } from "@tiptap/react";
-import { forwardRef, useEffect, useMemo, useRef } from "react";
+import { BubbleMenu, isNodeSelection, useCurrentEditor } from "@tiptap/react";
 import type { ReactNode } from "react";
+import { forwardRef, useEffect, useMemo, useRef } from "react";
 import type { Instance, Props } from "tippy.js";
 
 export interface EditorBubbleProps extends Omit<BubbleMenuProps, "editor"> {
@@ -20,6 +20,7 @@ export const EditorBubble = forwardRef<HTMLDivElement, EditorBubbleProps>(
       instanceRef.current.popperInstance?.update();
     }, [tippyOptions?.placement]);
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
     const bubbleMenuProps: Omit<BubbleMenuProps, "children"> = useMemo(() => {
       const shouldShow: BubbleMenuProps["shouldShow"] = ({ editor, state }) => {
         const { selection } = state;
@@ -61,6 +62,7 @@ export const EditorBubble = forwardRef<HTMLDivElement, EditorBubbleProps>(
         editor: currentEditor,
         ...rest
       };
+      // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
     }, [rest, tippyOptions]);
 
     if (!currentEditor) return null;

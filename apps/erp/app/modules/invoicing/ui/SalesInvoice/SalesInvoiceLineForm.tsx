@@ -1,3 +1,5 @@
+import { useCarbon } from "@carbon/auth";
+import { ValidatedForm } from "@carbon/form";
 import {
   Alert,
   AlertTitle,
@@ -17,9 +19,6 @@ import {
   toast,
   VStack
 } from "@carbon/react";
-
-import { useCarbon } from "@carbon/auth";
-import { ValidatedForm } from "@carbon/form";
 import { getItemReadableId } from "@carbon/utils";
 import { useParams } from "@remix-run/react";
 import { useEffect, useState } from "react";
@@ -31,6 +30,7 @@ import {
   Hidden,
   Item,
   Location,
+  // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
   Number,
   NumberControlled,
   SelectControlled,

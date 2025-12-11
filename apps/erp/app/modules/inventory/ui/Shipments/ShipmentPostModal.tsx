@@ -134,6 +134,7 @@ const ShipmentPostModal = ({ onClose }: { onClose: () => void }) => {
 
   const fetcher = useFetcher<{}>();
   const submitted = useRef(false);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (fetcher.state === "idle" && submitted.current) {
       onClose();

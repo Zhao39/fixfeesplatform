@@ -7,7 +7,7 @@ import { getSalesOrderStatus } from "@carbon/utils";
 import { getLocalTimeZone, today } from "@internationalized/date";
 import { renderAsync } from "@react-email/components";
 import { tasks } from "@trigger.dev/sdk";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
 import { parseAcceptLanguage } from "intl-parse-accept-language";
 import { getPaymentTermsList } from "~/modules/accounting";
 import { upsertDocument } from "~/modules/documents";
@@ -127,6 +127,7 @@ export async function action(args: ActionFunctionArgs) {
           message: "Failed to create document"
         });
       }
+      // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
     } catch (err) {
       return json({
         success: false,
@@ -249,6 +250,7 @@ export async function action(args: ActionFunctionArgs) {
             ],
             companyId
           });
+          // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
         } catch (err) {
           return json({
             success: false,

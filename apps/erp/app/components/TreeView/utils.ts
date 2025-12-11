@@ -1,5 +1,5 @@
-import type { Filter, FlatTree } from "./TreeView";
 import type { Changes, NodeState, NodesState, TreeState } from "./reducer";
+import type { Filter, FlatTree } from "./TreeView";
 
 type PartialNodeState = Record<string, Partial<NodeState>>;
 
@@ -95,6 +95,7 @@ export function selectedIdFromState(state: NodesState): string | undefined {
   return selected?.[0];
 }
 
+// biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
 export function applyFilterToState<TData>({
   tree,
   nodes,
@@ -227,6 +228,7 @@ export function lastVisibleNode(tree: FlatTree<any>, nodes: NodesState) {
     .find((node) => nodes[node.id].visible === true);
 }
 
+// biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
 function areSetsEqual<T>(a: Set<T>, b: Set<T>): boolean {
   return a.size === b.size && [...a].every((value) => b.has(value));
 }
@@ -251,6 +253,7 @@ export function generateChanges(a: NodesState, b: NodesState): Changes {
   const collapsedIdsA = new Set(collapsedIdsFromState(a));
   const collapsedIdsB = new Set(collapsedIdsFromState(b));
 
+  // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   const collapsedChanges = [...difference(collapsedIdsA, collapsedIdsB)];
 
   return {

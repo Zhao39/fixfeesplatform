@@ -78,6 +78,7 @@ export async function action({ request }: ActionFunctionArgs) {
     return validationError(validation.error);
   }
 
+  // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   const { id, ...data } = validation.data;
   let invoiceId = data.invoiceId;
   const useNextSequence = !invoiceId;

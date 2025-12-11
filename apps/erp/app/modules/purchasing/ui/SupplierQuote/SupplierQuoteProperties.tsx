@@ -4,18 +4,18 @@ import {
   Button,
   HStack,
   IconButton,
-  toast,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  toast,
   VStack
 } from "@carbon/react";
 import { useLocale } from "@react-aria/i18n";
 import { useFetcher, useParams } from "@remix-run/react";
 import { useCallback, useEffect, useMemo } from "react";
 import { LuCopy, LuInfo, LuLink, LuRefreshCcw } from "react-icons/lu";
-import { zfd } from "zod-form-data";
 import { z } from "zod/v3";
+import { zfd } from "zod-form-data";
 import { Assignee, useOptimisticAssignment } from "~/components";
 import {
   Currency,
@@ -58,6 +58,7 @@ const SupplierQuoteProperties = () => {
     [locale]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const onUpdate = useCallback(
     (field: keyof SupplierQuote, value: string | null) => {
       if (value === routeData?.quote[field]) {
@@ -77,6 +78,7 @@ const SupplierQuoteProperties = () => {
     [id, routeData?.quote]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const onUpdateCustomFields = useCallback(
     (value: string) => {
       const formData = new FormData();

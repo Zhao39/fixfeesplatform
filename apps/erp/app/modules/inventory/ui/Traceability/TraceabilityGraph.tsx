@@ -5,8 +5,8 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-  VStack,
-  useMount
+  useMount,
+  VStack
 } from "@carbon/react";
 import type {
   TrackedActivityAttributes,
@@ -465,6 +465,7 @@ export function TraceabilitySidebar({
                 return (
                   <JobMakeMethodAttribute
                     key={key}
+                    // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
                     jobId={selectedNodeAttributes["Job"]}
                     makeMethodId={value}
                     materialId={selectedNodeAttributes["Job Material"]}
@@ -474,6 +475,7 @@ export function TraceabilitySidebar({
                 return (
                   <JobOperationAttribute
                     key={key}
+                    // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
                     jobId={selectedNodeAttributes["Job"]}
                     operationId={value}
                   />
@@ -500,6 +502,7 @@ export function TraceabilitySidebar({
                 return (
                   <JobProductionEvent
                     key={key}
+                    // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
                     jobId={selectedNodeAttributes["Job"]}
                     eventId={value}
                   />

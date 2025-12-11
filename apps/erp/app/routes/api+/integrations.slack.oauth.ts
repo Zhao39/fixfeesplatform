@@ -12,7 +12,7 @@ import {
   slackOAuthCallbackSchema,
   slackOAuthTokenResponseSchema
 } from "@carbon/ee/slack.server";
-import { json, redirect, type LoaderFunctionArgs } from "@vercel/remix";
+import { json, type LoaderFunctionArgs, redirect } from "@vercel/remix";
 import { z } from "zod/v3";
 import { upsertCompanyIntegration } from "~/modules/settings/settings.server";
 import { path } from "~/utils/path";
@@ -89,6 +89,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     let responseData;
     try {
       responseData = JSON.parse(responseText);
+      // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
     } catch (parseError) {
       return json(
         { error: "Invalid JSON response from Slack" },
@@ -157,6 +158,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
               }
             ]
           });
+          // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
         } catch (err) {
           // Silently fail if welcome message can't be posted
         }
@@ -177,6 +179,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
         { status: 500 }
       );
     }
+    // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   } catch (err) {
     return json(
       { error: "Failed to exchange code for token" },

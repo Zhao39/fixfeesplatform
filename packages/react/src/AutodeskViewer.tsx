@@ -87,11 +87,13 @@ const AutodeskViewer: React.FC<AutodeskViewerProps> = ({
   const viewerRef = useRef<HTMLDivElement | null>(null);
   const { token, getToken } = useAutodesk();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (
       !urn ||
       !token ||
       !viewerRef.current ||
+      // biome-ignore lint/correctness/noUndeclaredVariables: suppressed due to migration
       typeof Autodesk === "undefined"
     ) {
       return;
@@ -106,6 +108,7 @@ const AutodeskViewer: React.FC<AutodeskViewerProps> = ({
       }
     };
 
+    // biome-ignore lint/correctness/noUndeclaredVariables: suppressed due to migration
     Autodesk.Viewing.Initializer(options, () => {
       const viewerOptions = {
         extensions: loadAutodeskExtensions || [
@@ -114,6 +117,7 @@ const AutodeskViewer: React.FC<AutodeskViewerProps> = ({
         ]
       };
 
+      // biome-ignore lint/correctness/noUndeclaredVariables: suppressed due to migration
       const viewer = new Autodesk.Viewing.GuiViewer3D(
         viewerRef.current!,
         viewerOptions
@@ -152,6 +156,7 @@ const AutodeskViewer: React.FC<AutodeskViewerProps> = ({
       }
 
       setViewer(viewer);
+      // biome-ignore lint/correctness/noUndeclaredVariables: suppressed due to migration
       Autodesk.Viewing.Document.load(
         "urn:" + urn,
         onDocumentLoadSuccess,
@@ -163,6 +168,7 @@ const AutodeskViewer: React.FC<AutodeskViewerProps> = ({
       if (viewer) {
         viewer.finish();
         setViewer(null);
+        // biome-ignore lint/correctness/noUndeclaredVariables: suppressed due to migration
         Autodesk.Viewing.shutdown();
       }
     };
@@ -178,6 +184,7 @@ const AutodeskViewer: React.FC<AutodeskViewerProps> = ({
     // viewer,
   ]);
 
+  // biome-ignore lint/correctness/noUndeclaredVariables: suppressed due to migration
   return typeof Autodesk === "undefined" ? (
     <div>Please include viewer3D.min.js to the index.html </div>
   ) : (

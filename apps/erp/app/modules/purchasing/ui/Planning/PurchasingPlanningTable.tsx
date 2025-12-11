@@ -133,10 +133,12 @@ const PlanningTable = memo(
     }, [mrpFetcher.state, mrpFetcher.data]);
 
     // Clear local state when data changes (e.g., filters, search)
+    // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
     useEffect(() => {
       setOrdersMap({});
     }, [data]);
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
     const onBulkUpdate = useCallback(
       (selectedRows: typeof data, action: "order") => {
         const payload = {
@@ -208,6 +210,7 @@ const PlanningTable = memo(
     >(new Map());
     const [isPending, startTransition] = useTransition();
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
     useEffect(() => {
       startTransition(() => {
         const ordersByItemId = new Map<string, PlannedOrder[]>();
@@ -226,6 +229,7 @@ const PlanningTable = memo(
       });
     }, [data]);
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
     const columns = useMemo<ColumnDef<PurchasingPlanningItem>[]>(() => {
       const periodColumns: ColumnDef<PurchasingPlanningItem>[] = periods.map(
         (period, index) => {

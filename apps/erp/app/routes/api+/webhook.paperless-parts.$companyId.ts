@@ -107,6 +107,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     });
 
     return json({ success: true });
+    // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   } catch (err) {
     return json({ success: false }, { status: 500 });
   }

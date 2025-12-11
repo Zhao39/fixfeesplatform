@@ -1,3 +1,4 @@
+import { ValidatedForm } from "@carbon/form";
 import {
   Button,
   Drawer,
@@ -9,12 +10,12 @@ import {
   HStack,
   VStack
 } from "@carbon/react";
-
-import { ValidatedForm } from "@carbon/form";
 import { useState } from "react";
 import type { z } from "zod/v3";
 import {
+  // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
   Array,
+  // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
   Boolean,
   Hidden,
   Input,

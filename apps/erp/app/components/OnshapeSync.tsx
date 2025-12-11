@@ -3,8 +3,8 @@ import { OnshapeLogo } from "@carbon/ee";
 import {
   Badge,
   Button,
-  cn,
   Combobox,
+  cn,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuIcon,
@@ -93,6 +93,7 @@ export const OnshapeSync = ({
     | { data: null; error: string }
   >({});
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (!isDisabled && initialized) {
       documentsFetcher.load(path.to.api.onShapeDocuments);
@@ -122,6 +123,7 @@ export const OnshapeSync = ({
     | { data: null; error: string }
   >({});
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (documentId && !isDisabled && initialized) {
       versionsFetcher.load(path.to.api.onShapeVersions(documentId));
@@ -145,6 +147,7 @@ export const OnshapeSync = ({
     | { data: null; error: string }
   >({});
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (documentId && versionId && !isDisabled && initialized) {
       elementsFetcher.load(path.to.api.onShapeElements(documentId, versionId));
@@ -446,7 +449,9 @@ export const OnshapeSync = ({
                       <Status color="red">No part ID</Status>
                     )}
                     {!isSynced && partId && <PulsingDot className="mt-0.5" />}
+                    {/** biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration */}
                     {row.data["State"] && (
+                      // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
                       <OnshapeStatus status={row.data["State"]} />
                     )}
                   </div>

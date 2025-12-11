@@ -16,8 +16,8 @@ import {
   CardHeader,
   CardTitle,
   Checkbox,
-  cn,
   Count,
+  cn,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -35,12 +35,12 @@ import {
   ModalHeader,
   ModalTitle,
   ScrollArea,
-  toast,
   ToggleGroup,
   ToggleGroupItem,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  toast,
   useDebounce,
   useDisclosure,
   useMount,
@@ -93,6 +93,7 @@ import Activity from "~/components/Activity";
 import {
   Hidden,
   InputControlled,
+  // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
   Number,
   NumberControlled,
   Process,
@@ -369,6 +370,7 @@ const JobBillOfProcess = ({
   salesOrderLineId,
   customerId
 }: JobBillOfProcessProps) => {
+  // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   const { carbon, accessToken } = useCarbon();
   const sortOrderFetcher = useFetcher<{}>();
   const deleteOperationFetcher = useFetcher<{ success: boolean }>();
@@ -1358,11 +1360,13 @@ function StepsListItem({
     }
     try {
       return JSON.parse(attribute.description);
+      // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
     } catch (e) {
       return {};
     }
   });
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (submitted.current && fetcher.state === "idle") {
       disclosure.onClose();
@@ -1872,6 +1876,7 @@ function ParametersListItem({
   const submitted = useRef(false);
   const fetcher = useFetcher<typeof editJobOperationParameterAction>();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (submitted.current && fetcher.state === "idle") {
       disclosure.onClose();
@@ -2897,6 +2902,7 @@ function ToolsListItem({
   const submitted = useRef(false);
   const fetcher = useFetcher<typeof editJobOperationToolAction>();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (submitted.current && fetcher.state === "idle") {
       disclosure.onClose();
@@ -3111,6 +3117,7 @@ function OperationChat({ jobOperationId }: { jobOperationId: string }) {
   const [employees] = usePeople();
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   const { carbon, accessToken } = useCarbon();
 
   const fetchChat = async () => {

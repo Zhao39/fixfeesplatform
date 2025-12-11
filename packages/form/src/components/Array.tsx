@@ -21,6 +21,7 @@ type FormArrayProps = InputProps & {
   isRequired?: boolean;
 };
 
+// biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
 const Array = forwardRef<HTMLInputElement, FormArrayProps>(
   ({ name, label, isRequired, ...rest }, ref) => {
     const listRef = useRef<HTMLDivElement>(null);

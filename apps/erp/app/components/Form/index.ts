@@ -1,6 +1,8 @@
 import {
+  // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
   Array,
   ArrayNumeric,
+  // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
   Boolean,
   Combobox,
   CreatableCombobox,
@@ -12,6 +14,7 @@ import {
   Input,
   InputControlled,
   MultiSelect,
+  // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
   Number,
   NumberControlled,
   Password,
@@ -28,23 +31,23 @@ import {
 import Abilities from "./Abilities";
 import Ability from "./Ability";
 import Account from "./Account";
-import AddressAutocomplete from "./AddressAutocomplete";
 import AccountCategory from "./AccountCategory";
 import AccountSubcategory from "./AccountSubcategory";
+import AddressAutocomplete from "./AddressAutocomplete";
 import Color from "./Color";
 import ConversionFactor from "./ConversionFactor";
 import Currency from "./Currency";
-import CustomFormFields from "./CustomFormFields";
 import Customer from "./Customer";
 import CustomerContact from "./CustomerContact";
 import CustomerLocation from "./CustomerLocation";
 import CustomerStatus from "./CustomerStatus";
 import CustomerType from "./CustomerType";
+import CustomFormFields from "./CustomFormFields";
 import DefaultMethodType from "./DefaultMethodType";
 import Department from "./Department";
+import EmojiPicker from "./EmojiPicker";
 import Employee from "./Employee";
 import Employees from "./Employees";
-import EmojiPicker from "./EmojiPicker";
 import Item from "./Item";
 import ItemPostingGroup from "./ItemPostingGroup";
 import Location from "./Location";
@@ -65,8 +68,8 @@ import SupplierContact from "./SupplierContact";
 import SupplierLocation from "./SupplierLocation";
 import SupplierProcess from "./SupplierProcess";
 import SupplierStatus from "./SupplierStatus";
-import SupplierType from "./SupplierType";
 import Suppliers from "./Suppliers";
+import SupplierType from "./SupplierType";
 import Tags from "./Tags";
 import Tool from "./Tool";
 import UnitHint from "./UnitHint";

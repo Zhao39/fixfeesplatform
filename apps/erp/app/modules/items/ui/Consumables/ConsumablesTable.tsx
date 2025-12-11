@@ -276,6 +276,7 @@ const ConsumablesTable = memo(
         toast.error(fetcher.data.error.message);
       }
     }, [fetcher.data]);
+    // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
     const onBulkUpdate = useCallback(
       (
         selectedRows: typeof data,

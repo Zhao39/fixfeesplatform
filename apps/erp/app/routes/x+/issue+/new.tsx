@@ -78,6 +78,7 @@ export async function action({ request }: ActionFunctionArgs) {
     );
   }
 
+  // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   const { id, ...nonConformance } = validation.data;
 
   const createIssue = await upsertIssue(serviceRole, {

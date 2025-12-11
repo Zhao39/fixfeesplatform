@@ -159,6 +159,7 @@ const JobMaterialsTable = memo(({ data, count }: JobMaterialsTableProps) => {
     }
   });
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const columns = useMemo<ColumnDef<JobMaterial>[]>(() => {
     return [
       {
@@ -511,6 +512,7 @@ const StockTransferSessionWidget = ({ jobId }: { jobId: string }) => {
     setStockTransferSession({ items: [] });
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (fetcher.data?.success) {
       onClearAll();

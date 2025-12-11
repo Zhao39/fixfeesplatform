@@ -35,6 +35,7 @@ const ShippingMethodsTable = memo(
     const customColumns =
       useCustomColumns<(typeof data)[number]>("shippingMethod");
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
     const columns = useMemo<ColumnDef<(typeof data)[number]>[]>(() => {
       let result: ColumnDef<(typeof rows)[number]>[] = [
         {

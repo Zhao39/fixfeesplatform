@@ -42,6 +42,7 @@ export const ImportCSVModal = ({ table, onClose }: ImportCSVModalProps) => {
     null
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (fetcher.data?.success === true) {
       toast.success("Import successful.");

@@ -4,6 +4,8 @@ import {
   getCarbonServiceRole,
   success
 } from "@carbon/auth";
+import { flash } from "@carbon/auth/session.server";
+import { validationError, validator } from "@carbon/form";
 import type { JSONContent } from "@carbon/react";
 import {
   Button,
@@ -19,9 +21,6 @@ import {
   useDisclosure,
   VStack
 } from "@carbon/react";
-
-import { flash } from "@carbon/auth/session.server";
-import { validationError, validator } from "@carbon/form";
 import { Editor } from "@carbon/react/Editor";
 import { useMode } from "@carbon/remix";
 import {
@@ -154,6 +153,7 @@ export const scarValidator = z.object({
       }
       try {
         return JSON.parse(str);
+        // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
       } catch (e) {
         ctx.addIssue({ code: "custom", message: "Invalid JSON" });
         return z.NEVER;

@@ -84,6 +84,7 @@ export async function action(args: ActionFunctionArgs) {
         message: "Failed to post sales invoice"
       };
     }
+    // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   } catch (err) {
     await client
       .from("salesInvoice")
@@ -175,6 +176,7 @@ export async function action(args: ActionFunctionArgs) {
         message: "Failed to create document"
       };
     }
+    // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   } catch (err) {
     return {
       success: false,
@@ -305,6 +307,7 @@ export async function action(args: ActionFunctionArgs) {
           ],
           companyId
         });
+        // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
       } catch (err) {
         return {
           success: false,

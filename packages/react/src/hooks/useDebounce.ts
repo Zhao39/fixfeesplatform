@@ -15,6 +15,7 @@ export default function useDebounce<T extends (...args: any[]) => any>(
   const timeout = useRef<ReturnType<typeof setTimeout>>();
   const argsRef = useRef<Parameters<T>>();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     return () => {
       if (executeOnUnmount && timeout.current && argsRef.current) {

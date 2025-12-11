@@ -1,3 +1,15 @@
+import { useCarbon } from "@carbon/auth";
+import {
+  Combobox,
+  DateTimePicker,
+  Hidden,
+  Input as InputField,
+  // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
+  Number,
+  Select,
+  Submit,
+  ValidatedForm
+} from "@carbon/form";
 import {
   Button,
   Checkbox,
@@ -5,6 +17,7 @@ import {
   generateHTML,
   HStack,
   IconButton,
+  type JSONContent,
   Modal,
   ModalBody,
   ModalContent,
@@ -14,33 +27,17 @@ import {
   ModalTitle,
   Switch,
   Table,
-  Td,
   Tbody,
-  toast,
+  Td,
   Tr,
+  toast,
   useDisclosure,
-  VStack,
-  type JSONContent
+  VStack
 } from "@carbon/react";
+import { formatDateTime, parseMentionsFromDocument } from "@carbon/utils";
+import { useNumberFormatter } from "@react-aria/i18n";
 import { useFetcher } from "@remix-run/react";
 import { useEffect, useMemo, useState } from "react";
-import { useUser } from "~/hooks";
-import { stepRecordValidator } from "~/services/models";
-import type { JobOperationStep } from "~/services/types";
-import { getPrivateUrl, path } from "~/utils/path";
-
-import { useCarbon } from "@carbon/auth";
-import {
-  Combobox,
-  DateTimePicker,
-  Hidden,
-  Input as InputField,
-  Number,
-  Select,
-  Submit,
-  ValidatedForm
-} from "@carbon/form";
-import { formatDateTime, parseMentionsFromDocument } from "@carbon/utils";
 import {
   LuChevronDown,
   LuChevronRight,
@@ -50,11 +47,13 @@ import {
   LuTrash
 } from "react-icons/lu";
 import { ProcedureStepTypeIcon } from "~/components/Icons";
-import { useItems, usePeople } from "~/stores";
-import FileDropzone from "../../FileDropzone";
-
-import { useNumberFormatter } from "@react-aria/i18n";
 import ItemThumbnail from "~/components/ItemThumbnail";
+import { useUser } from "~/hooks";
+import { stepRecordValidator } from "~/services/models";
+import type { JobOperationStep } from "~/services/types";
+import { useItems, usePeople } from "~/stores";
+import { getPrivateUrl, path } from "~/utils/path";
+import FileDropzone from "../../FileDropzone";
 
 export function StepsListItem({
   activeStep,

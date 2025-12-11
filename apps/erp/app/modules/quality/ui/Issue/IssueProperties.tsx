@@ -9,10 +9,10 @@ import {
 import {
   Button,
   HStack,
-  toast,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  toast,
   VStack
 } from "@carbon/react";
 import { useFetcher, useParams } from "@remix-run/react";
@@ -73,6 +73,7 @@ const IssueProperties = () => {
     }
   }, [fetcher.data]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const onUpdate = useCallback(
     (
       field:
@@ -108,6 +109,7 @@ const IssueProperties = () => {
     [id]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const onUpdateTags = useCallback(
     (value: string[]) => {
       const formData = new FormData();
@@ -127,6 +129,7 @@ const IssueProperties = () => {
     [id]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const onUpdateCustomFields = useCallback(
     (value: string) => {
       const formData = new FormData();

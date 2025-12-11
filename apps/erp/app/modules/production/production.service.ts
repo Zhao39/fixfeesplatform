@@ -1,5 +1,5 @@
 import { getCarbonServiceRole } from "@carbon/auth";
-import { fetchAllFromTable, type Database, type Json } from "@carbon/database";
+import { type Database, fetchAllFromTable, type Json } from "@carbon/database";
 import type { JSONContent } from "@carbon/react";
 import { parseDate } from "@internationalized/date";
 import type { FileObject, StorageError } from "@supabase/storage-js";
@@ -901,6 +901,7 @@ function getJobMethodTreeArrayToTree(items: JobMethod[]): JobMethodTreeItem[] {
       lookup[itemId] = { id: itemId, children: [] };
     }
 
+    // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
     lookup[itemId]["data"] = item;
 
     const treeItem = lookup[itemId];
@@ -913,6 +914,7 @@ function getJobMethodTreeArrayToTree(items: JobMethod[]): JobMethodTreeItem[] {
         lookup[parentId] = { id: parentId, children: [] };
       }
 
+      // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
       lookup[parentId]["children"].push(treeItem);
     }
   }
@@ -2252,6 +2254,7 @@ export async function upsertProcedure(
         attributes.length > 0
           ? client.from("procedureStep").insert(
               attributes.map((attribute) => {
+                // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
                 const { id, procedureId, ...rest } = attribute;
                 return {
                   ...rest,
@@ -2264,6 +2267,7 @@ export async function upsertProcedure(
         parameters.length > 0
           ? client.from("procedureParameter").insert(
               parameters.map((parameter) => {
+                // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
                 const { id, procedureId, ...rest } = parameter;
                 return {
                   ...rest,

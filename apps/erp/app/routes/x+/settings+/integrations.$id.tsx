@@ -5,7 +5,7 @@ import { integrations as availableIntegrations } from "@carbon/ee";
 import { validationError, validator } from "@carbon/form";
 import { redirect, useLoaderData, useNavigate } from "@remix-run/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
-import { IntegrationForm, getIntegration } from "~/modules/settings";
+import { getIntegration, IntegrationForm } from "~/modules/settings";
 import { upsertCompanyIntegration } from "~/modules/settings/settings.server";
 import { path } from "~/utils/path";
 
@@ -60,6 +60,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     return validationError(validation.error);
   }
 
+  // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   const { active, ...data } = validation.data;
 
   const update = await upsertCompanyIntegration(client, {

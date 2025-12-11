@@ -121,6 +121,7 @@ function useReadableTrackedEntities(data: Job[], companyId: string) {
     }
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     getTrackedEntities(
       data.reduce<string[]>((acc, curr) => {
@@ -170,6 +171,7 @@ const JobsTable = memo(({ data, count, tags }: JobsTableProps) => {
   const todaysDate = useMemo(() => today(getLocalTimeZone()), []);
 
   const customColumns = useCustomColumns<Job>("job");
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const columns = useMemo<ColumnDef<Job>[]>(() => {
     const defaultColumns: ColumnDef<Job>[] = [
       {
@@ -576,6 +578,7 @@ const JobsTable = memo(({ data, count, tags }: JobsTableProps) => {
     }
   }, [fetcher.data]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const onBulkUpdate = useCallback(
     (selectedRows: typeof data, field: "delete", value?: string) => {
       const formData = new FormData();
@@ -627,6 +630,7 @@ const JobsTable = memo(({ data, count, tags }: JobsTableProps) => {
     [onBulkUpdate, permissions]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const renderContextMenu = useCallback<(row: Job) => JSX.Element>(
     (row) => (
       <>

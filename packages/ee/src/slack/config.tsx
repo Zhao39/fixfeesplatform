@@ -47,6 +47,7 @@ export const Slack: IntegrationConfig = {
 
     window.addEventListener("message", listener);
   },
+  // biome-ignore lint/suspicious/noEmptyBlockStatements: suppressed due to migration
   onUninstall: () => {}
 };
 

@@ -12,8 +12,8 @@ import {
   Td,
   Th,
   Thead,
-  toast,
   Tr,
+  toast,
   VStack
 } from "@carbon/react";
 
@@ -46,6 +46,7 @@ const PurchaseInvoicePostModal = ({
 
   const fetcher = useFetcher<typeof action>();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (fetcher.data?.success) {
       onClose();

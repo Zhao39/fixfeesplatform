@@ -3,6 +3,7 @@ import {
   Hidden,
   Input,
   MultiSelect,
+  // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
   Number,
   Select,
   SelectControlled,
@@ -44,13 +45,13 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import {
   LuArrowRightLeft,
-  LuSquareCheck,
   LuCircleDot,
   LuCirclePlus,
   LuEllipsisVertical,
   LuGripVertical,
   LuHash,
   LuPencil,
+  LuSquareCheck,
   LuToggleLeft,
   LuTrash
 } from "react-icons/lu";
@@ -58,11 +59,11 @@ import type { z } from "zod/v3";
 import { Empty } from "~/components";
 import { ConfirmDelete } from "~/components/Modals";
 import { usePermissions, useRouteData } from "~/hooks";
+import type { Training, TrainingQuestion } from "~/modules/resources";
 import {
   trainingQuestionType,
   trainingQuestionValidator
 } from "~/modules/resources";
-import type { Training, TrainingQuestion } from "~/modules/resources";
 import { path } from "~/utils/path";
 
 export default function TrainingExplorer() {

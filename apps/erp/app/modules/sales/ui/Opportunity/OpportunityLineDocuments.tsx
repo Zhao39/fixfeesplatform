@@ -23,8 +23,8 @@ import {
   Td,
   Th,
   Thead,
-  toast,
   Tr,
+  toast,
   VStack
 } from "@carbon/react";
 import { convertKbToString } from "@carbon/utils";
@@ -180,6 +180,7 @@ const useOpportunityLineDocuments = ({
     []
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const download = useCallback(
     async (file: FileObject & { bucket?: string }) => {
       const bucket = file.bucket === "parts" ? "parts" : "opportunity-line";

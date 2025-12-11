@@ -15,9 +15,9 @@ import {
   ModalDrawerHeader,
   ModalDrawerProvider,
   ModalDrawerTitle,
-  VStack,
   toast,
-  useDisclosure
+  useDisclosure,
+  VStack
 } from "@carbon/react";
 import { useFetcher, useNavigate } from "@remix-run/react";
 import type { PostgrestResponse } from "@supabase/supabase-js";
@@ -31,6 +31,7 @@ import {
 import type { z } from "zod/v3";
 import { SupplierAvatar } from "~/components";
 import {
+  // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
   Boolean,
   CustomFormFields,
   Hidden,

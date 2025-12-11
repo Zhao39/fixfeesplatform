@@ -5,10 +5,10 @@ import {
   Button,
   HStack,
   IconButton,
-  toast,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  toast,
   VStack
 } from "@carbon/react";
 import { useLocale } from "@react-aria/i18n";
@@ -22,8 +22,8 @@ import {
   LuLink,
   LuRefreshCcw
 } from "react-icons/lu";
-import { zfd } from "zod-form-data";
 import { z } from "zod/v3";
+import { zfd } from "zod-form-data";
 import { Assignee, Hyperlink, useOptimisticAssignment } from "~/components";
 import {
   Currency,
@@ -68,6 +68,7 @@ const PurchaseOrderProperties = () => {
     [locale]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const onUpdate = useCallback(
     (field: keyof PurchaseOrder, value: string | null) => {
       if (value === routeData?.purchaseOrder[field]) {
@@ -87,6 +88,7 @@ const PurchaseOrderProperties = () => {
     [orderId, routeData?.purchaseOrder]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const onUpdateCustomFields = useCallback(
     (value: string) => {
       const formData = new FormData();

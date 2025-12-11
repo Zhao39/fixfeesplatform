@@ -111,6 +111,7 @@ const AttributeCategoriesTable = memo(
       ];
     }, [navigate, params]);
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
     const renderContextMenu = useCallback(
       (row: AttributeCategory) => {
         return (

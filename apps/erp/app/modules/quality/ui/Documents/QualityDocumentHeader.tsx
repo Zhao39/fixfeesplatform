@@ -50,6 +50,7 @@ const QualityDocumentHeader = () => {
   const newVersionDisclosure = useDisclosure();
   const deleteDisclosure = useDisclosure();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     newVersionDisclosure.onClose();
   }, [id]);

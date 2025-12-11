@@ -2,10 +2,10 @@ import { Select, ValidatedForm } from "@carbon/form";
 import {
   Button,
   HStack,
-  toast,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  toast,
   VStack
 } from "@carbon/react";
 import { useFetcher, useParams } from "@remix-run/react";
@@ -39,6 +39,7 @@ const ProcedureProperties = () => {
     }
   }, [fetcher.data]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const onUpdate = useCallback(
     (field: "name" | "processId" | "status", value: string | null) => {
       const formData = new FormData();

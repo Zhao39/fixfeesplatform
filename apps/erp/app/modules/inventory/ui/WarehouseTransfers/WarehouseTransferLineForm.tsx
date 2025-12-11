@@ -19,6 +19,7 @@ import {
   CustomFormFields,
   Hidden,
   Item,
+  // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
   Number,
   Shelf,
   Submit,

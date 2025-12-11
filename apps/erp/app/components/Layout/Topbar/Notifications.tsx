@@ -361,6 +361,7 @@ const Notifications = () => {
     }
   }, [isOpen]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (isOpen && hasUnseenNotifications) {
       markAllMessagesAsSeen();

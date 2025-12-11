@@ -77,6 +77,7 @@ const CustomFieldsTable = memo(({ data, count }: CustomFieldsTableProps) => {
     ];
   }, [params]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const renderContextMenu = useCallback(
     (row: (typeof data)[number]) => {
       return (

@@ -72,6 +72,7 @@ export function ChatInterface({ geo }: Props) {
     }
   } = useUser();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const authenticatedFetch = useMemo(
     () =>
       Object.assign(

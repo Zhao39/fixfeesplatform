@@ -1,9 +1,8 @@
-import { json } from "@remix-run/react";
-
 import { assertIsPost, error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validator } from "@carbon/form";
+import { json } from "@remix-run/react";
 import type { ActionFunctionArgs } from "@vercel/remix";
 import {
   trainingQuestionValidator,
@@ -36,6 +35,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     );
   }
 
+  // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   const { id, matchingPairs, correctBoolean, ...data } = validation.data;
 
   // Parse matchingPairs if it's a string

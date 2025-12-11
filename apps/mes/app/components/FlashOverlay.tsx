@@ -8,6 +8,7 @@ class FlashOverlayManager {
   private listeners: Set<(variant: FlashVariant) => void> = new Set();
 
   flash(variant: FlashVariant) {
+    // biome-ignore lint/suspicious/useIterableCallbackReturn: suppressed due to migration
     this.listeners.forEach((listener) => listener(variant));
   }
 

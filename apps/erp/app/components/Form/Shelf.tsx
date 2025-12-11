@@ -79,6 +79,7 @@ export function useShelves(locationId?: string, itemId?: string) {
   const shelvesWithQuantitiesFetcher =
     useFetcher<Awaited<ReturnType<typeof getShelvesList>>>();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (locationId) {
       if (itemId) {

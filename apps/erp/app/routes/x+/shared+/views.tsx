@@ -1,7 +1,7 @@
 import { assertIsPost } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { validator } from "@carbon/form";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
 import {
   savedViewStateValidator,
   savedViewValidator
@@ -59,6 +59,7 @@ export async function action({ request }: ActionFunctionArgs) {
       id: result.data.id,
       message: "View saved"
     });
+    // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   } catch (error) {
     return json({
       success: false,

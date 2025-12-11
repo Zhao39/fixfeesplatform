@@ -591,6 +591,7 @@ function JobOperationSelect(initialValues: { jobId?: string }) {
 
   const jobOperationFetcher =
     useFetcher<PostgrestResponse<{ id: string; description: string }>>();
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (jobId) {
       jobOperationFetcher.load(path.to.api.outsideOperations(jobId));

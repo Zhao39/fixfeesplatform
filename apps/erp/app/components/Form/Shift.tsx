@@ -24,6 +24,7 @@ export default Shift;
 export const useShifts = (props?: { location?: string }) => {
   const shiftFetcher = useFetcher<Awaited<ReturnType<typeof getShiftsList>>>();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (props?.location) {
       shiftFetcher.load(path.to.api.shifts(props.location));

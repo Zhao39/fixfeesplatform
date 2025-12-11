@@ -27,8 +27,8 @@ import {
   Td,
   Th,
   Thead,
-  toast,
   Tr,
+  toast,
   useDisclosure,
   useMount,
   VStack
@@ -176,6 +176,7 @@ export const PurchasingPlanningOrderDrawer = memo(
       }
     });
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
     useEffect(() => {
       if (selectedItem.id) {
         getExistingOrders();
@@ -282,6 +283,7 @@ export const PurchasingPlanningOrderDrawer = memo(
       [selectedItem, orders, setOrders]
     );
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
     useEffect(() => {
       if (fetcher.data?.success === false && fetcher?.data?.message) {
         toast.error(fetcher.data.message);

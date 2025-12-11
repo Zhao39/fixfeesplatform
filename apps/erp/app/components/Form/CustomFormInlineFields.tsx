@@ -1,5 +1,6 @@
 import type { Json } from "@carbon/database";
 import {
+  // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
   Boolean,
   DatePicker,
   InputControlled,
@@ -7,8 +8,8 @@ import {
   Select,
   ValidatedForm
 } from "@carbon/form";
-import { zfd } from "zod-form-data";
 import { z } from "zod/v3";
+import { zfd } from "zod-form-data";
 import { useCustomFieldsSchema } from "~/hooks/useCustomFieldsSchema";
 import { DataType } from "~/modules/shared";
 import { Enumerable } from "../Enumerable";
@@ -54,6 +55,7 @@ const CustomFormInlineFields = ({
           switch (field.dataTypeId) {
             case DataType.Boolean:
               return (
+                // biome-ignore lint/correctness/useJsxKeyInIterable: suppressed due to migration
                 <ValidatedForm
                   defaultValues={{
                     [field.id]:
@@ -84,6 +86,7 @@ const CustomFormInlineFields = ({
               );
             case DataType.Date:
               return (
+                // biome-ignore lint/correctness/useJsxKeyInIterable: suppressed due to migration
                 <ValidatedForm
                   defaultValues={{
                     [field.id]: fields[field.id] as string
@@ -113,6 +116,7 @@ const CustomFormInlineFields = ({
               );
             case DataType.List:
               return (
+                // biome-ignore lint/correctness/useJsxKeyInIterable: suppressed due to migration
                 <ValidatedForm
                   defaultValues={{
                     [field.id]: fields[field.id] as string
@@ -148,6 +152,7 @@ const CustomFormInlineFields = ({
               );
             case DataType.Numeric:
               return (
+                // biome-ignore lint/correctness/useJsxKeyInIterable: suppressed due to migration
                 <ValidatedForm
                   defaultValues={{
                     [field.id]: fields[field.id] as number
@@ -178,6 +183,7 @@ const CustomFormInlineFields = ({
               );
             case DataType.Text:
               return (
+                // biome-ignore lint/correctness/useJsxKeyInIterable: suppressed due to migration
                 <ValidatedForm
                   defaultValues={{
                     [field.id]: fields[field.id] as string
@@ -207,6 +213,7 @@ const CustomFormInlineFields = ({
               );
             case DataType.User:
               return (
+                // biome-ignore lint/correctness/useJsxKeyInIterable: suppressed due to migration
                 <ValidatedForm
                   defaultValues={{
                     [field.id]: fields[field.id] as string
@@ -236,6 +243,7 @@ const CustomFormInlineFields = ({
               );
             case DataType.Customer:
               return (
+                // biome-ignore lint/correctness/useJsxKeyInIterable: suppressed due to migration
                 <ValidatedForm
                   defaultValues={{
                     [field.id]: fields[field.id] as string
@@ -265,6 +273,7 @@ const CustomFormInlineFields = ({
               );
             case DataType.Supplier:
               return (
+                // biome-ignore lint/correctness/useJsxKeyInIterable: suppressed due to migration
                 <ValidatedForm
                   defaultValues={{
                     [field.id]: fields[field.id] as string

@@ -1,3 +1,5 @@
+import { useCarbon } from "@carbon/auth";
+import { ValidatedForm } from "@carbon/form";
 import {
   Card,
   CardContent,
@@ -9,16 +11,13 @@ import {
   toast,
   VStack
 } from "@carbon/react";
+import { getItemReadableId } from "@carbon/utils";
 import {
   useFetcher,
   useLocation,
   useNavigate,
   useParams
 } from "@remix-run/react";
-
-import { useCarbon } from "@carbon/auth";
-import { ValidatedForm } from "@carbon/form";
-import { getItemReadableId } from "@carbon/utils";
 import { useEffect, useState } from "react";
 import type { z } from "zod/v3";
 import {
@@ -26,6 +25,7 @@ import {
   Hidden,
   InputControlled,
   Item,
+  // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
   Number,
   NumberControlled,
   Select,
@@ -130,6 +130,7 @@ const JobMaterialForm = ({
 
   const [, setSelectedMaterialId] = useBom();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     const newPath = path.to.jobMakeMethod(
       jobId,

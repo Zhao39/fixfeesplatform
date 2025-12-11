@@ -83,6 +83,7 @@ const Filter = forwardRef<HTMLButtonElement, FilterProps>(
       [filters]
     );
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
     const updateActiveOptions = useCallback(
       (value: string) => {
         const accessorKey = value.split(":")?.[1] ?? "";

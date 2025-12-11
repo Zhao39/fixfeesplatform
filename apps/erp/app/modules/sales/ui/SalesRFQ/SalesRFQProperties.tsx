@@ -3,17 +3,17 @@ import { DatePicker, InputControlled, ValidatedForm } from "@carbon/form";
 import {
   Button,
   HStack,
-  toast,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  toast,
   VStack
 } from "@carbon/react";
 import { useFetcher, useParams } from "@remix-run/react";
 import { useCallback, useEffect } from "react";
 import { LuCopy, LuLink } from "react-icons/lu";
-import { zfd } from "zod-form-data";
 import { z } from "zod/v3";
+import { zfd } from "zod-form-data";
 import { Assignee, useOptimisticAssignment } from "~/components";
 import {
   Customer,
@@ -44,6 +44,7 @@ const SalesRFQProperties = () => {
     }
   }, [fetcher.data]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const onUpdate = useCallback(
     (field: keyof SalesRFQ, value: string | null) => {
       if (value === routeData?.rfqSummary[field]) {
@@ -63,6 +64,7 @@ const SalesRFQProperties = () => {
     [rfqId, routeData?.rfqSummary]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const onUpdateCustomFields = useCallback(
     (value: string) => {
       const formData = new FormData();

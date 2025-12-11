@@ -6,8 +6,8 @@ import { useLoaderData } from "@remix-run/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
 import {
-  PartnerForm,
   getPartner,
+  PartnerForm,
   partnerValidator,
   upsertPartner
 } from "~/modules/resources";
@@ -50,6 +50,7 @@ export async function action({ request }: ActionFunctionArgs) {
     return validationError(validation.error);
   }
 
+  // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   const { supplierId, ...data } = validation.data;
 
   const updatePartner = await upsertPartner(client, {

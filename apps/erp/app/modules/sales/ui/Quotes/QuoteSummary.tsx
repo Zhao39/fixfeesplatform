@@ -90,6 +90,7 @@ const LineItems = ({
 
   const [openItems, setOpenItems] = useState<string[]>([]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     Object.entries(selectedLines).forEach(([lineId, line]) => {
       if (line.quantity === 0 && openItems.includes(lineId)) {

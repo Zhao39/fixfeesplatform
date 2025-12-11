@@ -215,6 +215,7 @@ const JobOperationsTable = memo(({ data, count }: JobOperationsTableProps) => {
 
   const pendingItems = usePendingItems();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const optimisticData = useMemo<typeof data>(() => {
     if (pendingItems.length === 0) return data;
     return data.map((item) => {

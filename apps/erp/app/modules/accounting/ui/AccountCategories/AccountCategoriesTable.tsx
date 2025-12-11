@@ -113,6 +113,7 @@ const AccountCategoriesTable = memo(
       return [...defaultColumns, ...customColumns];
     }, [params, customColumns]);
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
     const renderContextMenu = useCallback(
       (row: (typeof data)[number]) => {
         if (!row.id) return null;

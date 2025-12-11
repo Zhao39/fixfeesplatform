@@ -1,5 +1,6 @@
 import { ValidatedForm } from "@carbon/form";
 import {
+  cn,
   ModalCard,
   ModalCardBody,
   ModalCardContent,
@@ -8,7 +9,6 @@ import {
   ModalCardHeader,
   ModalCardProvider,
   ModalCardTitle,
-  cn,
   toast
 } from "@carbon/react";
 import { useFetcher } from "@remix-run/react";
@@ -21,6 +21,7 @@ import {
   Hidden,
   Input,
   InputControlled,
+  // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
   Number,
   Select,
   Submit,

@@ -44,6 +44,7 @@ const RevisionForm = ({
     ? !permissions.can("update", "parts")
     : !permissions.can("create", "parts");
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (fetcher.data?.success) {
       onClose();

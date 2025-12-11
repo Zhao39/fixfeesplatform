@@ -110,6 +110,7 @@ const Editor = ({
     [uploadFn]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const mentionExtension = useMemo(() => {
     if (!mentions || mentions.length === 0) return null;
     // Use the first mention config - if multiple are needed with different

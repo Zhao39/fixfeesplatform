@@ -4,6 +4,7 @@ import { path } from "~/utils/path";
 
 export function useTags({ id, table }: { id?: string; table: string }) {
   const fetcher = useFetcher<{}>();
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const onUpdateTags = useCallback(
     (value: string[]) => {
       if (!id) return;

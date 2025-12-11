@@ -40,7 +40,9 @@ export function useNotifications({
       );
 
       headlessService.markAllMessagesAsRead({
+        // biome-ignore lint/suspicious/noEmptyBlockStatements: suppressed due to migration
         listener: () => {},
+        // biome-ignore lint/suspicious/noEmptyBlockStatements: suppressed due to migration
         onError: () => {}
       });
     }
@@ -65,7 +67,9 @@ export function useNotifications({
 
       headlessService.markNotificationsAsRead({
         messageId: [messageId],
+        // biome-ignore lint/suspicious/noEmptyBlockStatements: suppressed due to migration
         listener: (result) => {},
+        // biome-ignore lint/suspicious/noEmptyBlockStatements: suppressed due to migration
         onError: (error) => {}
       });
     }
@@ -76,6 +80,8 @@ export function useNotifications({
 
     if (headlessService) {
       headlessService.fetchNotifications({
+        // biome-ignore lint/correctness/noEmptyPattern: suppressed due to migration
+        // biome-ignore lint/suspicious/noEmptyBlockStatements: suppressed due to migration
         listener: ({}) => {},
         onSuccess: (response) => {
           setLoading(false);
@@ -96,7 +102,9 @@ export function useNotifications({
         }))
       );
       headlessService.markAllMessagesAsSeen({
+        // biome-ignore lint/suspicious/noEmptyBlockStatements: suppressed due to migration
         listener: () => {},
+        // biome-ignore lint/suspicious/noEmptyBlockStatements: suppressed due to migration
         onError: () => {}
       });
     }
@@ -106,6 +114,7 @@ export function useNotifications({
     setSubscriberId(getSubscriberId({ companyId, userId }));
   });
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     const headlessService = headlessServiceRef.current;
 
@@ -126,11 +135,13 @@ export function useNotifications({
       });
 
       headlessService.initializeSession({
+        // biome-ignore lint/suspicious/noEmptyBlockStatements: suppressed due to migration
         listener: () => {},
         onSuccess: () => {
           headlessServiceRef.current = headlessService;
           fetchNotifications();
         },
+        // biome-ignore lint/suspicious/noEmptyBlockStatements: suppressed due to migration
         onError: () => {}
       });
     }

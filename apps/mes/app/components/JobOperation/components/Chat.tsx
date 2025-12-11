@@ -1,3 +1,4 @@
+import { useCarbon } from "@carbon/auth";
 import {
   Avatar,
   Button,
@@ -9,16 +10,14 @@ import {
   useMount,
   useRealtimeChannel
 } from "@carbon/react";
-import { useEffect, useRef, useState } from "react";
-import { useUser } from "~/hooks";
-import type { OperationWithDetails } from "~/services/types";
-import { path } from "~/utils/path";
-
-import { useCarbon } from "@carbon/auth";
 import { nanoid } from "nanoid";
+import { useEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { LuSend } from "react-icons/lu";
+import { useUser } from "~/hooks";
+import type { OperationWithDetails } from "~/services/types";
 import { usePeople } from "~/stores";
+import { path } from "~/utils/path";
 
 type Message = {
   id: string;
@@ -37,6 +36,7 @@ export function OperationChat({
   const [messages, setMessages] = useState<Message[]>([]);
 
   const [isLoading, setIsLoading] = useState(false);
+  // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   const { carbon, accessToken } = useCarbon();
 
   const fetchChats = async () => {

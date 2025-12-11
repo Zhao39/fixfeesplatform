@@ -1,5 +1,7 @@
+// biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
 import { Array, ValidatedForm } from "@carbon/form";
 import {
+  cn,
   ModalCard,
   ModalCardBody,
   ModalCardContent,
@@ -8,7 +10,6 @@ import {
   ModalCardHeader,
   ModalCardProvider,
   ModalCardTitle,
-  cn,
   toast
 } from "@carbon/react";
 import { getMaterialDescription, getMaterialId } from "@carbon/utils";
@@ -22,6 +23,7 @@ import {
   DefaultMethodType,
   Hidden,
   InputControlled,
+  // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
   Number,
   Select,
   Submit,

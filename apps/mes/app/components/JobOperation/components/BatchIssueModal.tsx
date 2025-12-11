@@ -9,8 +9,8 @@ import {
   AlertDescription,
   AlertTitle,
   Button,
-  cn,
   Combobox as ComboboxBase,
+  cn,
   IconButton,
   Input,
   InputGroup,
@@ -222,6 +222,7 @@ export function BatchIssueModal({
     }>;
   }>();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const handleSubmit = useCallback(() => {
     // Validate all batch numbers
     let hasErrors = false;
@@ -376,6 +377,7 @@ export function BatchIssueModal({
   const [activeTab, setActiveTab] = useState("scan");
 
   const [unconsumedBatch, setUnconsumedBatch] = useState("");
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const handleUnconsume = useCallback(() => {
     const payload = {
       materialId: material?.id!,
@@ -938,6 +940,7 @@ function useBatchNumbers(itemId?: string) {
   const batchNumbersFetcher =
     useFetcher<Awaited<ReturnType<typeof getBatchNumbersForItem>>>();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (itemId) {
       batchNumbersFetcher.load(path.to.api.batchNumbers(itemId));

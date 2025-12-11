@@ -9,10 +9,10 @@ import {
   HStack,
   Loading,
   PulsingDot,
-  toast,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  toast,
   VStack
 } from "@carbon/react";
 import { getLocalTimeZone, parseDate } from "@internationalized/date";
@@ -90,10 +90,12 @@ const ProductionPlanningTable = ({
   }, [mrpFetcher.state, mrpFetcher.data]);
 
   // Clear local state when data changes (e.g., filters, search)
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     setOrdersMap({});
   }, [data]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (
       bulkUpdateFetcher.data?.success === false &&
@@ -117,6 +119,7 @@ const ProductionPlanningTable = ({
     {}
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const onBulkUpdate = useCallback(
     (selectedRows: typeof data, action: "order") => {
       const payload = {
@@ -190,6 +193,7 @@ const ProductionPlanningTable = ({
   >(new Map());
   const [isPending, startTransition] = useTransition();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     startTransition(() => {
       const ordersByItemId = new Map<string, ProductionOrder[]>();
@@ -203,6 +207,7 @@ const ProductionPlanningTable = ({
     });
   }, [data]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const columns = useMemo<ColumnDef<ProductionPlanningItem>[]>(() => {
     const periodColumns: ColumnDef<ProductionPlanningItem>[] = periods.map(
       (period, index) => {

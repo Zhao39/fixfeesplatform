@@ -59,6 +59,7 @@ export function TreeView<TData>({
     [onScroll]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     //subscribe to scrollRef scroll event
     if (!scrollRef?.current || onScroll === undefined) return;
@@ -204,6 +205,7 @@ export function useTree<TData, TFilterValue>({
   );
 
   //fire onSelectedIdChanged()
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     const selectedId = selectedIdFromState(state.nodes);
     if (selectedId !== previousSelectedId.current) {
@@ -213,6 +215,7 @@ export function useTree<TData, TFilterValue>({
   }, [state.changes.selectedId]);
 
   //update tree when the data changes or the tree length changes
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (isEager || tree.length !== previousNodeCount.current) {
       dispatch({ type: "UPDATE_TREE", payload: { tree } });
@@ -221,6 +224,7 @@ export function useTree<TData, TFilterValue>({
 
   //update the filter, if it's changed
   const previousFilter = useRef(filter);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     //check if the value (not reference) of the filter is the same
     const previousValue = previousFilter.current
@@ -249,6 +253,7 @@ export function useTree<TData, TFilterValue>({
     overscan: 20
   });
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const scrollToNodeFn = useCallback(
     (id: string) => {
       const itemIndex = state.visibleNodeIds.findIndex((n) => n === id);
@@ -260,6 +265,7 @@ export function useTree<TData, TFilterValue>({
     [state]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const selectNode = useCallback(
     (id: string, scrollToNode = true) => {
       dispatch({
@@ -270,6 +276,7 @@ export function useTree<TData, TFilterValue>({
     [state]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const deselectNode = useCallback(
     (id: string) => {
       dispatch({ type: "DESELECT_NODE", payload: { id } });
@@ -277,10 +284,12 @@ export function useTree<TData, TFilterValue>({
     [state]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const deselectAllNodes = useCallback(() => {
     dispatch({ type: "DESELECT_ALL_NODES" });
   }, [state]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const toggleNodeSelection = useCallback(
     (id: string, scrollToNode = true) => {
       dispatch({
@@ -291,6 +300,7 @@ export function useTree<TData, TFilterValue>({
     [state]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const expandNode = useCallback(
     (id: string, scrollToNode = true) => {
       dispatch({
@@ -301,6 +311,7 @@ export function useTree<TData, TFilterValue>({
     [state]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const collapseNode = useCallback(
     (id: string) => {
       dispatch({ type: "COLLAPSE_NODE", payload: { id } });
@@ -308,6 +319,7 @@ export function useTree<TData, TFilterValue>({
     [state]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const toggleExpandNode = useCallback(
     (id: string, scrollToNode = true) => {
       dispatch({
@@ -318,6 +330,7 @@ export function useTree<TData, TFilterValue>({
     [state]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const selectFirstVisibleNode = useCallback(
     (scrollToNode = true) => {
       dispatch({
@@ -328,6 +341,7 @@ export function useTree<TData, TFilterValue>({
     [tree, state]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const selectLastVisibleNode = useCallback(
     (scrollToNode = true) => {
       dispatch({
@@ -338,6 +352,7 @@ export function useTree<TData, TFilterValue>({
     [tree, state]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const selectNextVisibleNode = useCallback(
     (scrollToNode = true) => {
       dispatch({
@@ -348,6 +363,7 @@ export function useTree<TData, TFilterValue>({
     [state]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const selectPreviousVisibleNode = useCallback(
     (scrollToNode = true) => {
       dispatch({
@@ -358,6 +374,7 @@ export function useTree<TData, TFilterValue>({
     [state]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const selectParentNode = useCallback(
     (scrollToNode = true) => {
       dispatch({
@@ -368,6 +385,7 @@ export function useTree<TData, TFilterValue>({
     [state]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const expandAllBelowDepth = useCallback(
     (depth: number) => {
       dispatch({ type: "EXPAND_ALL_BELOW_DEPTH", payload: { depth } });
@@ -375,6 +393,7 @@ export function useTree<TData, TFilterValue>({
     [state]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const collapseAllBelowDepth = useCallback(
     (depth: number) => {
       dispatch({ type: "COLLAPSE_ALL_BELOW_DEPTH", payload: { depth } });
@@ -382,6 +401,7 @@ export function useTree<TData, TFilterValue>({
     [state]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const expandLevel = useCallback(
     (level: number) => {
       dispatch({ type: "EXPAND_LEVEL", payload: { level } });
@@ -389,6 +409,7 @@ export function useTree<TData, TFilterValue>({
     [state]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const collapseLevel = useCallback(
     (level: number) => {
       dispatch({ type: "COLLAPSE_LEVEL", payload: { level } });
@@ -396,6 +417,7 @@ export function useTree<TData, TFilterValue>({
     [state]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const toggleExpandLevel = useCallback(
     (level: number) => {
       dispatch({ type: "TOGGLE_EXPAND_LEVEL", payload: { level } });
@@ -403,6 +425,7 @@ export function useTree<TData, TFilterValue>({
     [state]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const getTreeProps = useCallback(() => {
     return {
       role: "tree",
@@ -494,6 +517,7 @@ export function useTree<TData, TFilterValue>({
     };
   }, [state]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const getNodeProps = useCallback(
     (id: string) => {
       const node = state.nodes[id];

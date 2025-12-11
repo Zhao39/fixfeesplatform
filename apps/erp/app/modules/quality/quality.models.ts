@@ -1,5 +1,5 @@
-import { zfd } from "zod-form-data";
 import { z } from "zod/v3";
+import { zfd } from "zod-form-data";
 import { procedureStepType } from "../shared/shared.models";
 
 export const disposition = [
@@ -109,6 +109,7 @@ export const gaugeCalibrationRecordValidator = z.object({
     .transform((val) => {
       try {
         return val ? JSON.parse(val) : {};
+        // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
       } catch (e) {
         return {};
       }
@@ -188,6 +189,7 @@ export const issueWorkflowValidator = z.object({
     .transform((val) => {
       try {
         return JSON.parse(val);
+        // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
       } catch (e) {
         return {};
       }
@@ -201,6 +203,7 @@ export const issueWorkflowValidator = z.object({
       if (!val) return [];
       try {
         return JSON.parse(val) as string[];
+        // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
       } catch (e) {
         return [];
       }

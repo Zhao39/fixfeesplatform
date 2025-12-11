@@ -2,6 +2,7 @@ import { useCarbon } from "@carbon/auth";
 import { ValidatedForm } from "@carbon/form";
 import {
   Button,
+  cn,
   Loading,
   ModalCard,
   ModalCardBody,
@@ -11,9 +12,8 @@ import {
   ModalCardHeader,
   ModalCardProvider,
   ModalCardTitle,
-  VStack,
-  cn,
-  toast
+  toast,
+  VStack
 } from "@carbon/react";
 import { convertKbToString, supportedModelTypes } from "@carbon/utils";
 import { useFetcher } from "@remix-run/react";
@@ -31,6 +31,7 @@ import {
   Hidden,
   Input,
   InputControlled,
+  // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
   Number,
   Select,
   Submit,

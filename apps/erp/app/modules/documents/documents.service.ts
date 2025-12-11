@@ -178,6 +178,7 @@ export async function upsertDocument(
     );
   }
 
+  // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   const { extension, ...data } = document;
   return client
     .from("document")

@@ -20,6 +20,7 @@ type FormBooleanProps = {
   onChange?: (value: boolean) => void;
 };
 
+// biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
 const Boolean = forwardRef<HTMLInputElement, FormBooleanProps>(
   (
     {

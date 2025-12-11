@@ -10,10 +10,10 @@ import {
   Badge,
   Button,
   HStack,
-  toast,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  toast,
   VStack
 } from "@carbon/react";
 import { Await, useFetcher, useParams } from "@remix-run/react";
@@ -21,8 +21,8 @@ import type { PostgrestResponse } from "@supabase/supabase-js";
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { LuCopy, LuLink, LuUnlink2 } from "react-icons/lu";
 import { RiProgress8Line } from "react-icons/ri";
-import { zfd } from "zod-form-data";
 import { z } from "zod/v3";
+import { zfd } from "zod-form-data";
 import { Assignee, Hyperlink, useOptimisticAssignment } from "~/components";
 import {
   Customer,
@@ -64,6 +64,7 @@ const JobProperties = () => {
     (routeData?.job?.itemType ?? "Part") as MethodItemType
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const onUpdate = useCallback(
     (field: keyof Job, value: string | number | null) => {
       if (value === routeData?.job[field]) {
@@ -83,6 +84,7 @@ const JobProperties = () => {
     [jobId, routeData?.job]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const onUpdateCustomFields = useCallback(
     (value: string) => {
       const formData = new FormData();
@@ -100,6 +102,7 @@ const JobProperties = () => {
     [jobId]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const onUpdateTags = useCallback(
     (value: string[]) => {
       const formData = new FormData();
@@ -119,6 +122,7 @@ const JobProperties = () => {
     [jobId]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const onUpdateBatchNumber = useCallback(
     (trackedEntityId: string, value: string) => {
       const formData = new FormData();

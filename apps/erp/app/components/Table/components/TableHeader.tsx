@@ -16,10 +16,10 @@ import {
   Heading,
   HStack,
   IconButton,
-  toast,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  toast,
   useDisclosure
 } from "@carbon/react";
 import { useFetcher } from "@remix-run/react";
@@ -121,6 +121,7 @@ const TableHeader = <T extends object>({
 
   const fetcher = useFetcher<typeof savedViewAction>();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (fetcher.data?.success && fetcher.data.id) {
       setParams({ view: fetcher.data.id });

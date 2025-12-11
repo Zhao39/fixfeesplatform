@@ -1233,6 +1233,7 @@ function getMethodTreeArrayToTree(items: Method[]): MethodTreeItem[] {
       lookup[itemId] = { id: itemId, children: [] };
     }
 
+    // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
     lookup[itemId]["data"] = item;
 
     const treeItem = lookup[itemId];
@@ -1245,6 +1246,7 @@ function getMethodTreeArrayToTree(items: Method[]): MethodTreeItem[] {
         lookup[parentId] = { id: parentId, children: [] };
       }
 
+      // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
       lookup[parentId]["children"].push(treeItem);
     }
   }
@@ -2390,6 +2392,7 @@ export async function upsertMakeMethodVersion(
 
   if (currentMakeMethod.error) return currentMakeMethod;
 
+  // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   const { id, version, ...data } = currentMakeMethod.data;
 
   const insert = await client

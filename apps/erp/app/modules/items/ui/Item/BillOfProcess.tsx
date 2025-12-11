@@ -13,8 +13,8 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-  cn,
   Count,
+  cn,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -24,12 +24,12 @@ import {
   IconButton,
   Label,
   Loading,
-  toast,
   ToggleGroup,
   ToggleGroupItem,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  toast,
   useDebounce,
   useDisclosure,
   useThrottle,
@@ -74,6 +74,7 @@ import type { Configuration } from "~/components/Configurator/types";
 import {
   Hidden,
   InputControlled,
+  // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
   Number,
   NumberControlled,
   Process,
@@ -2015,6 +2016,7 @@ function AttributesListItem({
   const submitted = useRef(false);
   const fetcher = useFetcher<typeof editMethodOperationStepAction>();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (submitted.current && fetcher.state === "idle") {
       disclosure.onClose();
@@ -2503,6 +2505,7 @@ function ParametersListItem({
   const submitted = useRef(false);
   const fetcher = useFetcher<typeof editMethodOperationParameterAction>();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (submitted.current && fetcher.state === "idle") {
       disclosure.onClose();
@@ -2774,6 +2777,7 @@ function ToolsListItem({
   const submitted = useRef(false);
   const fetcher = useFetcher<typeof editMethodOperationToolAction>();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (submitted.current && fetcher.state === "idle") {
       disclosure.onClose();

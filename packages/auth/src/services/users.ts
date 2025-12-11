@@ -103,15 +103,19 @@ export function makePermissionsFromClaims(claims: Json[] | null) {
 
       switch (action) {
         case "view":
+          // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
           permissions[module]["view"] = value as string[];
           break;
         case "create":
+          // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
           permissions[module]["create"] = value as string[];
           break;
         case "update":
+          // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
           permissions[module]["update"] = value as string[];
           break;
         case "delete":
+          // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
           permissions[module]["delete"] = value as string[];
           break;
       }
@@ -119,10 +123,12 @@ export function makePermissionsFromClaims(claims: Json[] | null) {
   });
 
   if ("role" in claims) {
+    // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
     role = claims["role"] as string;
   }
 
   if ("items" in permissions) {
+    // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
     delete permissions["items"];
   }
 

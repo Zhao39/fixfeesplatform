@@ -37,6 +37,7 @@ const CustomerLocation = (props: CustomerLocationSelectProps) => {
   const [created, setCreated] = useState<string>("");
   const triggerRef = useRef<HTMLButtonElement>(null);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (props?.customer) {
       customerLocationsFetcher.load(

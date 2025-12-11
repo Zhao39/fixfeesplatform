@@ -1,3 +1,6 @@
+import { useCarbon } from "@carbon/auth";
+
+import { ValidatedForm } from "@carbon/form";
 import {
   Badge,
   CardAction,
@@ -20,8 +23,7 @@ import {
   useDisclosure,
   VStack
 } from "@carbon/react";
-
-import { ValidatedForm } from "@carbon/form";
+import { getItemReadableId } from "@carbon/utils";
 import { useParams } from "@remix-run/react";
 import { useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -35,6 +37,7 @@ import {
   InputControlled,
   Item,
   Location,
+  // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
   Number,
   NumberControlled,
   SelectControlled,
@@ -49,9 +52,6 @@ import {
   useRouteData,
   useUser
 } from "~/hooks";
-
-import { useCarbon } from "@carbon/auth";
-import { getItemReadableId } from "@carbon/utils";
 import { getDefaultShelfForJob } from "~/modules/inventory/inventory.service";
 import { methodType } from "~/modules/shared";
 import { useItems } from "~/stores";

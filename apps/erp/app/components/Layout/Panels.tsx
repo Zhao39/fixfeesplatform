@@ -19,9 +19,13 @@ interface PanelContextType {
 const PanelContext = createContext<PanelContextType>({
   isExplorerCollapsed: false,
   isPropertiesCollapsed: false,
+  // biome-ignore lint/suspicious/noEmptyBlockStatements: suppressed due to migration
   toggleExplorer: () => {},
+  // biome-ignore lint/suspicious/noEmptyBlockStatements: suppressed due to migration
   toggleProperties: () => {},
+  // biome-ignore lint/suspicious/noEmptyBlockStatements: suppressed due to migration
   setIsExplorerCollapsed: () => {},
+  // biome-ignore lint/suspicious/noEmptyBlockStatements: suppressed due to migration
   setIsPropertiesCollapsed: () => {}
 });
 
@@ -57,6 +61,7 @@ export function PanelProvider({ children }: PanelProviderProps) {
     setIsPropertiesCollapsed
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (isMobile) {
       setIsExplorerCollapsed(true);

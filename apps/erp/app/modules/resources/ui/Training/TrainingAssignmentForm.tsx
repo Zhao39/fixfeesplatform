@@ -2,8 +2,8 @@ import { Select, ValidatedForm } from "@carbon/form";
 import {
   Badge,
   Button,
-  cn,
   Count,
+  cn,
   HStack,
   Input,
   ModalDrawer,
@@ -24,11 +24,11 @@ import {
 import { useFetcher } from "@remix-run/react";
 import { memo, useMemo, useState } from "react";
 import {
-  LuTriangleAlert,
   LuCalendar,
   LuCircleCheck,
   LuClock,
-  LuSearch
+  LuSearch,
+  LuTriangleAlert
 } from "react-icons/lu";
 import type { z } from "zod/v3";
 import { EmployeeAvatar, Empty } from "~/components";
@@ -228,7 +228,9 @@ const StatusList = memo(
               value="Completed"
             >
               <LuCircleCheck className="mr-1 size-3" />
-              Completed <Count count={statusCounts["Completed"] || 0} />
+              Completed{" "}
+              {/** biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration */}
+              <Count count={statusCounts["Completed"] || 0} />
             </ToggleGroupItem>
             <ToggleGroupItem
               className="flex gap-1.5 items-center"
@@ -236,7 +238,9 @@ const StatusList = memo(
               value="Pending"
             >
               <LuClock className="mr-1 size-3" />
-              Pending <Count count={statusCounts["Pending"] || 0} />
+              Pending{" "}
+              {/** biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration */}
+              <Count count={statusCounts["Pending"] || 0} />
             </ToggleGroupItem>
             <ToggleGroupItem
               className="flex gap-1.5 items-center"
@@ -244,7 +248,9 @@ const StatusList = memo(
               value="Overdue"
             >
               <LuTriangleAlert className="mr-1 size-3" />
-              Overdue <Count count={statusCounts["Overdue"] || 0} />
+              Overdue{" "}
+              {/** biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration */}
+              <Count count={statusCounts["Overdue"] || 0} />
             </ToggleGroupItem>
             <ToggleGroupItem
               className="flex gap-1.5 items-center"

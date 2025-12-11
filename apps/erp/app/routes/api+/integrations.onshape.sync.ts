@@ -2,7 +2,7 @@ import { getCarbonServiceRole } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { onShapeDataValidator } from "@carbon/ee/onshape";
 import { FunctionRegion } from "@supabase/supabase-js";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
 
 export async function action({ request }: ActionFunctionArgs) {
   const { client, companyId, userId } = await requirePermissions(request, {
@@ -76,6 +76,7 @@ export async function action({ request }: ActionFunctionArgs) {
     const currentExternalId =
       (item.data?.externalId as Record<string, any>) ?? {};
 
+    // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
     currentExternalId["onshape"] = {
       documentId,
       versionId,
@@ -89,6 +90,7 @@ export async function action({ request }: ActionFunctionArgs) {
         externalId: currentExternalId
       })
       .eq("id", record.data?.itemId as string);
+    // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   } catch (error) {
     console.error("Failed to sync onshape data");
     return json(

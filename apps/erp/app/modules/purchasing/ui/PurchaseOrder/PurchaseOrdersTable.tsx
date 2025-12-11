@@ -338,6 +338,7 @@ const PurchaseOrdersTable = memo(
       }
     }, [fetcher.data]);
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
     const onBulkUpdate = useCallback(
       (selectedRows: typeof data, field: "delete", value?: string) => {
         const formData = new FormData();

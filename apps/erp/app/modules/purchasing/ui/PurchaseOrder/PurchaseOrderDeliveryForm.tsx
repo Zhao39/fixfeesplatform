@@ -10,14 +10,16 @@ import { useFetcher, useParams } from "@remix-run/react";
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import type { z } from "zod/v3";
 import {
+  // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
   Boolean,
-  CustomFormFields,
   Customer,
   CustomerLocation,
+  CustomFormFields,
   DatePicker,
   Hidden,
   Input,
   Location,
+  // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
   Number,
   ShippingMethod,
   Submit

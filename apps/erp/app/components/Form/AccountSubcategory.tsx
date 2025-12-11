@@ -20,6 +20,7 @@ const AccountSubcategory = (props: AccountSubcategorySelectProps) => {
   const accountSubcategoriesFetcher =
     useFetcher<Awaited<ReturnType<typeof getAccountSubcategoriesByCategory>>>();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (props?.accountCategoryId) {
       accountSubcategoriesFetcher.load(

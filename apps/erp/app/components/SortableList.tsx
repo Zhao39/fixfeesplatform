@@ -1,10 +1,9 @@
 "use client";
 
-import { LayoutGroup, Reorder, motion, useDragControls } from "framer-motion";
+import { Checkbox, cn, HStack } from "@carbon/react";
+import { LayoutGroup, motion, Reorder, useDragControls } from "framer-motion";
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
-
-import { Checkbox, HStack, cn } from "@carbon/react";
 import { flushSync } from "react-dom";
 import { LuTrash } from "react-icons/lu";
 import Empty from "./Empty";
@@ -254,6 +253,7 @@ function SortableList<T extends Item>({
         <Reorder.Group
           axis="y"
           values={items}
+          // biome-ignore lint/suspicious/noEmptyBlockStatements: suppressed due to migration
           onReorder={isReadOnly ? () => {} : onReorder}
           className="flex flex-col"
         >

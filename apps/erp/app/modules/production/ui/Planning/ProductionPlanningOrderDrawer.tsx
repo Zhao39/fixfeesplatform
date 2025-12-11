@@ -23,8 +23,8 @@ import {
   Td,
   Th,
   Thead,
-  toast,
   Tr,
+  toast,
   useMount,
   VStack
 } from "@carbon/react";
@@ -237,6 +237,7 @@ export const ProductionPlanningOrderDrawer = memo(
       [row, orders, setOrders]
     );
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
     useEffect(() => {
       if (fetcher.data?.success === false && fetcher?.data?.message) {
         toast.error(fetcher.data.message);

@@ -16,8 +16,6 @@ import React, {
 import * as R from "remeda";
 import type { z } from "zod/v3";
 import { useIsSubmitting, useIsValid } from "./hooks";
-import type { MultiValueMap } from "./internal/MultiValueMap";
-import { useMultiValueMap } from "./internal/MultiValueMap";
 import { FORM_ID_FIELD } from "./internal/constants";
 import type { InternalFormContextValue } from "./internal/formContext";
 import { InternalFormContext } from "./internal/formContext";
@@ -27,6 +25,8 @@ import {
   useHasActiveFormSubmit,
   useSetFieldErrors
 } from "./internal/hooks";
+import type { MultiValueMap } from "./internal/MultiValueMap";
+import { useMultiValueMap } from "./internal/MultiValueMap";
 import type { SyncedFormProps } from "./internal/state/createFormStore";
 import { useRootFormStore } from "./internal/state/createFormStore";
 import { useFormStore } from "./internal/state/storeHooks";
@@ -355,6 +355,7 @@ export function ValidatedForm<
     setFormElementInState(formRef.current);
   }, [setFormElementInState]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     setFieldErrors(backendError?.fieldErrors ?? {});
     if (!disableFocusOnError && backendError?.fieldErrors) {

@@ -309,6 +309,7 @@ export const useChatStore = create<ChatState>()((set, get) => ({
   },
 
   navigateCommandUp: () => {
+    // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
     const { selectedCommandIndex, filteredCommands } = get();
     set({
       selectedCommandIndex: Math.max(selectedCommandIndex - 1, 0)

@@ -198,6 +198,7 @@ const ViewsReorderGroup = ({
     .sort()
     .join(",");
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     setSortedViews([...views].sort((a, b) => a.sortOrder - b.sortOrder));
   }, [views.length, viewNames]);

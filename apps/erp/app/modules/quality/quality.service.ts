@@ -1,4 +1,4 @@
-import { fetchAllFromTable, type Database, type Json } from "@carbon/database";
+import { type Database, fetchAllFromTable, type Json } from "@carbon/database";
 import type { JSONContent } from "@carbon/react";
 import { parseDate } from "@internationalized/date";
 import type { SupabaseClient } from "@supabase/supabase-js";
@@ -1373,6 +1373,7 @@ export async function upsertIssue(
 
     return result;
   } else {
+    // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
     const { items, ...data } = nonConformance;
     return client
       .from("nonConformance")
@@ -1516,6 +1517,7 @@ export async function upsertQualityDocument(
       steps.length > 0
         ? client.from("qualityDocumentStep").insert(
             steps.map((step) => {
+              // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
               const { id, qualityDocumentId, ...rest } = step;
               return {
                 ...rest,

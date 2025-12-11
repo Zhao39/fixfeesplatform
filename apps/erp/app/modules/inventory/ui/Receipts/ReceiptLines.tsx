@@ -1,4 +1,5 @@
 import { useCarbon } from "@carbon/auth";
+// biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
 import { Number, Submit, ValidatedForm } from "@carbon/form";
 import {
   Button,
@@ -6,8 +7,8 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-  cn,
   CreatableCombobox,
+  cn,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuIcon,
@@ -27,10 +28,10 @@ import {
   NumberField,
   NumberInput,
   SplitButton,
-  toast,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  toast,
   useDisclosure,
   VStack
 } from "@carbon/react";
@@ -148,6 +149,7 @@ const ReceiptLines = () => {
     }, {});
   });
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     setSerialNumbersByLineId(
       receiptLines.reduce((acc, line) => {
@@ -187,6 +189,7 @@ const ReceiptLines = () => {
     );
   }, [routeData?.receipt?.sourceDocumentId, routeData?.receiptLines?.length]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const onUpdateReceiptLine = useCallback(
     async ({
       lineId,

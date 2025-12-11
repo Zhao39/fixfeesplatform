@@ -40,6 +40,7 @@ const jobMaterialsSessionValidator = z.object({
         })
       );
       return itemsSchema.parse(parsed);
+      // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
     } catch (error) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,

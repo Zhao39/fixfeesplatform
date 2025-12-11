@@ -1,3 +1,9 @@
+import { error, useCarbon } from "@carbon/auth";
+import { requirePermissions } from "@carbon/auth/auth.server";
+import { flash } from "@carbon/auth/session.server";
+// biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
+import { Boolean, Submit, ValidatedForm, validator } from "@carbon/form";
+import type { JSONContent } from "@carbon/react";
 import {
   Badge,
   Card,
@@ -16,16 +22,15 @@ import {
   useDebounce,
   VStack
 } from "@carbon/react";
+import { Editor } from "@carbon/react/Editor";
+import { getLocalTimeZone, today } from "@internationalized/date";
+import { useFetcher, useLoaderData } from "@remix-run/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-
-import { error, useCarbon } from "@carbon/auth";
-import { requirePermissions } from "@carbon/auth/auth.server";
-import { flash } from "@carbon/auth/session.server";
-import { Boolean, Submit, ValidatedForm, validator } from "@carbon/form";
-import { useFetcher, useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
+import { LuCircleCheck } from "react-icons/lu";
 import { Users } from "~/components/Form";
+import { usePermissions, useUser } from "~/hooks";
 import {
   digitalQuoteValidator,
   getCompanySettings,
@@ -36,12 +41,6 @@ import {
 } from "~/modules/settings";
 import type { Handle } from "~/utils/handle";
 import { path } from "~/utils/path";
-
-import type { JSONContent } from "@carbon/react";
-import { Editor } from "@carbon/react/Editor";
-import { getLocalTimeZone, today } from "@internationalized/date";
-import { LuCircleCheck } from "react-icons/lu";
-import { usePermissions, useUser } from "~/hooks";
 
 export const handle: Handle = {
   breadcrumb: "Sales",

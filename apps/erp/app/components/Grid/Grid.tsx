@@ -120,6 +120,7 @@ const Grid = <T extends object>({
   const [isEditing, setIsEditing] = useState(false);
   const [selectedCell, setSelectedCell] = useState<Position>(null);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const focusOnSelectedCell = useCallback(() => {
     if (selectedCell == null) return;
     const cell = tableContainerRef.current?.querySelector(
@@ -309,6 +310,7 @@ const Grid = <T extends object>({
   );
 
   // reset the selected cell when the table data changes
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     setSelectedCell(null);
   }, [columnOrder, columnVisibility]);

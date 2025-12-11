@@ -1,4 +1,5 @@
 import { useCarbon } from "@carbon/auth";
+// biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
 import { Number, Submit, ValidatedForm } from "@carbon/form";
 import {
   Button,
@@ -6,8 +7,8 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-  cn,
   Combobox,
+  cn,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuIcon,
@@ -141,6 +142,7 @@ const ShipmentLines = () => {
     }, {});
   });
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     setSerialNumbersByLineId(
       shipmentLines.reduce((acc, line) => {
@@ -177,6 +179,7 @@ const ShipmentLines = () => {
     );
   }, [routeData?.shipment?.sourceDocumentId, routeData?.shipmentLines?.length]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const onUpdateShipmentLine = useCallback(
     async ({
       lineId,
@@ -610,6 +613,7 @@ function BatchForm({
     );
 
   // Verify batch quantity is sufficient for the shipped quantity
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (
       values.number &&
@@ -651,6 +655,7 @@ function BatchForm({
   };
 
   // Fetch the latest shelf for the selected batch number
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (values.number && values.number.trim()) {
       getShelfFromBatchNumber(values.number);
@@ -717,6 +722,7 @@ function BatchForm({
       const attributes = batchNumber.attributes as TrackedEntityAttributes;
       if (
         attributes["Shipment Line"] &&
+        // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
         attributes["Shipment"] === shipment?.id
       ) {
         setError("Batch number is already used on another shipment line");
@@ -1191,6 +1197,7 @@ export function useSerialNumbers(itemId?: string, isReadOnly = false) {
   const serialNumbersFetcher =
     useFetcher<Awaited<ReturnType<typeof getSerialNumbersForItem>>>();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (itemId) {
       serialNumbersFetcher.load(path.to.api.serialNumbers(itemId, isReadOnly));
@@ -1204,6 +1211,7 @@ export function useBatchNumbers(itemId?: string) {
   const batchNumbersFetcher =
     useFetcher<Awaited<ReturnType<typeof getBatchNumbersForItem>>>();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (itemId) {
       batchNumbersFetcher.load(path.to.api.batchNumbers(itemId));

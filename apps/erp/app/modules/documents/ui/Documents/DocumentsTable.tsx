@@ -1,11 +1,11 @@
 import {
   Badge,
   BadgeCloseButton,
-  cn,
   Command,
   CommandGroup,
   CommandInput,
   CommandItem,
+  cn,
   HStack,
   MenuIcon,
   MenuItem,
@@ -162,6 +162,7 @@ const DocumentsTable = memo(
       [favorite, filter]
     );
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
     const columns = useMemo<ColumnDef<Document>[]>(() => {
       return [
         {

@@ -111,6 +111,7 @@ export default function useShipmentForm({
     }
   }, [sourceDocument, carbon, user.company.id]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (status !== "Posted") {
       fetchSourceDocuments();

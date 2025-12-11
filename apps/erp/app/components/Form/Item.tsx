@@ -1,29 +1,29 @@
 import type { ComboboxProps } from "@carbon/form";
 import { useControlField, useField } from "@carbon/form";
 import {
-    Button,
-    cn,
-    CreatableCombobox,
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuRadioGroup,
-    DropdownMenuRadioItem,
-    DropdownMenuTrigger,
-    FormControl,
-    FormErrorMessage,
-    FormHelperText,
-    FormLabel,
-    IconButton,
-    Modal,
-    ModalBody,
-    ModalContent,
-    ModalFooter,
-    ModalHeader,
-    ModalTitle,
-    Tooltip,
-    TooltipContent,
-    TooltipTrigger,
-    useDisclosure
+  Button,
+  CreatableCombobox,
+  cn,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+  FormControl,
+  FormErrorMessage,
+  FormHelperText,
+  FormLabel,
+  IconButton,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalTitle,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+  useDisclosure
 } from "@carbon/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { LuFilter } from "react-icons/lu";
@@ -73,6 +73,7 @@ const Item = ({
 }: ItemSelectProps) => {
   const [items] = useItems();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const options = useMemo(() => {
     const results = items
       .filter((item) => {

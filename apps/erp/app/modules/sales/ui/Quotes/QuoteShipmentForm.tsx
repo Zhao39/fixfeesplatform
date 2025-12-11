@@ -13,6 +13,7 @@ import {
   DatePicker,
   Hidden,
   Location,
+  // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
   Number,
   ShippingMethod,
   Submit

@@ -23,6 +23,7 @@ export function QuoteLineMethodForm() {
     quoteFetcher.load(path.to.api.quotes);
   });
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (quote) {
       quoteLineFetcher.load(path.to.api.quoteLines(quote));

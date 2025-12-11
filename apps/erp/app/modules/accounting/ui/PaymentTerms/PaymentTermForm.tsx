@@ -8,8 +8,8 @@ import {
   ModalDrawerHeader,
   ModalDrawerProvider,
   ModalDrawerTitle,
-  VStack,
-  toast
+  toast,
+  VStack
 } from "@carbon/react";
 import { useFetcher } from "@remix-run/react";
 import type { PostgrestResponse } from "@supabase/supabase-js";
@@ -19,6 +19,7 @@ import {
   CustomFormFields,
   Hidden,
   Input,
+  // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
   Number,
   Select,
   Submit
@@ -26,8 +27,8 @@ import {
 import { usePermissions } from "~/hooks";
 import { path } from "~/utils/path";
 import {
-  paymentTermValidator,
-  paymentTermsCalculationMethod
+  paymentTermsCalculationMethod,
+  paymentTermValidator
 } from "../../accounting.models";
 import type { PaymentTermCalculationMethod } from "../../types";
 

@@ -1,3 +1,4 @@
+import { useFormContext } from "@carbon/form";
 import type { NumberFieldProps } from "@carbon/react";
 import {
   FormControl,
@@ -14,8 +15,6 @@ import {
   NumberInputStepper,
   VStack
 } from "@carbon/react";
-
-import { useFormContext } from "@carbon/form";
 import type { ReactNode } from "react";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import {
@@ -38,6 +37,7 @@ type FormNumberProps = NumberFieldProps & {
   onConfigure?: () => void;
 };
 
+// biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
 const Number = forwardRef<HTMLInputElement, FormNumberProps>(
   (
     {

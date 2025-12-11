@@ -1,3 +1,5 @@
+// biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
+import { Combobox, Hidden, Number, Select, ValidatedForm } from "@carbon/form";
 import {
   Button,
   Modal,
@@ -12,10 +14,8 @@ import {
 import { useMemo } from "react";
 import { issueValidator } from "~/services/models";
 import type { JobMaterial } from "~/services/types";
-import { path } from "~/utils/path";
-
-import { Combobox, Hidden, Number, Select, ValidatedForm } from "@carbon/form";
 import { useItems } from "~/stores";
+import { path } from "~/utils/path";
 
 export function IssueModal({
   operationId,

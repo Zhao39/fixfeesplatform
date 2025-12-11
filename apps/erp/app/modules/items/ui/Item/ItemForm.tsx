@@ -22,6 +22,7 @@ import { LuEllipsisVertical } from "react-icons/lu";
 import type { z } from "zod/v3";
 import { TrackingTypeIcon } from "~/components";
 import {
+  // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
   Boolean,
   DefaultMethodType,
   Hidden,

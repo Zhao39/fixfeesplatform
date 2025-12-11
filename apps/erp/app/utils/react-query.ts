@@ -9,6 +9,7 @@ enum RefreshRate {
 
 export const getCompanyId = () => {
   const cookieHeader = document.cookie;
+  // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
   const parsed = cookieHeader ? cookie.parse(cookieHeader)["companyId"] : null;
   return parsed;
 };

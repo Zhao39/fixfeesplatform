@@ -4,8 +4,8 @@ import type { Database } from "@carbon/database";
 import {
   Badge,
   Button,
-  cn,
   Copy,
+  cn,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuIcon,
@@ -31,11 +31,11 @@ import {
   Td,
   Th,
   Thead,
-  toast,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
   Tr,
+  toast,
   useDisclosure,
   VStack
 } from "@carbon/react";
@@ -263,6 +263,7 @@ export const JobOperation = ({
   const fetcher = useFetcher<Result>();
 
   // Lazy creation of Inspection steps for non-conformance actions
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     async function createInspectionStepsForNonConformanceActions() {
       if (!carbon || !operationId) return;

@@ -1,10 +1,10 @@
 import {
   ActionMenu,
   Button,
-  cn,
   ContextMenu,
   ContextMenuContent,
   ContextMenuTrigger,
+  cn,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuIcon,
@@ -241,6 +241,7 @@ const Table = <T extends object>({
   }, [data]);
 
   /* Clear row selection when data changes */
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (withSelectableRows) {
       setRowSelection({});
@@ -298,6 +299,7 @@ const Table = <T extends object>({
     };
   });
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (currentView) {
       setColumnVisibility(currentView.columnVisibility);
@@ -423,6 +425,7 @@ const Table = <T extends object>({
     ? table.getSelectedRowModel().flatRows.map((row) => row.original)
     : [];
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (typeof onSelectedRowsChange === "function") {
       onSelectedRowsChange(selectedRows);
@@ -438,6 +441,7 @@ const Table = <T extends object>({
     Record<string, AggregateFunction>
   >({});
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const focusOnSelectedCell = useCallback(() => {
     if (selectedCell == null) return;
     const cell = tableContainerRef.current?.querySelector(
@@ -512,6 +516,7 @@ const Table = <T extends object>({
     [table]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const onKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
       if (!selectedCell) return;
@@ -635,6 +640,7 @@ const Table = <T extends object>({
     ]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (selectedCell) setSelectedCell(null);
   }, [editMode, pagination.pageIndex, pagination.pageSize]);
@@ -683,6 +689,7 @@ const Table = <T extends object>({
   );
   const [columnSizeMap, setColumnSizeMap] = useState<ColumnSizeMap>(new Map());
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     const calculateColumnWidths = () => {
       const tableWrapperEl = getTableWrapperEl();

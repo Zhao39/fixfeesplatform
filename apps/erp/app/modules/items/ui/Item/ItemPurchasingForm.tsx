@@ -12,6 +12,7 @@ import type { z } from "zod/v3";
 import {
   ConversionFactor,
   Hidden,
+  // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
   Number,
   Submit,
   UnitOfMeasure

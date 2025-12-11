@@ -14,11 +14,13 @@ let hydratedFromIdb = false;
 let hydratedFromServer = false;
 
 const RealtimeDataProvider = ({ children }: { children: React.ReactNode }) => {
+  // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   const { carbon, accessToken, isRealtimeAuthSet } = useCarbon();
   const {
     company: { id: companyId }
   } = useUser();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     hydratedFromServer = false;
   }, [companyId]);
@@ -26,6 +28,7 @@ const RealtimeDataProvider = ({ children }: { children: React.ReactNode }) => {
   const [, setItems] = useItems();
   const [, setPeople] = usePeople();
 
+  // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   const channelRef = useRef<RealtimeChannel | null>(null);
 
   const hydrate = async () => {
@@ -94,6 +97,7 @@ const RealtimeDataProvider = ({ children }: { children: React.ReactNode }) => {
     );
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (!companyId) return;
     hydrate();

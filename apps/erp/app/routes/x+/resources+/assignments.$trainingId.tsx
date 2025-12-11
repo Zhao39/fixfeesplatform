@@ -4,8 +4,8 @@ import { flash } from "@carbon/auth/session.server";
 import {
   Badge,
   Button,
-  cn,
   Count,
+  cn,
   Drawer,
   DrawerBody,
   DrawerContent,
@@ -286,7 +286,9 @@ export default function TrainingAssignmentDetailRoute() {
                   value="Completed"
                 >
                   <LuCircleCheck className="mr-1 size-3" />
-                  Completed <Count count={statusCounts["Completed"] || 0} />
+                  Completed{" "}
+                  {/** biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration */}
+                  <Count count={statusCounts["Completed"] || 0} />
                 </ToggleGroupItem>
                 <ToggleGroupItem
                   className="flex gap-1.5 items-center"
@@ -294,7 +296,9 @@ export default function TrainingAssignmentDetailRoute() {
                   value="Pending"
                 >
                   <LuClock className="mr-1 size-3" />
-                  Pending <Count count={statusCounts["Pending"] || 0} />
+                  Pending{" "}
+                  {/** biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration */}
+                  <Count count={statusCounts["Pending"] || 0} />
                 </ToggleGroupItem>
                 <ToggleGroupItem
                   className="flex gap-1.5 items-center"
@@ -302,7 +306,9 @@ export default function TrainingAssignmentDetailRoute() {
                   value="Overdue"
                 >
                   <LuTriangleAlert className="mr-1 size-3" />
-                  Overdue <Count count={statusCounts["Overdue"] || 0} />
+                  Overdue{" "}
+                  {/** biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration */}
+                  <Count count={statusCounts["Overdue"] || 0} />
                 </ToggleGroupItem>
                 <ToggleGroupItem
                   className="flex gap-1.5 items-center"

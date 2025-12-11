@@ -13,6 +13,7 @@ export const ariaAttr = (condition: boolean | undefined) =>
  */
 export const copyToClipboard = async (
   str: string | Promise<string>,
+  // biome-ignore lint/suspicious/noEmptyBlockStatements: suppressed due to migration
   callback = () => {}
 ) => {
   const focused = window.document.hasFocus();

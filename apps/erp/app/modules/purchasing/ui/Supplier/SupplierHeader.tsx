@@ -48,6 +48,7 @@ const SupplierHeader = () => {
     (status) => status.id === routeData?.supplier?.supplierStatusId
   )?.name;
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const onUpdateTags = useCallback(
     (value: string[]) => {
       const formData = new FormData();

@@ -1,6 +1,3 @@
-import type { Handle } from "~/utils/handle";
-import { path } from "~/utils/path";
-
 import { error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
@@ -35,7 +32,7 @@ import {
   toCalendarDate
 } from "@internationalized/date";
 import { useLoaderData, useNavigate, useSearchParams } from "@remix-run/react";
-import { json, redirect, type LoaderFunctionArgs } from "@vercel/remix";
+import { json, type LoaderFunctionArgs, redirect } from "@vercel/remix";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { LuChevronLeft, LuChevronRight, LuSettings2 } from "react-icons/lu";
 import { SearchFilter } from "~/components";
@@ -52,6 +49,8 @@ import { getLocationsList } from "~/modules/resources";
 import { getTagsList } from "~/modules/shared";
 import { getUserDefaults } from "~/modules/users/users.server";
 import { usePeople } from "~/stores";
+import type { Handle } from "~/utils/handle";
+import { path } from "~/utils/path";
 
 export const handle: Handle = {
   breadcrumb: "Schedule",
@@ -473,6 +472,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       allJobs.reduce(
         (acc, job) => {
           if (job.tags) {
+            // biome-ignore lint/suspicious/useIterableCallbackReturn: suppressed due to migration
             job.tags.forEach((tag: string) => (acc[tag] = true));
           }
           return acc;

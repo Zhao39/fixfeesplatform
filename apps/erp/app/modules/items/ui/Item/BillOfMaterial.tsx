@@ -1,5 +1,6 @@
 "use client";
 import { useCarbon } from "@carbon/auth";
+import type { Database } from "@carbon/database";
 import { ValidatedForm } from "@carbon/form";
 import {
   Badge,
@@ -18,14 +19,15 @@ import {
   HStack,
   IconButton,
   Label,
-  toast,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  toast,
   useDisclosure,
   useThrottle,
   VStack
 } from "@carbon/react";
+import { getItemReadableId } from "@carbon/utils";
 import {
   Link,
   useFetcher,
@@ -54,36 +56,34 @@ import {
 } from "react-icons/lu";
 import type { z } from "zod/v3";
 import { MethodIcon, MethodItemTypeIcon, TrackingTypeIcon } from "~/components";
+import { ConfigurationEditor } from "~/components/Configurator/ConfigurationEditor";
 import type { Configuration } from "~/components/Configurator/types";
 import {
   DefaultMethodType,
   Hidden,
   Item,
   Location,
+  // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
   Number,
   Select,
   Shelf,
   Submit,
   UnitOfMeasure
 } from "~/components/Form";
+import { useShelves } from "~/components/Form/Shelf";
+import { useUnitOfMeasure } from "~/components/Form/UnitOfMeasure";
 import type {
   Item as SortableItem,
   SortableItemRenderProps
 } from "~/components/SortableList";
 import { SortableList, SortableListItem } from "~/components/SortableList";
 import { usePermissions, useUser } from "~/hooks";
-
-import type { Database } from "@carbon/database";
-import { getItemReadableId } from "@carbon/utils";
-import { ConfigurationEditor } from "~/components/Configurator/ConfigurationEditor";
-import { useShelves } from "~/components/Form/Shelf";
-import { useUnitOfMeasure } from "~/components/Form/UnitOfMeasure";
 import {
-  methodType,
   type MethodItemType,
-  type MethodType
+  type MethodType,
+  methodType
 } from "~/modules/shared";
-import { useBom, useItems, type Item as ItemType } from "~/stores";
+import { type Item as ItemType, useBom, useItems } from "~/stores";
 import { path } from "~/utils/path";
 import type { methodOperationValidator } from "../../items.models";
 import { methodMaterialValidator } from "../../items.models";

@@ -3,6 +3,7 @@ import type { ReactElement } from "react";
 import type { ColumnFilterData } from "./components/Filter/types";
 
 declare module "@tanstack/react-table" {
+  // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   interface ColumnMeta<TData extends unknown, TValue> {
     filter?: ColumnFilterData;
     pluralHeader?: string;

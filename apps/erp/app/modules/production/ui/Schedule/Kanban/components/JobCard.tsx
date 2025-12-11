@@ -19,7 +19,10 @@ import {
 import { formatDate } from "@carbon/utils";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { Link } from "@remix-run/react";
 import { cva } from "class-variance-authority";
+import { AiOutlinePartition } from "react-icons/ai";
+import { FaTasks } from "react-icons/fa";
 import {
   LuCalendarDays,
   LuEllipsisVertical,
@@ -31,13 +34,8 @@ import {
   LuTriangleAlert,
   LuUsers
 } from "react-icons/lu";
-
-import { Link } from "@remix-run/react";
 import { RiProgress8Line } from "react-icons/ri";
 import { Assignee, EmployeeAvatarGroup } from "~/components";
-
-import { AiOutlinePartition } from "react-icons/ai";
-import { FaTasks } from "react-icons/fa";
 import { getDeadlineIcon } from "~/modules/production/ui/Jobs/Deadline";
 import { useCustomers } from "~/stores";
 import { getPrivateUrl, path } from "~/utils/path";
@@ -111,6 +109,7 @@ type JobCardProps = {
 };
 
 export function JobCard({ item, isOverlay, progressByItemId }: JobCardProps) {
+  // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   const { displaySettings, selectedGroup, setSelectedGroup, tags } =
     useKanban();
   const {

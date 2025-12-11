@@ -26,6 +26,7 @@ export async function action({ request }: ActionFunctionArgs) {
     return validationError(validation.error);
   }
 
+  // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   const { supplierId, ...data } = validation.data;
 
   const createPartner = await upsertPartner(client, {

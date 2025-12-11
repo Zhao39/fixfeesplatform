@@ -134,6 +134,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
         )
       );
     }
+    // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   } catch (error) {
     await client
       .from("shipment")

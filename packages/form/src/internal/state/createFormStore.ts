@@ -88,6 +88,7 @@ export type FormState = {
   };
 };
 
+// biome-ignore lint/suspicious/noEmptyBlockStatements: suppressed due to migration
 const noOp = () => {};
 const defaultFormState: FormState = {
   isHydrated: false,

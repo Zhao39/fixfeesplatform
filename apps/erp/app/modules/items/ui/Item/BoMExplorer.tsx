@@ -1,7 +1,7 @@
 import {
   Badge,
-  cn,
   Copy,
+  cn,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuIcon,
@@ -86,6 +86,7 @@ const BoMExplorer = ({
   } = useTree({
     tree: methods,
     selectedId,
+    // biome-ignore lint/suspicious/noEmptyBlockStatements: suppressed due to migration
     onSelectedIdChanged: () => {},
     estimatedRowHeight: () => 40,
     parentRef,
@@ -393,6 +394,7 @@ function NodeData({ node }: { node: FlatTreeItem<Method> }) {
   const integrations = useIntegrations();
   const onShapeState = integrations.has("onshape")
     ? // @ts-expect-error
+      // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
       node.data.externalId?.["onshapeData"]?.["State"]
     : null;
 
@@ -417,6 +419,7 @@ function NodePreview({ node }: { node: FlatTreeItem<Method> }) {
   const integrations = useIntegrations();
   const onShapeState = integrations.has("onshape")
     ? // @ts-expect-error
+      // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
       node.data.externalId?.["onshapeData"]?.["State"]
     : null;
 

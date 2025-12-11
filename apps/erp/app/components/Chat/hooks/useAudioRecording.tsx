@@ -61,6 +61,7 @@ export function useAudioRecording(): UseAudioRecordingReturn {
     });
   }, [isRecording]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const startRecording = useCallback(async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({

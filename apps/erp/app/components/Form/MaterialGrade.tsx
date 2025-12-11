@@ -42,6 +42,7 @@ const MaterialGrade = (props: MaterialGradeSelectProps) => {
     }
   });
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (props.substanceId) {
       materialGradesLoader.load(path.to.api.materialGrades(props.substanceId));

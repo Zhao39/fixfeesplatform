@@ -44,6 +44,7 @@ const MaterialDimension = (props: MaterialDimensionSelectProps) => {
     }
   });
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (props.formId) {
       materialDimensionsLoader.load(

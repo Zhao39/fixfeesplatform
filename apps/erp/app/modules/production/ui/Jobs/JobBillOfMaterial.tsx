@@ -18,10 +18,10 @@ import {
   HStack,
   IconButton,
   Label,
-  toast,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  toast,
   useDebounce,
   useDisclosure,
   VStack
@@ -51,6 +51,7 @@ import {
   Hidden,
   InputControlled,
   Item,
+  // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
   Number,
   NumberControlled,
   Select,
@@ -67,7 +68,7 @@ import { SortableList, SortableListItem } from "~/components/SortableList";
 import { usePermissions, useRouteData, useUser } from "~/hooks";
 import { getLinkToItemDetails } from "~/modules/items/ui/Item/ItemForm";
 import type { MethodItemType, MethodType } from "~/modules/shared";
-import { useBom, useItems, type Item as ItemType } from "~/stores";
+import { type Item as ItemType, useBom, useItems } from "~/stores";
 import { path } from "~/utils/path";
 import type { jobOperationValidator } from "../../production.models";
 import {

@@ -5,8 +5,8 @@ import { formatAddress } from "@carbon/utils";
 import { useFetcher } from "@remix-run/react";
 import { useEffect, useMemo, useRef } from "react";
 import {
-  type SupplierLocation as SupplierLocationType,
-  type getSupplierLocations
+  type getSupplierLocations,
+  type SupplierLocation as SupplierLocationType
 } from "~/modules/purchasing";
 import { SupplierLocationForm } from "~/modules/purchasing/ui/Supplier";
 import { path } from "~/utils/path";
@@ -36,6 +36,7 @@ const SupplierLocation = (props: SupplierLocationSelectProps) => {
   const supplierLocationsFetcher =
     useFetcher<Awaited<ReturnType<typeof getSupplierLocations>>>();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (props?.supplier) {
       supplierLocationsFetcher.load(

@@ -1,3 +1,5 @@
+import { useCarbon } from "@carbon/auth";
+import { TextArea, ValidatedForm } from "@carbon/form";
 import {
   Badge,
   Button,
@@ -21,37 +23,33 @@ import {
   useDisclosure,
   VStack
 } from "@carbon/react";
-
-import { useCarbon } from "@carbon/auth";
-import { TextArea, ValidatedForm } from "@carbon/form";
+import { getItemReadableId } from "@carbon/utils";
 import { Link, useFetcher, useParams } from "@remix-run/react";
 import { useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { LuTrash } from "react-icons/lu";
 import type { z } from "zod/v3";
+import { MethodIcon, MethodItemTypeIcon } from "~/components";
+import { ConfiguratorModal } from "~/components/Configurator/ConfiguratorForm";
 import {
   ArrayNumeric,
   CustomFormFields,
   Hidden,
   InputControlled,
   Item,
+  // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
   Number,
   Select,
   SelectControlled,
   Submit
 } from "~/components/Form";
+import { QuoteLineStatusIcon } from "~/components/Icons";
 import {
   usePercentFormatter,
   usePermissions,
   useRouteData,
   useUser
 } from "~/hooks";
-import type { Quotation, QuotationLine } from "../../types";
-
-import { getItemReadableId } from "@carbon/utils";
-import { MethodIcon, MethodItemTypeIcon } from "~/components";
-import { ConfiguratorModal } from "~/components/Configurator/ConfiguratorForm";
-import { QuoteLineStatusIcon } from "~/components/Icons";
 import type {
   ConfigurationParameter,
   ConfigurationParameterGroup
@@ -62,6 +60,7 @@ import type { action } from "~/routes/x+/quote+/$quoteId.new";
 import { useItems } from "~/stores";
 import { path } from "~/utils/path";
 import { quoteLineStatusType, quoteLineValidator } from "../../sales.models";
+import type { Quotation, QuotationLine } from "../../types";
 import DeleteQuoteLine from "./DeleteQuoteLine";
 
 type QuoteLineFormProps = {

@@ -44,6 +44,7 @@ const MaterialFinish = (props: MaterialFinishSelectProps) => {
     }
   });
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (props.substanceId) {
       materialFinishesLoader.load(

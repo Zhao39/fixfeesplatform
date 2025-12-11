@@ -15,6 +15,7 @@ export default function useThrottle<T extends (...args: any[]) => any>(
   const timeout = useRef<ReturnType<typeof setTimeout>>();
   const lastArgs = useRef<Parameters<T>>();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     return () => {
       if (executeOnUnmount && timeout.current && lastArgs.current) {

@@ -3,8 +3,8 @@ import { useCarbon } from "@carbon/auth";
 import {
   Badge,
   Button,
-  cn,
   Count,
+  cn,
   Drawer,
   DrawerBody,
   DrawerContent,
@@ -34,11 +34,11 @@ import {
   Td,
   Th,
   Thead,
-  toast,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
   Tr,
+  toast,
   useMount,
   VStack
 } from "@carbon/react";
@@ -46,10 +46,10 @@ import { prettifyKeyboardShortcut } from "@carbon/utils";
 import { useNumberFormatter } from "@react-aria/i18n";
 import { useFetcher } from "@remix-run/react";
 import {
+  type ColumnDef,
   flexRender,
   getCoreRowModel,
-  useReactTable,
-  type ColumnDef
+  useReactTable
 } from "@tanstack/react-table";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
@@ -258,12 +258,14 @@ function TransferGrid({ locationId }: { locationId: string }) {
   }, [transferFromQuery]);
 
   // Reset offsets when page size changes
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     setTransferToOffset(0);
     setTransferFromOffset(0);
   }, [pageSize]);
 
   // Deselect active item/shelf when "to" table page changes
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     clearSelectedToItemShelves();
   }, [transferToOffset]);

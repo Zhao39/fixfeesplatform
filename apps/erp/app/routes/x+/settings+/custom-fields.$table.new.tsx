@@ -1,16 +1,15 @@
-import { json, redirect, useNavigate, useParams } from "@remix-run/react";
-import { useRouteData } from "~/hooks";
-import type { AttributeDataType } from "~/modules/people";
-import { CustomFieldForm, customFieldValidator } from "~/modules/settings";
-import { DataType } from "~/modules/shared";
-import { getParams, path } from "~/utils/path";
-
 import { assertIsPost, error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
+import { json, redirect, useNavigate, useParams } from "@remix-run/react";
 import type { ActionFunctionArgs } from "@vercel/remix";
+import { useRouteData } from "~/hooks";
+import type { AttributeDataType } from "~/modules/people";
+import { CustomFieldForm, customFieldValidator } from "~/modules/settings";
 import { upsertCustomField } from "~/modules/settings/settings.server";
+import { DataType } from "~/modules/shared";
+import { getParams, path } from "~/utils/path";
 
 export async function action({ request, params }: ActionFunctionArgs) {
   assertIsPost(request);
@@ -29,6 +28,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     return validationError(validation.error);
   }
 
+  // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   const { id, ...data } = validation.data;
 
   const create = await upsertCustomField(client, {

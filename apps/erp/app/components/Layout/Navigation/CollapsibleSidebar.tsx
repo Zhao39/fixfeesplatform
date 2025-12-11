@@ -17,6 +17,7 @@ const CollapsibleSidebarContext = createContext<
 export function useCollapsibleSidebar() {
   const context = useContext(CollapsibleSidebarContext);
   if (!context) {
+    // biome-ignore lint/suspicious/noEmptyBlockStatements: suppressed due to migration
     return { hasSidebar: false, isOpen: false, onToggle: () => {} };
   }
   return context;

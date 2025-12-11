@@ -8,6 +8,7 @@ export function isValidUrl(url: string) {
   try {
     new URL(url);
     return true;
+    // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   } catch (e) {
     return false;
   }
@@ -18,6 +19,7 @@ export function getUrlFromString(str: string) {
     if (str.includes(".") && !str.includes(" ")) {
       return new URL(`https://${str}`).toString();
     }
+    // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   } catch (e) {
     return null;
   }

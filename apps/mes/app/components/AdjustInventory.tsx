@@ -1,6 +1,7 @@
 "use client";
 
 import { useCarbon } from "@carbon/auth";
+// biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
 import { Combobox, Hidden, Number, Submit, ValidatedForm } from "@carbon/form";
 import {
   Button,
@@ -81,6 +82,7 @@ export function AdjustInventory({ add }: { add: boolean }) {
     fetchShelvesByLocationId();
   });
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (fetcher.data?.success === true) {
       modal.onClose();

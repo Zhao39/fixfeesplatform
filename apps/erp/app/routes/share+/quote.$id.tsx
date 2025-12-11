@@ -28,8 +28,8 @@ import {
   Td,
   Th,
   Thead,
-  toast,
   Tr,
+  toast,
   useDisclosure,
   VStack
 } from "@carbon/react";
@@ -375,6 +375,7 @@ const Header = ({
         )}
         {quote?.expirationDate && (
           <p className="text-lg text-muted-foreground">
+            {/** biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration */}
             {strings["Expires"]} {formatDate(quote.expirationDate)}
           </p>
         )}
@@ -467,6 +468,7 @@ const LineItems = ({
       ? quoteLines.map((line) => line.id!).filter(Boolean)
       : []
   );
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     Object.entries(selectedLines).forEach(([lineId, line]) => {
       if (line.quantity === 0 && openItems.includes(lineId)) {
@@ -1002,6 +1004,7 @@ const Quote = ({
   const mode = useMode();
   const logo = mode === "dark" ? company?.logoDark : company?.logoLight;
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (fetcher.state === "idle" && submitted.current) {
       confirmQuoteModal.onClose();

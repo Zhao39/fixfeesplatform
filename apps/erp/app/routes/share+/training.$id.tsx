@@ -255,6 +255,7 @@ export default function TrainingWizard() {
     if (actionData) {
       setIsSubmitted(true);
       if (actionData.passed && audioRef.current) {
+        // biome-ignore lint/suspicious/noEmptyBlockStatements: suppressed due to migration
         audioRef.current.play().catch(() => {});
       }
     }

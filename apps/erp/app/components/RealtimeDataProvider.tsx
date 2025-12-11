@@ -18,6 +18,7 @@ const RealtimeDataProvider = ({ children }: { children: React.ReactNode }) => {
     company: { id: companyId }
   } = useUser();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     hydratedFromServer = false;
   }, [companyId]);
@@ -121,6 +122,7 @@ const RealtimeDataProvider = ({ children }: { children: React.ReactNode }) => {
     idb.setItem("people", people.data);
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (!companyId) return;
     hydrate();

@@ -135,6 +135,7 @@ const CustomerContact = ({
   const customerContactFetcher =
     useFetcher<Awaited<ReturnType<typeof getCustomerContacts>>>();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (customer) {
       customerContactFetcher.load(path.to.api.customerContacts(customer));
@@ -175,6 +176,7 @@ const CustomerContact = ({
   };
 
   // so that we can call onChange on load
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (value && value === defaultValue) {
       handleChange(value);

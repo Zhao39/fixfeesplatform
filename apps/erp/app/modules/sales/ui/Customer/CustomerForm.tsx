@@ -1,5 +1,6 @@
 import { PhoneInput, ValidatedForm } from "@carbon/form";
 import {
+  cn,
   HStack,
   ModalCard,
   ModalCardBody,
@@ -9,7 +10,6 @@ import {
   ModalCardHeader,
   ModalCardProvider,
   ModalCardTitle,
-  cn,
   toast
 } from "@carbon/react";
 import { useFetcher } from "@remix-run/react";
@@ -18,12 +18,13 @@ import { useEffect } from "react";
 import type { z } from "zod/v3";
 import {
   Currency,
-  CustomFormFields,
   CustomerStatus,
   CustomerType,
+  CustomFormFields,
   Employee,
   Hidden,
   Input,
+  // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
   Number,
   Submit
 } from "~/components/Form";

@@ -1,4 +1,4 @@
-import { HStack, Spinner, cn } from "@carbon/react";
+import { cn, HStack, Spinner } from "@carbon/react";
 import { FaChevronRight } from "react-icons/fa";
 import { RxCheck } from "react-icons/rx";
 import useUserSelectContext from "../provider";
@@ -15,6 +15,7 @@ const UserTreeSelect = () => {
   } = useUserSelectContext();
 
   return (
+    // biome-ignore lint/a11y/useAriaPropsSupportedByRole: suppressed due to migration
     <div
       {...listBoxProps}
       aria-multiselectable={isMulti}
@@ -58,6 +59,7 @@ const Group = ({ group }: { group: OptionGroup }) => {
   const isExpanded = group.expanded && group.items.length > 0;
 
   return (
+    // biome-ignore lint/a11y/useAriaPropsSupportedByRole: suppressed due to migration
     <div
       id={group.uid}
       tabIndex={0}

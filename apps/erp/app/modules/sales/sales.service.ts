@@ -1,4 +1,4 @@
-import { fetchAllFromTable, type Database, type Json } from "@carbon/database";
+import { type Database, fetchAllFromTable, type Json } from "@carbon/database";
 import { getLocalTimeZone, now, today } from "@internationalized/date";
 import {
   FunctionRegion,
@@ -41,8 +41,8 @@ import type {
   salesOrderShipmentValidator,
   salesOrderStatusType,
   salesOrderValidator,
-  salesRfqLineValidator,
   salesRFQStatusType,
+  salesRfqLineValidator,
   salesRfqValidator,
   selectedLinesValidator
 } from "./sales.models";
@@ -906,6 +906,7 @@ function getQuoteMethodTreeArrayToTree(
       lookup[itemId] = { id: itemId, children: [] };
     }
 
+    // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
     lookup[itemId]["data"] = item;
 
     const treeItem = lookup[itemId];
@@ -918,6 +919,7 @@ function getQuoteMethodTreeArrayToTree(
         lookup[parentId] = { id: parentId, children: [] };
       }
 
+      // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
       lookup[parentId]["children"].push(treeItem);
     }
   }

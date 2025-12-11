@@ -223,18 +223,21 @@ export function ModelViewer({
     });
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (color) {
       updateColor(color);
     }
   }, [color]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (!file || !viewerRef.current) return;
     setIsLoading(true);
     loadFile(file);
   }, [file]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (!url || file || !viewerRef.current) return;
     setIsLoading(true);
@@ -242,6 +245,7 @@ export function ModelViewer({
   }, [url, file]);
 
   const isDarkMode = mode === "dark";
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (viewerRef.current) {
       const viewer3D = viewerRef.current.GetViewer();

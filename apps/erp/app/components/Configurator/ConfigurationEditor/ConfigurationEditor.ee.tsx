@@ -216,6 +216,7 @@ export default function Configurator({
     };
   }, []);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (fetcher.data?.success === false) {
       toast.error("Failed to save configuration rule");

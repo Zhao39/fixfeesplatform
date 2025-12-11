@@ -91,6 +91,7 @@ function useCustomerContacts(customerId?: string) {
   const customerContactsFetcher =
     useFetcher<Awaited<ReturnType<typeof getCustomerContacts>>>();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (customerId) {
       customerContactsFetcher.load(path.to.api.customerContacts(customerId));

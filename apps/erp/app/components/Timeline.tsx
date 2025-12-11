@@ -1,8 +1,8 @@
 import { inverseLerp, lerp } from "@carbon/utils";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import {
-  Fragment,
   createContext,
+  Fragment,
   useCallback,
   useContext,
   useRef,
@@ -22,6 +22,7 @@ export function MousePositionProvider({ children }: { children: ReactNode }) {
     undefined
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const handleMouseMove = useCallback(
     (e: React.MouseEvent) => {
       if (!ref.current) {

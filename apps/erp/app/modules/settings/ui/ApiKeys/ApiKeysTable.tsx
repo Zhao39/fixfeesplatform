@@ -79,6 +79,7 @@ const ApiKeysTable = memo(({ data, count }: ApiKeysTableProps) => {
     ];
   }, [people]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const renderContextMenu = useCallback(
     (row: (typeof data)[number]) => {
       return (

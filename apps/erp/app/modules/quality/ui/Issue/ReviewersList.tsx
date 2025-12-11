@@ -39,6 +39,7 @@ export function ReviewersList({
 
   const fetcher = useFetcher<typeof reviewAction>();
   const submitted = useRef(false);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (fetcher.data?.success && submitted.current) {
       disclosure.onClose();

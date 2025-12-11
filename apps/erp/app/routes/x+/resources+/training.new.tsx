@@ -6,9 +6,9 @@ import { useNavigate } from "@remix-run/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
 import {
+  TrainingForm,
   trainingValidator,
-  upsertTraining,
-  TrainingForm
+  upsertTraining
 } from "~/modules/resources";
 import { path } from "~/utils/path";
 
@@ -32,11 +32,13 @@ export async function action({ request }: ActionFunctionArgs) {
     return validationError(validation.error);
   }
 
+  // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   const { id, content, ...data } = validation.data;
 
   let contentJSON;
   try {
     contentJSON = content ? JSON.parse(content) : {};
+    // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   } catch (e) {
     return json(
       {},

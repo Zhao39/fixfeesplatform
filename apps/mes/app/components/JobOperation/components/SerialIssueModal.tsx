@@ -4,8 +4,8 @@ import {
   AlertTitle,
   Button,
   Checkbox,
-  cn,
   Combobox as ComboboxBase,
+  cn,
   IconButton,
   Input,
   InputGroup,
@@ -168,6 +168,7 @@ export function SerialIssueModal({
     });
   }, []);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const handleSubmit = useCallback(() => {
     // Validate all serial numbers
     let hasErrors = false;
@@ -543,6 +544,7 @@ function useSerialNumbers(itemId?: string) {
   const serialNumbersFetcher =
     useFetcher<Awaited<ReturnType<typeof getSerialNumbersForItem>>>();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (itemId) {
       serialNumbersFetcher.load(path.to.api.serialNumbers(itemId));

@@ -15,6 +15,7 @@ export function useReplaceLocation() {
     setLocation(newLocation);
   }, []);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const replaceSearchParam = useCallback(
     (key: string, value?: string) => {
       const searchParams = new URLSearchParams(location.search);

@@ -62,6 +62,7 @@ const AddressAutocomplete = ({
 
   const debouncedGetSuggestions = useDebounce(handleInputChange, 300);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (userInteracted) {
       debouncedGetSuggestions(value || "");
@@ -84,6 +85,7 @@ const AddressAutocomplete = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [open]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const handleSelect = useCallback(
     async (placeId: string) => {
       setOpen(false);

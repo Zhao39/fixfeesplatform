@@ -50,6 +50,7 @@ export const CarbonProvider = ({
   const initialLoad = useRef(true);
   const refresh = useFetcher<{}>();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     setAuthToken(session.accessToken);
   }, [carbon, setAuthToken, session.accessToken]);

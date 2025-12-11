@@ -134,6 +134,7 @@ const SupplierContact = ({
   const supplierContactFetcher =
     useFetcher<Awaited<ReturnType<typeof getSupplierContacts>>>();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (supplier) {
       supplierContactFetcher.load(path.to.api.supplierContacts(supplier));
@@ -173,6 +174,7 @@ const SupplierContact = ({
   };
 
   // so that we can call onChange on load
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (value && value === defaultValue) {
       handleChange(value);

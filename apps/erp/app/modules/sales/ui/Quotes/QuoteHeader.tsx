@@ -19,10 +19,10 @@ import {
   ModalFooter,
   ModalHeader,
   ModalTitle,
-  toast,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  toast,
   useDisclosure
 } from "@carbon/react";
 
@@ -414,6 +414,7 @@ function CreateRevisionModal({
     | { success: true; data: { newQuoteId: string } }
   >();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (fetcher.data?.success === false) {
       toast.error(fetcher.data?.message);

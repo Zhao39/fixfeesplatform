@@ -24,11 +24,11 @@ import {
   Tfoot,
   Th,
   Thead,
-  toast,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
   Tr,
+  toast,
   useDisclosure,
   VStack
 } from "@carbon/react";
@@ -129,6 +129,7 @@ const JobEstimatesVsActuals = ({
     );
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     getCurrentUnitCosts(materials.map((m) => m.itemId));
   }, [materials]);

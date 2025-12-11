@@ -160,6 +160,7 @@ export const ItemPlanningChart = ({
           (order.quantity ?? 0) - (order.existingQuantity ?? 0);
         const inventoryQuantityDelta = purchaseQuantityDelta * conversionFactor;
 
+        // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
         groupedData[periodId]["Planned"] += inventoryQuantityDelta;
       }
     });
@@ -216,6 +217,7 @@ export const ItemPlanningChart = ({
       runningProjection +=
         period["Purchase Order"] +
         period["Production Order"] +
+        // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
         period["Planned"];
       // Subtract demand (all values are already negative)
       runningProjection +=

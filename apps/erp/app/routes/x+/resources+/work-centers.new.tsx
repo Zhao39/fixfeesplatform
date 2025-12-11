@@ -8,8 +8,8 @@ import type { ActionFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
 import { useUser } from "~/hooks";
 import {
-  WorkCenterForm,
   upsertWorkCenter,
+  WorkCenterForm,
   workCenterValidator
 } from "~/modules/resources";
 import { setCustomFields } from "~/utils/form";
@@ -31,6 +31,7 @@ export async function action({ request }: ActionFunctionArgs) {
     return validationError(validation.error);
   }
 
+  // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   const { id, ...data } = validation.data;
 
   const createWorkCenter = await upsertWorkCenter(client, {

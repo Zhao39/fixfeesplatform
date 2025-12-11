@@ -40,6 +40,7 @@ const ApiKeyForm = ({ initialValues, onClose }: ApiKeyFormProps) => {
 
   const [key, setKey] = useState<string | null>(null);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (fetcher.data?.key) {
       setKey(fetcher.data.key);

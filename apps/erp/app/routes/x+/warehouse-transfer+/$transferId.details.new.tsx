@@ -7,13 +7,12 @@ import type {
   WarehouseTransfer,
   WarehouseTransferLine
 } from "~/modules/inventory";
-import { WarehouseTransferLineForm } from "~/modules/inventory/ui/WarehouseTransfers";
-import { path } from "~/utils/path";
-
 import {
   upsertWarehouseTransferLine,
   warehouseTransferLineValidator
 } from "~/modules/inventory";
+import { WarehouseTransferLineForm } from "~/modules/inventory/ui/WarehouseTransfers";
+import { path } from "~/utils/path";
 
 export async function action({ request, params }: ActionFunctionArgs) {
   console.log("DEBUG: new action called");
@@ -38,6 +37,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     });
   }
 
+  // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   const { id, ...data } = validation.data;
 
   const createWarehouseTransferLine = await upsertWarehouseTransferLine(

@@ -21,7 +21,7 @@ import { Edition } from "@carbon/utils";
 import { getLocalTimeZone } from "@internationalized/date";
 import { Link, useLoaderData } from "@remix-run/react";
 import { tasks } from "@trigger.dev/sdk";
-import { json, redirect, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json, redirect } from "@vercel/remix";
 import {
   AddressAutocomplete,
   Currency,
@@ -134,6 +134,7 @@ export async function action({ request }: ActionFunctionArgs) {
       });
     }
 
+    // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
     const { baseCurrencyCode, website, ...locationData } = data;
 
     // TODO: move all of this to transaction

@@ -96,6 +96,7 @@ const WorkCentersTable = memo(
     };
 
     const customColumns = useCustomColumns<WorkCenter>("workCenter");
+    // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
     const columns = useMemo<ColumnDef<WorkCenter>[]>(() => {
       const defaultColumns: ColumnDef<WorkCenter>[] = [
         {
@@ -265,6 +266,7 @@ const WorkCentersTable = memo(
       return [...defaultColumns, ...customColumns];
     }, [params, customColumns]);
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
     const renderContextMenu = useCallback<(row: WorkCenter) => JSX.Element>(
       (row) => (
         <>

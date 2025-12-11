@@ -154,6 +154,7 @@ export default function ProductionDashboard() {
     return dateRange.end.compare(dateRange.start) * 24 * 60 * 60 * 1000;
   }, [dateRange]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     kpiFetcher.load(
       `${path.to.api.productionKpi(
@@ -726,6 +727,7 @@ function WorkCenterCards({
     return acc;
   }, {});
 
+  // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   const { carbon, accessToken } = useCarbon();
   const {
     company: { id: companyId }

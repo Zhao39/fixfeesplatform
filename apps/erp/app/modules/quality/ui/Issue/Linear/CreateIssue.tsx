@@ -102,6 +102,7 @@ const useLinearTeams = (teamId?: string) => {
     members: LinearUser[];
   }>();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     fetcher.load(
       path.to.api.linearCreateIssue + (teamId ? `?teamId=${teamId}` : "")

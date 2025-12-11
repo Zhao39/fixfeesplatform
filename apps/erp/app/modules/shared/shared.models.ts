@@ -1,5 +1,5 @@
-import { zfd } from "zod-form-data";
 import { z } from "zod/v3";
+import { zfd } from "zod-form-data";
 
 export const chartIntervals = [
   { key: "week", label: "Week" },
@@ -107,6 +107,7 @@ export const operationStepValidator = z
       .transform((val) => {
         try {
           return JSON.parse(val);
+          // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
         } catch (e) {
           return {};
         }

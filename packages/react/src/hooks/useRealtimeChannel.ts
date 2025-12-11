@@ -22,6 +22,7 @@ export const useRealtimeChannel = <TDeps extends any[]>(
   const channelRef = useRef<RealtimeChannel | null>(null);
   const { carbon, isRealtimeAuthSet } = useCarbon();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const memoSetup = useCallback(setup, [topic, ...dependencies]);
 
   const teardown = useCallback(async () => {
@@ -39,6 +40,7 @@ export const useRealtimeChannel = <TDeps extends any[]>(
     }
   }, [carbon, topic]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (!carbon) return;
 
@@ -94,7 +96,7 @@ export const useRealtimeChannel = <TDeps extends any[]>(
     enabled,
     topic,
     memoSetup,
-    teardown,
+    teardown
     // dependencies are already in memoSetup, so not needed here
   ]);
 

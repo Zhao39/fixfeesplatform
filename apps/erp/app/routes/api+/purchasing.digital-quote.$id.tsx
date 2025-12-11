@@ -110,6 +110,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       let parsedData: unknown;
       try {
         parsedData = JSON.parse(selectedLinesRaw);
+        // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
       } catch (e) {
         return json({
           success: false,

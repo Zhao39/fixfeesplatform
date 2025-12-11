@@ -68,6 +68,7 @@ const EmployeesTable = memo(
 
     const canEdit = permissions.can("update", "users");
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
     const columns = useMemo<ColumnDef<(typeof data)[number]>[]>(() => {
       return [
         {

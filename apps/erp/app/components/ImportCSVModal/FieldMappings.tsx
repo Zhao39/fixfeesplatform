@@ -4,15 +4,15 @@ import { useCarbon } from "@carbon/auth";
 import type { Database } from "@carbon/database";
 import { Combobox, useFormContext } from "@carbon/form";
 import {
-    Button,
-    ModalDescription,
-    ModalHeader,
-    ModalTitle,
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-    toast
+  Button,
+  ModalDescription,
+  ModalHeader,
+  ModalTitle,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+  toast
 } from "@carbon/react";
 import { formatDate } from "@carbon/utils";
 import { useFetcher } from "@remix-run/react";
@@ -75,6 +75,7 @@ export function FieldMapping({
     }, {})
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (!fileColumns || !firstRows) return;
 
@@ -90,6 +91,7 @@ export function FieldMapping({
     );
   }, [fileColumns, firstRows]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (
       fetcher.data &&
@@ -398,6 +400,7 @@ function EnumMappingStep({
     }
   }, [enumData, carbon, company.id]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if ("fetcher" in enumData && carbon) {
       fetchOptions();

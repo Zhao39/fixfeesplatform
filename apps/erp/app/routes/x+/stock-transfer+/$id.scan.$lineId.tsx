@@ -225,6 +225,7 @@ export default function StockTransferScan() {
         setIsValid(true);
         onPick(trackedEntityId);
       }
+      // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
     } catch (error) {
       setValidationError("Error validating serial number");
       setIsValid(false);

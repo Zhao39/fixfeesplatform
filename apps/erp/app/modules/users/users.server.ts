@@ -805,18 +805,22 @@ export function makeCompanyPermissionsFromClaims(
       } else {
         switch (action) {
           case "view":
+            // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
             permissions[module]["view"] =
               value.includes("0") || value.includes(companyId);
             break;
           case "create":
+            // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
             permissions[module]["create"] =
               value.includes("0") || value.includes(companyId);
             break;
           case "update":
+            // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
             permissions[module]["update"] =
               value.includes("0") || value.includes(companyId);
             break;
           case "delete":
+            // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
             permissions[module]["delete"] =
               value.includes("0") || value.includes(companyId);
             break;
@@ -826,10 +830,12 @@ export function makeCompanyPermissionsFromClaims(
   });
 
   if ("role" in claims) {
+    // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
     role = claims["role"] as string;
   }
 
   if ("items" in permissions) {
+    // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
     delete permissions["items"];
   }
 
@@ -855,15 +861,19 @@ export function makePermissionsFromClaims(claims: Json[] | null) {
 
       switch (action) {
         case "view":
+          // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
           permissions[module]["view"] = value as string[];
           break;
         case "create":
+          // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
           permissions[module]["create"] = value as string[];
           break;
         case "update":
+          // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
           permissions[module]["update"] = value as string[];
           break;
         case "delete":
+          // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
           permissions[module]["delete"] = value as string[];
           break;
       }
@@ -871,10 +881,12 @@ export function makePermissionsFromClaims(claims: Json[] | null) {
   });
 
   if ("role" in claims) {
+    // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
     role = claims["role"] as string;
   }
 
   if ("items" in permissions) {
+    // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
     delete permissions["items"];
   }
 
@@ -917,6 +929,7 @@ export function makeCompanyPermissionsFromEmployeeType(
   });
 
   if ("items" in result) {
+    // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
     delete result["items"];
   }
 
@@ -1064,6 +1077,7 @@ export async function updatePermissions(
         ? {}
         : claims.data
     ) as Record<string, string[]>;
+    // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
     delete updatedPermissions["role"];
 
     // add any missing claims to the current claims

@@ -39,6 +39,7 @@ export function useNextItemId(
           } else {
             setId(`${prefix}${(1).toString().padStart(9, "0")}`);
           }
+          // biome-ignore lint/suspicious/noEmptyBlockStatements: suppressed due to migration
         } catch {
         } finally {
           setLoading(false);
@@ -65,6 +66,7 @@ export function useNextItemId(
           } else {
             setId(`${prefix}${(1).toString().padStart(9, "0")}`);
           }
+          // biome-ignore lint/suspicious/noEmptyBlockStatements: suppressed due to migration
         } catch {
         } finally {
           setLoading(false);

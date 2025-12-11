@@ -1,7 +1,7 @@
 import {
   Badge,
-  cn,
   Copy,
+  cn,
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
@@ -73,6 +73,7 @@ const QuoteBoMExplorer = ({
     tree: methods,
     // selectedId,
     // collapsedIds,
+    // biome-ignore lint/suspicious/noEmptyBlockStatements: suppressed due to migration
     onSelectedIdChanged: () => {},
     estimatedRowHeight: () => 32,
     parentRef,
@@ -93,6 +94,7 @@ const QuoteBoMExplorer = ({
 
   const params = useParams();
   const [selectedMaterialId, setSelectedMaterialId] = useBom();
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (selectedMaterialId) {
       const node = methods.find(
@@ -246,6 +248,7 @@ function NodeData({ node }: { node: FlatTreeItem<QuoteMethod> }) {
   const integrations = useIntegrations();
   const onShapeState = integrations.has("onshape")
     ? // @ts-expect-error
+      // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
       node.data.externalId?.["onshapeData"]?.["State"]
     : null;
 
@@ -269,6 +272,7 @@ function NodePreview({ node }: { node: FlatTreeItem<QuoteMethod> }) {
   const integrations = useIntegrations();
   const onShapeState = integrations.has("onshape")
     ? // @ts-expect-error
+      // biome-ignore lint/complexity/useLiteralKeys: suppressed due to migration
       node.data.externalId?.["onshapeData"]?.["State"]
     : null;
 

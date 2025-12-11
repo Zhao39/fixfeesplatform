@@ -177,6 +177,7 @@ export const useSmartValidate = (formId: InternalFormId) =>
 export const useValidate = (formId: InternalFormId) =>
   useFormStore(formId, (state) => state.validate);
 
+// biome-ignore lint/suspicious/noEmptyBlockStatements: suppressed due to migration
 const noOpReceiver = () => () => {};
 export const useRegisterReceiveFocus = (formId: InternalFormId) =>
   useFormStore(

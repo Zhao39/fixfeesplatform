@@ -1,3 +1,8 @@
+import { error } from "@carbon/auth";
+import { requirePermissions } from "@carbon/auth/auth.server";
+import { flash } from "@carbon/auth/session.server";
+// biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
+import { Boolean, Submit, ValidatedForm, validator } from "@carbon/form";
 import {
   Card,
   CardContent,
@@ -10,14 +15,9 @@ import {
   toast,
   VStack
 } from "@carbon/react";
+import { useFetcher, useLoaderData } from "@remix-run/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-
-import { error } from "@carbon/auth";
-import { requirePermissions } from "@carbon/auth/auth.server";
-import { flash } from "@carbon/auth/session.server";
-import { Boolean, Submit, ValidatedForm, validator } from "@carbon/form";
-import { useFetcher, useLoaderData } from "@remix-run/react";
 import { useEffect } from "react";
 import {
   getCompanySettings,

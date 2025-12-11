@@ -31,6 +31,7 @@ export function RangeCalendar({
     createCalendar
   });
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
     if (!props.value?.start) return;
     state.setFocusedDate(props.value.start as CalendarDate);

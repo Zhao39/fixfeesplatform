@@ -3,10 +3,10 @@ import {
   Badge,
   Button,
   HStack,
-  toast,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  toast,
   VStack
 } from "@carbon/react";
 import { useFetcher, useParams } from "@remix-run/react";
@@ -44,6 +44,7 @@ const TrainingProperties = () => {
     }
   }, [fetcher.data]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const onUpdate = useCallback(
     (
       field:
