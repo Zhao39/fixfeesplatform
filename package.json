@@ -19,11 +19,10 @@
   },
   "lint-staged": {
     "(apps|packages)/**/*.{js,ts,jsx,tsx}": [
-      "biome format --write",
-      "biome lint --write --max-warnings=0"
+      "biome check"
     ],
     "*.json": [
-      "biome --write"
+      "biome check"
     ]
   },
   "private": true,

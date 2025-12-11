@@ -5,10 +5,11 @@
     "ignoreUnknown": false,
     "maxSize": 1258291, // 1.2 MB
     "includes": [
-      "_.vscode",
-      "_sst.env.d.ts",
-      "_packages/database/src/types.ts",
-      "_packages/database/src/swagger-docs-schema.ts"
+      "!.vscode",
+      "!sst.env.d.ts",
+      "!packages/database/src/types.ts",
+      "!packages/database/src/swagger-docs-schema.ts",
+      "**/package.json"
     ]
   },
   "formatter": { "enabled": true, "indentStyle": "space", "indentWidth": 2 },
