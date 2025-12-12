@@ -8,9 +8,9 @@ import {
   TooltipTrigger,
   useKeyboardShortcuts
 } from "@carbon/react";
-import { Link } from "@remix-run/react";
 import { useRef } from "react";
 import { LuCirclePlus } from "react-icons/lu";
+import { Link } from "react-router";
 
 type NewProps = {
   label?: string;

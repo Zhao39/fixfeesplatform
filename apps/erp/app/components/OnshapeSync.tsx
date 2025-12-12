@@ -21,9 +21,9 @@ import {
   useMount
 } from "@carbon/react";
 import { formatDateTime } from "@carbon/utils";
-import { useFetcher } from "@remix-run/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { LuChevronRight } from "react-icons/lu";
+import { useFetcher } from "react-router";
 import { MethodIcon } from "~/components";
 import { OnshapeStatus } from "~/components/Icons";
 import { methodType } from "~/modules/shared";

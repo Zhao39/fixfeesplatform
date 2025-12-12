@@ -23,16 +23,11 @@ import {
 } from "@carbon/react";
 import { Editor } from "@carbon/react/Editor";
 import { useMode } from "@carbon/remix";
-import {
-  useFetcher,
-  useLoaderData,
-  useParams,
-  useSubmit
-} from "@remix-run/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
 import { useCallback, useRef, useState } from "react";
 import { LuChevronRight } from "react-icons/lu";
+import { useFetcher, useLoaderData, useParams, useSubmit } from "react-router";
 import z from "zod";
 import { zfd } from "zod-form-data";
 import { getSupplier } from "~/modules/purchasing";

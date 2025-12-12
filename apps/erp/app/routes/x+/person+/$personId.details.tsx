@@ -1,14 +1,13 @@
 import { error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
-import { useLoaderData } from "@remix-run/react";
+import { Card, CardContent, CardHeader, CardTitle } from "@carbon/react";
 import type { LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-import { path } from "~/utils/path";
-
-import { Card, CardContent, CardHeader, CardTitle } from "@carbon/react";
+import { useLoaderData } from "react-router";
 import { getAccount } from "~/modules/account";
 import { ProfileForm } from "~/modules/account/ui/Profile";
+import { path } from "~/utils/path";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client } = await requirePermissions(request, {

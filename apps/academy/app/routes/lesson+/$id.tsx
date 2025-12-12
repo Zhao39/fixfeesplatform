@@ -1,7 +1,6 @@
 import { getCarbon } from "@carbon/auth";
 import { getOrRefreshAuthSession } from "@carbon/auth/session.server";
 import { Button, Spinner } from "@carbon/react";
-import { json, Link, useFetcher, useParams } from "@remix-run/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { useEffect } from "react";
 import {
@@ -11,6 +10,7 @@ import {
   LuCirclePlay,
   LuFlag
 } from "react-icons/lu";
+import { json, Link, useFetcher, useParams } from "react-router";
 import Share from "~/components/Share";
 import { useProgress } from "~/hooks";
 import { path } from "~/utils/path";

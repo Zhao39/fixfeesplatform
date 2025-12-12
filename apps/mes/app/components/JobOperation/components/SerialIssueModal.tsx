@@ -24,7 +24,6 @@ import {
 } from "@carbon/react";
 import type { TrackedEntityAttributes } from "@carbon/utils";
 import { getItemReadableId } from "@carbon/utils";
-import { useFetcher } from "@remix-run/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   LuCheck,
@@ -34,6 +33,7 @@ import {
   LuUndo2,
   LuX
 } from "react-icons/lu";
+import { useFetcher } from "react-router";
 import type { getSerialNumbersForItem } from "~/services/inventory.service";
 import type { JobMaterial, TrackedInput } from "~/services/types";
 import { useItems } from "~/stores";

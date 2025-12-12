@@ -1,15 +1,14 @@
-import { VStack, type JSONContent } from "@carbon/react";
-import { supportedModelTypes } from "@carbon/utils";
-import type { DragEndEvent } from "@dnd-kit/core";
-import { DndContext } from "@dnd-kit/core";
-import { Outlet, useParams, useSubmit } from "@remix-run/react";
-import type { FileObject } from "@supabase/storage-js";
-import type { LoaderFunctionArgs } from "@vercel/remix";
-import { defer, redirect } from "@vercel/remix";
-
 import { error, getCarbonServiceRole } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
+import { type JSONContent, VStack } from "@carbon/react";
+import { supportedModelTypes } from "@carbon/utils";
+import type { DragEndEvent } from "@dnd-kit/core";
+import { DndContext } from "@dnd-kit/core";
+import type { FileObject } from "@supabase/storage-js";
+import type { LoaderFunctionArgs } from "@vercel/remix";
+import { defer, redirect } from "@vercel/remix";
+import { Outlet, useParams, useSubmit } from "react-router";
 import { PanelProvider, ResizablePanels } from "~/components/Layout/Panels";
 import type { SalesRFQLine } from "~/modules/sales";
 import {

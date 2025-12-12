@@ -12,10 +12,10 @@ import {
   HStack,
   IconButton
 } from "@carbon/react";
-import { Outlet, useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
 import { LuEllipsisVertical, LuPencil, LuTrash } from "react-icons/lu";
+import { Outlet, useNavigate } from "react-router";
 import { CustomerAvatar, New } from "~/components";
 import { EditableText } from "~/components/Editable";
 import Grid from "~/components/Grid";

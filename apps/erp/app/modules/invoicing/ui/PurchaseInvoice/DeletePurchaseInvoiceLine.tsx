@@ -1,4 +1,4 @@
-import { useParams } from "@remix-run/react";
+import { useParams } from "react-router";
 import { ConfirmDelete } from "~/components/Modals";
 import { path } from "~/utils/path";
 import type { PurchaseInvoiceLine } from "../../types";

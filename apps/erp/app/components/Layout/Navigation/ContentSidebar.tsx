@@ -1,5 +1,5 @@
 import { Button, VStack } from "@carbon/react";
-import { Link } from "@remix-run/react";
+import { Link } from "react-router";
 import { useOptimisticLocation, useUrlParams } from "~/hooks";
 import type { Route } from "~/types";
 import { CollapsibleSidebar } from "./CollapsibleSidebar";

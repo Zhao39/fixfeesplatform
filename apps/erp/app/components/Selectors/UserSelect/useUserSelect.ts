@@ -1,5 +1,4 @@
 import { useDisclosure, useOutsideClick } from "@carbon/react";
-import { useFetcher } from "@remix-run/react";
 import type { PostgrestError } from "@supabase/supabase-js";
 import debounce from "lodash/debounce";
 import words from "lodash/words";
@@ -12,6 +11,7 @@ import {
   useRef,
   useState
 } from "react";
+import { useFetcher } from "react-router";
 import type { Group } from "~/modules/users";
 import { path } from "~/utils/path";
 

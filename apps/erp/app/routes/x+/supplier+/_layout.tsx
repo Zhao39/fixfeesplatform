@@ -1,8 +1,8 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { VStack } from "@carbon/react";
-import { Outlet } from "@remix-run/react";
 import type { LoaderFunctionArgs, MetaFunction } from "@vercel/remix";
 import { json } from "@vercel/remix";
+import { Outlet } from "react-router";
 import { getShippingTermsList } from "~/modules/inventory";
 import { getSupplierStatuses, getSupplierTypes } from "~/modules/purchasing";
 import type { Handle } from "~/utils/handle";

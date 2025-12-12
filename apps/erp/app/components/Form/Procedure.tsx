@@ -1,8 +1,8 @@
 import type { ComboboxProps } from "@carbon/form";
 import { Combobox } from "@carbon/form";
 import { HStack, useMount } from "@carbon/react";
-import { useFetcher } from "@remix-run/react";
 import { useMemo } from "react";
+import { useFetcher } from "react-router";
 import type { getProceduresList } from "~/modules/production/production.service";
 import ProcedureStatus from "~/modules/production/ui/Procedures/ProcedureStatus";
 import { path } from "~/utils/path";

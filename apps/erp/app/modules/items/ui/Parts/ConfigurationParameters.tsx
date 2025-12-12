@@ -30,32 +30,6 @@ import {
   useDisclosure,
   VStack
 } from "@carbon/react";
-import {
-  useFetcher,
-  useFetchers,
-  useParams,
-  useSubmit
-} from "@remix-run/react";
-import { cva } from "class-variance-authority";
-import { useEffect, useRef, useState } from "react";
-import {
-  LuCirclePlus,
-  LuEllipsisVertical,
-  LuFolderOpen,
-  LuGripVertical,
-  LuKeySquare
-} from "react-icons/lu";
-import { EmployeeAvatar } from "~/components";
-import type { ConfigurationParameter } from "~/modules/items";
-import {
-  configurationParameterDataTypes,
-  configurationParameterGroupValidator,
-  configurationParameterValidator
-} from "~/modules/items";
-import type { action as configurationParameterAction } from "~/routes/x+/part+/$itemId.parameter";
-import { path } from "~/utils/path";
-import { capitalize } from "~/utils/string";
-
 import { formatRelativeTime } from "@carbon/utils";
 import type {
   Active,
@@ -81,9 +55,29 @@ import {
 } from "@dnd-kit/core";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { cva } from "class-variance-authority";
+import { useEffect, useRef, useState } from "react";
 import { createPortal, flushSync } from "react-dom";
+import {
+  LuCirclePlus,
+  LuEllipsisVertical,
+  LuFolderOpen,
+  LuGripVertical,
+  LuKeySquare
+} from "react-icons/lu";
+import { useFetcher, useFetchers, useParams, useSubmit } from "react-router";
+import { EmployeeAvatar } from "~/components";
 import { ConfiguratorDataTypeIcon } from "~/components/Configurator/Icons";
 import { ConfirmDelete } from "~/components/Modals";
+import type { ConfigurationParameter } from "~/modules/items";
+import {
+  configurationParameterDataTypes,
+  configurationParameterGroupValidator,
+  configurationParameterValidator
+} from "~/modules/items";
+import type { action as configurationParameterAction } from "~/routes/x+/part+/$itemId.parameter";
+import { path } from "~/utils/path";
+import { capitalize } from "~/utils/string";
 
 type ConfigurationParameterGroup = {
   id: string;

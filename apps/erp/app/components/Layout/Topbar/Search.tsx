@@ -14,12 +14,11 @@ import {
   Modal,
   ModalContent,
   ShortcutKey,
-  VStack,
   useDebounce,
   useMount,
-  useShortcutKeys
+  useShortcutKeys,
+  VStack
 } from "@carbon/react";
-import { useNavigate } from "@remix-run/react";
 import idb from "localforage";
 import { nanoid } from "nanoid";
 import { memo, useCallback, useEffect, useState } from "react";
@@ -39,6 +38,7 @@ import {
   RiProgress8Line
 } from "react-icons/ri";
 import { RxMagnifyingGlass } from "react-icons/rx";
+import { useNavigate } from "react-router";
 import { MethodItemTypeIcon } from "~/components/Icons";
 import { useModules, useUser } from "~/hooks";
 import useAccountSubmodules from "~/modules/account/ui/useAccountSubmodules";

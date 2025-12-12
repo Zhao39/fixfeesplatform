@@ -17,9 +17,9 @@ import {
   useMount,
   VStack
 } from "@carbon/react";
-import { useFetcher } from "@remix-run/react";
 import type { PostgrestResponse } from "@supabase/supabase-js";
 import { useEffect } from "react";
+import { useFetcher } from "react-router";
 import type { z } from "zod/v3";
 import { Hidden, Submit } from "~/components/Form";
 import { usePermissions } from "~/hooks";

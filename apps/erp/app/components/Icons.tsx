@@ -1,5 +1,10 @@
 import type { Database } from "@carbon/database";
+import type { LinearIssue } from "@carbon/ee/linear";
+import { mapLinearStatusToCarbonStatus } from "@carbon/ee/linear";
 import { Badge, cn, Status } from "@carbon/react";
+import { useMode } from "@carbon/remix";
+import { getColor } from "@carbon/utils";
+import type { ReactNode } from "react";
 import { AiOutlinePartition } from "react-icons/ai";
 import { FaCodePullRequest } from "react-icons/fa6";
 import {
@@ -32,16 +37,9 @@ import {
   LuToggleLeft,
   LuUser
 } from "react-icons/lu";
-
 import { RxCodesandboxLogo } from "react-icons/rx";
 import { TbTargetOff } from "react-icons/tb";
-
-import type { LinearIssue } from "@carbon/ee/linear";
-import { mapLinearStatusToCarbonStatus } from "@carbon/ee/linear";
-import { useMode } from "@carbon/remix";
-import { getColor } from "@carbon/utils";
-import { Link } from "@remix-run/react";
-import type { ReactNode } from "react";
+import { Link } from "react-router";
 import { AlmostDoneIcon } from "~/assets/icons/AlmostDoneIcon";
 import { InProgressStatusIcon } from "~/assets/icons/InProgressStatusIcon";
 import { TodoStatusIcon } from "~/assets/icons/TodoStatusIcon";

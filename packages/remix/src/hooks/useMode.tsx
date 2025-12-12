@@ -1,7 +1,7 @@
 import { useRouteData } from "@carbon/remix";
 import type { Mode } from "@carbon/utils";
 import { modeValidator } from "@carbon/utils";
-import { useFetchers } from "@remix-run/react";
+import { useFetchers } from "react-router";
 
 export function useOptimisticMode() {
   const fetchers = useFetchers();

@@ -37,15 +37,6 @@ import {
 } from "@carbon/react";
 import type { TrackedEntityAttributes } from "@carbon/utils";
 import { labelSizes } from "@carbon/utils";
-import {
-  Await,
-  Outlet,
-  useFetcher,
-  useFetchers,
-  useParams,
-  useRevalidator,
-  useSubmit
-} from "@remix-run/react";
 import type { PostgrestResponse } from "@supabase/supabase-js";
 import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import {
@@ -57,6 +48,15 @@ import {
   LuTrash,
   LuX
 } from "react-icons/lu";
+import {
+  Await,
+  Outlet,
+  useFetcher,
+  useFetchers,
+  useParams,
+  useRevalidator,
+  useSubmit
+} from "react-router";
 import { DocumentPreview, Empty, ItemThumbnail } from "~/components";
 import DocumentIcon from "~/components/DocumentIcon";
 import { Enumerable } from "~/components/Enumerable";

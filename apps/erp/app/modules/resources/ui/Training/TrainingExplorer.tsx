@@ -39,7 +39,6 @@ import {
   VStack
 } from "@carbon/react";
 import { prettifyKeyboardShortcut } from "@carbon/utils";
-import { useFetcher, useParams } from "@remix-run/react";
 import { Reorder } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { flushSync } from "react-dom";
@@ -55,6 +54,7 @@ import {
   LuToggleLeft,
   LuTrash
 } from "react-icons/lu";
+import { useFetcher, useParams } from "react-router";
 import type { z } from "zod/v3";
 import { Empty } from "~/components";
 import { ConfirmDelete } from "~/components/Modals";

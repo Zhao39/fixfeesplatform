@@ -16,10 +16,10 @@ import {
 } from "@carbon/react";
 import { formatDate, getItemReadableId } from "@carbon/utils";
 import { useLocale } from "@react-aria/i18n";
-import { Link, useParams } from "@remix-run/react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { LuChevronRight, LuImage } from "react-icons/lu";
+import { Link, useParams } from "react-router";
 import { CustomerAvatar, MethodIcon } from "~/components";
 import { useUnitOfMeasure } from "~/components/Form/UnitOfMeasure";
 import {

@@ -1,6 +1,6 @@
 import { CONTROLLED_ENVIRONMENT, SUPABASE_URL } from "@carbon/auth";
 import { Button, Heading, VStack } from "@carbon/react";
-import { useNavigate, useSearchParams } from "@remix-run/react";
+import { useNavigate, useSearchParams } from "react-router";
 
 export default function ConfirmMagicLink() {
   const [params] = useSearchParams();

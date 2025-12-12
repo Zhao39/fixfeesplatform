@@ -1,6 +1,6 @@
 import { ValidatedForm } from "@carbon/form";
 import { VStack } from "@carbon/react";
-import { useFetcher, useParams } from "@remix-run/react";
+import { useFetcher, useParams } from "react-router";
 import { Hidden, Input, Submit, TextArea } from "~/components/Form";
 import type { User } from "~/modules/users/types";
 import { path } from "~/utils/path";

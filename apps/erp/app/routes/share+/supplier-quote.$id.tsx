@@ -33,29 +33,29 @@ import {
 import { useMode } from "@carbon/remix";
 import { formatDate } from "@carbon/utils";
 import { useLocale } from "@react-aria/i18n";
-import { useFetcher, useLoaderData, useParams } from "@remix-run/react";
 import type { LoaderFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
 import { motion } from "framer-motion";
+import type { Dispatch, SetStateAction } from "react";
 import { useEffect, useRef, useState } from "react";
 import { LuChevronRight, LuImage, LuPencil } from "react-icons/lu";
-import type { Company } from "~/modules/settings";
-import { getCompany, getCompanySettings } from "~/modules/settings";
-import { getBase64ImageFromSupabase } from "~/modules/shared";
-import { path } from "~/utils/path";
+import { useFetcher, useLoaderData, useParams } from "react-router";
+import { externalSupplierQuoteValidator } from "~/modules/purchasing/purchasing.models";
 import {
   getSupplierQuoteByExternalId,
-  getSupplierQuoteLines,
-  getSupplierQuoteLinePricesByQuoteId
+  getSupplierQuoteLinePricesByQuoteId,
+  getSupplierQuoteLines
 } from "~/modules/purchasing/purchasing.service";
 import type {
   SupplierQuote,
   SupplierQuoteLine,
   SupplierQuoteLinePrice
 } from "~/modules/purchasing/types";
+import type { Company } from "~/modules/settings";
+import { getCompany, getCompanySettings } from "~/modules/settings";
+import { getBase64ImageFromSupabase } from "~/modules/shared";
 import type { action } from "~/routes/api+/purchasing.digital-quote.$id";
-import { externalSupplierQuoteValidator } from "~/modules/purchasing/purchasing.models";
-import type { Dispatch, SetStateAction } from "react";
+import { path } from "~/utils/path";
 
 export const meta = () => {
   return [{ title: "Supplier Quote" }];

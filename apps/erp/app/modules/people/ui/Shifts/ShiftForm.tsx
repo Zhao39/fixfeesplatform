@@ -12,7 +12,7 @@ import {
   HStack,
   VStack
 } from "@carbon/react";
-import { useNavigate } from "@remix-run/react";
+import { useNavigate } from "react-router";
 import type { z } from "zod/v3";
 import {
   // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration

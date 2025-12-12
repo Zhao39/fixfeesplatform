@@ -16,7 +16,6 @@ import {
   toast,
   VStack
 } from "@carbon/react";
-import { Await, Link, useFetcher, useParams } from "@remix-run/react";
 import type { PostgrestResponse } from "@supabase/supabase-js";
 import { Suspense, useCallback, useEffect } from "react";
 import {
@@ -26,6 +25,7 @@ import {
   LuLink,
   LuMove3D
 } from "react-icons/lu";
+import { Await, Link, useFetcher, useParams } from "react-router";
 import { z } from "zod/v3";
 import { zfd } from "zod-form-data";
 import { MethodBadge, MethodIcon, TrackingTypeIcon } from "~/components";

@@ -17,7 +17,6 @@ import {
   formatDurationMilliseconds,
   formatRelativeTime
 } from "@carbon/utils";
-import { Link } from "@remix-run/react";
 import { cva } from "class-variance-authority";
 import {
   LuCalendarDays,
@@ -25,6 +24,7 @@ import {
   LuHardHat,
   LuTimer
 } from "react-icons/lu";
+import { Link } from "react-router";
 import EmployeeAvatar from "~/components/EmployeeAvatar";
 import type { Operation, OperationSettings } from "~/services/types";
 import { getPrivateUrl, path } from "~/utils/path";

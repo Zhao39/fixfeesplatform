@@ -28,7 +28,6 @@ import {
   VStack
 } from "@carbon/react";
 import { formatDate } from "@carbon/utils";
-import { Form, useNavigation, useParams } from "@remix-run/react";
 import type { Dispatch, SetStateAction } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { flushSync } from "react-dom";
@@ -43,6 +42,7 @@ import {
   LuTruck,
   LuUpload
 } from "react-icons/lu";
+import { Form, useNavigation, useParams } from "react-router";
 import type { z } from "zod/v3";
 import { CustomerAvatar } from "~/components";
 import { Enumerable } from "~/components/Enumerable";

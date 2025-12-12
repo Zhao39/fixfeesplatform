@@ -19,7 +19,6 @@ import {
   toast,
   VStack
 } from "@carbon/react";
-import { useFetcher, useSearchParams } from "@remix-run/react";
 import { Ratelimit } from "@upstash/ratelimit";
 import type {
   ActionFunctionArgs,
@@ -28,6 +27,7 @@ import type {
 } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
 import { LuCircleAlert } from "react-icons/lu";
+import { useFetcher, useSearchParams } from "react-router";
 
 import { path } from "~/utils/path";
 

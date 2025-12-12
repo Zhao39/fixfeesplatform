@@ -2,15 +2,15 @@ import {
   Card,
   CardAttribute,
   CardAttributeLabel,
-  CardAttributeValue,
   CardAttributes,
+  CardAttributeValue,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
   HStack
 } from "@carbon/react";
-import { useParams } from "@remix-run/react";
+import { useParams } from "react-router";
 import { Avatar } from "~/components";
 import { useRouteData } from "~/hooks";
 import { path } from "~/utils/path";

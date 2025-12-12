@@ -1,15 +1,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@carbon/react";
 import { formatDate } from "@carbon/utils";
-import { Link } from "@remix-run/react";
 import clsx from "clsx";
 import type { IconType } from "react-icons";
-
 import { BsBarChartFill, BsCheckLg } from "react-icons/bs";
 import { FaThumbsUp } from "react-icons/fa";
+import { Link } from "react-router";
 import {
   AbilityEmployeeStatus,
-  getTrainingStatus,
-  type EmployeeAbility
+  type EmployeeAbility,
+  getTrainingStatus
 } from "~/modules/resources/types";
 import { path } from "~/utils/path";
 

@@ -13,7 +13,7 @@ import {
   Input as InputBase,
   VStack
 } from "@carbon/react";
-import { useParams } from "@remix-run/react";
+import { useParams } from "react-router";
 import type { z } from "zod/v3";
 import { CustomFormFields, Hidden, Input, Submit } from "~/components/Form";
 import { usePermissions, useRouteData } from "~/hooks";

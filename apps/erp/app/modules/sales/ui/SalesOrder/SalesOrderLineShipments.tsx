@@ -15,12 +15,12 @@ import {
   Tr,
   useDisclosure
 } from "@carbon/react";
-import { useFetcher, useParams } from "@remix-run/react";
+import { formatDate } from "@carbon/utils";
 import { LuCirclePlus } from "react-icons/lu";
+import { useFetcher, useParams } from "react-router";
 import { Empty, Hyperlink } from "~/components";
-
 import { usePermissions } from "~/hooks";
-
+import { ShipmentStatus } from "~/modules/inventory/ui/Shipments";
 import { path } from "~/utils/path";
 import type {
   Opportunity,
@@ -28,9 +28,6 @@ import type {
   SalesOrderLine,
   SalesOrderLineShipment
 } from "../../types";
-
-import { formatDate } from "@carbon/utils";
-import { ShipmentStatus } from "~/modules/inventory/ui/Shipments";
 
 type SalesOrderLineShipmentsProps = {
   salesOrder: SalesOrder;

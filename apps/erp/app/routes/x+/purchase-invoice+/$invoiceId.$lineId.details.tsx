@@ -5,11 +5,11 @@ import { validationError, validator } from "@carbon/form";
 import type { JSONContent } from "@carbon/react";
 import { Spinner } from "@carbon/react";
 import { getItemReadableId } from "@carbon/utils";
-import { Await, Outlet, useLoaderData, useParams } from "@remix-run/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { defer, redirect } from "@vercel/remix";
 import { Suspense } from "react";
 import { Fragment } from "react/jsx-runtime";
+import { Await, Outlet, useLoaderData, useParams } from "react-router";
 import {
   getPurchaseInvoiceLine,
   PurchaseInvoiceLineForm,

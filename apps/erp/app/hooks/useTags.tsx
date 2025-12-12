@@ -1,5 +1,5 @@
-import { useFetcher } from "@remix-run/react";
 import { useCallback } from "react";
+import { useFetcher } from "react-router";
 import { path } from "~/utils/path";
 
 export function useTags({ id, table }: { id?: string; table: string }) {

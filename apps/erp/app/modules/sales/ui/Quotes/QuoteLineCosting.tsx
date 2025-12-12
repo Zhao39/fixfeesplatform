@@ -21,8 +21,8 @@ import {
   VStack
 } from "@carbon/react";
 import { formatDurationHours } from "@carbon/utils";
-import { useParams } from "@remix-run/react";
 import { LuClock, LuInfo } from "react-icons/lu";
+import { useParams } from "react-router";
 import { MethodItemTypeIcon, TimeTypeIcon } from "~/components";
 import { Enumerable } from "~/components/Enumerable";
 import { useCurrencyFormatter } from "~/hooks";

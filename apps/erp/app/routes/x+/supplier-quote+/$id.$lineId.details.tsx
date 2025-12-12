@@ -5,10 +5,10 @@ import { validationError, validator } from "@carbon/form";
 import type { JSONContent } from "@carbon/react";
 import { Spinner } from "@carbon/react";
 import { useRouteData } from "@carbon/remix";
-import { Await, Outlet, useLoaderData, useParams } from "@remix-run/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { defer, redirect } from "@vercel/remix";
 import { Fragment, Suspense } from "react";
+import { Await, Outlet, useLoaderData, useParams } from "react-router";
 import type {
   SupplierQuote,
   SupplierQuoteLinePrice

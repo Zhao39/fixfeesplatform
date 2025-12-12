@@ -19,11 +19,11 @@ import {
 } from "@carbon/remix";
 import { getStripeCustomerByCompanyId } from "@carbon/stripe/stripe.server";
 import { Edition } from "@carbon/utils";
-import type { ShouldRevalidateFunction } from "@remix-run/react";
-import { Outlet, useLoaderData, useNavigate } from "@remix-run/react";
 import type { LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
 import posthog from "posthog-js";
+import type { ShouldRevalidateFunction } from "react-router";
+import { Outlet, useLoaderData, useNavigate } from "react-router";
 import { AppSidebar } from "~/components";
 import RealtimeDataProvider from "~/components/RealtimeDataProvider";
 import { getLocation, setLocation } from "~/services/location.server";

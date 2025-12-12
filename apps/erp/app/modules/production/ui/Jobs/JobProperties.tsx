@@ -16,11 +16,11 @@ import {
   toast,
   VStack
 } from "@carbon/react";
-import { Await, useFetcher, useParams } from "@remix-run/react";
 import type { PostgrestResponse } from "@supabase/supabase-js";
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { LuCopy, LuLink, LuUnlink2 } from "react-icons/lu";
 import { RiProgress8Line } from "react-icons/ri";
+import { Await, useFetcher, useParams } from "react-router";
 import { z } from "zod/v3";
 import { zfd } from "zod-form-data";
 import { Assignee, Hyperlink, useOptimisticAssignment } from "~/components";

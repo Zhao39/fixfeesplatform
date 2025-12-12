@@ -1,6 +1,5 @@
 import { Badge, Button, HStack, MenuIcon, MenuItem } from "@carbon/react";
 import { formatDate } from "@carbon/utils";
-import { Link, Outlet, useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
 import {
@@ -12,6 +11,7 @@ import {
   LuTrash,
   LuUser
 } from "react-icons/lu";
+import { Link, Outlet, useNavigate } from "react-router";
 import { EmployeeAvatar, Hyperlink, New, Table } from "~/components";
 import { usePermissions, useUrlParams } from "~/hooks";
 import { type ApiKey } from "~/modules/settings";

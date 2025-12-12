@@ -1,10 +1,11 @@
 import type { ComboboxProps } from "@carbon/form";
 import { Combobox } from "@carbon/form";
 import { useMount } from "@carbon/react";
-import { useFetcher } from "@remix-run/react";
 import { useMemo } from "react";
+import { useFetcher } from "react-router";
 import type { getScrapReasonsList } from "~/services/operations.service";
 import { path } from "~/utils/path";
+
 type ScrapReasonSelectProps = Omit<ComboboxProps, "options">;
 
 const ScrapReason = (props: ScrapReasonSelectProps) => {

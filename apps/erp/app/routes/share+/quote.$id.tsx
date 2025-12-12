@@ -37,7 +37,6 @@ import {
 import { useMode } from "@carbon/remix";
 import { formatCityStatePostalCode, formatDate } from "@carbon/utils";
 import { useLocale } from "@react-aria/i18n";
-import { useFetcher, useLoaderData, useParams } from "@remix-run/react";
 import type { PostgrestResponse } from "@supabase/supabase-js";
 import type { LoaderFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
@@ -54,6 +53,7 @@ import {
   LuTruck,
   LuUpload
 } from "react-icons/lu";
+import { useFetcher, useLoaderData, useParams } from "react-router";
 import { usePercentFormatter } from "~/hooks";
 import { getPaymentTermsList } from "~/modules/accounting";
 import { getShippingMethodsList } from "~/modules/inventory";

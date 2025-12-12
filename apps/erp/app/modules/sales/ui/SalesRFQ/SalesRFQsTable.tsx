@@ -1,6 +1,5 @@
 import { HStack, MenuIcon, MenuItem, useDisclosure } from "@carbon/react";
 import { formatDate } from "@carbon/utils";
-import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useMemo, useState } from "react";
 import {
@@ -14,6 +13,7 @@ import {
   LuTrash,
   LuUser
 } from "react-icons/lu";
+import { useNavigate } from "react-router";
 import {
   CustomerAvatar,
   EmployeeAvatar,
@@ -27,9 +27,9 @@ import { usePermissions } from "~/hooks";
 import { useCustomColumns } from "~/hooks/useCustomColumns";
 import { useCustomers, usePeople } from "~/stores";
 import { path } from "~/utils/path";
-import { SalesRFQStatus } from ".";
 import { salesRFQStatusType } from "../../sales.models";
 import type { SalesRFQ } from "../../types";
+import { SalesRFQStatus } from ".";
 
 type SalesRFQsTableProps = {
   data: SalesRFQ[];

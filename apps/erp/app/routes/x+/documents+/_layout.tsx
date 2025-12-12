@@ -1,6 +1,6 @@
 import { VStack } from "@carbon/react";
-import { Outlet } from "@remix-run/react";
 import type { MetaFunction } from "@vercel/remix";
+import { Outlet } from "react-router";
 import {
   CollapsibleSidebarProvider,
   ContentSidebar

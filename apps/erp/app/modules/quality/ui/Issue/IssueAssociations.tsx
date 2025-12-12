@@ -29,7 +29,6 @@ import {
   VStack
 } from "@carbon/react";
 import { getItemReadableId } from "@carbon/utils";
-import { Link, useFetcher, useParams } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { flushSync } from "react-dom";
 import { AiOutlinePartition } from "react-icons/ai";
@@ -49,6 +48,7 @@ import {
   LuTruck
 } from "react-icons/lu";
 import { RiProgress8Line } from "react-icons/ri";
+import { Link, useFetcher, useParams } from "react-router";
 import { Customer, Item, Supplier } from "~/components/Form";
 import { ConfirmDelete } from "~/components/Modals";
 import { LevelLine } from "~/components/TreeView";

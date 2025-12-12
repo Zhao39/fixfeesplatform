@@ -23,7 +23,6 @@ import {
   VStack
 } from "@carbon/react";
 import { useOptimisticLocation } from "@carbon/remix";
-import { Link, useNavigate, useParams } from "@remix-run/react";
 import { useRef, useState } from "react";
 import {
   LuBraces,
@@ -35,6 +34,7 @@ import {
   LuSearch,
   LuTable
 } from "react-icons/lu";
+import { Link, useNavigate, useParams } from "react-router";
 import { MethodIcon, MethodItemTypeIcon } from "~/components";
 import { OnshapeStatus } from "~/components/Icons";
 import { ImportCSVModal } from "~/components/ImportCSVModal";

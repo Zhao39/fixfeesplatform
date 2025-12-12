@@ -1,7 +1,15 @@
 {
-  "include": ["env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "ESNext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "ESNext"
+    ],
     "esModuleInterop": true,
     "jsx": "react-jsx",
     "module": "ESNext",
@@ -13,9 +21,13 @@
     "allowJs": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./app/*"]
+      "~/*": [
+        "./app/*"
+      ]
     },
-    "types": ["@remix-run/react/future/single-fetch.d.ts"],
+    "types": [
+      "@react-router/react/future/single-fetch.d.ts"
+    ],
     "noEmit": true,
     "isolatedModules": true,
     "skipLibCheck": true,

@@ -20,9 +20,9 @@ import {
   VStack
 } from "@carbon/react";
 import { useRouteData } from "@carbon/remix";
-import { useFetcher } from "@remix-run/react";
 import { useEffect, useMemo, useState } from "react";
 import { LuGitBranchPlus, LuGitPullRequestCreateArrow } from "react-icons/lu";
+import { useFetcher } from "react-router";
 import type { action as endShiftAction } from "~/routes/x+/end-shift";
 import { inventoryAdjustmentValidator } from "~/services/inventory.service";
 import { useItems } from "~/stores";

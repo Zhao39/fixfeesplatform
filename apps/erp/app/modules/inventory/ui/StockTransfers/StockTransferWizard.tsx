@@ -44,7 +44,6 @@ import {
 } from "@carbon/react";
 import { prettifyKeyboardShortcut } from "@carbon/utils";
 import { useNumberFormatter } from "@react-aria/i18n";
-import { useFetcher } from "@remix-run/react";
 import {
   type ColumnDef,
   flexRender,
@@ -66,6 +65,7 @@ import {
   LuTruck,
   LuX
 } from "react-icons/lu";
+import { useFetcher } from "react-router";
 import { ItemThumbnail } from "~/components";
 import { getAccessorKey } from "~/components/Table/utils";
 import { useUser } from "~/hooks";

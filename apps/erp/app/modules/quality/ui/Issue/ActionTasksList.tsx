@@ -16,10 +16,10 @@ import {
   useDebounce,
   VStack
 } from "@carbon/react";
-import { useFetcher, useParams } from "@remix-run/react";
 import { Reorder, useDragControls } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
 import { LuCirclePlus } from "react-icons/lu";
+import { useFetcher, useParams } from "react-router";
 import { useRouteData } from "~/hooks";
 import type { IssueActionTask } from "~/modules/quality";
 import type { ListItem } from "~/types";

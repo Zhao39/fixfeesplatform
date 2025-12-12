@@ -23,7 +23,6 @@ import {
   useShortcutKeys
 } from "@carbon/react";
 import { formatDurationMilliseconds, lerp } from "@carbon/utils";
-import { Link, useParams } from "@remix-run/react";
 import type { Virtualizer } from "@tanstack/react-virtual";
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
@@ -35,6 +34,7 @@ import {
   LuZoomIn,
   LuZoomOut
 } from "react-icons/lu";
+import { Link, useParams } from "react-router";
 import {
   ShowParentIcon,
   ShowParentIconSelected

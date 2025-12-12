@@ -19,7 +19,6 @@ import {
   VStack
 } from "@carbon/react";
 import { formatDate } from "@carbon/utils";
-import { useFetcher, useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import {
@@ -34,6 +33,7 @@ import {
 } from "react-icons/lu";
 import { RxCodesandboxLogo } from "react-icons/rx";
 import { TbTargetArrow } from "react-icons/tb";
+import { useFetcher, useNavigate } from "react-router";
 import {
   EmployeeAvatar,
   Hyperlink,

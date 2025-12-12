@@ -39,7 +39,6 @@ import {
 } from "@dnd-kit/core";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { useFetcher, useFetchers, useSubmit } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
@@ -47,6 +46,7 @@ import {
   LuEllipsisVertical,
   LuGripVertical
 } from "react-icons/lu";
+import { useFetcher, useFetchers, useSubmit } from "react-router";
 import { EmployeeAvatar } from "~/components";
 import { ConfiguratorDataTypeIcon } from "~/components/Configurator/Icons";
 import { ConfirmDelete } from "~/components/Modals";

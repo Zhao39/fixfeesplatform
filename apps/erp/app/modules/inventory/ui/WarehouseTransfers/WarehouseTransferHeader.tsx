@@ -11,7 +11,6 @@ import {
   HStack,
   toast
 } from "@carbon/react";
-import { Link, useFetcher } from "@remix-run/react";
 import { useCallback, useEffect, useState } from "react";
 import {
   LuCheckCheck,
@@ -22,6 +21,7 @@ import {
   LuLoaderCircle,
   LuTruck
 } from "react-icons/lu";
+import { Link, useFetcher } from "react-router";
 import { usePermissions } from "~/hooks";
 import type { action as statusAction } from "~/routes/x+/warehouse-transfer+/$transferId.status";
 import { path } from "~/utils/path";

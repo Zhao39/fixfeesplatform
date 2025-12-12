@@ -19,12 +19,12 @@ import {
 } from "@carbon/react";
 import { formatDate } from "@carbon/utils";
 import { useLocale } from "@react-aria/i18n";
-import { Link, useParams } from "@remix-run/react";
 import { motion } from "framer-motion";
 import MotionNumber from "motion-number";
 import type { Dispatch, SetStateAction } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { LuChevronRight, LuImage } from "react-icons/lu";
+import { Link, useParams } from "react-router";
 import { CustomerAvatar } from "~/components";
 import { usePercentFormatter, useRouteData, useUser } from "~/hooks";
 import { getPrivateUrl, path } from "~/utils/path";

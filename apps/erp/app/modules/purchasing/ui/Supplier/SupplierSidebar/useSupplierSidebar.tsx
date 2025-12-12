@@ -1,13 +1,13 @@
-import { useParams } from "@remix-run/react";
 import {
   LuBuilding,
+  LuCog,
   LuContact,
   LuCreditCard,
   LuLayoutList,
   LuMapPin,
-  LuPackageSearch,
-  LuCog
+  LuPackageSearch
 } from "react-icons/lu";
+import { useParams } from "react-router";
 import { usePermissions } from "~/hooks";
 import type { Role } from "~/types";
 import { path } from "~/utils/path";

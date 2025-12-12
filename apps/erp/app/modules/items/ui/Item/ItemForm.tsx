@@ -16,9 +16,9 @@ import {
   HStack,
   IconButton
 } from "@carbon/react";
-import { Link, useFetcher } from "@remix-run/react";
 import { useState } from "react";
 import { LuEllipsisVertical } from "react-icons/lu";
+import { Link, useFetcher } from "react-router";
 import type { z } from "zod/v3";
 import { TrackingTypeIcon } from "~/components";
 import {

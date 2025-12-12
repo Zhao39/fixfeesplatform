@@ -24,7 +24,7 @@ import {
   VStack
 } from "@carbon/react";
 import { SUPPORT_EMAIL } from "@carbon/utils";
-import { useParams } from "@remix-run/react";
+import { useParams } from "react-router";
 import { Processes } from "~/components/Form";
 import { MethodIcon, TrackingTypeIcon } from "~/components/Icons";
 import { usePermissions, useUser } from "~/hooks";

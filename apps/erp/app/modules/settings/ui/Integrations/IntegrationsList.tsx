@@ -9,7 +9,7 @@ import {
   CardTitle
 } from "@carbon/react";
 import { useUrlParams } from "@carbon/remix";
-import { Link, useFetcher, useNavigate } from "@remix-run/react";
+import { Link, useFetcher, useNavigate } from "react-router";
 import { SearchFilter } from "~/components";
 import { path } from "~/utils/path";
 

@@ -1,7 +1,7 @@
-import type { Fetcher } from "@remix-run/react";
-import { useFetcher } from "@remix-run/react";
 import { noop } from "@tanstack/react-query";
 import { useCallback, useEffect, useRef } from "react";
+import type { Fetcher } from "react-router";
+import { useFetcher } from "react-router";
 
 type FetcherOptions = {
   key?: string;

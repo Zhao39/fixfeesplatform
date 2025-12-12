@@ -18,8 +18,8 @@ import {
 } from "@carbon/react";
 
 import { getItemReadableId } from "@carbon/utils";
-import { useFetcher } from "@remix-run/react";
 import { useEffect } from "react";
+import { useFetcher } from "react-router";
 import type { action } from "~/routes/x+/purchase-invoice+/$invoiceId.post";
 import { useItems } from "~/stores";
 import { path } from "~/utils/path";

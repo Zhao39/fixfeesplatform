@@ -11,7 +11,6 @@ import {
 } from "@carbon/react";
 import { formatDate } from "@carbon/utils";
 import { useNumberFormatter } from "@react-aria/i18n";
-import { useLoaderData, useParams } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { LoaderFunctionArgs } from "@vercel/remix";
 import { defer } from "@vercel/remix";
@@ -23,6 +22,7 @@ import {
   LuShield,
   LuShieldCheck
 } from "react-icons/lu";
+import { useLoaderData, useParams } from "react-router";
 import { z } from "zod/v3";
 import {
   BreadcrumbItem,

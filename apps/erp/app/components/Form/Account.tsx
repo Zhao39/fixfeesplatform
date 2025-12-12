@@ -1,8 +1,8 @@
 import type { ComboboxProps } from "@carbon/form";
 import { Combobox } from "@carbon/form";
 import { useMount } from "@carbon/react";
-import { useFetcher } from "@remix-run/react";
 import { useMemo } from "react";
+import { useFetcher } from "react-router";
 import type { AccountClass, getAccountsList } from "~/modules/accounting";
 import { path } from "~/utils/path";
 

@@ -25,13 +25,6 @@ import {
   useMount,
   VStack
 } from "@carbon/react";
-import {
-  Await,
-  Link,
-  useFetcher,
-  useLocation,
-  useParams
-} from "@remix-run/react";
 import { Suspense, useEffect, useState } from "react";
 import {
   LuGitBranch,
@@ -42,6 +35,7 @@ import {
   LuTriangleAlert
 } from "react-icons/lu";
 import { RiProgress4Line } from "react-icons/ri";
+import { Await, Link, useFetcher, useLocation, useParams } from "react-router";
 import { ConfiguratorModal } from "~/components/Configurator/ConfiguratorForm";
 import { Hidden, Item, Submit } from "~/components/Form";
 import type { Tree } from "~/components/TreeView";
@@ -452,7 +446,6 @@ const QuoteMakeMethodTools = () => {
           </ModalContent>
         </Modal>
       )}
-
       {saveMethodModal.isOpen && (
         <Modal
           open
@@ -565,7 +558,6 @@ const QuoteMakeMethodTools = () => {
           </ModalContent>
         </Modal>
       )}
-
       {configuratorModal.isOpen && (
         <Suspense fallback={null}>
           {sourceItemRequiresConfiguration ? (

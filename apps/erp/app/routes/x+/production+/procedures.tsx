@@ -1,11 +1,11 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { VStack } from "@carbon/react";
-import { Outlet, useLoaderData } from "@remix-run/react";
 import type { LoaderFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
+import { Outlet, useLoaderData } from "react-router";
 import { getProcedures } from "~/modules/production";
-import { getTagsList } from "~/modules/shared";
 import ProceduresTable from "~/modules/production/ui/Procedures/ProceduresTable";
+import { getTagsList } from "~/modules/shared";
 import type { Handle } from "~/utils/handle";
 import { path } from "~/utils/path";
 import { getGenericQueryFilters } from "~/utils/query";

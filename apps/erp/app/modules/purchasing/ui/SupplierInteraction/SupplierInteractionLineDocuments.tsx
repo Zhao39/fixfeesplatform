@@ -1,3 +1,4 @@
+import { useCarbon } from "@carbon/auth";
 import {
   Card,
   CardAction,
@@ -22,20 +23,17 @@ import {
 } from "@carbon/react";
 import { convertKbToString } from "@carbon/utils";
 import type { FileObject } from "@supabase/storage-js";
+import type { ChangeEvent } from "react";
+import { useCallback } from "react";
 import { LuEllipsisVertical, LuUpload } from "react-icons/lu";
+import { useFetchers, useRevalidator, useSubmit } from "react-router";
 import { DocumentPreview, FileDropzone } from "~/components";
 import DocumentIcon from "~/components/DocumentIcon";
-import type { ItemFile } from "~/modules/items";
-import { getDocumentType } from "~/modules/shared";
-
-import { useFetchers, useRevalidator, useSubmit } from "@remix-run/react";
-import type { ChangeEvent } from "react";
 import { usePermissions, useUser } from "~/hooks";
-import { path } from "~/utils/path";
-
-import { useCarbon } from "@carbon/auth";
-import { useCallback } from "react";
+import type { ItemFile } from "~/modules/items";
 import type { OptimisticFileObject } from "~/modules/shared";
+import { getDocumentType } from "~/modules/shared";
+import { path } from "~/utils/path";
 import { stripSpecialCharacters } from "~/utils/string";
 
 type SupportedDocument =

@@ -9,7 +9,7 @@ import {
   ModalHeader,
   ModalTitle
 } from "@carbon/react";
-import { useFetcher } from "@remix-run/react";
+import { useFetcher } from "react-router";
 import { UserSelect } from "~/components/Selectors";
 import { revokeInviteValidator } from "~/modules/users";
 import { path } from "~/utils/path";

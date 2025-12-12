@@ -5,8 +5,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  HStack,
   Heading,
+  HStack,
   Table,
   Tbody,
   Td,
@@ -17,10 +17,10 @@ import {
 } from "@carbon/react";
 import { formatDate, getItemReadableId } from "@carbon/utils";
 import { useLocale } from "@react-aria/i18n";
-import { Link, useParams } from "@remix-run/react";
 import { motion } from "framer-motion";
 import { useMemo, useState } from "react";
 import { LuChevronRight, LuImage } from "react-icons/lu";
+import { Link, useParams } from "react-router";
 import { SupplierAvatar } from "~/components";
 import { useUnitOfMeasure } from "~/components/Form/UnitOfMeasure";
 import { useCurrencyFormatter, useRouteData, useUser } from "~/hooks";

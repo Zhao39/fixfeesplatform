@@ -12,9 +12,9 @@ import {
   parseAbsolute,
   toZoned
 } from "@internationalized/date";
-import { useParams, useRevalidator } from "@remix-run/react";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useParams, useRevalidator } from "react-router";
 import { useUrlParams, useUser } from "~/hooks";
 import type {
   JobMaterial,

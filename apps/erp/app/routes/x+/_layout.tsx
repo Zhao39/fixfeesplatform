@@ -4,12 +4,12 @@ import {
   CONTROLLED_ENVIRONMENT,
   getCarbon
 } from "@carbon/auth";
+import { setCompanyId } from "@carbon/auth/company.server";
 import {
   destroyAuthSession,
   requireAuthSession,
   updateCompanySession
 } from "@carbon/auth/session.server";
-import { setCompanyId } from "@carbon/auth/company.server";
 import { TooltipProvider, useMount } from "@carbon/react";
 import {
   AcademyBanner,
@@ -19,12 +19,11 @@ import {
 } from "@carbon/remix";
 import { getStripeCustomerByCompanyId } from "@carbon/stripe/stripe.server";
 import { Edition } from "@carbon/utils";
-import type { ShouldRevalidateFunction } from "@remix-run/react";
-import { Outlet, useLoaderData, useNavigate } from "@remix-run/react";
 import type { LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-
 import posthog from "posthog-js";
+import type { ShouldRevalidateFunction } from "react-router";
+import { Outlet, useLoaderData, useNavigate } from "react-router";
 import { RealtimeDataProvider } from "~/components";
 import { PrimaryNavigation, Topbar } from "~/components/Layout";
 import {
@@ -33,6 +32,7 @@ import {
   getCompanySettings
 } from "~/modules/settings";
 import { getCustomFieldsSchemas } from "~/modules/shared/shared.server";
+import { getSavedViews } from "~/modules/shared/shared.service";
 import {
   getUser,
   getUserClaims,
@@ -40,8 +40,6 @@ import {
   getUserGroups
 } from "~/modules/users/users.server";
 import { ERP_URL, MES_URL, path } from "~/utils/path";
-
-import { getSavedViews } from "~/modules/shared/shared.service";
 
 export const shouldRevalidate: ShouldRevalidateFunction = ({
   currentUrl,

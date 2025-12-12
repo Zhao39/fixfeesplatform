@@ -1,7 +1,7 @@
 import { useCarbon } from "@carbon/auth";
 import { toast } from "@carbon/react";
-import { useNavigate } from "@remix-run/react";
 import { useCallback } from "react";
+import { useNavigate } from "react-router";
 import { usePermissions, useUrlParams, useUser } from "~/hooks";
 import type {
   DocumentTransactionType,

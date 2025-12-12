@@ -15,13 +15,13 @@ import { redis } from "@carbon/kv";
 import { Button as _Button, Heading as _Heading, VStack } from "@carbon/react";
 import { updateSubscriptionQuantityForCompany } from "@carbon/stripe/stripe.server";
 import { Edition } from "@carbon/utils";
-import { Form, Link, redirect, useLoaderData } from "@remix-run/react";
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
   MetaFunction
 } from "@vercel/remix";
 import { AnimatePresence, motion } from "framer-motion";
+import { Form, Link, redirect, useLoaderData } from "react-router";
 import { acceptInvite } from "~/modules/users/users.server";
 import { path } from "~/utils/path";
 

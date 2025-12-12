@@ -22,8 +22,6 @@ import {
   useDisclosure,
   VStack
 } from "@carbon/react";
-import type { FetcherWithComponents } from "@remix-run/react";
-import { Await, Link, useFetcher, useParams } from "@remix-run/react";
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { CSVLink } from "react-csv";
 import {
@@ -42,6 +40,8 @@ import {
   LuTrash,
   LuTruck
 } from "react-icons/lu";
+import type { FetcherWithComponents } from "react-router";
+import { Await, Link, useFetcher, useParams } from "react-router";
 import { CustomerContact } from "~/components/Form";
 import { usePanels } from "~/components/Layout";
 import Confirm from "~/components/Modals/Confirm/Confirm";

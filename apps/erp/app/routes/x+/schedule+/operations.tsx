@@ -26,10 +26,10 @@ import {
   parseAbsolute,
   toZoned
 } from "@internationalized/date";
-import { Link, useLoaderData } from "@remix-run/react";
 import { json, type LoaderFunctionArgs, redirect } from "@vercel/remix";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { LuCirclePlus, LuSettings2, LuTriangleAlert } from "react-icons/lu";
+import { Link, useLoaderData } from "react-router";
 import { SearchFilter } from "~/components";
 import { Enumerable } from "~/components/Enumerable";
 import { useLocations } from "~/components/Form/Location";

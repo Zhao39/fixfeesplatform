@@ -1,8 +1,8 @@
 import { Button, cn, getValidChildren } from "@carbon/react";
-import type { LinkProps } from "@remix-run/react";
-import { Link } from "@remix-run/react";
 import type { ComponentProps } from "react";
 import { cloneElement, forwardRef } from "react";
+import type { LinkProps } from "react-router";
+import { Link } from "react-router";
 
 const Breadcrumbs = forwardRef<
   HTMLElement,

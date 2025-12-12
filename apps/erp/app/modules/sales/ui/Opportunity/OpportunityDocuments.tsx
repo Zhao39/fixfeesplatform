@@ -24,12 +24,6 @@ import {
 } from "@carbon/react";
 import { convertKbToString } from "@carbon/utils";
 import { useDndContext, useDraggable } from "@dnd-kit/core";
-import {
-  Outlet,
-  useFetchers,
-  useRevalidator,
-  useSubmit
-} from "@remix-run/react";
 import type { FileObject } from "@supabase/storage-js";
 import type { ChangeEvent } from "react";
 import { useCallback } from "react";
@@ -40,6 +34,7 @@ import {
   LuShoppingCart,
   LuUpload
 } from "react-icons/lu";
+import { Outlet, useFetchers, useRevalidator, useSubmit } from "react-router";
 import { DocumentPreview, FileDropzone } from "~/components";
 import DocumentIcon from "~/components/DocumentIcon";
 import { usePermissions, useUser } from "~/hooks";

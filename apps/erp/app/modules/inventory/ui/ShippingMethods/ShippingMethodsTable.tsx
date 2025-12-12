@@ -1,5 +1,4 @@
 import { MenuIcon, MenuItem } from "@carbon/react";
-import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
 import {
@@ -10,6 +9,7 @@ import {
   LuTrash,
   LuTruck
 } from "react-icons/lu";
+import { useNavigate } from "react-router";
 import { Hyperlink, New, Table } from "~/components";
 import { Enumerable } from "~/components/Enumerable";
 import { usePermissions, useUrlParams } from "~/hooks";

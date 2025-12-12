@@ -10,8 +10,6 @@ import {
   useDebounce,
   VStack
 } from "@carbon/react";
-
-import { Link, useSubmit } from "@remix-run/react";
 import { Reorder } from "framer-motion";
 import { useEffect, useState } from "react";
 import {
@@ -21,6 +19,7 @@ import {
   LuGripVertical,
   LuTrash
 } from "react-icons/lu";
+import { Link, useSubmit } from "react-router";
 import { ConfirmDelete } from "~/components/Modals";
 import { useOptimisticLocation } from "~/hooks";
 import type { RouteGroup } from "~/types";

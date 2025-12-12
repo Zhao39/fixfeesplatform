@@ -5,14 +5,14 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  VStack,
-  cn
+  cn,
+  VStack
 } from "@carbon/react";
 import { useMode } from "@carbon/remix";
 import type { Theme } from "@carbon/utils";
 import { themes } from "@carbon/utils";
-import { useFetcher } from "@remix-run/react";
 import { RxCheck } from "react-icons/rx";
+import { useFetcher } from "react-router";
 import type { z } from "zod/v3";
 import type { themeValidator } from "~/modules/settings";
 import type { Action } from "~/types";

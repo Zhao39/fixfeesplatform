@@ -1,5 +1,5 @@
 import { getItemReadableId } from "@carbon/utils";
-import { useParams } from "@remix-run/react";
+import { useParams } from "react-router";
 import { ConfirmDelete } from "~/components/Modals";
 import { useItems } from "~/stores";
 import { path } from "~/utils/path";

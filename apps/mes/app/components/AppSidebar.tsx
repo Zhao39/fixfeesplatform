@@ -1,20 +1,5 @@
 "use client";
 
-import {
-  LuActivity,
-  LuBuilding,
-  LuCalendarDays,
-  LuChevronDown,
-  LuClipboardList,
-  LuClock,
-  LuLogOut,
-  LuMapPin,
-  LuMoon,
-  LuShieldCheck,
-  LuSun,
-  LuUser
-} from "react-icons/lu";
-
 import { CONTROLLED_ENVIRONMENT, type Company } from "@carbon/auth";
 import {
   Avatar,
@@ -47,9 +32,23 @@ import {
   useSidebar
 } from "@carbon/react";
 import { ItarDisclosure, useMode } from "@carbon/remix";
-import { Form, Link, useFetcher, useLocation } from "@remix-run/react";
-import { useRef, type ComponentProps } from "react";
+import { type ComponentProps, useRef } from "react";
 import { BsFillHexagonFill } from "react-icons/bs";
+import {
+  LuActivity,
+  LuBuilding,
+  LuCalendarDays,
+  LuChevronDown,
+  LuClipboardList,
+  LuClock,
+  LuLogOut,
+  LuMapPin,
+  LuMoon,
+  LuShieldCheck,
+  LuSun,
+  LuUser
+} from "react-icons/lu";
+import { Form, Link, useFetcher, useLocation } from "react-router";
 import { useUser } from "~/hooks";
 import type { action } from "~/root";
 import type { Location } from "~/services/types";

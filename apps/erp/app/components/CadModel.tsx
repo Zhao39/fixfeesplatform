@@ -10,11 +10,11 @@ import {
 } from "@carbon/react";
 import { useMode } from "@carbon/remix";
 import { convertKbToString, supportedModelTypes } from "@carbon/utils";
-import { useFetcher } from "@remix-run/react";
 import { nanoid } from "nanoid";
 import { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { LuCloudUpload } from "react-icons/lu";
+import { useFetcher } from "react-router";
 import { useUser } from "~/hooks";
 import { getPrivateUrl, path } from "~/utils/path";
 

@@ -1,6 +1,6 @@
 import { Heading, VStack } from "@carbon/react";
-import { Outlet } from "@remix-run/react";
 import type { MetaFunction } from "@vercel/remix";
+import { Outlet } from "react-router";
 import type { Handle } from "~/utils/handle";
 import { path } from "~/utils/path";
 

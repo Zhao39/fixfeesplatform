@@ -10,9 +10,9 @@ import {
   toast,
   useDisclosure
 } from "@carbon/react";
-import { useFetcher, useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { flushSync } from "react-dom";
 import {
   LuBookMarked,
   LuCalendar,
@@ -24,9 +24,8 @@ import {
   LuTrash,
   LuUser
 } from "react-icons/lu";
+import { useFetcher, useNavigate } from "react-router";
 import { EmployeeAvatar, Hyperlink, New, Table } from "~/components";
-
-import { flushSync } from "react-dom";
 import { ConfirmDelete } from "~/components/Modals";
 import { usePermissions } from "~/hooks";
 import { path } from "~/utils/path";

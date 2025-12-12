@@ -8,11 +8,11 @@ import {
   DrawerHeader,
   DrawerTitle,
   HStack,
-  VStack,
-  useMount
+  useMount,
+  VStack
 } from "@carbon/react";
-import { useFetcher } from "@remix-run/react";
 import { useEffect, useState } from "react";
+import { useFetcher } from "react-router";
 import { Employees, Hidden, Radios, Submit } from "~/components/Form";
 import type { CompanyPermission } from "~/modules/users";
 import { bulkPermissionsValidator } from "~/modules/users";

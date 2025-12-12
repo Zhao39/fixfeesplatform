@@ -12,9 +12,9 @@ import {
   useDebounce,
   VStack
 } from "@carbon/react";
-import { Link } from "@remix-run/react";
 import { useId, useState } from "react";
 import { LuExternalLink } from "react-icons/lu";
+import { Link } from "react-router";
 import z from "zod";
 import { LinearIssueStateBadge } from "~/components/Icons";
 import { useAsyncFetcher } from "~/hooks/useAsyncFetcher";

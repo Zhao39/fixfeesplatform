@@ -1,8 +1,7 @@
-import { ModelViewer } from "@carbon/react";
-import { json, useLoaderData } from "@remix-run/react";
-
 import { getCarbonServiceRole, notFound } from "@carbon/auth";
+import { ModelViewer } from "@carbon/react";
 import type { LoaderFunctionArgs } from "@vercel/remix";
+import { json, useLoaderData } from "react-router";
 import { getPublicModelUrl } from "~/utils/path";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {

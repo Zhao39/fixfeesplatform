@@ -1,17 +1,16 @@
 import type { OperatingSystemPlatform } from "@carbon/react";
 import { OperatingSystemContextProvider } from "@carbon/react";
 import { I18nProvider } from "@react-aria/i18n";
-import { RemixServer } from "@remix-run/react";
 import type { EntryContext } from "@vercel/remix";
 import { handleRequest } from "@vercel/remix";
-
 import { parseAcceptLanguage } from "intl-parse-accept-language";
+import { ServerRouter } from "react-router";
 
 export default async function (
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext
+  reactRouterContext: EntryContext
 ) {
   const acceptLanguage = request.headers.get("accept-language");
   const locales = parseAcceptLanguage(acceptLanguage, {
@@ -27,7 +26,7 @@ export default async function (
   let remixServer = (
     <OperatingSystemContextProvider platform={platform}>
       <I18nProvider locale={locales?.[0] ?? "en-US"}>
-        <RemixServer context={remixContext} url={request.url} />
+        <ServerRouter context={reactRouterContext} url={request.url} />
       </I18nProvider>
     </OperatingSystemContextProvider>
   );

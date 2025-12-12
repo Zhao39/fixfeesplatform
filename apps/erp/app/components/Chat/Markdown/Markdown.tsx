@@ -1,9 +1,9 @@
 import { getAppUrl } from "@carbon/auth";
 import { CodeBlock } from "@carbon/react";
-import { Link } from "@remix-run/react";
 import { memo, useMemo } from "react";
 import type { Components } from "react-markdown";
 import ReactMarkdown from "react-markdown";
+import { Link } from "react-router";
 import { allowedHTMLElements, rehypePlugins, remarkPlugins } from "./utils";
 
 type MarkdownProps = {

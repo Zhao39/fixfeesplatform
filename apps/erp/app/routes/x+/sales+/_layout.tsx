@@ -1,6 +1,6 @@
 import { VStack } from "@carbon/react";
-import { Outlet } from "@remix-run/react";
 import type { MetaFunction } from "@vercel/remix";
+import { Outlet } from "react-router";
 import { GroupedContentSidebar } from "~/components/Layout";
 import { CollapsibleSidebarProvider } from "~/components/Layout/Navigation";
 import useSalesSubmodules from "~/modules/sales/ui/useSalesSubmodules";

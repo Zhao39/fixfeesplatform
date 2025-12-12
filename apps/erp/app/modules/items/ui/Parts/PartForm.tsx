@@ -16,13 +16,13 @@ import {
   VStack
 } from "@carbon/react";
 import { convertKbToString, supportedModelTypes } from "@carbon/utils";
-import { useFetcher } from "@remix-run/react";
 import type { PostgrestResponse } from "@supabase/supabase-js";
 import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
 import { flushSync } from "react-dom";
 import { useDropzone } from "react-dropzone";
 import { LuCloudUpload } from "react-icons/lu";
+import { useFetcher } from "react-router";
 import type { z } from "zod/v3";
 import { TrackingTypeIcon } from "~/components";
 import {

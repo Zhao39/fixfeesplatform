@@ -1,8 +1,8 @@
 import type { SelectProps } from "@carbon/form";
 import { Select } from "@carbon/form";
 import { useMount } from "@carbon/react";
-import { useFetcher } from "@remix-run/react";
 import { useMemo } from "react";
+import { useFetcher } from "react-router";
 import type { getSequencesList } from "~/modules/settings";
 import { path } from "~/utils/path";
 

@@ -9,13 +9,12 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-  HStack,
   Heading,
+  HStack,
   IconButton,
   useDisclosure
 } from "@carbon/react";
 import { getItemReadableId } from "@carbon/utils";
-import { Link, useFetcher, useParams } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { flushSync } from "react-dom";
 import {
@@ -28,6 +27,7 @@ import {
   LuShoppingCart,
   LuTrash
 } from "react-icons/lu";
+import { Link, useFetcher, useParams } from "react-router";
 import { usePanels } from "~/components/Layout/Panels";
 import ConfirmDelete from "~/components/Modals/ConfirmDelete";
 import { usePermissions, useRouteData } from "~/hooks";

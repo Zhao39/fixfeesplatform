@@ -6,7 +6,7 @@ import {
   HStack,
   VStack
 } from "@carbon/react";
-import { Link } from "@remix-run/react";
+import { Link } from "react-router";
 import type { Action } from "~/types";
 
 type ContactProps = {

@@ -18,9 +18,9 @@ import {
 } from "@carbon/react";
 import { useRouteData } from "@carbon/remix";
 import { getItemReadableId } from "@carbon/utils";
-import { useFetcher, useNavigation, useParams } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
 import { LuTriangleAlert } from "react-icons/lu";
+import { useFetcher, useNavigation, useParams } from "react-router";
 import { useUser } from "~/hooks";
 import { useItems } from "~/stores";
 import { path } from "~/utils/path";

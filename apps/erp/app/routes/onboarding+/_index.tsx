@@ -1,6 +1,6 @@
 import { Button as _Button, Heading as _Heading, VStack } from "@carbon/react";
-import { useNavigate } from "@remix-run/react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useNavigate } from "react-router";
 import { onboardingSequence } from "~/utils/path";
 
 const Heading = motion(_Heading);

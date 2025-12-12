@@ -6,14 +6,13 @@ import {
   DropdownMenuIcon,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  HStack,
   Heading,
+  HStack,
   IconButton,
   SplitButton,
   useDisclosure
 } from "@carbon/react";
 import { labelSizes } from "@carbon/utils";
-import { Link, useParams } from "@remix-run/react";
 import {
   LuCheckCheck,
   LuCreditCard,
@@ -23,6 +22,7 @@ import {
   LuTrash,
   LuTruck
 } from "react-icons/lu";
+import { Link, useParams } from "react-router";
 
 import ConfirmDelete from "~/components/Modals/ConfirmDelete";
 import { usePermissions, useRouteData } from "~/hooks";

@@ -1,17 +1,17 @@
-import { validationError, validator } from "@carbon/form";
 import { error, success } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
+import { validationError, validator } from "@carbon/form";
 import { NotificationEvent } from "@carbon/notifications";
-import { redirect, useLoaderData, useNavigate } from "@remix-run/react";
 import { tasks } from "@trigger.dev/sdk";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
+import { redirect, useLoaderData, useNavigate } from "react-router";
 import {
   getTrainingsList,
+  TrainingAssignmentForm,
   trainingAssignmentValidator,
-  upsertTrainingAssignment,
-  TrainingAssignmentForm
+  upsertTrainingAssignment
 } from "~/modules/resources";
 import type { TrainingListItem } from "~/modules/resources/types";
 import type { Handle } from "~/utils/handle";

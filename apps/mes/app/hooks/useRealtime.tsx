@@ -1,5 +1,5 @@
 import { useRealtimeChannel } from "@carbon/react";
-import { useRevalidator } from "@remix-run/react";
+import { useRevalidator } from "react-router";
 import { useUser } from "./useUser";
 
 export function useRealtime(table: string, filter?: string) {

@@ -2,13 +2,13 @@ import { assertIsPost, error, notFound, success } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
-import type { ClientActionFunctionArgs } from "@remix-run/react";
-import { useLoaderData, useNavigate } from "@remix-run/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
+import type { ClientActionFunctionArgs } from "react-router";
+import { useLoaderData, useNavigate } from "react-router";
 import {
-  ShelfForm,
   getShelf,
+  ShelfForm,
   shelfValidator,
   upsertShelf
 } from "~/modules/inventory";

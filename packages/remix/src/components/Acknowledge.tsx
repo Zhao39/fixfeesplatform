@@ -10,9 +10,9 @@ import {
   ModalTitle,
   toast
 } from "@carbon/react";
-import { Form, useFetcher } from "@remix-run/react";
 import { useEffect } from "react";
 import { LuArrowUpRight, LuX } from "react-icons/lu";
+import { Form, useFetcher } from "react-router";
 
 export function AcademyBanner({
   acknowledgeAction

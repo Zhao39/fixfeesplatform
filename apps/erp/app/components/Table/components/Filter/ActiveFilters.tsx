@@ -13,10 +13,10 @@ import {
   reactNodeToString,
   useMount
 } from "@carbon/react";
-import { useFetcher } from "@remix-run/react";
 import type { PostgrestResponse } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { LuX } from "react-icons/lu";
+import { useFetcher } from "react-router";
 import Filter from "./Filter";
 import type { ColumnFilter } from "./types";
 import { useFilters } from "./useFilters";

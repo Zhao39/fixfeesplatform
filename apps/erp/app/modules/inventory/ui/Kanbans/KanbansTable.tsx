@@ -15,13 +15,12 @@ import {
   HStack,
   MenuItem,
   PulsingDot,
-  toast,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  toast,
   VStack
 } from "@carbon/react";
-import { Link } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
 import {
@@ -41,6 +40,7 @@ import {
   LuTrash,
   LuUser
 } from "react-icons/lu";
+import { Link } from "react-router";
 import {
   EmployeeAvatar,
   Hyperlink,

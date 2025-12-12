@@ -15,10 +15,10 @@ import {
   toast,
   VStack
 } from "@carbon/react";
-import { useFetcher, useLoaderData } from "@remix-run/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
 import { useEffect } from "react";
+import { useFetcher, useLoaderData } from "react-router";
 import {
   getCompanySettings,
   materialIdsValidator,

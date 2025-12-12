@@ -1,9 +1,9 @@
 import { error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
-import type { ClientLoaderFunctionArgs } from "@remix-run/react";
 import type { LoaderFunctionArgs, SerializeFrom } from "@vercel/remix";
 import { json } from "@vercel/remix";
+import type { ClientLoaderFunctionArgs } from "react-router";
 import { getCustomerLocations } from "~/modules/sales";
 import { customerLocationsQuery } from "~/utils/react-query";
 

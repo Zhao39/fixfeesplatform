@@ -1,7 +1,6 @@
-import { Outlet } from "@remix-run/react";
-
 import { CONTROLLED_ENVIRONMENT } from "@carbon/auth";
 import { cn, Heading } from "@carbon/react";
+import { Outlet } from "react-router";
 
 export default function PublicRoute() {
   return (

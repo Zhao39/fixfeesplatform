@@ -16,7 +16,6 @@ import {
 import { useMode } from "@carbon/remix";
 import type { OnMount } from "@monaco-editor/react";
 import Editor from "@monaco-editor/react";
-import { useFetcher, useParams } from "@remix-run/react";
 import type * as Monaco from "monaco-editor";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
@@ -26,6 +25,7 @@ import {
   LuSquareFunction,
   LuTrash2
 } from "react-icons/lu";
+import { useFetcher, useParams } from "react-router";
 import type { action } from "~/routes/x+/part+/$itemId.rule";
 import { path } from "~/utils/path";
 import { ConfirmDelete } from "../../Modals";

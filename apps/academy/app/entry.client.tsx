@@ -5,10 +5,10 @@ import {
 } from "@carbon/auth";
 import { OperatingSystemContextProvider } from "@carbon/react";
 import { I18nProvider } from "@react-aria/i18n";
-import { RemixBrowser } from "@remix-run/react";
 import posthog from "posthog-js";
 import { startTransition, useEffect } from "react";
 import { hydrateRoot } from "react-dom/client";
+import { HydratedRouter } from "react-router/dom";
 
 function PosthogInit() {
   useEffect(() => {
@@ -32,7 +32,7 @@ startTransition(() => {
       <I18nProvider
         locale={navigator.language ?? navigator.languages?.[0] ?? "en-US"}
       >
-        <RemixBrowser />
+        <HydratedRouter />
       </I18nProvider>
       <PosthogInit />
     </OperatingSystemContextProvider>

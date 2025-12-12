@@ -1,3 +1,4 @@
+import crypto from "node:crypto";
 import { assertIsPost, error, RATE_LIMIT } from "@carbon/auth";
 import {
   createEmailAuthAccount,
@@ -19,7 +20,6 @@ import {
   Heading,
   VStack
 } from "@carbon/react";
-import { Link, useFetcher, useSearchParams } from "@remix-run/react";
 import { Ratelimit } from "@upstash/ratelimit";
 import type {
   ActionFunctionArgs,
@@ -27,8 +27,8 @@ import type {
   MetaFunction
 } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-import crypto from "node:crypto";
 import { LuCircleAlert } from "react-icons/lu";
+import { Link, useFetcher, useSearchParams } from "react-router";
 import { z } from "zod/v3";
 
 import type { FormActionData, Result } from "~/types";

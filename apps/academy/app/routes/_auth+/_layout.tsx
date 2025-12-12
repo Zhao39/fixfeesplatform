@@ -1,5 +1,5 @@
 import { VStack } from "@carbon/react";
-import { Outlet } from "@remix-run/react";
+import { Outlet } from "react-router";
 
 export default function PublicRoute() {
   return (

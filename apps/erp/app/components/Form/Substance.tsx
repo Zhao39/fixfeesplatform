@@ -1,8 +1,8 @@
 import type { ComboboxProps } from "@carbon/form";
 import { Combobox, CreatableCombobox } from "@carbon/form";
 import { useDisclosure, useMount } from "@carbon/react";
-import { useFetcher } from "@remix-run/react";
 import { useMemo, useRef, useState } from "react";
+import { useFetcher } from "react-router";
 import { usePermissions } from "~/hooks";
 import type { getMaterialSubstancesList } from "~/modules/items";
 import { MaterialSubstanceForm } from "~/modules/items/ui/MaterialSubstances";

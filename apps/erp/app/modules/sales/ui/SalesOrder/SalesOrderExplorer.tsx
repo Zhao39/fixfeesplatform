@@ -1,7 +1,7 @@
 import {
   Button,
-  cn,
   Count,
+  cn,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuIcon,
@@ -22,7 +22,6 @@ import {
   VStack
 } from "@carbon/react";
 import { getItemReadableId, prettifyKeyboardShortcut } from "@carbon/utils";
-import { Await, Link, useNavigate, useParams } from "@remix-run/react";
 import { Suspense, useRef, useState } from "react";
 import {
   LuChevronDown,
@@ -33,6 +32,7 @@ import {
   LuTrash,
   LuTruck
 } from "react-icons/lu";
+import { Await, Link, useNavigate, useParams } from "react-router";
 import {
   Empty,
   Hyperlink,

@@ -6,7 +6,6 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from "@carbon/react";
-import { useFetcher } from "@remix-run/react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import {
@@ -16,6 +15,7 @@ import {
   LuThumbsDown,
   LuThumbsUp
 } from "react-icons/lu";
+import { useFetcher } from "react-router";
 
 interface MessageActionsProps {
   messageId: string;

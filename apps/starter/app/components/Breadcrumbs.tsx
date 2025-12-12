@@ -1,3 +1,4 @@
+import type { Company } from "@carbon/auth";
 import {
   Avatar,
   Badge,
@@ -14,16 +15,13 @@ import {
   HStack,
   useIsMobile
 } from "@carbon/react";
-import type { LinkProps } from "@remix-run/react";
-import { Form, Link, useMatches } from "@remix-run/react";
+import { useMode } from "@carbon/remix";
 import type { ComponentProps } from "react";
 import { cloneElement, forwardRef } from "react";
-
-import type { Company } from "@carbon/auth";
 import { LuChevronsUpDown } from "react-icons/lu";
+import type { LinkProps } from "react-router";
+import { Form, Link, useMatches } from "react-router";
 import { z } from "zod/v3";
-
-import { useMode } from "@carbon/remix";
 import { useRouteData } from "~/hooks";
 import { path } from "~/utils/path";
 

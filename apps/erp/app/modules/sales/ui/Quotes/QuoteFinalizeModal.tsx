@@ -15,10 +15,10 @@ import {
   useMount,
   VStack
 } from "@carbon/react";
-import type { FetcherWithComponents } from "@remix-run/react";
-import { useParams } from "@remix-run/react";
 import { useState } from "react";
 import { LuTriangleAlert } from "react-icons/lu";
+import type { FetcherWithComponents } from "react-router";
+import { useParams } from "react-router";
 import { CustomerContact, SelectControlled } from "~/components/Form";
 import { useIntegrations } from "~/hooks/useIntegrations";
 import { path } from "~/utils/path";

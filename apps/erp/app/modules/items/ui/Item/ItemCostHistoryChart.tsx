@@ -35,7 +35,6 @@ import {
 import type { CalendarDate } from "@internationalized/date";
 import { today } from "@internationalized/date";
 import { useDateFormatter } from "@react-aria/i18n";
-import { Link } from "@remix-run/react";
 import { useMemo } from "react";
 import { CSVLink } from "react-csv";
 import {
@@ -46,12 +45,14 @@ import {
   LuInfo,
   LuTable
 } from "react-icons/lu";
+import { Link } from "react-router";
 import { Bar, CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 import { SupplierAvatar } from "~/components";
 import { useCurrencyFormatter } from "~/hooks";
 import type { ItemCostHistory } from "~/modules/items";
 import { useSuppliers } from "~/stores";
 import { path } from "~/utils/path";
+
 const chartConfig = {
   cost: {
     color: "hsl(var(--chart-1))",

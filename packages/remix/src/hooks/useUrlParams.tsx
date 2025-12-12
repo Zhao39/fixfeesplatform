@@ -1,5 +1,5 @@
-import { useSearchParams, useSubmit } from "@remix-run/react";
 import { useCallback } from "react";
+import { useSearchParams, useSubmit } from "react-router";
 
 export function useUrlParams(): [
   URLSearchParams,

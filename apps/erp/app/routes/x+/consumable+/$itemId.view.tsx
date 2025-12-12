@@ -1,11 +1,10 @@
-import { Await, Outlet, useLoaderData, useParams } from "@remix-run/react";
-import { ResizablePanels } from "~/components/Layout";
-
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { useRouteData } from "@carbon/remix";
 import type { LoaderFunctionArgs } from "@vercel/remix";
 import { defer } from "@vercel/remix";
 import { Suspense } from "react";
+import { Await, Outlet, useLoaderData, useParams } from "react-router";
+import { ResizablePanels } from "~/components/Layout";
 import type { ConsumableSummary, ItemFile } from "~/modules/items";
 import { getMaterialUsedIn } from "~/modules/items";
 import ConsumableProperties from "~/modules/items/ui/Consumables/ConsumableProperties";

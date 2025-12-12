@@ -1,9 +1,9 @@
 import { Checkbox, MenuIcon, MenuItem, useDisclosure } from "@carbon/react";
-import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
 import { flushSync } from "react-dom";
 import { LuPencil, LuSquareCheck, LuTrash } from "react-icons/lu";
+import { useNavigate } from "react-router";
 import { Hyperlink, New, Table } from "~/components";
 import { Enumerable } from "~/components/Enumerable";
 import { ConfirmDelete } from "~/components/Modals";

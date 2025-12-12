@@ -1,8 +1,8 @@
 import { error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
-import { Outlet, useLoaderData } from "@remix-run/react";
-import { json, redirect, type LoaderFunctionArgs } from "@vercel/remix";
+import { json, type LoaderFunctionArgs, redirect } from "@vercel/remix";
+import { Outlet, useLoaderData } from "react-router";
 import { getConfig, getWebhooks } from "~/modules/settings";
 import { WebhooksTable } from "~/modules/settings/ui/Webhooks";
 import type { Handle } from "~/utils/handle";

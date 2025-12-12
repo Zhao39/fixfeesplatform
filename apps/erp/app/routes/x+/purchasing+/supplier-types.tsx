@@ -1,8 +1,8 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { VStack } from "@carbon/react";
-import { Outlet, useLoaderData } from "@remix-run/react";
 import type { LoaderFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
+import { Outlet, useLoaderData } from "react-router";
 import { getSupplierTypes } from "~/modules/purchasing";
 import { SupplierTypesTable } from "~/modules/purchasing/ui/SupplierTypes";
 import type { Handle } from "~/utils/handle";

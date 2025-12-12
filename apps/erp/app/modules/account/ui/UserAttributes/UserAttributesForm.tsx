@@ -6,13 +6,13 @@ import {
   Switch,
   toast,
   useDisclosure,
-  VStack
+  VStack,
 } from "@carbon/react";
 import { parseDate } from "@internationalized/date";
 import { useLocale } from "@react-aria/i18n";
-import { useFetcher, useParams } from "@remix-run/react";
 import { useState } from "react";
 import { LuFile, LuPaperclip } from "react-icons/lu";
+import { useFetcher, useParams } from "react-router";
 import type { ZodSchema } from "zod/v3";
 import CustomerAvatar from "~/components/CustomerAvatar";
 import FileDropzone from "~/components/FileDropzone";
@@ -875,5 +875,15 @@ function UpdateRemoveButtons({
     </HStack>
   );
 }
+
+export default UserAttributesForm;
+
+export default UserAttributesForm;
+
+export default UserAttributesForm;
+
+export default UserAttributesForm;
+
+export default UserAttributesForm;
 
 export default UserAttributesForm;

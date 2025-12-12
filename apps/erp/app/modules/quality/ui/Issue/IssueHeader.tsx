@@ -12,8 +12,6 @@ import {
   useDisclosure,
   VStack
 } from "@carbon/react";
-
-import { Link, useFetcher, useParams } from "@remix-run/react";
 import {
   LuChevronDown,
   LuCircleCheck,
@@ -24,6 +22,7 @@ import {
   LuLoaderCircle,
   LuTrash
 } from "react-icons/lu";
+import { Link, useFetcher, useParams } from "react-router";
 import ConfirmDelete from "~/components/Modals/ConfirmDelete";
 import { usePermissions, useRouteData } from "~/hooks";
 import { useSuppliers } from "~/stores/suppliers";

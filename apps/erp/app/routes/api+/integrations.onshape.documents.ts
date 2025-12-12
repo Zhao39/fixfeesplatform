@@ -1,9 +1,9 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { Onshape as OnshapeConfig } from "@carbon/ee";
 import { OnshapeClient } from "@carbon/ee/onshape";
-import type { ShouldRevalidateFunction } from "@remix-run/react";
 import type { LoaderFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
+import type { ShouldRevalidateFunction } from "react-router";
 import { getIntegration } from "~/modules/settings/settings.service";
 
 export const shouldRevalidate: ShouldRevalidateFunction = () => {

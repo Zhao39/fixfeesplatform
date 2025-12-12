@@ -1,3 +1,4 @@
+import type { Result } from "@carbon/auth";
 import {
   Button,
   Copy,
@@ -6,12 +7,11 @@ import {
   DropdownMenuIcon,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  HStack,
   Heading,
+  HStack,
   IconButton,
   useDisclosure
 } from "@carbon/react";
-import { useFetcher, useParams } from "@remix-run/react";
 import {
   LuBarcode,
   LuCircleCheck,
@@ -20,12 +20,11 @@ import {
   LuLoaderCircle,
   LuTrash
 } from "react-icons/lu";
+import { useFetcher, useParams } from "react-router";
+import Assignee, { useOptimisticAssignment } from "~/components/Assignee";
 import ConfirmDelete from "~/components/Modals/ConfirmDelete";
 import { usePermissions, useRouteData } from "~/hooks";
 import type { StockTransfer, StockTransferLine } from "~/modules/inventory";
-
-import type { Result } from "@carbon/auth";
-import Assignee, { useOptimisticAssignment } from "~/components/Assignee";
 import { path } from "~/utils/path";
 import StockTransferCompleteModal from "./StockTransferCompleteModal";
 import StockTransferStatus from "./StockTransferStatus";

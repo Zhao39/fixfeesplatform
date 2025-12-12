@@ -17,7 +17,6 @@ import {
 } from "@carbon/react";
 import { getLocalTimeZone, parseDate } from "@internationalized/date";
 import { useDateFormatter, useNumberFormatter } from "@react-aria/i18n";
-import { useFetcher } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import {
   useCallback,
@@ -34,6 +33,7 @@ import {
   LuPackage,
   LuSquareChartGantt
 } from "react-icons/lu";
+import { useFetcher } from "react-router";
 import { ItemThumbnail, MethodItemTypeIcon, Table } from "~/components";
 import { Enumerable } from "~/components/Enumerable";
 import { useLocations } from "~/components/Form/Location";

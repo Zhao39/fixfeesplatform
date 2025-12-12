@@ -25,12 +25,6 @@ import {
   SelectValue,
   VStack
 } from "@carbon/react";
-import {
-  Link,
-  useActionData,
-  useLoaderData,
-  useSubmit
-} from "@remix-run/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -46,6 +40,7 @@ import {
   LuHouse,
   LuRefreshCcw
 } from "react-icons/lu";
+import { Link, useActionData, useLoaderData, useSubmit } from "react-router";
 import {
   getTrainingAssignmentForCompletion,
   insertTrainingCompletion

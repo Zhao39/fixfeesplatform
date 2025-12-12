@@ -1,8 +1,8 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { VStack } from "@carbon/react";
-import { Outlet, useLoaderData } from "@remix-run/react";
 import type { LoaderFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
+import { Outlet, useLoaderData } from "react-router";
 import { getQualityDocuments } from "~/modules/quality";
 import QualityDocumentsTable from "~/modules/quality/ui/Documents/QualityDocumentsTable";
 import { getTagsList } from "~/modules/shared";

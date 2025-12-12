@@ -10,7 +10,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@carbon/react";
-import { useLocation, useNavigate } from "@remix-run/react";
 import {
   LuCalendar,
   LuCalendarDays,
@@ -18,6 +17,7 @@ import {
   LuCog,
   LuList
 } from "react-icons/lu";
+import { useLocation, useNavigate } from "react-router";
 import { path } from "~/utils/path";
 
 export function ScheduleNavigation() {

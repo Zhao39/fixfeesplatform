@@ -1,5 +1,5 @@
-import { useNavigate } from "@remix-run/react";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
 interface UseKeyboardWedgeOptions {
   test: (input: string) => boolean;

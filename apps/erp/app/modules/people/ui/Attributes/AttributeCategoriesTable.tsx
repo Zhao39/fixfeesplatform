@@ -6,12 +6,12 @@ import {
   MenuItem,
   useDisclosure
 } from "@carbon/react";
-import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
 import { BiAddToQueue } from "react-icons/bi";
 import { BsListUl } from "react-icons/bs";
 import { LuListChecks, LuPencil, LuTrash } from "react-icons/lu";
+import { useNavigate } from "react-router";
 import { Hyperlink, New, Table } from "~/components";
 import { ConfirmDelete } from "~/components/Modals";
 import { usePermissions, useUrlParams } from "~/hooks";

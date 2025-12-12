@@ -12,13 +12,8 @@ import {
   VStack
 } from "@carbon/react";
 import { getItemReadableId } from "@carbon/utils";
-import {
-  useFetcher,
-  useLocation,
-  useNavigate,
-  useParams
-} from "@remix-run/react";
 import { useEffect, useState } from "react";
+import { useFetcher, useLocation, useNavigate, useParams } from "react-router";
 import type { z } from "zod/v3";
 import {
   DefaultMethodType,

@@ -27,13 +27,6 @@ import {
   VStack
 } from "@carbon/react";
 import { labelSizes } from "@carbon/utils";
-import {
-  Await,
-  Link,
-  useFetcher,
-  useLocation,
-  useParams
-} from "@remix-run/react";
 import { Suspense, useEffect, useState } from "react";
 import {
   LuGitBranch,
@@ -45,6 +38,7 @@ import {
   LuTriangleAlert
 } from "react-icons/lu";
 import { RiProgress4Line } from "react-icons/ri";
+import { Await, Link, useFetcher, useLocation, useParams } from "react-router";
 import { ConfiguratorModal } from "~/components/Configurator/ConfiguratorForm";
 import { Hidden, Item, Submit } from "~/components/Form";
 import type { Tree } from "~/components/TreeView";
@@ -493,7 +487,6 @@ const JobMakeMethodTools = ({ makeMethod }: { makeMethod?: JobMakeMethod }) => {
           </ModalContent>
         </Modal>
       )}
-
       {saveMethodModal.isOpen && (
         <Modal
           open
@@ -612,7 +605,6 @@ const JobMakeMethodTools = ({ makeMethod }: { makeMethod?: JobMakeMethod }) => {
           </ModalContent>
         </Modal>
       )}
-
       {configuratorModal.isOpen && (
         <Suspense fallback={null}>
           {sourceItemRequiresConfiguration ? (

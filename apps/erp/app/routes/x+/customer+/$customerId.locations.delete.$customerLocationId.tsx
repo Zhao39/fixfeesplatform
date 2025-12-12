@@ -1,9 +1,9 @@
 import { error, success } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
-import type { ClientActionFunctionArgs } from "@remix-run/react";
 import type { ActionFunctionArgs } from "@vercel/remix";
 import { redirect } from "@vercel/remix";
+import type { ClientActionFunctionArgs } from "react-router";
 import { deleteCustomerLocation } from "~/modules/sales";
 import { path } from "~/utils/path";
 import { customerLocationsQuery } from "~/utils/react-query";

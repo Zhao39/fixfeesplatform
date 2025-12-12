@@ -1,15 +1,15 @@
 import {
   Count,
+  cn,
   HStack,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-  cn,
   useKeyboardShortcuts
 } from "@carbon/react";
 import { prettifyKeyboardShortcut } from "@carbon/utils";
-import { Link, useNavigate } from "@remix-run/react";
 import type { IconType } from "react-icons";
+import { Link, useNavigate } from "react-router";
 import { useOptimisticLocation, useUrlParams } from "~/hooks";
 
 type DetailTopbarProps = {

@@ -12,7 +12,6 @@ import {
   VStack
 } from "@carbon/react";
 import { useNumberFormatter } from "@react-aria/i18n";
-import { useFetcher, useParams } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useEffect, useMemo, useState } from "react";
 import {
@@ -31,6 +30,7 @@ import {
   LuTruck,
   LuX
 } from "react-icons/lu";
+import { useFetcher, useParams } from "react-router";
 import {
   Hyperlink,
   ItemThumbnail,

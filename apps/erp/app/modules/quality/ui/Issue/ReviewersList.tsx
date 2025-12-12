@@ -17,9 +17,9 @@ import {
   useDisclosure,
   VStack
 } from "@carbon/react";
-import { useFetcher, useParams } from "@remix-run/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { LuCirclePlus } from "react-icons/lu";
+import { useFetcher, useParams } from "react-router";
 import { useRouteData } from "~/hooks";
 import type { IssueReviewer } from "~/modules/quality";
 import { nonConformanceReviewerValidator } from "~/modules/quality";

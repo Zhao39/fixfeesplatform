@@ -39,9 +39,9 @@ import {
   parseAbsolute,
   toZoned
 } from "@internationalized/date";
-import { Link, useParams } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { LuCircleChevronRight, LuNotebook } from "react-icons/lu";
+import { Link, useParams } from "react-router";
 import type { z } from "zod/v3";
 import { EmployeeAvatar, EmployeeAvatarGroup } from "~/components";
 import { MethodIcon, TimeTypeIcon } from "~/components/Icons";

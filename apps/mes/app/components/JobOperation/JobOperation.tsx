@@ -50,7 +50,6 @@ import {
   getItemReadableId,
   labelSizes
 } from "@carbon/utils";
-import { Await, useFetcher, useNavigate, useParams } from "@remix-run/react";
 import type { PostgrestSingleResponse } from "@supabase/supabase-js";
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { flushSync } from "react-dom";
@@ -77,6 +76,7 @@ import {
   LuTimer,
   LuTriangleAlert
 } from "react-icons/lu";
+import { Await, useFetcher, useNavigate, useParams } from "react-router";
 import {
   DeadlineIcon,
   FileIcon,

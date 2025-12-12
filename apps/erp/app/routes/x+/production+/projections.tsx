@@ -3,9 +3,9 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { VStack } from "@carbon/react";
 import { getLocalTimeZone, startOfWeek, today } from "@internationalized/date";
-import { Outlet, useLoaderData } from "@remix-run/react";
 import type { LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
+import { Outlet, useLoaderData } from "react-router";
 import { getProductionProjections } from "~/modules/production";
 import DemandProjectionsTable from "~/modules/production/ui/Projection/DemandProjectionTable";
 

@@ -1,8 +1,8 @@
 import type { CreatableMultiSelectProps } from "@carbon/form";
 import { CreatableMultiSelect } from "@carbon/form";
 import { useDisclosure, useMount } from "@carbon/react";
-import { useFetcher } from "@remix-run/react";
 import { useMemo, useRef, useState } from "react";
+import { useFetcher } from "react-router";
 import { useUser } from "~/hooks";
 import type { getWorkCentersList } from "~/modules/resources";
 import WorkCenterForm from "~/modules/resources/ui/WorkCenters/WorkCenterForm";

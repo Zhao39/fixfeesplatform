@@ -1,3 +1,4 @@
+import { Hidden, ValidatedForm } from "@carbon/form";
 import {
   cn,
   ToggleGroup,
@@ -7,9 +8,12 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from "@carbon/react";
-import { useFetcher } from "@remix-run/react";
+import { getLocalTimeZone } from "@internationalized/date";
 import type { ComponentProps, ReactNode } from "react";
 import { useMemo } from "react";
+import { FaPause, FaPlay } from "react-icons/fa6";
+import { LuHammer, LuHardHat, LuTimer } from "react-icons/lu";
+import { useFetcher } from "react-router";
 import type { productionEventType } from "~/services/models";
 import { productionEventValidator } from "~/services/models";
 import type {
@@ -18,11 +22,6 @@ import type {
   ProductionEvent
 } from "~/services/types";
 import { path } from "~/utils/path";
-
-import { Hidden, ValidatedForm } from "@carbon/form";
-import { getLocalTimeZone } from "@internationalized/date";
-import { FaPause, FaPlay } from "react-icons/fa6";
-import { LuHammer, LuHardHat, LuTimer } from "react-icons/lu";
 
 export function Controls({
   children,

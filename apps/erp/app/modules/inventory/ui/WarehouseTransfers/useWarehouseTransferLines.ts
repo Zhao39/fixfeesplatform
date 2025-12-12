@@ -1,5 +1,5 @@
-import { useFetcher } from "@remix-run/react";
 import { useCallback } from "react";
+import { useFetcher } from "react-router";
 import { usePermissions } from "~/hooks";
 import type { WarehouseTransfer } from "~/modules/inventory";
 import { path } from "~/utils/path";

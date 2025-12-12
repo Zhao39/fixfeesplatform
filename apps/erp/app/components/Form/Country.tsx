@@ -1,6 +1,6 @@
 import type { ComboboxProps } from "@carbon/form";
 import { useMount } from "@carbon/react";
-import { useFetcher } from "@remix-run/react";
+import { useFetcher } from "react-router";
 import { Combobox } from "~/components/Form";
 import type { getCountries } from "~/modules/shared";
 import { path } from "~/utils/path";

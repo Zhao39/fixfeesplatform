@@ -1,7 +1,7 @@
 import { useChatActions } from "@ai-sdk-tools/store";
 import { IconButton } from "@carbon/react";
-import { useNavigate } from "@remix-run/react";
 import { LuArrowLeft } from "react-icons/lu";
+import { useNavigate } from "react-router";
 import { path } from "~/utils/path";
 import { useChatInterface } from "./hooks/useChatInterface";
 

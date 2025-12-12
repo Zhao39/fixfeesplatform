@@ -1,7 +1,7 @@
 import { useCarbon } from "@carbon/auth";
 import { toast } from "@carbon/react";
-import { useNavigate } from "@remix-run/react";
 import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import type { Receipt, Shipment } from "~/modules/inventory";
 import type { PurchaseInvoice } from "~/modules/invoicing";
 import type { PurchaseOrder } from "~/modules/purchasing";

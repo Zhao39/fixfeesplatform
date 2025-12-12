@@ -7,10 +7,10 @@ import {
   HStack,
   useDisclosure
 } from "@carbon/react";
-import { Outlet, useNavigate, useParams } from "@remix-run/react";
 import { useCallback, useState } from "react";
 import { IoMdAdd } from "react-icons/io";
 import { LuPencil, LuTrash } from "react-icons/lu";
+import { Outlet, useNavigate, useParams } from "react-router";
 import { Contact, New } from "~/components";
 import { ConfirmDelete } from "~/components/Modals";
 import { usePermissions } from "~/hooks";

@@ -7,9 +7,9 @@ import {
   ScrollArea,
   VStack
 } from "@carbon/react";
-import { Outlet, useLoaderData } from "@remix-run/react";
 import type { LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
+import { Outlet, useLoaderData } from "react-router";
 import InventoryItemHeader from "~/modules/inventory/ui/Inventory/InventoryItemHeader";
 import { getItem, getPickMethod, upsertPickMethod } from "~/modules/items";
 import { getLocationsList } from "~/modules/resources";

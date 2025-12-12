@@ -1,5 +1,5 @@
 import { getAppUrl, getMESUrl, SUPABASE_URL } from "@carbon/auth";
-import { generatePath } from "@remix-run/react";
+import { generatePath } from "react-router";
 
 const x = "/x"; // from ~/routes/x+ folder
 const api = "/api"; // from ~/routes/api+ folder

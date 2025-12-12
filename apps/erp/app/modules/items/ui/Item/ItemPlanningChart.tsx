@@ -25,8 +25,6 @@ import {
 import { formatDate } from "@carbon/utils";
 import { getLocalTimeZone, parseDate } from "@internationalized/date";
 import { useDateFormatter, useNumberFormatter } from "@react-aria/i18n";
-import { useFetcher } from "@remix-run/react";
-
 import { useMemo, useState } from "react";
 import {
   LuChartLine,
@@ -38,6 +36,7 @@ import {
   LuSearch,
   LuShoppingCart
 } from "react-icons/lu";
+import { useFetcher } from "react-router";
 import {
   Area,
   Bar,

@@ -6,7 +6,6 @@ import {
   useDisclosure
 } from "@carbon/react";
 import { formatDate } from "@carbon/utils";
-import { useNavigate } from "@remix-run/react";
 import { type ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
 import {
@@ -19,6 +18,7 @@ import {
   LuTrash,
   LuUser
 } from "react-icons/lu";
+import { useNavigate } from "react-router";
 import { EmployeeAvatar, Hyperlink, Table } from "~/components";
 import { Enumerable } from "~/components/Enumerable";
 import { useLocations } from "~/components/Form/Location";

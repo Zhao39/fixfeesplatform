@@ -1,5 +1,3 @@
-import { useParams } from "@remix-run/react";
-
 import {
   LuBox,
   LuChartLine,
@@ -7,6 +5,7 @@ import {
   LuShoppingCart,
   LuTags
 } from "react-icons/lu";
+import { useParams } from "react-router";
 import { usePermissions, useRouteData } from "~/hooks";
 import type { Role } from "~/types";
 import { path } from "~/utils/path";

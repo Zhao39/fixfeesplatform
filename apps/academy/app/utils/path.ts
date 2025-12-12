@@ -1,5 +1,5 @@
 import { SUPABASE_URL } from "@carbon/auth";
-import { generatePath } from "@remix-run/react";
+import { generatePath } from "react-router";
 
 const challenge = "/challenge"; // from ~/routes/challenge+ folder
 const course = "/course"; // from ~/routes/course+ folder

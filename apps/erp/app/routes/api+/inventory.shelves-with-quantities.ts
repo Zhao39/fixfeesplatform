@@ -1,7 +1,7 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
-import type { ClientLoaderFunctionArgs } from "@remix-run/react";
 import type { LoaderFunctionArgs, SerializeFrom } from "@vercel/remix";
 import { json } from "@vercel/remix";
+import type { ClientLoaderFunctionArgs } from "react-router";
 import { getShelvesListForLocation } from "~/modules/inventory";
 import { getItemShelfQuantities } from "~/modules/items/items.service";
 import { getCompanyId, shelvesQuery } from "~/utils/react-query";

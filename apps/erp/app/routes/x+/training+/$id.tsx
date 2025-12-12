@@ -5,11 +5,11 @@ import type { JSONContent } from "@carbon/react";
 import { generateHTML, Input, toast, useDebounce } from "@carbon/react";
 import { Editor } from "@carbon/react/Editor";
 import { getLocalTimeZone, today } from "@internationalized/date";
-import { Outlet, useFetcher, useLoaderData, useParams } from "@remix-run/react";
 import type { LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
 import { nanoid } from "nanoid";
 import { useState } from "react";
+import { Outlet, useFetcher, useLoaderData, useParams } from "react-router";
 import { PanelProvider, ResizablePanels } from "~/components/Layout/Panels";
 import { usePermissions, useUser } from "~/hooks";
 import {

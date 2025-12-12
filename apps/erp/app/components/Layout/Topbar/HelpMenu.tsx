@@ -6,8 +6,8 @@ import {
   DropdownMenuTrigger,
   IconButton
 } from "@carbon/react";
-import { Link } from "@remix-run/react";
 import { LuCircleHelp, LuFiles } from "react-icons/lu";
+import { Link } from "react-router";
 import { path } from "~/utils/path";
 
 const HelpMenu = () => {

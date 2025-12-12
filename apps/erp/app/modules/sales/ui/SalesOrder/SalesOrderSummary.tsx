@@ -28,7 +28,6 @@ import {
   today
 } from "@internationalized/date";
 import { useLocale } from "@react-aria/i18n";
-import { Link, useParams } from "@remix-run/react";
 import { motion } from "framer-motion";
 import MotionNumber from "motion-number";
 import { useMemo, useState } from "react";
@@ -39,6 +38,7 @@ import {
   LuInfo,
   LuTriangleAlert
 } from "react-icons/lu";
+import { Link, useParams } from "react-router";
 import { CustomerAvatar, Hyperlink, MethodIcon } from "~/components";
 import { Confirm } from "~/components/Modals";
 import { usePercentFormatter, usePermissions, useRouteData } from "~/hooks";

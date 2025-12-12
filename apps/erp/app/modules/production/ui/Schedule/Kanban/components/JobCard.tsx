@@ -19,7 +19,6 @@ import {
 import { formatDate } from "@carbon/utils";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Link } from "@remix-run/react";
 import { cva } from "class-variance-authority";
 import { AiOutlinePartition } from "react-icons/ai";
 import { FaTasks } from "react-icons/fa";
@@ -36,6 +35,7 @@ import {
   LuUsers
 } from "react-icons/lu";
 import { RiProgress8Line } from "react-icons/ri";
+import { Link } from "react-router";
 import { Assignee, EmployeeAvatarGroup } from "~/components";
 import { getDeadlineIcon } from "~/modules/production/ui/Jobs/Deadline";
 import { useCustomers } from "~/stores";

@@ -28,7 +28,6 @@ import {
   VStack
 } from "@carbon/react";
 import { getItemReadableId } from "@carbon/utils";
-import { Link, useFetcher, useFetchers, useParams } from "@remix-run/react";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import { nanoid } from "nanoid";
 import type { Dispatch, SetStateAction } from "react";
@@ -45,6 +44,7 @@ import {
   LuSettings2,
   LuX
 } from "react-icons/lu";
+import { Link, useFetcher, useFetchers, useParams } from "react-router";
 import type { z } from "zod/v3";
 import { MethodIcon, MethodItemTypeIcon, TrackingTypeIcon } from "~/components";
 import {

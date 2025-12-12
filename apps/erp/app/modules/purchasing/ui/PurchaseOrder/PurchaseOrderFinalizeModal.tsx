@@ -10,9 +10,9 @@ import {
   ModalTitle,
   VStack
 } from "@carbon/react";
-import type { FetcherWithComponents } from "@remix-run/react";
-import { useParams } from "@remix-run/react";
 import { useState } from "react";
+import type { FetcherWithComponents } from "react-router";
+import { useParams } from "react-router";
 import { SelectControlled, SupplierContact } from "~/components/Form";
 import { useIntegrations } from "~/hooks/useIntegrations";
 import { path } from "~/utils/path";

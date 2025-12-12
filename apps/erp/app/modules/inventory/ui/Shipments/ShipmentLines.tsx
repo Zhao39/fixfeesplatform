@@ -38,13 +38,6 @@ import {
 } from "@carbon/react";
 import type { TrackedEntityAttributes } from "@carbon/utils";
 import { getItemReadableId, labelSizes } from "@carbon/utils";
-import {
-  Outlet,
-  useFetcher,
-  useFetchers,
-  useParams,
-  useSubmit
-} from "@remix-run/react";
 import { useCallback, useEffect, useState } from "react";
 import {
   LuCheck,
@@ -55,6 +48,13 @@ import {
   LuSplit,
   LuTrash
 } from "react-icons/lu";
+import {
+  Outlet,
+  useFetcher,
+  useFetchers,
+  useParams,
+  useSubmit
+} from "react-router";
 import { Empty, ItemThumbnail } from "~/components";
 import { Enumerable } from "~/components/Enumerable";
 import { useShelves } from "~/components/Form/Shelf";

@@ -6,11 +6,11 @@ import {
   SidebarTrigger,
   useIsMobile
 } from "@carbon/react";
-import { json, useLoaderData, useParams } from "@remix-run/react";
 import type { LoaderFunctionArgs } from "@vercel/remix";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { LuSearch, LuTriangleAlert } from "react-icons/lu";
 import type { ImperativePanelHandle } from "react-resizable-panels";
+import { json, useLoaderData, useParams } from "react-router";
 import { OperationsList } from "~/components";
 import { getRecentJobOperationsByEmployee } from "~/services/operations.service";
 import { makeDurations } from "~/utils/durations";

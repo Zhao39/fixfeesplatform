@@ -9,8 +9,8 @@ import {
   ModalTitle,
   toast
 } from "@carbon/react";
-import { useFetcher } from "@remix-run/react";
 import { useEffect, useRef } from "react";
+import { useFetcher } from "react-router";
 
 type ConfirmProps = {
   action?: string;

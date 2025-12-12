@@ -5,10 +5,10 @@ import {
   Skeleton
 } from "@carbon/react";
 import { convertKbToString } from "@carbon/utils";
-import { useNavigate } from "@remix-run/react";
 import { useState } from "react";
 import { LuDownload, LuX } from "react-icons/lu";
 import { Document, Page, pdfjs } from "react-pdf";
+import { useNavigate } from "react-router";
 import DocumentIcon from "~/components/DocumentIcon";
 import { path } from "~/utils/path";
 import { type Document as DocumentType } from "../../types";

@@ -29,7 +29,6 @@ import {
   VStack
 } from "@carbon/react";
 import { getLocalTimeZone, parseDate, today } from "@internationalized/date";
-import { Link, useFetcher } from "@remix-run/react";
 import { memo, useCallback, useEffect, useMemo } from "react";
 import {
   LuCalendar,
@@ -42,6 +41,7 @@ import {
   LuStar,
   LuTrash2
 } from "react-icons/lu";
+import { Link, useFetcher } from "react-router";
 import { getLinkToItemPlanning } from "~/modules/items/ui/Item/ItemForm";
 import { ItemPlanningChart } from "~/modules/items/ui/Item/ItemPlanningChart";
 import { ItemReorderPolicy } from "~/modules/items/ui/Item/ItemReorderPolicy";

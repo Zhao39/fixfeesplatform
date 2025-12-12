@@ -19,7 +19,6 @@ import {
   useDisclosure,
   useMount
 } from "@carbon/react";
-import { useFetcher, useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -34,6 +33,7 @@ import {
   LuUser,
   LuWrench
 } from "react-icons/lu";
+import { useFetcher, useNavigate } from "react-router";
 import { EmployeeAvatar, Hyperlink, New, Table } from "~/components";
 import { Enumerable } from "~/components/Enumerable";
 import { useProcesses } from "~/components/Form/Process";

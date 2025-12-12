@@ -18,7 +18,6 @@ import {
   Spinner,
   VStack
 } from "@carbon/react";
-import { Link, useFetchers, useNavigate, useParams } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
 import {
   LuBraces,
@@ -29,6 +28,7 @@ import {
   LuSearch,
   LuTable
 } from "react-icons/lu";
+import { Link, useFetchers, useNavigate, useParams } from "react-router";
 import { MethodIcon, MethodItemTypeIcon } from "~/components";
 import { OnshapeStatus } from "~/components/Icons";
 import type { FlatTree, FlatTreeItem } from "~/components/TreeView";

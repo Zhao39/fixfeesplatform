@@ -20,9 +20,8 @@ import {
   LuPencil,
   LuTrash2
 } from "react-icons/lu";
+import { Link } from "react-router";
 import { Hyperlink, New, Table } from "~/components";
-
-import { Link } from "@remix-run/react";
 import { useLocations } from "~/components/Form/Location";
 import ItemThumbnail from "~/components/ItemThumbnail";
 import { ConfirmDelete } from "~/components/Modals";

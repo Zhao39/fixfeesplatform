@@ -19,9 +19,9 @@ import {
   VStack
 } from "@carbon/react";
 import { getItemReadableId } from "@carbon/utils";
-import { useFetcher, useParams } from "@remix-run/react";
 import type { PostgrestResponse } from "@supabase/supabase-js";
 import { useEffect, useMemo, useState } from "react";
+import { useFetcher, useParams } from "react-router";
 import type { z } from "zod/v3";
 import {
   ConversionFactor,

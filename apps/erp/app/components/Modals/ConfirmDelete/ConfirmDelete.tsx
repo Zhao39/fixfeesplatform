@@ -8,8 +8,8 @@ import {
   ModalOverlay,
   ModalTitle
 } from "@carbon/react";
-import { useFetcher } from "@remix-run/react";
 import { useEffect, useRef } from "react";
+import { useFetcher } from "react-router";
 
 type ConfirmDeleteProps = {
   action?: string;

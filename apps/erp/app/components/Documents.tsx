@@ -22,10 +22,10 @@ import {
   toast
 } from "@carbon/react";
 import { convertKbToString } from "@carbon/utils";
-import { Link, useFetchers, useRevalidator, useSubmit } from "@remix-run/react";
 import type { ChangeEvent } from "react";
 import { useCallback } from "react";
 import { LuAxis3D, LuEllipsisVertical, LuUpload } from "react-icons/lu";
+import { Link, useFetchers, useRevalidator, useSubmit } from "react-router";
 import { DocumentPreview, FileDropzone, Hyperlink } from "~/components";
 import DocumentIcon from "~/components/DocumentIcon";
 import { usePermissions, useUser } from "~/hooks";

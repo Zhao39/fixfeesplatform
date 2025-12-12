@@ -15,10 +15,10 @@ import {
   toast
 } from "@carbon/react";
 import { formatDate } from "@carbon/utils";
-import { useFetcher } from "@remix-run/react";
 import type { PostgrestResponse, SupabaseClient } from "@supabase/supabase-js";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { LuInfo, LuMoveRight } from "react-icons/lu";
+import { useFetcher } from "react-router";
 import { Submit } from "~/components/Form";
 import { useCurrencyFormatter, useUser } from "~/hooks";
 import type { importSchemas } from "~/modules/shared";

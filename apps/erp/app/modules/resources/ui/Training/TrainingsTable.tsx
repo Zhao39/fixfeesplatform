@@ -5,7 +5,6 @@ import {
   MenuItem,
   useDisclosure
 } from "@carbon/react";
-import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
 import { flushSync } from "react-dom";
@@ -14,12 +13,13 @@ import {
   LuClock,
   LuPencil,
   LuRepeat,
-  LuTag,
   LuShapes,
   LuStar,
+  LuTag,
   LuTrash,
   LuUser
 } from "react-icons/lu";
+import { useNavigate } from "react-router";
 import { EmployeeAvatar, Hyperlink, New, Table } from "~/components";
 import { ConfirmDelete } from "~/components/Modals";
 import { usePermissions } from "~/hooks";

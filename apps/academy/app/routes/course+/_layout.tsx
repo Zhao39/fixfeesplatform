@@ -1,6 +1,6 @@
 import { Button, Heading } from "@carbon/react";
-import { Link, Outlet } from "@remix-run/react";
 import { LuBookOpen, LuCirclePlay } from "react-icons/lu";
+import { Link, Outlet } from "react-router";
 import { Hero } from "~/components/Hero";
 import { modules } from "~/config";
 import { useOptionalUser } from "~/hooks/useUser";

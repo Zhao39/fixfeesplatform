@@ -7,13 +7,15 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  HStack,
   Heading,
+  HStack,
   IconButton,
   SplitButton,
   useDisclosure
 } from "@carbon/react";
-import { Await, Link, useNavigate, useParams } from "@remix-run/react";
+import type { TrackedEntityAttributes } from "@carbon/utils";
+import { labelSizes } from "@carbon/utils";
+import { Suspense } from "react";
 import {
   LuBarcode,
   LuCheckCheck,
@@ -27,14 +29,11 @@ import {
   LuTrash,
   LuTruck
 } from "react-icons/lu";
+import { RiProgress8Line } from "react-icons/ri";
+import { Await, Link, useNavigate, useParams } from "react-router";
 import ConfirmDelete from "~/components/Modals/ConfirmDelete";
 import { usePermissions, useRouteData } from "~/hooks";
 import type { ItemTracking, Shipment, ShipmentLine } from "~/modules/inventory";
-
-import type { TrackedEntityAttributes } from "@carbon/utils";
-import { labelSizes } from "@carbon/utils";
-import { Suspense } from "react";
-import { RiProgress8Line } from "react-icons/ri";
 import type { SalesInvoice } from "~/modules/invoicing/types";
 import SalesInvoiceStatus from "~/modules/invoicing/ui/SalesInvoice/SalesInvoiceStatus";
 import { path } from "~/utils/path";

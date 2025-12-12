@@ -1,12 +1,11 @@
-import { json } from "@remix-run/react";
-
 import { assertIsPost, error, notFound } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validator } from "@carbon/form";
 import type { ActionFunctionArgs } from "@vercel/remix";
-import { upsertProcedureParameter } from "~/modules/production/production.service";
+import { json } from "react-router";
 import { procedureParameterValidator } from "~/modules/production/production.models";
+import { upsertProcedureParameter } from "~/modules/production/production.service";
 
 export async function action({ request, params }: ActionFunctionArgs) {
   assertIsPost(request);

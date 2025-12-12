@@ -16,9 +16,9 @@ import {
   ModalTitle,
   VStack
 } from "@carbon/react";
-import { useFetcher } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { LuCheck, LuClipboard, LuLock } from "react-icons/lu";
+import { useFetcher } from "react-router";
 import type { z } from "zod/v3";
 import { Hidden, Input, Submit } from "~/components/Form";
 import { usePermissions } from "~/hooks";

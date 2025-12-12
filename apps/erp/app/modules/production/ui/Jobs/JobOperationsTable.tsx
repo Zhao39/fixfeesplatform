@@ -10,12 +10,6 @@ import {
   HStack,
   IconButton
 } from "@carbon/react";
-import {
-  useFetcher,
-  useFetchers,
-  useParams,
-  useSubmit
-} from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
 import { AiOutlinePartition } from "react-icons/ai";
@@ -28,6 +22,7 @@ import {
   LuTriangleAlert,
   LuWrench
 } from "react-icons/lu";
+import { useFetcher, useFetchers, useParams, useSubmit } from "react-router";
 import { Hyperlink, Table } from "~/components";
 import { EditableNumber } from "~/components/Editable";
 import { Enumerable } from "~/components/Enumerable";

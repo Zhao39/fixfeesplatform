@@ -2,9 +2,9 @@ import { assertIsPost, error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
-import { useNavigate } from "@remix-run/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
+import { useNavigate } from "react-router";
 import { ApiKeyForm, apiKeyValidator, upsertApiKey } from "~/modules/settings";
 
 export async function loader({ request }: LoaderFunctionArgs) {

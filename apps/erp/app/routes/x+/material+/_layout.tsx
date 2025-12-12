@@ -1,6 +1,6 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
-import { Outlet } from "@remix-run/react";
 import type { LoaderFunctionArgs, MetaFunction } from "@vercel/remix";
+import { Outlet } from "react-router";
 import {
   getMaterialFormsList,
   getMaterialSubstancesList,

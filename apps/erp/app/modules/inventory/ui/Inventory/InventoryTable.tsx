@@ -9,7 +9,6 @@ import {
   VStack
 } from "@carbon/react";
 import { useNumberFormatter } from "@react-aria/i18n";
-import { useFetcher } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useMemo } from "react";
 import {
@@ -32,6 +31,7 @@ import {
   LuShapes,
   LuStar
 } from "react-icons/lu";
+import { useFetcher } from "react-router";
 import {
   Hyperlink,
   ItemThumbnail,
@@ -49,8 +49,8 @@ import {
   itemReplenishmentSystems
 } from "~/modules/items";
 import {
-  ItemReorderPolicy,
-  getReorderPolicyDescription
+  getReorderPolicyDescription,
+  ItemReorderPolicy
 } from "~/modules/items/ui/Item/ItemReorderPolicy";
 import type { action as mrpAction } from "~/routes/api+/mrp";
 import type { ListItem } from "~/types";

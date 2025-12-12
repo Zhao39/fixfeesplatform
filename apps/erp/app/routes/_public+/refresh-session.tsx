@@ -4,9 +4,9 @@ import {
   refreshAuthSession,
   setAuthSession
 } from "@carbon/auth/session.server";
-import { useNavigate } from "@remix-run/react";
 import type { ActionFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
+import { useNavigate } from "react-router";
 
 import { path } from "~/utils/path";
 

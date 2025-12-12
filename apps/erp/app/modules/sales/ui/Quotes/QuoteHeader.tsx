@@ -25,8 +25,6 @@ import {
   toast,
   useDisclosure
 } from "@carbon/react";
-
-import { Link, useFetcher, useParams } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import {
   LuCheck,
@@ -47,6 +45,7 @@ import {
   LuTrash,
   LuTrophy
 } from "react-icons/lu";
+import { Link, useFetcher, useParams } from "react-router";
 import { usePanels } from "~/components/Layout";
 import ConfirmDelete from "~/components/Modals/ConfirmDelete";
 import { usePermissions, useRouteData } from "~/hooks";

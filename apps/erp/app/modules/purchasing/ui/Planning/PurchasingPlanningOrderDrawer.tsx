@@ -34,7 +34,6 @@ import {
   VStack
 } from "@carbon/react";
 import { getLocalTimeZone, parseDate, today } from "@internationalized/date";
-import { Link, useFetcher } from "@remix-run/react";
 import { memo, useCallback, useEffect, useState } from "react";
 import {
   LuCalendar,
@@ -49,6 +48,7 @@ import {
   LuStar,
   LuTrash2
 } from "react-icons/lu";
+import { Link, useFetcher } from "react-router";
 import { SupplierAvatar } from "~/components";
 import { useUnitOfMeasure } from "~/components/Form/UnitOfMeasure";
 import { useCurrencyFormatter } from "~/hooks";

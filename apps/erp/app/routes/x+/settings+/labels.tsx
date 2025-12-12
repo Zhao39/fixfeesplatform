@@ -1,3 +1,7 @@
+import { error } from "@carbon/auth";
+import { requirePermissions } from "@carbon/auth/auth.server";
+import { flash } from "@carbon/auth/session.server";
+import { Select, Submit, ValidatedForm, validator } from "@carbon/form";
 import {
   Card,
   CardContent,
@@ -10,16 +14,11 @@ import {
   toast,
   VStack
 } from "@carbon/react";
+import { labelSizes } from "@carbon/utils";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-
-import { error } from "@carbon/auth";
-import { requirePermissions } from "@carbon/auth/auth.server";
-import { flash } from "@carbon/auth/session.server";
-import { Select, Submit, ValidatedForm, validator } from "@carbon/form";
-import { labelSizes } from "@carbon/utils";
-import { useFetcher, useLoaderData } from "@remix-run/react";
 import { useEffect } from "react";
+import { useFetcher, useLoaderData } from "react-router";
 import {
   getCompanySettings,
   productLabelSizeValidator,

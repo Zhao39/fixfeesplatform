@@ -1,6 +1,8 @@
 import { error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
+import type { LoaderFunctionArgs } from "@vercel/remix";
+import { Suspense, useMemo } from "react";
 import {
   Await,
   defer,
@@ -8,9 +10,7 @@ import {
   redirect,
   useLoaderData,
   useParams
-} from "@remix-run/react";
-import type { LoaderFunctionArgs } from "@vercel/remix";
-import { Suspense, useMemo } from "react";
+} from "react-router";
 import { PanelProvider, ResizablePanels } from "~/components/Layout/Panels";
 import { ExplorerSkeleton } from "~/components/Skeletons";
 import { flattenTree } from "~/components/TreeView";

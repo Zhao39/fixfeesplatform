@@ -1,6 +1,5 @@
-import { useParams } from "@remix-run/react";
-
 import { LuChartBar, LuFileText } from "react-icons/lu";
+import { useParams } from "react-router";
 import { usePermissions } from "~/hooks";
 import { path } from "~/utils/path";
 

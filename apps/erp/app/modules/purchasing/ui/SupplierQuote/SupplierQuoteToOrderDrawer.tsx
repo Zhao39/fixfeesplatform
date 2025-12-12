@@ -21,10 +21,10 @@ import {
   Tr,
   VStack
 } from "@carbon/react";
-import { Form, useNavigation, useParams } from "@remix-run/react";
 import type { Dispatch, SetStateAction } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { LuImage } from "react-icons/lu";
+import { Form, useNavigation, useParams } from "react-router";
 import type { z } from "zod/v3";
 import { useUser } from "~/hooks";
 import { useCurrencyFormatter } from "~/hooks/useCurrencyFormatter";

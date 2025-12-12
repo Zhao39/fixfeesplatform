@@ -4,12 +4,12 @@ import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import { useUrlParams } from "@carbon/remix";
 import { getLocalTimeZone, today } from "@internationalized/date";
-import { useLoaderData, useNavigate } from "@remix-run/react";
 import type { FileObject } from "@supabase/storage-js";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
 import { nanoid } from "nanoid";
 import { useEffect } from "react";
+import { useLoaderData, useNavigate } from "react-router";
 import {
   gaugeCalibrationRecordValidator,
   getQualityFiles,

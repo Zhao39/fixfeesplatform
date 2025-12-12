@@ -1,4 +1,4 @@
-import { vitePlugin as remix } from "@remix-run/dev";
+import { reactRouter } from "@react-router/dev/vite";
 import { vercelPreset } from "@vercel/remix/vite";
 import path from "node:path";
 import { flatRoutes } from "remix-flat-routes";
@@ -36,7 +36,7 @@ export default defineConfig({
     port: 3001,
   },
   plugins: [
-    remix({
+    reactRouter({
       presets: process.env.VERCEL === "1" ? [vercelPreset()] : [],
       future: {
         v3_singleFetch: true,

@@ -1,6 +1,5 @@
-import { useFetchers } from "@remix-run/react";
-
 import { useRouteData } from "@carbon/remix";
+import { useFetchers } from "react-router";
 import { themeValidator } from "~/modules/settings";
 import { path } from "~/utils/path";
 

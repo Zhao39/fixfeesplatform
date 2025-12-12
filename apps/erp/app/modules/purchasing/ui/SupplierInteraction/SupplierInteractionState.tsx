@@ -1,12 +1,12 @@
 import { Button, cn, Menubar, SplitButton } from "@carbon/react";
 import { useOptimisticLocation } from "@carbon/remix";
-import { Link, useNavigate } from "@remix-run/react";
 import { LuCircle, LuCreditCard } from "react-icons/lu";
 import {
   RiProgress2Line,
   RiProgress4Line,
   RiProgress8Line
 } from "react-icons/ri";
+import { Link, useNavigate } from "react-router";
 import { path } from "~/utils/path";
 import type { SupplierInteraction } from "../../types";
 

@@ -10,7 +10,7 @@ import {
   HStack,
   VStack
 } from "@carbon/react";
-import { useFetcher } from "@remix-run/react";
+import { useFetcher } from "react-router";
 import type { z } from "zod/v3";
 import {
   CustomerLocation,

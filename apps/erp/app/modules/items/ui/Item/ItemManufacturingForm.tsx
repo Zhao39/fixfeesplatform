@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle
 } from "@carbon/react";
-import { useFetcher, useParams } from "@remix-run/react";
+import { useFetcher, useParams } from "react-router";
 import type { z } from "zod/v3";
 import {
   // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration

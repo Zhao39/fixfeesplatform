@@ -23,12 +23,11 @@ import {
   CarouselNext,
   CarouselPrevious
 } from "@carbon/react/Carousel";
-import { Link } from "@remix-run/react";
-import { Empty } from "~/components";
-import { path } from "~/utils/path";
-
 import { formatDate } from "@carbon/utils";
+import { Link } from "react-router";
+import { Empty } from "~/components";
 import { useCustomers } from "~/stores/customers";
+import { path } from "~/utils/path";
 import type { HistoricalQuotationPrice, SalesOrderLine } from "../../types";
 
 const QuoteLinePricingHistory = ({

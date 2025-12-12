@@ -31,7 +31,6 @@ import {
   useDisclosure,
   VStack
 } from "@carbon/react";
-import { Link, useFetcher, useParams } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { flushSync } from "react-dom";
 import {
@@ -47,6 +46,7 @@ import {
   LuStar,
   LuTriangleAlert
 } from "react-icons/lu";
+import { Link, useFetcher, useParams } from "react-router";
 import { Hidden, Item } from "~/components/Form";
 import { Confirm } from "~/components/Modals";
 import { usePermissions } from "~/hooks";

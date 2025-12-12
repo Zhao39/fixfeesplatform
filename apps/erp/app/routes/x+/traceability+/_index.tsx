@@ -1,9 +1,9 @@
 import { useCarbon } from "@carbon/auth";
 import { Button, cn, toast, useMount } from "@carbon/react";
-import { useNavigate } from "@remix-run/react";
 import type { ComponentProps } from "react";
-import { useState, forwardRef } from "react";
+import { forwardRef, useState } from "react";
 import { LuBarcode, LuQrCode } from "react-icons/lu";
+import { useNavigate } from "react-router";
 import type { Handle } from "~/utils/handle";
 import { path } from "~/utils/path";
 

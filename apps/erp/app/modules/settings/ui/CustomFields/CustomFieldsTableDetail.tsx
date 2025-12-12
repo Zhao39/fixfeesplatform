@@ -15,7 +15,6 @@ import {
   useDebounce,
   useDisclosure
 } from "@carbon/react";
-import { Link, useFetcher, useParams } from "@remix-run/react";
 import { Reorder } from "framer-motion";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { AiOutlineNumber } from "react-icons/ai";
@@ -29,6 +28,7 @@ import {
   LuSquareUser,
   LuTrash
 } from "react-icons/lu";
+import { Link, useFetcher, useParams } from "react-router";
 import { New } from "~/components";
 import { ConfirmDelete } from "~/components/Modals";
 import { useUrlParams } from "~/hooks";

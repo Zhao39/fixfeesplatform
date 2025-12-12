@@ -24,7 +24,6 @@ import {
 } from "@carbon/react";
 import { formatRelativeTime } from "@carbon/utils";
 import { parseDate } from "@internationalized/date";
-import { Await, Link, useFetcher, useNavigate } from "@remix-run/react";
 import type { PostgrestResponse } from "@supabase/supabase-js";
 import { Suspense, useState } from "react";
 import {
@@ -33,6 +32,7 @@ import {
   LuCirclePlus,
   LuEllipsisVertical
 } from "react-icons/lu";
+import { Await, Link, useFetcher, useNavigate } from "react-router";
 import type { z } from "zod/v3";
 import { EmployeeAvatar, Empty } from "~/components";
 import { Enumerable } from "~/components/Enumerable";

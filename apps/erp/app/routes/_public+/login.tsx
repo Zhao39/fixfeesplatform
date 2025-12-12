@@ -1,10 +1,10 @@
 import {
   assertIsPost,
-  carbonClient,
   CarbonEdition,
   CLOUDFLARE_TURNSTILE_SECRET_KEY,
   CLOUDFLARE_TURNSTILE_SITE_KEY,
   CONTROLLED_ENVIRONMENT,
+  carbonClient,
   error,
   magicLinkValidator,
   RATE_LIMIT
@@ -27,7 +27,6 @@ import {
 import { ItarLoginDisclaimer, useMode } from "@carbon/remix";
 import { Edition } from "@carbon/utils";
 import { Turnstile } from "@marsidev/react-turnstile";
-import { useFetcher, useSearchParams } from "@remix-run/react";
 import { Ratelimit } from "@upstash/ratelimit";
 import type {
   ActionFunctionArgs,
@@ -37,6 +36,7 @@ import type {
 import { json, redirect } from "@vercel/remix";
 import { useEffect, useState } from "react";
 import { LuCircleAlert } from "react-icons/lu";
+import { useFetcher, useSearchParams } from "react-router";
 
 import type { FormActionData, Result } from "~/types";
 import { path } from "~/utils/path";

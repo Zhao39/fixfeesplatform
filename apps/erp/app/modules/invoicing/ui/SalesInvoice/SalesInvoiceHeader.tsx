@@ -15,7 +15,6 @@ import {
   useDisclosure
 } from "@carbon/react";
 import { getItemReadableId } from "@carbon/utils";
-import { Link, useFetcher, useParams } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { flushSync } from "react-dom";
 import {
@@ -30,6 +29,7 @@ import {
   LuTruck
 } from "react-icons/lu";
 import { RiProgress8Line } from "react-icons/ri";
+import { Link, useFetcher, useParams } from "react-router";
 import { usePanels } from "~/components/Layout/Panels";
 import { usePermissions, useRouteData } from "~/hooks";
 import { ShipmentStatus } from "~/modules/inventory/ui/Shipments";

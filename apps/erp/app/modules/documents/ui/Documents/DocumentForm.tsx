@@ -10,7 +10,7 @@ import {
   HStack,
   VStack
 } from "@carbon/react";
-import { useNavigate } from "@remix-run/react";
+import { useNavigate } from "react-router";
 import type { z } from "zod/v3";
 import { Hidden, Input, Submit, TextArea, Users } from "~/components/Form";
 import { usePermissions } from "~/hooks";

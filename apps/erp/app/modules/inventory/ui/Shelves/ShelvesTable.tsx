@@ -5,10 +5,9 @@ import {
   HStack,
   MenuIcon,
   MenuItem,
-  VStack,
-  useDisclosure
+  useDisclosure,
+  VStack
 } from "@carbon/react";
-import { Link, useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
 import {
@@ -19,6 +18,7 @@ import {
   LuPlus,
   LuTrash
 } from "react-icons/lu";
+import { Link, useNavigate } from "react-router";
 import { Hyperlink, Table } from "~/components";
 import { Enumerable } from "~/components/Enumerable";
 import { useLocations } from "~/components/Form/Location";

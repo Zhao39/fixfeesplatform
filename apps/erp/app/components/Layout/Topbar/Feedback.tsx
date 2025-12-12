@@ -14,15 +14,15 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-  VStack,
-  toast
+  toast,
+  VStack
 } from "@carbon/react";
 import { SUPPORT_EMAIL } from "@carbon/utils";
-import { useFetcher, useLocation } from "@remix-run/react";
 import { nanoid } from "nanoid";
 import type { ChangeEvent } from "react";
 import { useEffect, useRef, useState } from "react";
 import { LuImage } from "react-icons/lu";
+import { useFetcher, useLocation } from "react-router";
 import { feedbackValidator } from "~/modules/shared";
 import type { action } from "~/routes/x+/feedback";
 import { path } from "~/utils/path";

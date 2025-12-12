@@ -21,7 +21,6 @@ import {
   parseDate,
   today
 } from "@internationalized/date";
-import { useFetcher, useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { AiOutlinePartition } from "react-icons/ai";
@@ -39,6 +38,7 @@ import {
   LuUser,
   LuUsers
 } from "react-icons/lu";
+import { useFetcher, useNavigate } from "react-router";
 import {
   CustomerAvatar,
   EmployeeAvatar,

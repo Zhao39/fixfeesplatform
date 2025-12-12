@@ -8,9 +8,9 @@ import {
   toast,
   VStack
 } from "@carbon/react";
-import { useFetcher, useParams } from "@remix-run/react";
 import { useCallback, useEffect } from "react";
 import { LuCopy, LuKeySquare, LuLink } from "react-icons/lu";
+import { useFetcher, useParams } from "react-router";
 import { z } from "zod/v3";
 import Assignee, { useOptimisticAssignment } from "~/components/Assignee";
 import { Tags } from "~/components/Form";

@@ -13,7 +13,6 @@ import {
 } from "@carbon/react";
 import { formatDate } from "@carbon/utils";
 import { getLocalTimeZone, today } from "@internationalized/date";
-import { useFetcher } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import {
@@ -30,6 +29,7 @@ import {
   LuTruck,
   LuUser
 } from "react-icons/lu";
+import { useFetcher } from "react-router";
 import {
   EmployeeAvatar,
   Hyperlink,

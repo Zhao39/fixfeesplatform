@@ -1,6 +1,5 @@
 import type { Database } from "@carbon/database";
 import { Copy, MenuIcon, MenuItem } from "@carbon/react";
-import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
 import {
@@ -9,6 +8,7 @@ import {
   LuSquareUser,
   LuTrash
 } from "react-icons/lu";
+import { useNavigate } from "react-router";
 import { CustomerAvatar, Hyperlink, New, Table } from "~/components";
 import { usePermissions, useUrlParams } from "~/hooks";
 import { path } from "~/utils/path";

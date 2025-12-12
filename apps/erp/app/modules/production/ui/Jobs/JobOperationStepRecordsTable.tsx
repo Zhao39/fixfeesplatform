@@ -2,7 +2,6 @@ import type { Database } from "@carbon/database";
 import { Checkbox, cn } from "@carbon/react";
 import { formatDateTime } from "@carbon/utils";
 import { useNumberFormatter } from "@react-aria/i18n";
-import { useParams } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useMemo } from "react";
 import {
@@ -14,6 +13,7 @@ import {
   LuSettings,
   LuUser
 } from "react-icons/lu";
+import { useParams } from "react-router";
 import { EmployeeAvatar, Table } from "~/components";
 import { useUnitOfMeasure } from "~/components/Form/UnitOfMeasure";
 import { ProcedureStepTypeIcon } from "~/components/Icons";

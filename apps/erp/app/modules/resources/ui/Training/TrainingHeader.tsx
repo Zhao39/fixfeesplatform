@@ -5,19 +5,19 @@ import {
   DropdownMenuIcon,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  HStack,
   Heading,
+  HStack,
   IconButton,
-  VStack,
-  useDisclosure
+  useDisclosure,
+  VStack
 } from "@carbon/react";
-import { useParams } from "@remix-run/react";
 import {
   LuEllipsisVertical,
   LuPanelLeft,
   LuPanelRight,
   LuTrash
 } from "react-icons/lu";
+import { useParams } from "react-router";
 import { usePanels } from "~/components/Layout";
 import ConfirmDelete from "~/components/Modals/ConfirmDelete";
 import { usePermissions, useRouteData } from "~/hooks";

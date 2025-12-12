@@ -1,4 +1,4 @@
-import { json } from "@remix-run/server-runtime";
+import { json } from "react-router";
 import type { FORM_DEFAULTS_FIELD } from "./internal/constants";
 import { formDefaultValuesKey } from "./internal/constants";
 import type {

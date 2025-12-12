@@ -2,10 +2,9 @@ import { assertIsPost, error, success } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validator } from "@carbon/form";
-import { useLoaderData, useNavigate } from "@remix-run/react";
-
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
+import { useLoaderData, useNavigate } from "react-router";
 import {
   getRequiredAction,
   requiredActionValidator,

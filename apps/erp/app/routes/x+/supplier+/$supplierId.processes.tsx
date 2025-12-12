@@ -1,9 +1,9 @@
 import { error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
-import { Outlet, useLoaderData } from "@remix-run/react";
 import type { LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
+import { Outlet, useLoaderData } from "react-router";
 import { getSupplierProcessesBySupplier } from "~/modules/purchasing";
 import SupplierProcesses from "~/modules/purchasing/ui/Supplier/SupplierProcesses";
 import { path } from "~/utils/path";

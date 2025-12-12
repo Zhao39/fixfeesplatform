@@ -6,8 +6,8 @@ import {
   CardHeader,
   CardTitle
 } from "@carbon/react";
-import { useParams } from "@remix-run/react";
 import { useState } from "react";
+import { useParams } from "react-router";
 import type { z } from "zod/v3";
 import {
   ConversionFactor,

@@ -5,12 +5,12 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-  VStack,
-  useKeyboardShortcuts
+  useKeyboardShortcuts,
+  VStack
 } from "@carbon/react";
 import { prettifyKeyboardShortcut } from "@carbon/utils";
-import { Link, useNavigate } from "@remix-run/react";
 import type { ReactNode } from "react";
+import { Link, useNavigate } from "react-router";
 import { useOptimisticLocation } from "~/hooks";
 
 type DetailSidebarProps = {

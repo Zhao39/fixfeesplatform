@@ -36,7 +36,6 @@ import {
 } from "@carbon/react";
 import { formatDateTime, parseMentionsFromDocument } from "@carbon/utils";
 import { useNumberFormatter } from "@react-aria/i18n";
-import { useFetcher } from "@remix-run/react";
 import { useEffect, useMemo, useState } from "react";
 import {
   LuChevronDown,
@@ -46,6 +45,7 @@ import {
   LuPaperclip,
   LuTrash
 } from "react-icons/lu";
+import { useFetcher } from "react-router";
 import { ProcedureStepTypeIcon } from "~/components/Icons";
 import ItemThumbnail from "~/components/ItemThumbnail";
 import { useUser } from "~/hooks";

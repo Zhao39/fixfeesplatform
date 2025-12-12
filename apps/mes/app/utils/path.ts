@@ -1,5 +1,5 @@
 import { getAppUrl, getMESUrl, SUPABASE_URL } from "@carbon/auth";
-import { generatePath } from "@remix-run/react";
+import { generatePath } from "react-router";
 
 export const ERP_URL = getAppUrl();
 export const MES_URL = getMESUrl();

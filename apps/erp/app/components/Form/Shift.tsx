@@ -1,7 +1,7 @@
 import type { SelectProps } from "@carbon/form";
 import { Select } from "@carbon/form";
-import { useFetcher } from "@remix-run/react";
 import { useEffect, useMemo } from "react";
+import { useFetcher } from "react-router";
 import type { getShiftsList } from "~/modules/people";
 import { path } from "~/utils/path";
 

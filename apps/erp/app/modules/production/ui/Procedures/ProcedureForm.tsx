@@ -10,8 +10,8 @@ import {
   ModalDrawerTitle,
   VStack
 } from "@carbon/react";
-import { useFetcher } from "@remix-run/react";
 import type { PostgrestResponse } from "@supabase/supabase-js";
+import { useFetcher } from "react-router";
 import type { z } from "zod/v3";
 // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
 import { Hidden, Input, Number, Process, Submit } from "~/components/Form";

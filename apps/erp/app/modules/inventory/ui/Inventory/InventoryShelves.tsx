@@ -29,10 +29,10 @@ import {
   useDisclosure,
   VStack
 } from "@carbon/react";
-import { Outlet } from "@remix-run/react";
 import { nanoid } from "nanoid";
 import { useMemo, useState } from "react";
 import { LuEllipsisVertical, LuQrCode } from "react-icons/lu";
+import { Outlet } from "react-router";
 import type { z } from "zod/v3";
 import { Enumerable } from "~/components/Enumerable";
 import { Input, Location, Select, Shelf } from "~/components/Form";

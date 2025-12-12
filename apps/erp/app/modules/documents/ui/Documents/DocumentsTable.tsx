@@ -15,7 +15,6 @@ import {
   useDisclosure
 } from "@carbon/react";
 import { convertKbToString, filterEmpty, formatDate } from "@carbon/utils";
-import { Link, useRevalidator } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { IoMdAdd } from "react-icons/io";
@@ -34,6 +33,7 @@ import {
   LuUsers
 } from "react-icons/lu";
 import { RxCheck } from "react-icons/rx";
+import { Link, useRevalidator } from "react-router";
 import { EmployeeAvatar, Hyperlink, Table } from "~/components";
 import DocumentIcon from "~/components/DocumentIcon";
 import { Enumerable } from "~/components/Enumerable";

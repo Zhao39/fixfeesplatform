@@ -1,7 +1,8 @@
 import { MenuIcon, MenuItem, useDisclosure } from "@carbon/react";
-import { useNavigate } from "@remix-run/react";
+import { formatDate } from "@carbon/utils";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
+import { flushSync } from "react-dom";
 import {
   LuBookMarked,
   LuCalendar,
@@ -19,6 +20,7 @@ import {
   LuUser,
   LuUsers
 } from "react-icons/lu";
+import { useNavigate } from "react-router";
 import {
   EmployeeAvatar,
   Hyperlink,
@@ -26,25 +28,21 @@ import {
   SupplierAvatar,
   Table
 } from "~/components";
-
-import { flushSync } from "react-dom";
-import { Confirm, ConfirmDelete } from "~/components/Modals";
-import { usePermissions, useUrlParams } from "~/hooks";
-import type { ListItem } from "~/types";
-import { path } from "~/utils/path";
-import type { Gauge } from "../../types";
-
-import { formatDate } from "@carbon/utils";
 import { Enumerable } from "~/components/Enumerable";
 import { useLocations } from "~/components/Form/Location";
+import { Confirm, ConfirmDelete } from "~/components/Modals";
+import { usePermissions, useUrlParams } from "~/hooks";
 import { useCustomColumns } from "~/hooks/useCustomColumns";
 import { usePeople } from "~/stores/people";
 import { useSuppliers } from "~/stores/suppliers";
+import type { ListItem } from "~/types";
+import { path } from "~/utils/path";
 import {
   gaugeCalibrationStatus,
   gaugeRole,
   gaugeStatus
 } from "../../quality.models";
+import type { Gauge } from "../../types";
 import { GaugeCalibrationStatus, GaugeRole, GaugeStatus } from "./GaugeStatus";
 
 type GaugesTableProps = {

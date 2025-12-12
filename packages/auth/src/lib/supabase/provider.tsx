@@ -1,10 +1,10 @@
 import type { Database } from "@carbon/database";
 import { useInterval } from "@carbon/react";
 import { isBrowser } from "@carbon/utils";
-import { useFetcher } from "@remix-run/react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { PropsWithChildren } from "react";
 import { createContext, useContext, useEffect, useRef } from "react";
+import { useFetcher } from "react-router";
 import type { StoreApi } from "zustand";
 import { createStore, useStore } from "zustand";
 import type { AuthSession } from "../../types";

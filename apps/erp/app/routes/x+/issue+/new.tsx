@@ -4,10 +4,10 @@ import { flash } from "@carbon/auth/session.server";
 import { notifyIssueCreated } from "@carbon/ee/notifications";
 import { validationError, validator } from "@carbon/form";
 import { getLocalTimeZone, today } from "@internationalized/date";
-import { useLoaderData } from "@remix-run/react";
 import { FunctionRegion } from "@supabase/supabase-js";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
+import { useLoaderData } from "react-router";
 import { useUrlParams, useUser } from "~/hooks";
 import {
   deleteIssue,

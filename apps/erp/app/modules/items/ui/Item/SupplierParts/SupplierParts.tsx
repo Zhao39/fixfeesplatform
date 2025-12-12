@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle, cn } from "@carbon/react";
-import { Outlet, useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
+import { Outlet, useNavigate } from "react-router";
 import { SupplierAvatar } from "~/components";
 import {
   EditableList,

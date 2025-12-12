@@ -11,9 +11,9 @@ import {
   toast,
   VStack
 } from "@carbon/react";
-import { useFetcher, useParams } from "@remix-run/react";
 import type { PostgrestResponse } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
+import { useFetcher, useParams } from "react-router";
 import type { z } from "zod/v3";
 // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
 import { Hidden, Item, Number, Shelf, Submit } from "~/components/Form";

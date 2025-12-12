@@ -1,7 +1,6 @@
 import { Button, VStack } from "@carbon/react";
-
-import { Link, useNavigate, useParams } from "@remix-run/react";
 import { LuExternalLink, LuX } from "react-icons/lu";
+import { Link, useNavigate, useParams } from "react-router";
 import { DetailsTopbar } from "~/components/Layout";
 import { useUrlParams } from "~/hooks";
 import { getLinkToItemDetails } from "~/modules/items/ui/Item/ItemForm";

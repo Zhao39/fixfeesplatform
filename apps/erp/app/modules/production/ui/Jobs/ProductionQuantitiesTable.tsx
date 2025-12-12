@@ -1,8 +1,8 @@
 import { Badge, MenuIcon, MenuItem, useDisclosure } from "@carbon/react";
-import { useNavigate, useParams } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
 import { LuPencil, LuTrash } from "react-icons/lu";
+import { useNavigate, useParams } from "react-router";
 import { EmployeeAvatar, Hyperlink, Table } from "~/components";
 import { Enumerable } from "~/components/Enumerable";
 import { ConfirmDelete } from "~/components/Modals";

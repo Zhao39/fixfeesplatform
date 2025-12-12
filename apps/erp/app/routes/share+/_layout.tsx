@@ -8,8 +8,8 @@ import {
   TooltipProvider
 } from "@carbon/react";
 import { useMode } from "@carbon/remix";
-import { Outlet, useFetcher, useRevalidator } from "@remix-run/react";
 import { LuMoon, LuRefreshCw, LuSun } from "react-icons/lu";
+import { Outlet, useFetcher, useRevalidator } from "react-router";
 import type { action } from "~/root";
 
 export default function ExternalLayout() {

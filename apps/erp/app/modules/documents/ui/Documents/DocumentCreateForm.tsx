@@ -1,9 +1,9 @@
 import { useCarbon } from "@carbon/auth";
 import { File, toast } from "@carbon/react";
-import { useSubmit } from "@remix-run/react";
 import { nanoid } from "nanoid";
 import type { ChangeEvent } from "react";
 import { LuUpload } from "react-icons/lu";
+import { useSubmit } from "react-router";
 import { useUser } from "~/hooks";
 import { path } from "~/utils/path";
 

@@ -1,9 +1,9 @@
 import type { CreatableMultiSelectProps } from "@carbon/form";
 import { CreatableMultiSelect } from "@carbon/form";
 import { Badge, HStack } from "@carbon/react";
-import { useFetcher } from "@remix-run/react";
 import { useMemo } from "react";
 import { LuTags } from "react-icons/lu";
+import { useFetcher } from "react-router";
 import type { action } from "~/routes/x+/settings+/tags.new";
 import { path } from "~/utils/path";
 

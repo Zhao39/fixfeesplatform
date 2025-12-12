@@ -1,8 +1,8 @@
 import { Button, cn } from "@carbon/react";
-import type { LinkProps } from "@remix-run/react";
-import { Link } from "@remix-run/react";
 import type { ComponentProps, PropsWithChildren } from "react";
 import { LuSquareArrowOutUpRight } from "react-icons/lu";
+import type { LinkProps } from "react-router";
+import { Link } from "react-router";
 
 const Hyperlink = ({
   children,

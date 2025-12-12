@@ -22,7 +22,6 @@ import {
   toast,
   useDisclosure
 } from "@carbon/react";
-import { useFetcher } from "@remix-run/react";
 import type {
   Column,
   ColumnOrderState,
@@ -37,6 +36,7 @@ import {
   LuLayers,
   LuLock
 } from "react-icons/lu";
+import { useFetcher } from "react-router";
 import { SearchFilter } from "~/components";
 import { ImportCSVModal } from "~/components/ImportCSVModal";
 import { CollapsibleSidebarTrigger } from "~/components/Layout/Navigation";

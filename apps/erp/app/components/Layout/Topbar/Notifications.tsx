@@ -16,7 +16,6 @@ import {
   TabsTrigger
 } from "@carbon/react";
 import { formatTimeAgo } from "@carbon/utils";
-import { Link, useFetcher } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import {
   LuBell,
@@ -38,6 +37,7 @@ import {
   RiProgress4Line,
   RiProgress8Line
 } from "react-icons/ri";
+import { Link, useFetcher } from "react-router";
 import { useNotifications, useUser } from "~/hooks";
 import { usePeople } from "~/stores";
 import { path } from "~/utils/path";

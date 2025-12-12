@@ -1,9 +1,9 @@
 import { error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
-import { useLoaderData } from "@remix-run/react";
 import type { LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
+import { useLoaderData } from "react-router";
 import { getCustomerContacts } from "~/modules/sales";
 import { CustomerContacts } from "~/modules/sales/ui/Customer";
 import { path } from "~/utils/path";

@@ -24,10 +24,10 @@ import {
   parseAbsolute,
   toZoned
 } from "@internationalized/date";
-import { json, redirect, useLoaderData } from "@remix-run/react";
 import type { LoaderFunctionArgs } from "@vercel/remix";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { LuSettings2, LuTriangleAlert } from "react-icons/lu";
+import { json, redirect, useLoaderData } from "react-router";
 
 import type { ColumnFilter } from "~/components/Filter";
 import { ActiveFilters, Filter, useFilters } from "~/components/Filter";

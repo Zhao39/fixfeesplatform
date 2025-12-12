@@ -1,8 +1,8 @@
 import type { Database, Json } from "@carbon/database";
 import {
   Badge,
-  cn,
   Count,
+  cn,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuIcon,
@@ -17,7 +17,6 @@ import {
   useDisclosure,
   VStack
 } from "@carbon/react";
-import { useParams } from "@remix-run/react";
 import { useState } from "react";
 import { flushSync } from "react-dom";
 import {
@@ -30,6 +29,7 @@ import {
   LuStar,
   LuTruck
 } from "react-icons/lu";
+import { useParams } from "react-router";
 import { z } from "zod/v3";
 import { Hyperlink, MethodIcon } from "~/components";
 import { Confirm } from "~/components/Modals";

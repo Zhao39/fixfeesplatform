@@ -1,7 +1,7 @@
 import { MenuIcon, MenuItem, useDisclosure } from "@carbon/react";
-import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
+import { flushSync } from "react-dom";
 import {
   LuBookMarked,
   LuChartNoAxesColumnIncreasing,
@@ -9,9 +9,8 @@ import {
   LuPencil,
   LuTrash
 } from "react-icons/lu";
+import { useNavigate } from "react-router";
 import { Hyperlink, New, Table } from "~/components";
-
-import { flushSync } from "react-dom";
 import { ConfirmDelete } from "~/components/Modals";
 import { usePermissions } from "~/hooks";
 import { path } from "~/utils/path";

@@ -39,7 +39,6 @@ import { FunnelChart } from "@carbon/react/FunnelChart";
 import { getLocalTimeZone, parseDate, today } from "@internationalized/date";
 import { useDateFormatter, useNumberFormatter } from "@react-aria/i18n";
 import type { DateRange } from "@react-types/datepicker";
-import { Await, Link, useFetcher, useLoaderData } from "@remix-run/react";
 import { defer, type LoaderFunctionArgs } from "@vercel/remix";
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { CSVLink } from "react-csv";
@@ -54,6 +53,7 @@ import {
   RiProgress4Line,
   RiProgress8Line
 } from "react-icons/ri";
+import { Await, Link, useFetcher, useLoaderData } from "react-router";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import { CustomerAvatar, Empty, Hyperlink } from "~/components";
 import { useCurrencyFormatter } from "~/hooks/useCurrencyFormatter";

@@ -10,40 +10,39 @@ import {
   DropdownMenuIcon,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  HStack,
   Heading,
+  HStack,
   IconButton,
-  useDisclosure,
+  Input,
+  InputGroup,
+  InputRightElement,
   Modal,
+  ModalBody,
   ModalContent,
+  ModalDescription,
+  ModalFooter,
   ModalHeader,
   ModalTitle,
-  ModalDescription,
-  ModalBody,
-  ModalFooter,
-  InputGroup,
-  Input,
-  InputRightElement,
+  useDisclosure,
   VStack
 } from "@carbon/react";
-
-import { Link, useFetcher, useParams } from "@remix-run/react";
-import type { FetcherWithComponents } from "@remix-run/react";
 import {
+  LuCheckCheck,
+  LuChevronDown,
+  LuCircleStop,
   LuEllipsisVertical,
+  LuExternalLink,
+  LuEye,
+  LuLoaderCircle,
   LuPanelLeft,
   LuPanelRight,
+  LuSend,
   LuShoppingCart,
   LuTrash,
-  LuEye,
-  LuChevronDown,
-  LuExternalLink,
-  LuCheckCheck,
-  LuCircleStop,
-  LuLoaderCircle,
-  LuSend,
   LuTriangleAlert
 } from "react-icons/lu";
+import type { FetcherWithComponents } from "react-router";
+import { Link, useFetcher, useParams } from "react-router";
 import { usePanels } from "~/components/Layout";
 import ConfirmDelete from "~/components/Modals/ConfirmDelete";
 
@@ -57,9 +56,9 @@ import type {
   SupplierQuoteLine,
   SupplierQuoteLinePrice
 } from "../../types";
+import SupplierQuoteSendModal from "./SupplierQuoteSendModal";
 import SupplierQuoteStatus from "./SupplierQuoteStatus";
 import SupplierQuoteToOrderDrawer from "./SupplierQuoteToOrderDrawer";
-import SupplierQuoteSendModal from "./SupplierQuoteSendModal";
 
 const SupplierQuoteHeader = () => {
   const { id } = useParams();

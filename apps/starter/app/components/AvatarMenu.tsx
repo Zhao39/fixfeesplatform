@@ -9,9 +9,9 @@ import {
   Switch
 } from "@carbon/react";
 import { useMode } from "@carbon/remix";
-import { Form, Link, useFetcher } from "@remix-run/react";
 import { useRef, useState } from "react";
 import { LuHouse, LuLogOut, LuMoon, LuSun, LuUser } from "react-icons/lu";
+import { Form, Link, useFetcher } from "react-router";
 import { Avatar } from "~/components";
 import { useUser } from "~/hooks";
 import type { action } from "~/root";

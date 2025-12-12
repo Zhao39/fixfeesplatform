@@ -1,4 +1,4 @@
-import { useParams } from "@remix-run/react";
+import { useParams } from "react-router";
 import { DetailSidebar } from "~/components/Layout";
 import { useRouteData } from "~/hooks";
 import type {

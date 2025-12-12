@@ -1,5 +1,5 @@
 import { useMount } from "@carbon/react";
-import { useFetcher } from "@remix-run/react";
+import { useFetcher } from "react-router";
 import { path } from "~/utils/path";
 
 type SwaggerDocsSchema = {

@@ -25,7 +25,6 @@ import {
 } from "@carbon/react";
 import { prettifyKeyboardShortcut } from "@carbon/utils";
 import { useDroppable } from "@dnd-kit/core";
-import { Link, useFetchers, useNavigate, useParams } from "@remix-run/react";
 import { useMemo, useRef, useState } from "react";
 import {
   LuBraces,
@@ -37,6 +36,7 @@ import {
   LuTable,
   LuTrash
 } from "react-icons/lu";
+import { Link, useFetchers, useNavigate, useParams } from "react-router";
 import { Empty, ItemThumbnail, MethodItemTypeIcon } from "~/components";
 import { QuoteLineStatusIcon } from "~/components/Icons";
 import type { Tree } from "~/components/TreeView";

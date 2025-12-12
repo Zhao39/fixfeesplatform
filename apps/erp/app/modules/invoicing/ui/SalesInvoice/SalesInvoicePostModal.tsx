@@ -18,9 +18,8 @@ import {
   toast,
   VStack
 } from "@carbon/react";
-
-import type { FetcherWithComponents } from "@remix-run/react";
 import { useEffect, useState } from "react";
+import type { FetcherWithComponents } from "react-router";
 import { CustomerContact, SelectControlled } from "~/components/Form";
 import { useIntegrations } from "~/hooks/useIntegrations";
 import { path } from "~/utils/path";

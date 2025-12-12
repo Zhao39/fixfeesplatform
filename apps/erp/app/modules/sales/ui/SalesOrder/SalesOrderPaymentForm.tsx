@@ -7,8 +7,8 @@ import {
   CardTitle,
   HStack
 } from "@carbon/react";
-import { useFetcher } from "@remix-run/react";
 import { useState } from "react";
+import { useFetcher } from "react-router";
 import type { z } from "zod/v3";
 import {
   Customer,

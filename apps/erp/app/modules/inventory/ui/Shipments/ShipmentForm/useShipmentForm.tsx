@@ -1,6 +1,6 @@
 import { useCarbon } from "@carbon/auth";
-import { useParams } from "@remix-run/react";
 import { useCallback, useEffect, useState } from "react";
+import { useParams } from "react-router";
 import type { z } from "zod/v3";
 import { useUser } from "~/hooks";
 import type {

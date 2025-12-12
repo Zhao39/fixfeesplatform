@@ -10,9 +10,9 @@ import {
   CardTitle,
   VStack
 } from "@carbon/react";
-import { useLoaderData } from "@remix-run/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
+import { useLoaderData } from "react-router";
 import {
   accountProfileValidator,
   getAccount,

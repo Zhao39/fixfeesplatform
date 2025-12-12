@@ -4,11 +4,11 @@ import type { Database } from "@carbon/database";
 import type { recalculateTask } from "@carbon/jobs/trigger/recalculate";
 import { Loading } from "@carbon/react";
 import { getLocalTimeZone, today } from "@internationalized/date";
-import { Await, useLoaderData } from "@remix-run/react";
 import { FunctionRegion, type SupabaseClient } from "@supabase/supabase-js";
 import { tasks } from "@trigger.dev/sdk";
 import { defer, type LoaderFunctionArgs } from "@vercel/remix";
 import { Suspense } from "react";
+import { Await, useLoaderData } from "react-router";
 import { Redirect } from "~/components/Redirect";
 
 import { getDefaultShelfForJob, getKanban } from "~/modules/inventory";

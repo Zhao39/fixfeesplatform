@@ -24,7 +24,6 @@ import {
 } from "@carbon/react";
 import { clamp } from "@carbon/utils";
 import { useNumberFormatter } from "@react-aria/i18n";
-import { useNavigation } from "@remix-run/react";
 import type {
   Column,
   ColumnDef,
@@ -50,6 +49,7 @@ import {
   LuTrendingUpDown,
   LuTriangleAlert
 } from "react-icons/lu";
+import { useNavigation } from "react-router";
 import { useSpinDelay } from "spin-delay";
 import type {
   EditableTableCellComponent,

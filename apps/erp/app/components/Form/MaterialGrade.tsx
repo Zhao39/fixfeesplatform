@@ -1,8 +1,8 @@
 import type { ComboboxProps } from "@carbon/form";
 import { CreatableCombobox } from "@carbon/form";
 import { useDisclosure, useMount } from "@carbon/react";
-import { useFetcher } from "@remix-run/react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useFetcher } from "react-router";
 import type {
   getMaterialGradeList,
   MaterialGrade as MaterialGradeType

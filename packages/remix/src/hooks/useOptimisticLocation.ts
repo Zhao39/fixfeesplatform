@@ -1,5 +1,5 @@
 // credit: Matt Aitken at trigger.dev
-import { useLocation, useNavigation } from "@remix-run/react";
+import { useLocation, useNavigation } from "react-router";
 
 export function useOptimisticLocation() {
   const navigation = useNavigation();

@@ -2,14 +2,14 @@ import { SUPABASE_URL, useCarbon } from "@carbon/auth";
 import {
   Avatar,
   Button,
+  cn,
   File as FileUpload,
   HStack,
-  VStack,
-  cn,
-  toast
+  toast,
+  VStack
 } from "@carbon/react";
-import { useSubmit } from "@remix-run/react";
 import { type ChangeEvent } from "react";
+import { useSubmit } from "react-router";
 import type { Company } from "~/modules/settings";
 import { path } from "~/utils/path";
 

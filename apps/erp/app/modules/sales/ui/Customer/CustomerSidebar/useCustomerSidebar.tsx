@@ -1,4 +1,3 @@
-import { useParams } from "@remix-run/react";
 import {
   LuBuilding,
   LuContact,
@@ -11,6 +10,7 @@ import {
   RiProgress4Line,
   RiProgress8Line
 } from "react-icons/ri";
+import { useParams } from "react-router";
 import { usePermissions } from "~/hooks";
 import type { Role } from "~/types";
 import { path } from "~/utils/path";

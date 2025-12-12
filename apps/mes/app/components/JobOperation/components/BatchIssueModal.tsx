@@ -38,7 +38,6 @@ import {
 import type { TrackedEntityAttributes } from "@carbon/utils";
 import { getItemReadableId } from "@carbon/utils";
 import { useNumberFormatter } from "@react-aria/i18n";
-import { useFetcher } from "@remix-run/react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   LuArrowRightLeft,
@@ -55,6 +54,7 @@ import {
   LuUndo2,
   LuX
 } from "react-icons/lu";
+import { useFetcher } from "react-router";
 import type { getBatchNumbersForItem } from "~/services/inventory.service";
 import { convertEntityValidator } from "~/services/models";
 import type { JobMaterial, TrackedInput } from "~/services/types";

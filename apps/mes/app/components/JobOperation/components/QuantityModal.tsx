@@ -1,4 +1,10 @@
 import {
+  Hidden,
+  NumberControlled,
+  TextArea,
+  ValidatedForm
+} from "@carbon/form";
+import {
   Alert,
   AlertDescription,
   AlertTitle,
@@ -12,8 +18,9 @@ import {
   ModalTitle,
   VStack
 } from "@carbon/react";
-import { useFetcher } from "@remix-run/react";
 import { useMemo, useState } from "react";
+import { LuTriangleAlert } from "react-icons/lu";
+import { useFetcher } from "react-router";
 import {
   finishValidator,
   nonScrapQuantityValidator,
@@ -26,14 +33,6 @@ import type {
   ProductionQuantity
 } from "~/services/types";
 import { path } from "~/utils/path";
-
-import {
-  Hidden,
-  NumberControlled,
-  TextArea,
-  ValidatedForm
-} from "@carbon/form";
-import { LuTriangleAlert } from "react-icons/lu";
 import ScrapReason from "./ScrapReason";
 
 export function QuantityModal({

@@ -1,9 +1,8 @@
-import { json, redirect } from "@remix-run/react";
-
 import { assertIsPost, error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import type { ActionFunctionArgs } from "@vercel/remix";
+import { json, redirect } from "react-router";
 import { deleteSalesRFQ } from "~/modules/sales";
 import { path } from "~/utils/path";
 

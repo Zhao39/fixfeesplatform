@@ -21,7 +21,6 @@ import {
   ToggleGroupItem,
   VStack
 } from "@carbon/react";
-import { useFetcher } from "@remix-run/react";
 import { memo, useMemo, useState } from "react";
 import {
   LuCalendar,
@@ -30,6 +29,7 @@ import {
   LuSearch,
   LuTriangleAlert
 } from "react-icons/lu";
+import { useFetcher } from "react-router";
 import type { z } from "zod/v3";
 import { EmployeeAvatar, Empty } from "~/components";
 import { Hidden, Submit, Users } from "~/components/Form";

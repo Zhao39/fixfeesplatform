@@ -1,3 +1,4 @@
+import { type LinearIssue, LinearIssueSchema } from "@carbon/ee/linear";
 import {
   Badge,
   Button,
@@ -17,14 +18,12 @@ import {
   useDisclosure
 } from "@carbon/react";
 import { useState } from "react";
-import type { IssueActionTask } from "~/modules/quality/types";
-
-import { LinearIssueSchema, type LinearIssue } from "@carbon/ee/linear";
-import { Link, useRevalidator } from "@remix-run/react";
 import { LuExternalLink } from "react-icons/lu";
 import { PiLinkBreak } from "react-icons/pi";
+import { Link, useRevalidator } from "react-router";
 import { LinearIcon, LinearIssueStateBadge } from "~/components/Icons";
 import { useAsyncFetcher } from "~/hooks/useAsyncFetcher";
+import type { IssueActionTask } from "~/modules/quality/types";
 import { path } from "~/utils/path";
 import { CreateIssue } from "./CreateIssue";
 import { LinkIssue } from "./LinkIssue";

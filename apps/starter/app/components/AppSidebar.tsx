@@ -27,7 +27,6 @@ import {
   SidebarMenuSubItem,
   useSidebar
 } from "@carbon/react";
-import { Link } from "@remix-run/react";
 import type { IconType } from "react-icons/lib";
 import {
   LuBadgeCheck,
@@ -51,6 +50,7 @@ import {
   LuSparkles,
   LuTrash
 } from "react-icons/lu";
+import { Link } from "react-router";
 
 const data = {
   user: {

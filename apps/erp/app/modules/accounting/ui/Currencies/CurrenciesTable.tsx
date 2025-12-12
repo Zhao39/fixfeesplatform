@@ -1,8 +1,8 @@
 import { MenuIcon, MenuItem } from "@carbon/react";
-import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
 import { LuBookMarked, LuEuro, LuPencil, LuPercent } from "react-icons/lu";
+import { useNavigate } from "react-router";
 import { Hyperlink, Table } from "~/components";
 import { usePermissions, useUrlParams } from "~/hooks";
 import { useCustomColumns } from "~/hooks/useCustomColumns";

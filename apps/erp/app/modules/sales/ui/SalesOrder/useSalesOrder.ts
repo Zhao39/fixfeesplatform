@@ -1,5 +1,5 @@
-import { useNavigate } from "@remix-run/react";
 import { useCallback } from "react";
+import { useNavigate } from "react-router";
 import { path } from "~/utils/path";
 import type { SalesOrder } from "../../types";
 

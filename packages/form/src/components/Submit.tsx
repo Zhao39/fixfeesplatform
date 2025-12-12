@@ -9,8 +9,8 @@ import {
   ModalHeader,
   ModalTitle
 } from "@carbon/react";
-import { useBlocker, useNavigation } from "@remix-run/react";
 import { forwardRef } from "react";
+import { useBlocker, useNavigation } from "react-router";
 import { useIsSubmitting } from "../hooks";
 import { useFormContext } from "../userFacingFormContext";
 

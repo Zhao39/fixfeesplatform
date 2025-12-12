@@ -1,7 +1,7 @@
 import { getBrowserEnv, SUPABASE_ANON_KEY } from "@carbon/auth";
 import { Alert, AlertDescription, AlertTitle } from "@carbon/react";
-import { Link } from "@remix-run/react";
 import { LuTriangleAlert } from "react-icons/lu";
+import { Link } from "react-router";
 import { useUser } from "~/hooks";
 import { CodeSnippet, Snippets, useSelectedLang } from "~/modules/api";
 import { path } from "~/utils/path";

@@ -5,7 +5,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from "@carbon/react";
-import { Link } from "@remix-run/react";
+import { useMemo } from "react";
 
 import {
   LuContainer,
@@ -16,13 +16,12 @@ import {
   LuSquareUser,
   LuUsers
 } from "react-icons/lu";
-
-import { useMemo } from "react";
 import {
   RiProgress2Line,
   RiProgress4Line,
   RiProgress8Line
 } from "react-icons/ri";
+import { Link } from "react-router";
 import { usePermissions } from "~/hooks";
 
 import type { Route } from "~/types";

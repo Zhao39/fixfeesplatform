@@ -15,8 +15,6 @@ import {
   useDisclosure,
   VStack
 } from "@carbon/react";
-
-import { Await, Link, useParams } from "@remix-run/react";
 import type { PostgrestResponse } from "@supabase/supabase-js";
 import { Suspense, useEffect } from "react";
 import {
@@ -28,6 +26,7 @@ import {
   LuPanelRight,
   LuTrash
 } from "react-icons/lu";
+import { Await, Link, useParams } from "react-router";
 import { usePanels } from "~/components/Layout";
 import ConfirmDelete from "~/components/Modals/ConfirmDelete";
 import { usePermissions, useRouteData } from "~/hooks";

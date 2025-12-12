@@ -1,6 +1,5 @@
 import { MenuIcon, MenuItem } from "@carbon/react";
 import { useNumberFormatter } from "@react-aria/i18n";
-import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
 import {
@@ -10,10 +9,11 @@ import {
   LuHash,
   LuNetwork
 } from "react-icons/lu";
+import { useNavigate } from "react-router";
 import { Hyperlink, Table } from "~/components";
 import { Enumerable } from "~/components/Enumerable";
 import { usePermissions } from "~/hooks";
-import { trackedEntityStatus, type TrackedEntity } from "~/modules/inventory";
+import { type TrackedEntity, trackedEntityStatus } from "~/modules/inventory";
 import { getLinkToItemDetails } from "~/modules/items/ui/Item/ItemForm";
 import type { Item } from "~/stores/items";
 import { useItems } from "~/stores/items";

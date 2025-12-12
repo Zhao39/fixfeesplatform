@@ -13,12 +13,12 @@ import {
   reactNodeToString,
   VStack
 } from "@carbon/react";
-import { useFetcher } from "@remix-run/react";
 import type { PostgrestResponse } from "@supabase/supabase-js";
 import type { ComponentPropsWithoutRef } from "react";
 import { forwardRef, useCallback, useEffect, useMemo, useState } from "react";
 import { IoMdAdd } from "react-icons/io";
 import { LuListFilter, LuX } from "react-icons/lu";
+import { useFetcher } from "react-router";
 import type { ColumnFilter, Option } from "./types";
 import { useFilters } from "./useFilters";
 

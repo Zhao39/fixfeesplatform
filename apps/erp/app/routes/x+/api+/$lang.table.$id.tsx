@@ -1,5 +1,5 @@
 import { getBrowserEnv } from "@carbon/auth";
-import { useParams } from "@remix-run/react";
+import { useParams } from "react-router";
 import { TableDocs, useSelectedLang } from "~/modules/api";
 
 const { SUPABASE_URL } = getBrowserEnv();
