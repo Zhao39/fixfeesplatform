@@ -9,7 +9,8 @@
       "!sst.env.d.ts",
       "!packages/database/src/types.ts",
       "!packages/database/src/swagger-docs-schema.ts",
-      "**/package.json"
+      "**/*.json",
+      "examples/**"
     ]
   },
   "formatter": { "enabled": true, "indentStyle": "space", "indentWidth": 2 },

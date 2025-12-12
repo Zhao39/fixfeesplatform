@@ -1,7 +1,5 @@
-import type { EntryContext } from "react-router";
-import { handleRequest, ServerRouter } from "react-router";
-
-
+import { handleRequest } from "@vercel/react-router/entry.server";
+import { type EntryContext } from "react-router";
 
 export default async function (
   request: Request,
@@ -9,12 +7,10 @@ export default async function (
   responseHeaders: Headers,
   reactRouterContext: EntryContext
 ) {
-
- 
   return handleRequest(
     request,
     responseStatusCode,
     responseHeaders,
-    <ServerRouter context={reactRouterContext} url={request.url} />
+    reactRouterContext
   );
 }

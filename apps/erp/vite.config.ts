@@ -1,6 +1,6 @@
 import { reactRouter } from "@react-router/dev/vite";
 import path from "node:path";
-import { defineConfig } from "vite";
+import { defineConfig, PluginOption } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
@@ -33,7 +33,7 @@ export default defineConfig({
     port: 3000,
     allowedHosts: [".ngrok-free.app"],
   },
-  plugins: [reactRouter(), tsconfigPaths()],
+  plugins: [reactRouter(), tsconfigPaths()] as PluginOption[],
   resolve: {
     alias: {
       "@carbon/utils": path.resolve(
