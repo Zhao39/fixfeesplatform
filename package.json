@@ -13,7 +13,7 @@
     "supabase": "2.54.11",
     "ts-morph": "^22.0.0",
     "tsx": "^4.13.2",
-    "turbo": "^1.13.2"
+    "turbo": "^2.6.3"
   },
   "lint-staged": {
     "(apps|packages)/**/*.{js,ts,jsx,tsx}": [

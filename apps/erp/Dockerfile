@@ -10,7 +10,7 @@ RUN npm install --legacy-peer-deps
 
 FROM deps AS build
 # Build only ERP and its deps
-RUN npx turbo@1.13.2 run build --filter=./apps/erp
+RUN npx turbo run build --filter=./apps/erp
 
 FROM node:20
 WORKDIR /repo
