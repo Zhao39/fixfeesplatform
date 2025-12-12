@@ -48,32 +48,30 @@ const RiskRegisterForm = ({
   onClose,
 }: RiskRegisterFormProps) => {
   const permissions = usePermissions();
-  const fetcher =
-    useFetcher<PostgrestResponse<{ id: string; success: boolean }>>();
+  const fetcher = useFetcher<PostgrestResponse<{ id: string }>>();
   const deleteDisclosure = useDisclosure();
-  const deleteFetcher = useFetcher();
-
-  console.log("zaza", fetcher);
+  const deleteFetcher = useFetcher<{ success: boolean; message: string }>();
 
   useEffect(() => {
-    console.log("zaza1", fetcher.state, fetcher.data);
-
-    if (fetcher.state === "idle" && fetcher.data?.data) {
-      console.log("zaza2", fetcher.data.data);
+    if (fetcher.data?.data) {
       onClose?.();
       toast.success(`Saved risk`);
-    } else if (fetcher.state === "idle" && fetcher.data?.error) {
+    } else if (fetcher.data?.error) {
       toast.error(`Failed to save risk: ${fetcher.data.error.message}`);
     }
-  }, [fetcher.data, fetcher.state, onClose, type]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetcher.data]);
 
   useEffect(() => {
-    if (deleteFetcher.state === "idle" && deleteFetcher.data) {
+    if (deleteFetcher.data?.success) {
       deleteDisclosure.onClose();
       onClose?.();
-      toast.success(`Deleted risk`);
+      toast.success(deleteFetcher.data.message || "Deleted risk");
+    } else if (deleteFetcher.data?.success === false) {
+      toast.error(deleteFetcher.data.message || "Failed to delete risk");
     }
-  }, [deleteFetcher.state, deleteFetcher.data, deleteDisclosure, onClose]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [deleteFetcher.data?.success]);
 
   const isEditing = !!initialValues.id;
   const isDisabled = isEditing
@@ -181,9 +179,6 @@ const RiskRegisterForm = ({
           isOpen={deleteDisclosure.isOpen}
           confirmText="Delete"
           onCancel={deleteDisclosure.onClose}
-          onSubmit={() => {
-            // Handled by form action
-          }}
           title="Delete Risk"
           text="Are you sure you want to delete this risk?"
           action={path.to.deleteRisk(initialValues.id)}
