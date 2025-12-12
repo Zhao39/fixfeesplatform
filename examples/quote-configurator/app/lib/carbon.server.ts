@@ -5,14 +5,14 @@ import {
   CARBON_API_URL,
   CARBON_APP_URL,
   CARBON_COMPANY_ID,
-  CARBON_PUBLIC_KEY,
+  CARBON_PUBLIC_KEY
 } from "~/config";
 
 export const quoteLineStatusType = [
   "Not Started",
   "In Progress",
   "Complete",
-  "No Quote",
+  "No Quote"
 ] as const;
 
 export const quoteStatusType = [
@@ -22,7 +22,7 @@ export const quoteStatusType = [
   "Partial",
   "Lost",
   "Cancelled",
-  "Expired",
+  "Expired"
 ] as const;
 
 class CarbonClient {
@@ -33,9 +33,9 @@ class CarbonClient {
     this.client = createClient(CARBON_API_URL, CARBON_PUBLIC_KEY, {
       global: {
         headers: {
-          "carbon-key": CARBON_API_KEY,
-        },
-      },
+          "carbon-key": CARBON_API_KEY
+        }
+      }
     });
   }
 
@@ -58,13 +58,13 @@ class CarbonClient {
     if (!result.data) {
       return {
         data: null,
-        error: "Customer not found",
+        error: "Customer not found"
       };
     }
 
     return {
       data: result.data.customerId,
-      error: null,
+      error: null
     };
   }
 
@@ -87,7 +87,7 @@ class CarbonClient {
   async getNextSequence(table: string) {
     return this.client.rpc("get_next_sequence", {
       sequence_name: table,
-      company_id: this.companyId,
+      company_id: this.companyId
     });
   }
 
@@ -120,7 +120,7 @@ class CarbonClient {
     if (!("id" in quote)) {
       const [customerPayment, customerShipping] = await Promise.all([
         this.getCustomerPayment(quote.customerId),
-        this.getCustomerShipping(quote.customerId),
+        this.getCustomerShipping(quote.customerId)
       ]);
 
       if (customerPayment.error) return customerPayment;
@@ -130,7 +130,7 @@ class CarbonClient {
         paymentTermId,
         invoiceCustomerId,
         invoiceCustomerContactId,
-        invoiceCustomerLocationId,
+        invoiceCustomerLocationId
       } = customerPayment.data;
 
       const { shippingMethodId, shippingTermId } = customerShipping.data;
@@ -154,8 +154,8 @@ class CarbonClient {
             id: quoteId,
             shippingMethodId: shippingMethodId,
             shippingTermId: shippingTermId,
-            companyId: this.companyId,
-          },
+            companyId: this.companyId
+          }
         ]),
         this.client.from("quotePayment").insert([
           {
@@ -164,8 +164,8 @@ class CarbonClient {
             invoiceCustomerContactId: invoiceCustomerContactId,
             invoiceCustomerLocationId: invoiceCustomerLocationId,
             paymentTermId: paymentTermId,
-            companyId: this.companyId,
-          },
+            companyId: this.companyId
+          }
         ]),
         this.client
           .from("opportunity")
@@ -175,8 +175,8 @@ class CarbonClient {
           documentId: quoteId,
           customerId: quote.customerId,
           expiresAt: quote.expirationDate,
-          companyId: this.companyId,
-        }),
+          companyId: this.companyId
+        })
       ]);
 
       if (shipment.error) {
@@ -204,7 +204,7 @@ class CarbonClient {
         .from("quote")
         .update({
           ...this.sanitize(quote),
-          updatedAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
         })
         .eq("id", quote.id)
         .select("id, quoteId")
@@ -255,7 +255,7 @@ class CarbonClient {
           this.sanitize({
             ...quotationLine,
             companyId: this.companyId,
-            updatedBy: "system",
+            updatedBy: "system"
           })
         )
         .eq("id", quotationLine.id)
@@ -265,7 +265,7 @@ class CarbonClient {
     return this.client
       .from("quoteLine")
       .insert([
-        { ...quotationLine, companyId: this.companyId, createdBy: "system" },
+        { ...quotationLine, companyId: this.companyId, createdBy: "system" }
       ])
       .select("*")
       .single();
@@ -284,8 +284,8 @@ class CarbonClient {
         targetId: `${lineMethod.quoteId}:${lineMethod.quoteLineId}`,
         companyId: this.companyId,
         configuration: lineMethod.configuration,
-        userId: "system",
-      },
+        userId: "system"
+      }
     });
   }
 

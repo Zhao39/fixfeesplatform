@@ -12,20 +12,20 @@ export default defineConfig({
         }
 
         defaultHandler(warning);
-      },
-    },
+      }
+    }
   },
   define: {
-    global: "globalThis",
+    global: "globalThis"
   },
   optimizeDeps: {
-    extensions: [".css", ".scss", ".sass"], // explicitly include CSS extensions if needed
+    extensions: [".css", ".scss", ".sass"] // explicitly include CSS extensions if needed
   },
   ssr: {
-    noExternal: ["react-dropzone", "react-icons", "tailwind-merge"],
+    noExternal: ["react-dropzone", "react-icons", "tailwind-merge"]
   },
   server: {
-    port: 5000,
+    port: 5000
   },
-  plugins: [reactRouter(), tsconfigPaths()] as PluginOption[],
+  plugins: [reactRouter(), tsconfigPaths()] as PluginOption[]
 });

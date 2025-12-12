@@ -7,11 +7,7 @@
     "../carbon/app/components/Breadcrumb.tsx"
   ],
   "compilerOptions": {
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "ESNext"
-    ],
+    "lib": ["dom", "dom.iterable", "ESNext"],
     "esModuleInterop": true,
     "jsx": "react-jsx",
     "module": "ESNext",
@@ -23,13 +19,9 @@
     "allowJs": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": [
-        "./app/*"
-      ]
+      "~/*": ["./app/*"]
     },
-    "types": [
-      "@react-router/react/future/single-fetch.d.ts"
-    ],
+    "types": ["@react-router/react/future/single-fetch.d.ts"],
     "noEmit": true,
     "isolatedModules": true,
     "skipLibCheck": true,

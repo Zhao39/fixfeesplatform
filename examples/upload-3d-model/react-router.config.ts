@@ -3,5 +3,5 @@ import { vercelPreset } from "@vercel/react-router/vite";
 
 export default {
   ssr: true,
-  presets: process.env.VERCEL ? [vercelPreset()] : undefined,
+  presets: process.env.VERCEL ? [vercelPreset()] : undefined
 } satisfies Config;

@@ -10,7 +10,7 @@
       "!packages/database/src/types.ts",
       "!packages/database/src/swagger-docs-schema.ts",
       "**/*.json",
-      "examples/**"
+      "examples/**/*"
     ]
   },
   "formatter": { "enabled": true, "indentStyle": "space", "indentWidth": 2 },

@@ -5,7 +5,7 @@ import {
   CARBON_API_URL,
   CARBON_APP_URL,
   CARBON_COMPANY_ID,
-  CARBON_PUBLIC_KEY,
+  CARBON_PUBLIC_KEY
 } from "~/config";
 
 class CarbonClient {
@@ -16,9 +16,9 @@ class CarbonClient {
     this.client = createClient(CARBON_API_URL, CARBON_PUBLIC_KEY, {
       global: {
         headers: {
-          "carbon-key": CARBON_API_KEY,
-        },
-      },
+          "carbon-key": CARBON_API_KEY
+        }
+      }
     });
   }
 
@@ -45,14 +45,14 @@ class CarbonClient {
         size: file.size,
         name: file.name,
         companyId: this.companyId,
-        createdBy: "system",
-      }),
+        createdBy: "system"
+      })
     ]);
 
     if (fileUpload.error) {
       return {
         data: null,
-        error: fileUpload.error as unknown as PostgrestError,
+        error: fileUpload.error as unknown as PostgrestError
       };
     }
 
@@ -65,9 +65,9 @@ class CarbonClient {
         id: modelId,
         name: file.name,
         extension: fileExtension!,
-        url: this.getPublicModelUrl(fileName),
+        url: this.getPublicModelUrl(fileName)
       },
-      error: null,
+      error: null
     };
   }
 
@@ -81,13 +81,13 @@ class CarbonClient {
       .from("private")
       .upload(thumbnailPath, file, {
         upsert: true,
-        contentType: "image/png",
+        contentType: "image/png"
       });
 
     if (thumbnailUpload.error) {
       return {
         data: null,
-        error: thumbnailUpload.error as unknown as PostgrestError,
+        error: thumbnailUpload.error as unknown as PostgrestError
       };
     }
 
@@ -101,9 +101,9 @@ class CarbonClient {
 
     return {
       data: {
-        id: thumbnailId,
+        id: thumbnailId
       },
-      error: null,
+      error: null
     };
   }
 }

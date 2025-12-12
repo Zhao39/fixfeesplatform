@@ -9,7 +9,7 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
-  useRouteError,
+  useRouteError
 } from "react-router";
 import Tailwind from "~/styles/tailwind.css?url";
 
@@ -19,7 +19,7 @@ export function links() {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   return {
-    env: {},
+    env: {}
   };
 }
 
@@ -29,7 +29,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
 function Document({
   children,
-  title = "Configurator Example",
+  title = "Configurator Example"
 }: {
   children: React.ReactNode;
   title?: string;
@@ -61,7 +61,7 @@ export default function App() {
       <Outlet />
       <script
         dangerouslySetInnerHTML={{
-          __html: `window.env = ${JSON.stringify(env)}`,
+          __html: `window.env = ${JSON.stringify(env)}`
         }}
       />
     </Document>
@@ -72,10 +72,10 @@ export function ErrorBoundary() {
   const error = useRouteError();
 
   const message = isRouteErrorResponse(error)
-    ? error.data.message ?? error.data
+    ? (error.data.message ?? error.data)
     : error instanceof Error
-    ? error.message
-    : String(error);
+      ? error.message
+      : String(error);
 
   return (
     <Document title="Error!">

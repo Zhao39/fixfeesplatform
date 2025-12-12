@@ -17,13 +17,13 @@ export const ModelUpload = ({
   url,
   file,
   onFileChange,
-  className,
+  className
 }: ModelUploadProps) => {
   const hasFile = !!file || !!url;
 
   const { isDragActive, getRootProps, getInputProps } = useDropzone({
     accept: {
-      "application/step": [".stp", ".step"],
+      "application/step": [".stp", ".step"]
     },
     disabled: hasFile,
     multiple: false,
@@ -57,7 +57,7 @@ export const ModelUpload = ({
         message = errors[0].message;
       }
       toast.error(message);
-    },
+    }
   });
 
   return (

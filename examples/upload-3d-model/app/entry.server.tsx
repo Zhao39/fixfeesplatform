@@ -1,4 +1,4 @@
-import { handleRequest, } from "@vercel/react-router/entry.server";
+import { handleRequest } from "@vercel/react-router/entry.server";
 import { type EntryContext } from "react-router";
 
 export default async function (

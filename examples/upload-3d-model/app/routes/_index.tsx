@@ -5,7 +5,7 @@ import {
   InputGroup,
   InputLeftAddon,
   toast,
-  TooltipProvider,
+  TooltipProvider
 } from "@carbon/react";
 import { useEffect, useState } from "react";
 import { data, useFetcher } from "react-router";
@@ -61,7 +61,7 @@ export default function Route() {
 
     fetcher.submit(formData, {
       method: "post",
-      encType: "multipart/form-data",
+      encType: "multipart/form-data"
     });
   };
 
