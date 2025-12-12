@@ -7,7 +7,6 @@
   },
   "devDependencies": {
     "@carbon/tsconfig": "*",
-    "eslint-config-carbon": "*",
     "typescript": "^5.2.2"
   },
   "exports": {

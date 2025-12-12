@@ -10,7 +10,6 @@
     "@tailwindcss/line-clamp": "^0.4.4",
     "@tailwindcss/typography": "^0.5.10",
     "autoprefixer": "10.4.14",
-    "eslint-config-carbon": "*",
     "postcss": "^8.4.33",
     "postcss-nesting": "12.1.5",
     "tailwind-merge": "^2.2.1",
