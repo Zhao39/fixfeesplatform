@@ -241,7 +241,10 @@ export function useTree<TData, TFilterValue>({
 
   const virtualizer = useVirtualizer({
     count: state.visibleNodeIds.length,
-    getItemKey: (index) => state.visibleNodeIds[index],
+    getItemKey: useCallback(
+      (index: number) => state.visibleNodeIds[index],
+      [state.visibleNodeIds]
+    ),
     getScrollElement: () => parentRef.current,
     estimateSize: (index: number) => {
       return estimatedRowHeight({
@@ -250,10 +253,6 @@ export function useTree<TData, TFilterValue>({
         index
       });
     },
-    enabled: false /** 
-    Disable virtualise; @brad need help in this 
-    https://github.com/opentech1/openchat/commit/430e4efe3c2bd6cdd1cef620393a472e8d2f91d4 see
-    */,
     overscan: 20
   });
 
