@@ -80,6 +80,7 @@
   "dependencies": {
     "@opentelemetry/semantic-conventions": "^1.38.0",
     "@react-router/remix-routes-option-adapter": "^7.10.1",
+    "ajv": "^8.16.0",
     "fdir": "^6.5.0",
     "remix-flat-routes": "^0.8.5",
     "sst": "3.17.14"
