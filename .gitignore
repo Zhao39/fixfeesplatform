@@ -33,3 +33,5 @@ packages/database/supabase/seed.sql
 
 .vercel
 .env*.local
+
+.react-router

@@ -64,7 +64,7 @@
   "shouldRevalidate": {
     "prefix": "/shouldRevalidate",
     "body": [
-      "import type { ShouldRevalidateFunction } from '@remix-run/react'",
+      "import type { ShouldRevalidateFunction } from 'react-router'",
       "",
       "export const shouldRevalidate: ShouldRevalidateFunction = ({",
       "  defaultShouldRevalidate",

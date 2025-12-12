@@ -80,6 +80,7 @@
   ],
   "packageManager": "npm@10.8.2",
   "dependencies": {
+    "fdir": "^6.5.0",
     "sst": "3.17.14"
   }
 }

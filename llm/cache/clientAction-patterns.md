@@ -94,6 +94,6 @@ export async function clientAction({
 ## Import Requirements
 
 ```typescript
-import type { ClientActionFunctionArgs } from "@remix-run/react";
+import type { ClientActionFunctionArgs } from "react-router";
 import { getCompanyId } from "~/utils/react-query";
 ```

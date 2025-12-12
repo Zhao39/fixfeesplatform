@@ -11,7 +11,7 @@
 //   HStack,
 //   VStack,
 // } from "@carbon/react";
-// import { useNavigate } from "@remix-run/react";
+// import { useNavigate } from "react-router";
 // import { useState } from "react";
 import type { z } from "zod/v3";
 // import {
@@ -23,6 +23,7 @@ import type { z } from "zod/v3";
 // } from "~/components/Form";
 // import { usePermissions } from "~/hooks";
 import type { partnerValidator } from "~/modules/resources";
+
 // import { path } from "~/utils/path";
 
 type PartnerFormProps = {
