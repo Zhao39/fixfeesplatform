@@ -1,8 +1,6 @@
 import { POSTHOG_API_HOST, POSTHOG_PROJECT_PUBLIC_KEY } from "@carbon/auth";
-import { OperatingSystemContextProvider } from "@carbon/react";
-import { I18nProvider } from "@react-aria/i18n";
 import posthog from "posthog-js";
-import { startTransition, useEffect } from "react";
+import { Fragment, startTransition, useEffect } from "react";
 import { hydrateRoot } from "react-dom/client";
 import { HydratedRouter } from "react-router/dom";
 
@@ -20,15 +18,9 @@ function PosthogInit() {
 startTransition(() => {
   hydrateRoot(
     document,
-    <OperatingSystemContextProvider
-      platform={window.navigator.userAgent.includes("Mac") ? "mac" : "windows"}
-    >
-      <I18nProvider
-        locale={navigator.language ?? navigator.languages?.[0] ?? "en-US"}
-      >
-        <HydratedRouter />
-      </I18nProvider>
+    <Fragment>
+      <HydratedRouter />
       <PosthogInit />
-    </OperatingSystemContextProvider>
+    </Fragment>
   );
 });

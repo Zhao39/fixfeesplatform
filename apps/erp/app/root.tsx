@@ -1,10 +1,18 @@
 import { CONTROLLED_ENVIRONMENT, error, getBrowserEnv } from "@carbon/auth";
 import { getSessionFlash } from "@carbon/auth/session.server";
 import { validator } from "@carbon/form";
-import { Button, Heading, Toaster, toast, useMount } from "@carbon/react";
-import { useMode } from "@carbon/remix";
+import {
+  Button,
+  Heading,
+  OperatingSystemContextProvider,
+  Toaster,
+  toast,
+  useMount
+} from "@carbon/react";
+import { getPreferenceHeaders, useMode } from "@carbon/remix";
 import type { Theme } from "@carbon/utils";
 import { modeValidator, themes } from "@carbon/utils";
+import { I18nProvider } from "@react-aria/i18n";
 import { QueryClient } from "@tanstack/react-query";
 import { Analytics } from "@vercel/analytics/react";
 import React, { useEffect } from "react";
@@ -48,7 +56,7 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ request, context }: LoaderFunctionArgs) {
   const {
     CARBON_EDITION,
     CLOUDFLARE_TURNSTILE_SITE_KEY,
@@ -82,6 +90,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       },
       mode: getMode(request),
       theme: getTheme(request),
+      preferences: getPreferenceHeaders(request),
       result: sessionFlash?.result
     },
     {
@@ -178,6 +187,7 @@ export default function App() {
   const env = loaderData?.env ?? {};
   const result = loaderData?.result;
   const theme = loaderData?.theme ?? "blue";
+  const prefs = loaderData?.preferences;
   const mode = useMode();
 
   useMount(() => {
@@ -204,15 +214,18 @@ export default function App() {
   }, [result]);
 
   return (
-    <Document mode={mode} theme={theme}>
-      <Outlet />
-
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `window.env = ${JSON.stringify(env)};`
-        }}
-      />
-    </Document>
+    <OperatingSystemContextProvider platform={prefs.platform}>
+      <I18nProvider locale={prefs.locale}>
+        <Document mode={mode} theme={theme}>
+          <Outlet />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `window.env = ${JSON.stringify(env)};`
+            }}
+          />
+        </Document>
+      </I18nProvider>
+    </OperatingSystemContextProvider>
   );
 }
 
