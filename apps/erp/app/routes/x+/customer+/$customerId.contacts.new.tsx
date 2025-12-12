@@ -12,7 +12,7 @@ import type {
   ActionFunctionArgs,
   ClientActionFunctionArgs
 } from "react-router";
-import { json, redirect, useNavigate, useParams } from "react-router";
+import { data, redirect, useNavigate, useParams } from "react-router";
 import {
   customerContactValidator,
   insertCustomerContact
@@ -96,7 +96,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     }
 
     return modal
-      ? json(createCustomerContact)
+      ? createCustomerContact
       : redirect(
           path.to.customerContacts(customerId),
           await flash(request, error(createCustomerContact.error, errorMessage))
@@ -104,7 +104,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   }
 
   return modal
-    ? json(createCustomerContact, { status: 201 })
+    ? data(createCustomerContact, { status: 201 })
     : redirect(
         path.to.customerContacts(customerId),
         await flash(request, success("Customer contact created"))

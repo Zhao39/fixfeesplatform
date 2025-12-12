@@ -7,7 +7,7 @@ import type {
   ClientActionFunctionArgs,
   LoaderFunctionArgs
 } from "react-router";
-import { json, redirect, useNavigate, useSearchParams } from "react-router";
+import { data, redirect, useNavigate, useSearchParams } from "react-router";
 import { useUser } from "~/hooks";
 import { ShelfForm, shelfValidator, upsertShelf } from "~/modules/inventory";
 import { setCustomFields } from "~/utils/form";
@@ -38,10 +38,10 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
-  const { id, ...data } = validation.data;
+  const { id, ...rest } = validation.data;
 
   const createShelf = await upsertShelf(client, {
-    ...data,
+    ...rest,
     companyId,
     customFields: setCustomFields(formData),
     createdBy: userId
@@ -54,7 +54,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   return modal
-    ? json(createShelf, { status: 201 })
+    ? data(createShelf, { status: 201 })
     : redirect(
         `${path.to.shelves}?${getParams(request)}`,
         await flash(request, success("Shelf created"))

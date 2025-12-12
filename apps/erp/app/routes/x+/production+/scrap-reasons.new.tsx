@@ -43,7 +43,7 @@ export async function action({ request }: ActionFunctionArgs) {
   });
   if (insertScrapReason.error) {
     return modal
-      ? json(insertScrapReason)
+      ? insertScrapReason
       : redirect(
           requestReferrer(request) ??
             `${path.to.scrapReasons}?${getParams(request)}`,
@@ -55,7 +55,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   return modal
-    ? json(insertScrapReason)
+    ? insertScrapReason
     : redirect(
         `${path.to.scrapReasons}?${getParams(request)}`,
         await flash(request, success("Scrap reason created"))

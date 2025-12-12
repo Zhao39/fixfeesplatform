@@ -45,7 +45,7 @@ export async function action({ request }: ActionFunctionArgs) {
   });
   if (insertCustomerStatus.error) {
     return modal
-      ? json(insertCustomerStatus)
+      ? insertCustomerStatus
       : redirect(
           requestReferrer(request) ??
             `${path.to.customerStatuses}?${getParams(request)}`,
@@ -60,7 +60,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   return modal
-    ? json(insertCustomerStatus)
+    ? insertCustomerStatus
     : redirect(
         `${path.to.customerStatuses}?${getParams(request)}`,
         await flash(request, success("Customer status created"))

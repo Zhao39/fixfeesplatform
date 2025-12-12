@@ -57,7 +57,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   }
 
   return modal
-    ? json(createSupplierProcess)
+    ? createSupplierProcess
     : redirect(path.to.supplierProcesses(supplierId));
 }
 

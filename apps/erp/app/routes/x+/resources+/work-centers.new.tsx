@@ -43,7 +43,7 @@ export async function action({ request }: ActionFunctionArgs) {
   });
   if (createWorkCenter.error) {
     return modal
-      ? json(createWorkCenter)
+      ? createWorkCenter
       : redirect(
           path.to.workCenters,
           await flash(
@@ -53,7 +53,7 @@ export async function action({ request }: ActionFunctionArgs) {
         );
   }
 
-  return modal ? json(createWorkCenter) : redirect(path.to.workCenters);
+  return modal ? createWorkCenter : redirect(path.to.workCenters);
 }
 
 export async function clientAction({ serverAction }: ClientActionFunctionArgs) {

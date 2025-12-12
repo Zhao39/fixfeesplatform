@@ -3,7 +3,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
-import { json, redirect, useNavigate } from "react-router";
+import { data, redirect, useNavigate } from "react-router";
 import { materialFinishValidator, upsertMaterialFinish } from "~/modules/items";
 import MaterialFinishForm from "~/modules/items/ui/MaterialFinishes/MaterialFinishForm";
 
@@ -35,10 +35,10 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
-  const { id, ...data } = validation.data;
+  const { id, ...rest } = validation.data;
 
   const insertMaterialFinish = await upsertMaterialFinish(client, {
-    ...data,
+    ...rest,
     companyId
   });
   if (insertMaterialFinish.error) {
@@ -63,7 +63,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   return modal
-    ? json(insertMaterialFinish, { status: 201 })
+    ? data(insertMaterialFinish, { status: 201 })
     : redirect(
         `${path.to.materialFinishes}?${getParams(request)}`,
         await flash(request, success("Finish created"))

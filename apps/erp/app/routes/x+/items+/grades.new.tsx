@@ -3,7 +3,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
-import { json, redirect, useNavigate } from "react-router";
+import { data, redirect, useNavigate } from "react-router";
 import { materialGradeValidator, upsertMaterialGrade } from "~/modules/items";
 import MaterialGradeForm from "~/modules/items/ui/MaterialGrades/MaterialGradeForm";
 
@@ -33,10 +33,10 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
-  const { id, ...data } = validation.data;
+  const { id, ...rest } = validation.data;
 
   const insertMaterialGrade = await upsertMaterialGrade(client, {
-    ...data,
+    ...rest,
     companyId
   });
   if (insertMaterialGrade.error) {
@@ -61,7 +61,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   return modal
-    ? json(insertMaterialGrade, { status: 201 })
+    ? data(insertMaterialGrade, { status: 201 })
     : redirect(
         `${path.to.materialGrades}?${getParams(request)}`,
         await flash(request, success("Grade created"))

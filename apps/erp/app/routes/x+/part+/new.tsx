@@ -5,7 +5,7 @@ import { validationError, validator } from "@carbon/form";
 import type { modelThumbnailTask } from "@carbon/jobs/trigger/model-thumbnail";
 import { tasks } from "@trigger.dev/sdk";
 import type { ActionFunctionArgs } from "react-router";
-import { json, redirect } from "react-router";
+import { data, json, redirect } from "react-router";
 import { partValidator, upsertPart } from "~/modules/items";
 import { PartForm } from "~/modules/items/ui/Parts";
 import { setCustomFields } from "~/utils/form";
@@ -41,7 +41,7 @@ export async function action({ request }: ActionFunctionArgs) {
   });
   if (createPart.error) {
     return modal
-      ? json(
+      ? data(
           createPart,
           await flash(request, error(createPart.error, "Failed to insert part"))
         )
@@ -62,7 +62,7 @@ export async function action({ request }: ActionFunctionArgs) {
   if (!itemId) throw new Error("Part ID not found");
 
   return modal
-    ? json(createPart, { status: 201 })
+    ? data(createPart, { status: 201 })
     : redirect(path.to.part(itemId));
 }
 

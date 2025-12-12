@@ -43,7 +43,7 @@ export async function action({ request }: ActionFunctionArgs) {
   });
   if (insertGaugeType.error) {
     return modal
-      ? json(insertGaugeType)
+      ? insertGaugeType
       : redirect(
           requestReferrer(request) ??
             `${path.to.gaugeTypes}?${getParams(request)}`,
@@ -55,7 +55,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   return modal
-    ? json(insertGaugeType)
+    ? insertGaugeType
     : redirect(
         `${path.to.gaugeTypes}?${getParams(request)}`,
         await flash(request, success("Non-conformance type created"))

@@ -44,7 +44,7 @@ export async function action({ request }: ActionFunctionArgs) {
   });
   if (insertNoQuoteReason.error) {
     return modal
-      ? json(insertNoQuoteReason)
+      ? insertNoQuoteReason
       : redirect(
           requestReferrer(request) ??
             `${path.to.noQuoteReasons}?${getParams(request)}`,
@@ -56,7 +56,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   return modal
-    ? json(insertNoQuoteReason)
+    ? insertNoQuoteReason
     : redirect(
         `${path.to.noQuoteReasons}?${getParams(request)}`,
         await flash(request, success("No quote reason created"))

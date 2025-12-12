@@ -25,7 +25,7 @@ export default async function (
     : "windows";
 
   // TODO: @brad - Need to figure out how to pass remixServer to handleRequest
-  let remixServer = (
+  let _remixServer = (
     <OperatingSystemContextProvider platform={platform}>
       <I18nProvider locale={locales?.[0] ?? "en-US"}>
         <ServerRouter context={reactRouterContext} url={request.url} />

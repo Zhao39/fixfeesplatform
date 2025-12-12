@@ -108,7 +108,7 @@ export async function action({ request }: ActionFunctionArgs) {
         });
 
         if (upsertMethod.error) {
-          json(upsertMethod.error);
+          upsertMethod.error;
         }
 
         await tasks.trigger<typeof recalculateTask>("recalculate", {

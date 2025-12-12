@@ -7,7 +7,7 @@ import type {
   ClientActionFunctionArgs,
   LoaderFunctionArgs
 } from "react-router";
-import { json, redirect, useNavigate } from "react-router";
+import { data, json, redirect, useNavigate } from "react-router";
 import {
   supplierTypeValidator,
   upsertSupplierType
@@ -51,7 +51,7 @@ export async function action({ request }: ActionFunctionArgs) {
   });
   if (insertSupplierType.error) {
     return modal
-      ? json(insertSupplierType)
+      ? insertSupplierType
       : redirect(
           `${path.to.supplierTypes}?${getParams(request)}`,
           await flash(
@@ -62,7 +62,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   return modal
-    ? json(insertSupplierType, { status: 201 })
+    ? data(insertSupplierType, { status: 201 })
     : redirect(
         `${path.to.supplierTypes}?${getParams(request)}`,
         await flash(request, success("Supplier type created"))

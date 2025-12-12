@@ -96,7 +96,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     throw redirect(redirectUrl.toString());
   }
 
-  return defer({
+  return {
     events: events.data ?? [],
     quantities: (quantities.data ?? []).reduce(
       (acc, curr) => {
@@ -136,7 +136,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     procedure: getJobOperationProcedure(serviceRole, operation.data?.[0].id),
     workCenter: getWorkCenter(serviceRole, operation.data?.[0].workCenterId),
     thumbnailPath
-  });
+  };
 }
 
 export default function OperationRoute() {

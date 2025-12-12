@@ -3,7 +3,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs } from "react-router";
-import { json, redirect } from "react-router";
+import { data, json, redirect } from "react-router";
 import { toolValidator, upsertTool } from "~/modules/items";
 import { ToolForm } from "~/modules/items/ui/Tools";
 import { setCustomFields } from "~/utils/form";
@@ -39,7 +39,7 @@ export async function action({ request }: ActionFunctionArgs) {
   });
   if (createTool.error) {
     return modal
-      ? json(
+      ? data(
           createTool,
           await flash(request, error(createTool.error, "Failed to insert tool"))
         )
@@ -53,7 +53,7 @@ export async function action({ request }: ActionFunctionArgs) {
   if (!itemId) throw new Error("Tool ID not found");
 
   return modal
-    ? json(createTool, { status: 201 })
+    ? data(createTool, { status: 201 })
     : redirect(path.to.tool(itemId));
 }
 

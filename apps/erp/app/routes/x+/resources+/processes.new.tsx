@@ -43,7 +43,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   if (createProcess.error) {
     return modal
-      ? json(createProcess)
+      ? createProcess
       : redirect(
           path.to.processes,
           await flash(
@@ -54,7 +54,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   return modal
-    ? json(createProcess)
+    ? createProcess
     : redirect(
         path.to.processes,
         await flash(request, success("Process created"))

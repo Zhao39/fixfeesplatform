@@ -12,7 +12,7 @@ import {
   slackOAuthCallbackSchema,
   slackOAuthTokenResponseSchema
 } from "@carbon/ee/slack.server";
-import { type LoaderFunctionArgs, redirect } from "react-router";
+import { data, type LoaderFunctionArgs, redirect } from "react-router";
 import { z } from "zod/v3";
 import { upsertCompanyIntegration } from "~/modules/settings/settings.server";
 import { path } from "~/utils/path";
@@ -30,13 +30,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
   if (!slackAuthResponse.success) {
     return data({ error: "Invalid Slack auth response" }, { status: 400 });
   }
-
-  const { data } = slackAuthResponse;
-
   const veryfiedState = await getSlackInstaller().stateStore?.verifyStateParam(
     new Date(),
-    data.state
+    slackAuthResponse.data.state
   );
+
   const parsedMetadata = z
     .object({
       companyId: z.string(),
@@ -65,7 +63,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     const body = new URLSearchParams({
       client_id: SLACK_CLIENT_ID,
       client_secret: SLACK_CLIENT_SECRET,
-      code: data.code,
+      code: slackAuthResponse.data.code,
       redirect_uri: SLACK_OAUTH_REDIRECT_URL
     });
 

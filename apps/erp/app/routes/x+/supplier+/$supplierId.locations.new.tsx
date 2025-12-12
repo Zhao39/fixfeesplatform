@@ -6,7 +6,7 @@ import type {
   ActionFunctionArgs,
   ClientActionFunctionArgs
 } from "react-router";
-import { json, redirect, useNavigate, useParams } from "react-router";
+import { data, json, redirect, useNavigate, useParams } from "react-router";
 import { useUser } from "~/hooks";
 import {
   insertSupplierLocation,
@@ -49,7 +49,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   });
   if (createSupplierLocation.error) {
     return modal
-      ? json(createSupplierLocation)
+      ? createSupplierLocation
       : redirect(
           path.to.supplierLocations(supplierId),
           await flash(
@@ -63,7 +63,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   }
 
   return modal
-    ? json(createSupplierLocation, { status: 201 })
+    ? data(createSupplierLocation, { status: 201 })
     : redirect(
         path.to.supplierLocations(supplierId),
         await flash(request, success("Supplier location created"))

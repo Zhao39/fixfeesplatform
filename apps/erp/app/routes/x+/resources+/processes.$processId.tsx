@@ -75,7 +75,7 @@ export async function action({ request }: ActionFunctionArgs) {
     );
   }
 
-  return modal ? json(createProcess) : redirect(path.to.processes);
+  return modal ? createProcess : redirect(path.to.processes);
 }
 
 export async function clientAction({ serverAction }: ClientActionFunctionArgs) {

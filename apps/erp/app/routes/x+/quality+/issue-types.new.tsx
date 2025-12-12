@@ -43,7 +43,7 @@ export async function action({ request }: ActionFunctionArgs) {
   });
   if (insertIssueType.error) {
     return modal
-      ? json(insertIssueType)
+      ? insertIssueType
       : redirect(
           requestReferrer(request) ??
             `${path.to.issueTypes}?${getParams(request)}`,
@@ -55,7 +55,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   return modal
-    ? json(insertIssueType)
+    ? insertIssueType
     : redirect(
         `${path.to.issueTypes}?${getParams(request)}`,
         await flash(request, success("Non-conformance type created"))

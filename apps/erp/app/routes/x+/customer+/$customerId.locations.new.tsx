@@ -6,7 +6,7 @@ import type {
   ActionFunctionArgs,
   ClientActionFunctionArgs
 } from "react-router";
-import { json, redirect, useNavigate, useParams } from "react-router";
+import { data, redirect, useNavigate, useParams } from "react-router";
 import { useUser } from "~/hooks";
 import {
   customerLocationValidator,
@@ -49,7 +49,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   });
   if (createCustomerLocation.error) {
     return modal
-      ? json(createCustomerLocation)
+      ? createCustomerLocation
       : redirect(
           path.to.customerLocations(customerId),
           await flash(
@@ -63,7 +63,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   }
 
   return modal
-    ? json(createCustomerLocation, { status: 201 })
+    ? data(createCustomerLocation, { status: 201 })
     : redirect(
         path.to.customerLocations(customerId),
         await flash(request, success("Customer location created"))

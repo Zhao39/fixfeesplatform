@@ -56,7 +56,7 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 
   if (issue.error) {
-    throw json(
+    throw data(
       insertScrap.data,
       await flash(request, error(issue.error, "Failed to issue materials"))
     );

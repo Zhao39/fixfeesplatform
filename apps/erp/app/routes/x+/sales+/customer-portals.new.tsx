@@ -46,7 +46,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   if (insertCustomerPortal.error) {
     return modal
-      ? json(insertCustomerPortal)
+      ? insertCustomerPortal
       : redirect(
           requestReferrer(request) ??
             `${path.to.customerPortals}?${getParams(request)}`,
@@ -61,7 +61,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   return modal
-    ? json(insertCustomerPortal)
+    ? insertCustomerPortal
     : redirect(
         `${path.to.customerPortals}?${getParams(request)}`,
         await flash(request, success("Customer portal created"))

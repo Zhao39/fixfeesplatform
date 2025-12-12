@@ -3,7 +3,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs } from "react-router";
-import { json, redirect } from "react-router";
+import { data, redirect } from "react-router";
 import { useUser } from "~/hooks";
 import { customerValidator, upsertCustomer } from "~/modules/sales";
 import { CustomerForm } from "~/modules/sales/ui/Customer";
@@ -33,17 +33,17 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
-  const { id, ...data } = validation.data;
+  const { id, ...rest } = validation.data;
 
   const createCustomer = await upsertCustomer(client, {
-    ...data,
+    ...rest,
     companyId,
     customFields: setCustomFields(formData),
     createdBy: userId
   });
   if (createCustomer.error) {
     return modal
-      ? json(
+      ? data(
           createCustomer,
           await flash(
             request,
@@ -61,7 +61,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const customerId = createCustomer.data?.id;
 
-  return modal ? json(createCustomer) : redirect(path.to.customer(customerId));
+  return modal ? createCustomer : redirect(path.to.customer(customerId));
 }
 
 export default function CustomersNewRoute() {

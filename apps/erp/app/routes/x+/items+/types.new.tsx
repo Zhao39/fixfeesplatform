@@ -7,7 +7,7 @@ import type {
   ClientActionFunctionArgs,
   LoaderFunctionArgs
 } from "react-router";
-import { json, redirect, useNavigate } from "react-router";
+import { data, json, redirect, useNavigate } from "react-router";
 import { materialTypeValidator, upsertMaterialType } from "~/modules/items";
 import MaterialTypeForm from "~/modules/items/ui/MaterialTypes/MaterialTypeForm";
 
@@ -66,7 +66,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   return modal
-    ? json(insertMaterialType, { status: 201 })
+    ? data(insertMaterialType, { status: 201 })
     : redirect(
         `${path.to.materialTypes}?${getParams(request)}`,
         await flash(request, success("Type created"))

@@ -2,7 +2,7 @@ import { assertIsPost, error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validator } from "@carbon/form";
-import type { ActionFunctionArgs } from "react-router";
+import { type ActionFunctionArgs, data } from "react-router";
 import {
   trainingQuestionValidator,
   upsertTrainingQuestion
@@ -35,7 +35,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   }
 
   // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
-  const { id, matchingPairs, correctBoolean, ...data } = validation.data;
+  const { id, matchingPairs, correctBoolean, ...rest } = validation.data;
 
   // Parse matchingPairs if it's a string
   let parsedMatchingPairs = null;
@@ -48,11 +48,12 @@ export async function action({ request, params }: ActionFunctionArgs) {
   }
 
   const create = await upsertTrainingQuestion(client, {
-    ...data,
-    options: options.length > 0 ? options : data.options,
+    ...rest,
+    options: options.length > 0 ? options : rest.options,
     correctAnswers:
-      correctAnswers.length > 0 ? correctAnswers : data.correctAnswers,
+      correctAnswers.length > 0 ? correctAnswers : rest.correctAnswers,
     matchingPairs: parsedMatchingPairs,
+    // @ts-expect-error correctBoolean can be string or boolean we already validate in zod, can remove here
     correctBoolean: correctBoolean === true || correctBoolean === "true",
     companyId,
     createdBy: userId

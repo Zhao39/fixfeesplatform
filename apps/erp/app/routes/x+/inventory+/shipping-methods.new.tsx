@@ -7,7 +7,7 @@ import type {
   ClientActionFunctionArgs,
   LoaderFunctionArgs
 } from "react-router";
-import { json, redirect, useNavigate } from "react-router";
+import { data, redirect, useNavigate } from "react-router";
 import type { ShippingCarrier } from "~/modules/inventory";
 import {
   ShippingMethodForm,
@@ -44,10 +44,10 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
-  const { id, ...data } = validation.data;
+  const { id, ...rest } = validation.data;
 
   const insertShippingMethod = await upsertShippingMethod(client, {
-    ...data,
+    ...rest,
     companyId,
     createdBy: userId,
     customFields: setCustomFields(formData)
@@ -63,7 +63,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   return modal
-    ? json(insertShippingMethod, { status: 201 })
+    ? data(insertShippingMethod, { status: 201 })
     : redirect(
         `${path.to.shippingMethods}?${getParams(request)}`,
         await flash(request, success("Shipping method created"))

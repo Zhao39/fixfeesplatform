@@ -3,7 +3,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
-import { json, redirect, useNavigate } from "react-router";
+import { data, json, redirect, useNavigate } from "react-router";
 import {
   materialSubstanceValidator,
   upsertMaterialSubstance
@@ -71,7 +71,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   return modal
-    ? json(insertMaterialSubstance, { status: 201 })
+    ? data(insertMaterialSubstance, { status: 201 })
     : redirect(
         `${path.to.materialSubstances}?${getParams(request)}`,
         await flash(request, success("Part group created"))

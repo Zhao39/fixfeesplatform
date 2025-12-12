@@ -7,7 +7,7 @@ import type {
   ClientActionFunctionArgs,
   LoaderFunctionArgs
 } from "react-router";
-import { json, redirect, useNavigate } from "react-router";
+import { data, json, redirect, useNavigate } from "react-router";
 import { unitOfMeasureValidator, upsertUnitOfMeasure } from "~/modules/items";
 import { UnitOfMeasureForm } from "~/modules/items/ui/UnitOfMeasure";
 import { setCustomFields } from "~/utils/form";
@@ -57,7 +57,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   return modal
-    ? json(insertUnitOfMeasure, { status: 201 })
+    ? data(insertUnitOfMeasure, { status: 201 })
     : redirect(
         `${path.to.uoms}?${getParams(request)}`,
         await flash(request, success("Unit of measure created"))
