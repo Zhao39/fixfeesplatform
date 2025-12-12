@@ -30,8 +30,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   });
 
   if (result.error) {
-    console.log("this ran2", userId);
-
     return json(
       {
         data: null,

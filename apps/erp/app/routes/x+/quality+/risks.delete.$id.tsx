@@ -1,10 +1,11 @@
+import { assertIsPost } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
-import { type ActionFunctionArgs, json, redirect } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
 import invariant from "tiny-invariant";
 import { deleteRisk } from "~/modules/quality/quality.service";
-import { path } from "~/utils/path";
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
+  assertIsPost(request);
   const { client } = await requirePermissions(request, {
     delete: "quality",
     role: "employee",
@@ -17,11 +18,15 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   if (result.error) {
     return json(
       {
-        error: result.error,
+        success: false,
+        message: "Failed to delete risk",
       },
       { status: 500 }
     );
   }
 
-  return redirect(path.to.risks);
+  return json({
+    success: true,
+    message: "Risk deleted successfully",
+  });
 };
