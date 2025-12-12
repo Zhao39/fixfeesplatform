@@ -1,6 +1,6 @@
 import { Button, ClientOnly } from "@carbon/react";
-import type { MetaFunction } from "@vercel/remix";
 import { LuEye, LuTable2 } from "react-icons/lu";
+import type { MetaFunction } from "react-router";
 import { Outlet, useLocation, useNavigate } from "react-router";
 import { GroupedContentSidebar } from "~/components/Layout";
 import { CollapsibleSidebarProvider } from "~/components/Layout/Navigation";

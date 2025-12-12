@@ -12,8 +12,6 @@ import {
 import { formatDate } from "@carbon/utils";
 import { useNumberFormatter } from "@react-aria/i18n";
 import type { ColumnDef } from "@tanstack/react-table";
-import type { LoaderFunctionArgs } from "@vercel/remix";
-import { defer } from "@vercel/remix";
 import { useMemo } from "react";
 import {
   LuBookMarked,
@@ -22,7 +20,8 @@ import {
   LuShield,
   LuShieldCheck
 } from "react-icons/lu";
-import { useLoaderData, useParams } from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
+import { defer, useLoaderData, useParams } from "react-router";
 import { z } from "zod/v3";
 import {
   BreadcrumbItem,

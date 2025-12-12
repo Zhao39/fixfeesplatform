@@ -1,9 +1,8 @@
 import { error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
-import type { LoaderFunctionArgs } from "@vercel/remix";
-import { json, redirect } from "@vercel/remix";
-import { useLoaderData } from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
+import { redirect, useLoaderData } from "react-router";
 import { getSupplierLocations } from "~/modules/purchasing";
 import SupplierLocations from "~/modules/purchasing/ui/Supplier/SupplierLocations";
 import { path } from "~/utils/path";

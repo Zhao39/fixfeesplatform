@@ -3,9 +3,8 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import { useRouteData } from "@carbon/remix";
-import type { ActionFunctionArgs } from "@vercel/remix";
-import { redirect } from "@vercel/remix";
-import { useParams } from "react-router";
+import type { ActionFunctionArgs } from "react-router";
+import { redirect, useParams } from "react-router";
 import { useUser } from "~/hooks";
 import type { SalesInvoice } from "~/modules/invoicing";
 import {

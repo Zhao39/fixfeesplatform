@@ -17,8 +17,6 @@ import {
   ToggleGroupItem,
   VStack
 } from "@carbon/react";
-import type { LoaderFunctionArgs } from "@vercel/remix";
-import { json } from "@vercel/remix";
 import { useMemo, useState } from "react";
 import {
   LuCalendar,
@@ -27,6 +25,7 @@ import {
   LuSearch,
   LuTriangleAlert
 } from "react-icons/lu";
+import type { LoaderFunctionArgs } from "react-router";
 import { redirect, useFetcher, useLoaderData, useNavigate } from "react-router";
 import { EmployeeAvatar, Empty } from "~/components";
 import { usePermissions } from "~/hooks";

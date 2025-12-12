@@ -8,10 +8,12 @@ import {
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
-import { json, redirect } from "@vercel/remix";
-import type { ClientActionFunctionArgs } from "react-router";
-import { useLoaderData, useNavigate, useParams } from "react-router";
+import type {
+  ActionFunctionArgs,
+  ClientActionFunctionArgs,
+  LoaderFunctionArgs
+} from "react-router";
+import { redirect, useLoaderData, useNavigate, useParams } from "react-router";
 import {
   customerContactValidator,
   getCustomerContact,

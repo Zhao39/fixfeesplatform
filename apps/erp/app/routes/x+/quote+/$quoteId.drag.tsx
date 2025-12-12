@@ -5,11 +5,10 @@ import { flash } from "@carbon/auth/session.server";
 import type { modelThumbnailTask } from "@carbon/jobs/trigger/model-thumbnail";
 import { supportedModelTypes } from "@carbon/utils";
 import { tasks } from "@trigger.dev/sdk";
-import type { ActionFunctionArgs } from "@vercel/remix";
-import { json, redirect } from "@vercel/remix";
 import { generateObject } from "ai";
 import { nanoid } from "nanoid";
-import { data } from "react-router";
+import type { ActionFunctionArgs } from "react-router";
+import { data, redirect } from "react-router";
 import { z } from "zod/v3";
 import { upsertPart } from "~/modules/items";
 import {

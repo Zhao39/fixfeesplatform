@@ -4,7 +4,7 @@ import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import type { sendEmailResendTask } from "@carbon/jobs/trigger/send-email-resend";
 import { tasks } from "@trigger.dev/sdk";
-import { redirect, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, redirect } from "react-router";
 import {
   getSupplierContact,
   getSupplierQuote,

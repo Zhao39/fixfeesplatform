@@ -12,8 +12,7 @@ import {
   slackOAuthCallbackSchema,
   slackOAuthTokenResponseSchema
 } from "@carbon/ee/slack.server";
-import { json, type LoaderFunctionArgs, redirect } from "@vercel/remix";
-import { data } from "react-router";
+import { type LoaderFunctionArgs, redirect } from "react-router";
 import { z } from "zod/v3";
 import { upsertCompanyIntegration } from "~/modules/settings/settings.server";
 import { path } from "~/utils/path";

@@ -1,8 +1,10 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
 import swaggerDocsSchema from "@carbon/database/swagger-docs-schema";
-import type { LoaderFunctionArgs, SerializeFrom } from "@vercel/remix";
-import { json } from "@vercel/remix";
-import type { ClientLoaderFunctionArgs } from "react-router";
+import type {
+  ClientLoaderFunctionArgs,
+  LoaderFunctionArgs,
+  SerializeFrom
+} from "react-router";
 import { docsQuery } from "~/utils/react-query";
 
 export async function loader({ request }: LoaderFunctionArgs) {

@@ -9,9 +9,8 @@ import {
   ScrollArea,
   VStack
 } from "@carbon/react";
-import { type ActionFunctionArgs, json } from "@vercel/remix";
 import { LuMoon, LuSun } from "react-icons/lu";
-import { data } from "react-router";
+import { type ActionFunctionArgs, data } from "react-router";
 import { useRouteData } from "~/hooks";
 import type { Company } from "~/modules/settings";
 import {

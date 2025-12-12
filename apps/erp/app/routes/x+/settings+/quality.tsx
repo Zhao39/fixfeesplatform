@@ -15,10 +15,9 @@ import {
   toast,
   VStack
 } from "@carbon/react";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
-import { json, redirect } from "@vercel/remix";
 import { useEffect } from "react";
-import { useFetcher, useLoaderData } from "react-router";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
+import { redirect, useFetcher, useLoaderData } from "react-router";
 import { z } from "zod/v3";
 import { Users } from "~/components/Form";
 import { getCompanySettings } from "~/modules/settings";

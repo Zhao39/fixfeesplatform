@@ -1,8 +1,7 @@
 import { assertIsPost } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
-import { type ActionFunctionArgs, json } from "@vercel/remix";
 import template from "lodash.template";
-import { data } from "react-router";
+import { type ActionFunctionArgs, data } from "react-router";
 import { documents } from "./data/quality";
 
 function interpolateContent(

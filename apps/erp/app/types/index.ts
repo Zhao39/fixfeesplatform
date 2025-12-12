@@ -1,8 +1,8 @@
 import type { ValidationErrorResponseData } from "@carbon/form";
 import type { FileObject } from "@supabase/storage-js";
-import type { TypedResponse } from "@vercel/remix";
 import type { ReactElement } from "react";
 import type { IconType } from "react-icons";
+import type { TypedResponse } from "react-router";
 
 export type Action = {
   label: string;

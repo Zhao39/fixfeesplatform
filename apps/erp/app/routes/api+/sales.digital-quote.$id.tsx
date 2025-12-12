@@ -2,8 +2,7 @@ import { assertIsPost, getCarbonServiceRole, notFound } from "@carbon/auth";
 import type { notifyTask } from "@carbon/jobs/trigger/notify";
 import { NotificationEvent } from "@carbon/notifications";
 import { tasks } from "@trigger.dev/sdk";
-import type { ActionFunctionArgs } from "@vercel/remix";
-import { json } from "@vercel/remix";
+import type { ActionFunctionArgs } from "react-router";
 import {
   convertQuoteToOrder,
   getQuoteByExternalId,

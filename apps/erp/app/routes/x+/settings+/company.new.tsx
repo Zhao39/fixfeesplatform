@@ -5,8 +5,8 @@ import { updateCompanySession } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import { redis } from "@carbon/kv";
 import { getLocalTimeZone } from "@internationalized/date";
-import type { ActionFunctionArgs } from "@vercel/remix";
-import { redirect } from "@vercel/remix";
+import type { ActionFunctionArgs } from "react-router";
+import { redirect } from "react-router";
 import { insertEmployeeJob } from "~/modules/people";
 import { upsertLocation } from "~/modules/resources";
 import {

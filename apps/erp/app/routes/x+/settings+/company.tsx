@@ -12,8 +12,7 @@ import {
   ScrollArea,
   VStack
 } from "@carbon/react";
-import type { ActionFunctionArgs } from "@vercel/remix";
-import { json } from "@vercel/remix";
+import type { ActionFunctionArgs } from "react-router";
 import { data } from "react-router";
 import { useRouteData } from "~/hooks";
 import type { Company as CompanyType } from "~/modules/settings";

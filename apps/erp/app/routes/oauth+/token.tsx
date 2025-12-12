@@ -1,7 +1,6 @@
 import { getCarbonServiceRole } from "@carbon/auth";
 import { validator } from "@carbon/form";
-import { type ActionFunctionArgs, json } from "@vercel/remix";
-import { data } from "react-router";
+import { type ActionFunctionArgs, data } from "react-router";
 import { z } from "zod/v3";
 
 const oauthTokenValidator = z.object({

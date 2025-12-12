@@ -1,8 +1,8 @@
 import { getAppUrl } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { VStack } from "@carbon/react";
-import type { LoaderFunctionArgs } from "@vercel/remix";
-import { json, Outlet, useLoaderData } from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
+import { Outlet, useLoaderData } from "react-router";
 import { CustomerPortalsTable } from "~/modules/sales/ui/CustomerPortals";
 import { getCustomerPortals } from "~/modules/shared";
 import type { Handle } from "~/utils/handle";

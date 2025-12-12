@@ -25,8 +25,6 @@ import {
   SelectValue,
   VStack
 } from "@carbon/react";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
-import { json } from "@vercel/remix";
 import { useEffect, useMemo, useRef, useState } from "react";
 import ConfettiExplosion from "react-confetti-explosion";
 import {
@@ -40,6 +38,7 @@ import {
   LuHouse,
   LuRefreshCcw
 } from "react-icons/lu";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import {
   data,
   Link,

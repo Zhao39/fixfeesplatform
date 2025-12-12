@@ -1,7 +1,7 @@
 import { getCarbonServiceRole, notFound } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { validator } from "@carbon/form";
-import { type ActionFunctionArgs, json } from "@vercel/remix";
+import { type ActionFunctionArgs } from "react-router";
 import { z } from "zod/v3";
 import { importCsv, importPermissions, importSchemas } from "~/modules/shared";
 

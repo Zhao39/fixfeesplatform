@@ -10,8 +10,6 @@ import {
   VStack
 } from "@carbon/react";
 import type { ColumnDef } from "@tanstack/react-table";
-import type { LoaderFunctionArgs } from "@vercel/remix";
-import { json } from "@vercel/remix";
 import { memo, useMemo } from "react";
 import {
   LuBookOpen,
@@ -25,6 +23,7 @@ import {
   LuTriangleAlert,
   LuUsers
 } from "react-icons/lu";
+import type { LoaderFunctionArgs } from "react-router";
 import {
   Link,
   Outlet,

@@ -22,11 +22,10 @@ import {
 } from "@carbon/react";
 import { Editor } from "@carbon/react/Editor";
 import { getLocalTimeZone, today } from "@internationalized/date";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
-import { json, redirect } from "@vercel/remix";
 import { useEffect, useState } from "react";
 import { LuCircleCheck } from "react-icons/lu";
-import { useFetcher, useLoaderData } from "react-router";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
+import { redirect, useFetcher, useLoaderData } from "react-router";
 import { usePermissions, useUser } from "~/hooks";
 import {
   getCompanySettings,

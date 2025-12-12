@@ -1,4 +1,4 @@
-import { redirect } from "@vercel/remix";
+import { redirect } from "react-router";
 import { path } from "~/utils/path";
 
 export async function loader() {

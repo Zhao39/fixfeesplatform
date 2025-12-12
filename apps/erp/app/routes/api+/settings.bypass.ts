@@ -1,5 +1,4 @@
 import { STRIPE_BYPASS_COMPANY_IDS } from "@carbon/auth";
-import { json } from "@vercel/remix";
 
 export async function loader() {
   if (STRIPE_BYPASS_COMPANY_IDS) {

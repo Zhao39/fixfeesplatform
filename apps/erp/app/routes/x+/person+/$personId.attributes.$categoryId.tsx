@@ -9,9 +9,8 @@ import {
   CardHeader,
   CardTitle
 } from "@carbon/react";
-import type { LoaderFunctionArgs } from "@vercel/remix";
-import { json, redirect } from "@vercel/remix";
-import { useLoaderData } from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
+import { redirect, useLoaderData } from "react-router";
 import { getAttributeCategoryWithValues } from "~/modules/account";
 import { UserAttributesForm } from "~/modules/account/ui/UserAttributes";
 import { path } from "~/utils/path";

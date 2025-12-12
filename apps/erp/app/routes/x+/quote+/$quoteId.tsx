@@ -6,9 +6,15 @@ import type { DragEndEvent } from "@dnd-kit/core";
 import { DndContext } from "@dnd-kit/core";
 import type { FileObject } from "@supabase/storage-js";
 import type { PostgrestResponse } from "@supabase/supabase-js";
-import type { LoaderFunctionArgs } from "@vercel/remix";
-import { defer, redirect } from "@vercel/remix";
-import { Outlet, useLoaderData, useParams, useSubmit } from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
+import {
+  defer,
+  Outlet,
+  redirect,
+  useLoaderData,
+  useParams,
+  useSubmit
+} from "react-router";
 import { PanelProvider, ResizablePanels } from "~/components/Layout/Panels";
 import { getCurrencyByCode } from "~/modules/accounting";
 import type { SalesOrderLine } from "~/modules/sales";

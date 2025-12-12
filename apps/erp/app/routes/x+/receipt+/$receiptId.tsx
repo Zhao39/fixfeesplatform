@@ -2,9 +2,8 @@ import { error, getCarbonServiceRole } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { VStack } from "@carbon/react";
-import type { LoaderFunctionArgs } from "@vercel/remix";
-import { defer, redirect } from "@vercel/remix";
-import { Outlet, useParams } from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
+import { defer, Outlet, redirect, useParams } from "react-router";
 import { PanelProvider } from "~/components/Layout";
 import {
   getBatchProperties,

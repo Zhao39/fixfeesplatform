@@ -2,8 +2,7 @@ import { error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { getLocalTimeZone, startOfWeek, today } from "@internationalized/date";
-import { json, type LoaderFunctionArgs } from "@vercel/remix";
-import { data } from "react-router";
+import { data, type LoaderFunctionArgs } from "react-router";
 import {
   getItemDemand,
   getItemQuantities,

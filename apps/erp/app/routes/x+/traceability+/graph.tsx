@@ -8,11 +8,10 @@ import {
   VStack
 } from "@carbon/react";
 import { useUrlParams } from "@carbon/remix";
-import type { LoaderFunctionArgs } from "@vercel/remix";
-import { json, redirect } from "@vercel/remix";
 import { ParentSize } from "@visx/responsive";
 import { useEffect, useMemo, useState } from "react";
-import { Link, useLoaderData, useNavigation } from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
+import { Link, redirect, useLoaderData, useNavigation } from "react-router";
 import { Empty } from "~/components";
 import type {
   Activity,

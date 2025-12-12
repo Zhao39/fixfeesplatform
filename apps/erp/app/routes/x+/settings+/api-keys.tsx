@@ -1,8 +1,12 @@
 import { error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
-import { json, type LoaderFunctionArgs, redirect } from "@vercel/remix";
-import { Outlet, useLoaderData } from "react-router";
+import {
+  type LoaderFunctionArgs,
+  Outlet,
+  redirect,
+  useLoaderData
+} from "react-router";
 import { ApiKeysTable, getApiKeys } from "~/modules/settings";
 import type { Handle } from "~/utils/handle";
 import { path } from "~/utils/path";

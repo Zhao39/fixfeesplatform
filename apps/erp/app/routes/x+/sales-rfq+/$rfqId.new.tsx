@@ -2,7 +2,7 @@ import { assertIsPost, error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
-import { type ActionFunctionArgs, redirect } from "@vercel/remix";
+import { type ActionFunctionArgs, redirect } from "react-router";
 import { salesRfqLineValidator, upsertSalesRFQLine } from "~/modules/sales";
 import { setCustomFields } from "~/utils/form";
 import { path } from "~/utils/path";

@@ -4,8 +4,8 @@ import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import { getLocalTimeZone, today } from "@internationalized/date";
 import type { FunctionsResponse } from "@supabase/functions-js";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
-import { redirect } from "@vercel/remix";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
+import { redirect } from "react-router";
 import { useUrlParams, useUser } from "~/hooks";
 import {
   createSalesInvoiceFromSalesOrder,

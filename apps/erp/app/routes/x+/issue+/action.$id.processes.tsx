@@ -1,6 +1,5 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
-import { type ActionFunctionArgs, json } from "@vercel/remix";
-import { data } from "react-router";
+import { type ActionFunctionArgs, data } from "react-router";
 import { z } from "zod/v3";
 import { updateIssueActionProcesses } from "~/modules/quality/quality.service";
 

@@ -1,6 +1,5 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
-import { type ActionFunctionArgs, json } from "@vercel/remix";
-import { data } from "react-router";
+import { type ActionFunctionArgs, data } from "react-router";
 import { insertTag } from "~/modules/shared";
 
 export async function action({ request }: ActionFunctionArgs) {

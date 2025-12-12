@@ -1,6 +1,6 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { parseDate } from "@internationalized/date";
-import { type ActionFunctionArgs, json } from "@vercel/remix";
+import { type ActionFunctionArgs } from "react-router";
 import { getCurrencyByCode } from "~/modules/accounting";
 
 export async function action({ request }: ActionFunctionArgs) {

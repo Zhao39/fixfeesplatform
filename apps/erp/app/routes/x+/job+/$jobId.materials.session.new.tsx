@@ -8,8 +8,7 @@ import {
   startOfWeek,
   today
 } from "@internationalized/date";
-import type { ActionFunctionArgs } from "@vercel/remix";
-import { json } from "@vercel/remix";
+import type { ActionFunctionArgs } from "react-router";
 import { data } from "react-router";
 import { z } from "zod/v3";
 import {

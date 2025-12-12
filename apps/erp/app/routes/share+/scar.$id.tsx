@@ -23,10 +23,9 @@ import {
 } from "@carbon/react";
 import { Editor } from "@carbon/react/Editor";
 import { useMode } from "@carbon/remix";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
-import { json } from "@vercel/remix";
 import { useCallback, useRef, useState } from "react";
 import { LuChevronRight } from "react-icons/lu";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import {
   data,
   useFetcher,

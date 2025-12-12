@@ -1,7 +1,6 @@
 import { assertIsPost } from "@carbon/auth";
 import { validationError, validator } from "@carbon/form";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
-import { json } from "@vercel/remix";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import { data } from "react-router";
 import { themeValidator } from "~/modules/settings";
 import { getTheme, setTheme } from "~/services/theme.server";

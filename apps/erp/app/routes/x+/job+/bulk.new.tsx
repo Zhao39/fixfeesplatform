@@ -13,7 +13,7 @@ import {
   toCalendarDateTime
 } from "@internationalized/date";
 import { tasks } from "@trigger.dev/sdk";
-import { redirect, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, redirect } from "react-router";
 import { getDefaultShelfForJob } from "~/modules/inventory";
 import { getItemReplenishment } from "~/modules/items";
 import {

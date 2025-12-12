@@ -5,12 +5,12 @@ import { InviteEmail } from "@carbon/documents/email";
 import { validationError, validator } from "@carbon/form";
 import { sendEmail } from "@carbon/lib/resend.server";
 import { render } from "@react-email/components";
-import type { ActionFunctionArgs } from "@vercel/remix";
-import { redirect } from "@vercel/remix";
 import { nanoid } from "nanoid";
+import type { ActionFunctionArgs } from "react-router";
+import { redirect } from "react-router";
 import {
-  createSupplierAccountValidator,
-  CreateSupplierModal
+  CreateSupplierModal,
+  createSupplierAccountValidator
 } from "~/modules/users";
 import { createSupplierAccount } from "~/modules/users/users.server";
 import { path } from "~/utils/path";

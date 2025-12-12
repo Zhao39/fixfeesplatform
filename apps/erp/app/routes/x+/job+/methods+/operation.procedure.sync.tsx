@@ -3,8 +3,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validator } from "@carbon/form";
 import { FunctionRegion } from "@supabase/supabase-js";
-import { type ActionFunctionArgs, json } from "@vercel/remix";
-import { data } from "react-router";
+import { type ActionFunctionArgs, data } from "react-router";
 import { procedureSyncValidator } from "~/modules/production";
 
 export async function action({ request }: ActionFunctionArgs) {

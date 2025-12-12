@@ -6,9 +6,8 @@ import { supportedModelTypes } from "@carbon/utils";
 import type { DragEndEvent } from "@dnd-kit/core";
 import { DndContext } from "@dnd-kit/core";
 import type { FileObject } from "@supabase/storage-js";
-import type { LoaderFunctionArgs } from "@vercel/remix";
-import { defer, redirect } from "@vercel/remix";
-import { Outlet, useParams, useSubmit } from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
+import { defer, Outlet, redirect, useParams, useSubmit } from "react-router";
 import { PanelProvider, ResizablePanels } from "~/components/Layout/Panels";
 import type { SalesRFQLine } from "~/modules/sales";
 import {

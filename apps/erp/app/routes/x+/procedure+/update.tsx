@@ -1,6 +1,6 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
-import { type ActionFunctionArgs, json } from "@vercel/remix";
 import type { ClientActionFunctionArgs } from "react-router";
+import { type ActionFunctionArgs } from "react-router";
 import { getCompanyId, proceduresQuery } from "~/utils/react-query";
 
 export async function action({ request }: ActionFunctionArgs) {

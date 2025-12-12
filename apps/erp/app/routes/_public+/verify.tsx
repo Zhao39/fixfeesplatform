@@ -21,14 +21,19 @@ import {
   VStack
 } from "@carbon/react";
 import { Ratelimit } from "@upstash/ratelimit";
+import { LuCircleAlert } from "react-icons/lu";
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
   MetaFunction
-} from "@vercel/remix";
-import { json, redirect } from "@vercel/remix";
-import { LuCircleAlert } from "react-icons/lu";
-import { data, Link, useFetcher, useSearchParams } from "react-router";
+} from "react-router";
+import {
+  data,
+  Link,
+  redirect,
+  useFetcher,
+  useSearchParams
+} from "react-router";
 import { z } from "zod/v3";
 
 import type { FormActionData, Result } from "~/types";

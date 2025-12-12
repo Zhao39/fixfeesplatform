@@ -28,15 +28,14 @@ import { ItarLoginDisclaimer, useMode } from "@carbon/remix";
 import { Edition } from "@carbon/utils";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { Ratelimit } from "@upstash/ratelimit";
+import { useEffect, useState } from "react";
+import { LuCircleAlert } from "react-icons/lu";
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
   MetaFunction
-} from "@vercel/remix";
-import { json, redirect } from "@vercel/remix";
-import { useEffect, useState } from "react";
-import { LuCircleAlert } from "react-icons/lu";
-import { data, useFetcher, useSearchParams } from "react-router";
+} from "react-router";
+import { data, redirect, useFetcher, useSearchParams } from "react-router";
 
 import type { FormActionData, Result } from "~/types";
 import { path } from "~/utils/path";

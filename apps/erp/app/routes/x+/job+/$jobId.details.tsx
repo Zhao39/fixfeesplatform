@@ -20,11 +20,10 @@ import {
   useMount,
   VStack
 } from "@carbon/react";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
-import { defer, redirect } from "@vercel/remix";
 import { Suspense } from "react";
 import { LuShoppingCart } from "react-icons/lu";
-import { Await, useLoaderData, useParams } from "react-router";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
+import { Await, defer, redirect, useLoaderData, useParams } from "react-router";
 import { CadModel, Hyperlink, SupplierAvatar } from "~/components";
 import { usePanels } from "~/components/Layout";
 import { usePermissions, useRealtime, useRouteData } from "~/hooks";

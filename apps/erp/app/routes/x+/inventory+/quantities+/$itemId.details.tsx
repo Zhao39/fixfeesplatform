@@ -1,9 +1,8 @@
 import { error, notFound } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
-import type { LoaderFunctionArgs } from "@vercel/remix";
-import { json, redirect } from "@vercel/remix";
-import { useLoaderData } from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
+import { redirect, useLoaderData } from "react-router";
 import { useShelves } from "~/components/Form/Shelf";
 import { InventoryDetails } from "~/modules/inventory";
 import {

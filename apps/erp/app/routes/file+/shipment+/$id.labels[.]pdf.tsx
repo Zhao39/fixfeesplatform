@@ -3,7 +3,7 @@ import { ProductLabelPDF } from "@carbon/documents/pdf";
 import type { TrackedEntityAttributes } from "@carbon/utils";
 import { labelSizes } from "@carbon/utils";
 import { renderToStream } from "@react-pdf/renderer";
-import { redirect, type LoaderFunctionArgs } from "@vercel/remix";
+import { type LoaderFunctionArgs, redirect } from "react-router";
 import { getShipmentTracking } from "~/modules/inventory";
 import { getCompanySettings } from "~/modules/settings/settings.service";
 import { path } from "~/utils/path";

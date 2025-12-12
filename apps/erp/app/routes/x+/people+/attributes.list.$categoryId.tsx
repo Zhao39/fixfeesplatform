@@ -1,9 +1,14 @@
 import { assertIsPost, error, notFound } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
-import { json, redirect } from "@vercel/remix";
-import { data, Outlet, useLoaderData, useNavigate } from "react-router";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
+import {
+  data,
+  Outlet,
+  redirect,
+  useLoaderData,
+  useNavigate
+} from "react-router";
 import { useUrlParams } from "~/hooks";
 import {
   getAttributeCategory,

@@ -1,9 +1,8 @@
 import { openai } from "@ai-sdk/openai";
 import { notFound } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
-import type { ActionFunctionArgs } from "@vercel/remix";
-import { json } from "@vercel/remix";
 import { generateObject } from "ai";
+import type { ActionFunctionArgs } from "react-router";
 import type { ZodSchema } from "zod/v3";
 import { z } from "zod/v3";
 import { importSchemas } from "~/modules/shared";

@@ -2,9 +2,8 @@ import { assertIsPost, error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
-import type { ActionFunctionArgs } from "@vercel/remix";
-import { redirect } from "@vercel/remix";
-import { useNavigate } from "react-router";
+import type { ActionFunctionArgs } from "react-router";
+import { redirect, useNavigate } from "react-router";
 import type { AccountClass, AccountIncomeBalance } from "~/modules/accounting";
 import {
   accountCategoryValidator,

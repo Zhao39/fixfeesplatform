@@ -15,10 +15,9 @@ import {
   VStack
 } from "@carbon/react";
 import { labelSizes } from "@carbon/utils";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
-import { json, redirect } from "@vercel/remix";
 import { useEffect } from "react";
-import { useFetcher, useLoaderData } from "react-router";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
+import { redirect, useFetcher, useLoaderData } from "react-router";
 import {
   getCompanySettings,
   productLabelSizeValidator,

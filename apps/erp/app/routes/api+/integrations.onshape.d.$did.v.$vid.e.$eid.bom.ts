@@ -1,9 +1,10 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { Onshape as OnshapeConfig } from "@carbon/ee";
 import { OnshapeClient } from "@carbon/ee/onshape";
-import type { LoaderFunctionArgs } from "@vercel/remix";
-import { json } from "@vercel/remix";
-import type { ShouldRevalidateFunction } from "react-router";
+import type {
+  LoaderFunctionArgs,
+  ShouldRevalidateFunction
+} from "react-router";
 import { getIntegration } from "~/modules/settings/settings.service";
 import { getReadableIdWithRevision } from "~/utils/string";
 

@@ -38,8 +38,6 @@ import { useMode } from "@carbon/remix";
 import { formatCityStatePostalCode, formatDate } from "@carbon/utils";
 import { useLocale } from "@react-aria/i18n";
 import type { PostgrestResponse } from "@supabase/supabase-js";
-import type { LoaderFunctionArgs } from "@vercel/remix";
-import { json } from "@vercel/remix";
 import { motion } from "framer-motion";
 import MotionNumber from "motion-number";
 import type { Dispatch, SetStateAction } from "react";
@@ -53,6 +51,7 @@ import {
   LuTruck,
   LuUpload
 } from "react-icons/lu";
+import type { LoaderFunctionArgs } from "react-router";
 import { useFetcher, useLoaderData, useParams } from "react-router";
 import { usePercentFormatter } from "~/hooks";
 import { getPaymentTermsList } from "~/modules/accounting";

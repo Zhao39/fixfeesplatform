@@ -1,9 +1,8 @@
 import { error, success } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
-import type { ActionFunctionArgs } from "@vercel/remix";
-import { json, redirect } from "@vercel/remix";
-import { data } from "react-router";
+import type { ActionFunctionArgs } from "react-router";
+import { data, redirect } from "react-router";
 import { deleteStockTransferLine } from "~/modules/inventory";
 import { path } from "~/utils/path";
 

@@ -1,6 +1,6 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
-import type { LoaderFunctionArgs } from "@vercel/remix";
-import { redirect } from "@vercel/remix";
+import type { LoaderFunctionArgs } from "react-router";
+import { redirect } from "react-router";
 import { getMakeMethods } from "~/modules/items";
 import { path } from "~/utils/path";
 

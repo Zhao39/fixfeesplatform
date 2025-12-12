@@ -1,6 +1,6 @@
 import { assertIsPost, getCarbonServiceRole } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
-import { type ActionFunctionArgs, json, redirect } from "@vercel/remix";
+import { type ActionFunctionArgs, redirect } from "react-router";
 import { activateMethodVersion } from "~/modules/items/items.service";
 import { requestReferrer } from "~/utils/path";
 

@@ -2,8 +2,7 @@ import { assertIsPost, error, getCarbonServiceRole } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
-import { type ActionFunctionArgs, json, redirect } from "@vercel/remix";
-import { data } from "react-router";
+import { type ActionFunctionArgs, data, redirect } from "react-router";
 import {
   copyMakeMethod,
   makeMethodVersionValidator,

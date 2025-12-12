@@ -5,8 +5,7 @@ import {
   type TiptapDocument,
   tiptapToMarkdown
 } from "@carbon/ee/linear";
-import { type ActionFunction, json } from "@vercel/remix";
-import { data } from "react-router";
+import { type ActionFunction, data } from "react-router";
 
 const linear = new LinearClient();
 

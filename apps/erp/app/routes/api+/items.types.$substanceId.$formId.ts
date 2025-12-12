@@ -1,7 +1,9 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
-import type { LoaderFunctionArgs, SerializeFrom } from "@vercel/remix";
-import { json } from "@vercel/remix";
-import type { ClientLoaderFunctionArgs } from "react-router";
+import type {
+  ClientLoaderFunctionArgs,
+  LoaderFunctionArgs,
+  SerializeFrom
+} from "react-router";
 import { data } from "react-router";
 import { getMaterialTypeList } from "~/modules/items";
 import { getCompanyId, materialTypesQuery } from "~/utils/react-query";

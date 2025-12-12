@@ -1,12 +1,12 @@
 import { assertIsPost, error, success } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
-import { redirect, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, redirect } from "react-router";
 import {
   finalizeSupplierQuote,
   getSupplierQuote,
-  getSupplierQuoteLines,
-  getSupplierQuoteLinePricesByQuoteId
+  getSupplierQuoteLinePricesByQuoteId,
+  getSupplierQuoteLines
 } from "~/modules/purchasing";
 import { upsertExternalLink } from "~/modules/shared";
 import { path } from "~/utils/path";

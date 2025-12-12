@@ -1,8 +1,7 @@
 import { getCarbonServiceRole } from "@carbon/auth";
 import { syncIssueFromLinearSchema } from "@carbon/jobs/trigger/linear";
 import { tasks } from "@trigger.dev/sdk";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
-import { json } from "@vercel/remix";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import { data } from "react-router";
 import { getIntegration } from "../../modules/settings";
 

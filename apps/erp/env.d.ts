@@ -1,3 +1,3 @@
 /// <reference types="vite/client" />
-/// <reference types="@vercel/remix/globals" />
-/// <reference types="@vercel/remix" />
+/// <reference types="@vercel/react-router/globals" />
+/// <reference types="@vercel/react-router" />

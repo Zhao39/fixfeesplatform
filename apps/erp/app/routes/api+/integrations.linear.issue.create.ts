@@ -5,8 +5,7 @@ import {
   LinearClient,
   linkActionToLinearIssue
 } from "@carbon/ee/linear";
-import { type ActionFunction, json, type LoaderFunction } from "@vercel/remix";
-import { data } from "react-router";
+import { type ActionFunction, data, type LoaderFunction } from "react-router";
 import { getIssueAction } from "~/modules/quality/quality.service";
 
 const linear = new LinearClient();

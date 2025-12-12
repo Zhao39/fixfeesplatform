@@ -12,9 +12,8 @@ import { validationError, validator } from "@carbon/form";
 import { sendEmail } from "@carbon/lib/resend.server";
 import { render } from "@react-email/components";
 import { tasks } from "@trigger.dev/sdk";
-import type { ActionFunctionArgs } from "@vercel/remix";
-import { json } from "@vercel/remix";
 import { nanoid } from "nanoid";
+import type { ActionFunctionArgs } from "react-router";
 import { data } from "react-router";
 import { resendInviteValidator } from "~/modules/users";
 

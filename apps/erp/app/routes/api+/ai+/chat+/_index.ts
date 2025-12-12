@@ -1,6 +1,6 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
-import type { ActionFunctionArgs } from "@vercel/remix";
 import { smoothStream } from "ai";
+import type { ActionFunctionArgs } from "react-router";
 import { orchestrationAgent } from "./agents/orchestration-agent";
 import { createChatContext } from "./agents/shared/context";
 

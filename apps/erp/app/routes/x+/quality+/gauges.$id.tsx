@@ -8,9 +8,14 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import { getLocalTimeZone, parseDate, today } from "@internationalized/date";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
-import { defer, redirect } from "@vercel/remix";
-import { useLoaderData, useNavigate, useParams } from "react-router";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
+import {
+  defer,
+  redirect,
+  useLoaderData,
+  useNavigate,
+  useParams
+} from "react-router";
 import { useRouteData } from "~/hooks";
 import type { GaugeType } from "~/modules/quality";
 import {

@@ -6,7 +6,7 @@ import {
 } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
-import { redirect, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, redirect } from "react-router";
 import { convertSalesRfqToQuote } from "~/modules/sales";
 import { path } from "~/utils/path";
 

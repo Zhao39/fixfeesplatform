@@ -2,8 +2,8 @@ import { assertIsPost, error, notFound } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validator } from "@carbon/form";
-import type { ActionFunctionArgs } from "@vercel/remix";
-import { data, json } from "react-router";
+import type { ActionFunctionArgs } from "react-router";
+import { data } from "react-router";
 import { procedureParameterValidator } from "~/modules/production/production.models";
 import { upsertProcedureParameter } from "~/modules/production/production.service";
 

@@ -4,9 +4,8 @@ import {
   processStripeEvent,
   syncStripeDataToKV
 } from "@carbon/stripe/stripe.server";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
-import { json, redirect } from "@vercel/remix";
-import { data } from "react-router";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
+import { data, redirect } from "react-router";
 import { path } from "~/utils/path";
 
 export async function loader({ request }: LoaderFunctionArgs) {

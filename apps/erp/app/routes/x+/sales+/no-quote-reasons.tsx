@@ -1,7 +1,7 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { VStack } from "@carbon/react";
-import type { LoaderFunctionArgs } from "@vercel/remix";
-import { json, Outlet, useLoaderData } from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
+import { Outlet, useLoaderData } from "react-router";
 import { getNoQuoteReasons } from "~/modules/sales";
 import { NoQuoteReasonsTable } from "~/modules/sales/ui/NoQuoteReasons";
 import type { Handle } from "~/utils/handle";

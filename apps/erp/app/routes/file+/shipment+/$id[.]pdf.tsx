@@ -1,8 +1,9 @@
+import { getCarbonServiceRole } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { PackingSlipPDF } from "@carbon/documents/pdf";
 import type { JSONContent } from "@carbon/react";
 import { renderToStream } from "@react-pdf/renderer";
-import { type LoaderFunctionArgs } from "@vercel/remix";
+import { type LoaderFunctionArgs } from "react-router";
 import { getPaymentTerm } from "~/modules/accounting";
 import {
   getShipment,
@@ -24,7 +25,6 @@ import {
 import { getCompany } from "~/modules/settings";
 import { getBase64ImageFromSupabase } from "~/modules/shared";
 import { getLocale } from "~/utils/request";
-import { getCarbonServiceRole } from "@carbon/auth";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, companyId } = await requirePermissions(request, {

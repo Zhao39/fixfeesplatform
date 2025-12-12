@@ -15,13 +15,13 @@ import {
 } from "@carbon/react";
 import { useMode } from "@carbon/remix";
 import { type Theme, themes } from "@carbon/utils";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
-import { json, redirect } from "@vercel/remix";
 import { useEffect, useRef, useState } from "react";
 import { BiMoon, BiSun } from "react-icons/bi";
 import { RxCheck } from "react-icons/rx";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import {
   Link,
+  redirect,
   useFetcher,
   useLoaderData,
   useNavigation,

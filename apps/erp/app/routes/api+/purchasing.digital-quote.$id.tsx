@@ -1,7 +1,6 @@
 import { assertIsPost, getCarbonServiceRole, notFound } from "@carbon/auth";
 import { validationError, validator } from "@carbon/form";
-import type { ActionFunctionArgs } from "@vercel/remix";
-import { json } from "@vercel/remix";
+import type { ActionFunctionArgs } from "react-router";
 import { z } from "zod/v3";
 import {
   externalSupplierQuoteValidator,

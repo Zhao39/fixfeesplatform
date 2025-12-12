@@ -33,12 +33,11 @@ import {
 import { useMode } from "@carbon/remix";
 import { formatDate } from "@carbon/utils";
 import { useLocale } from "@react-aria/i18n";
-import type { LoaderFunctionArgs } from "@vercel/remix";
-import { json } from "@vercel/remix";
 import { motion } from "framer-motion";
 import type { Dispatch, SetStateAction } from "react";
 import { useEffect, useRef, useState } from "react";
 import { LuChevronRight, LuImage, LuPencil } from "react-icons/lu";
+import type { LoaderFunctionArgs } from "react-router";
 import { useFetcher, useLoaderData, useParams } from "react-router";
 import { externalSupplierQuoteValidator } from "~/modules/purchasing/purchasing.models";
 import {

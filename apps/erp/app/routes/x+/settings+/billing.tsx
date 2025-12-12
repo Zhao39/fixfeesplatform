@@ -24,10 +24,9 @@ import {
 import { useEdition } from "@carbon/remix";
 import { getBillingPortalRedirectUrl } from "@carbon/stripe/stripe.server";
 import { Edition } from "@carbon/utils";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
-import { json, redirect } from "@vercel/remix";
 import { useState } from "react";
-import { data, Form, useLoaderData } from "react-router";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
+import { data, Form, redirect, useLoaderData } from "react-router";
 import { z } from "zod/v3";
 import { usePermissions, useUser } from "~/hooks";
 import type { Handle } from "~/utils/handle";

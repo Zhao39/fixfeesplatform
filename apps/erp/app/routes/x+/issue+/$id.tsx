@@ -2,10 +2,16 @@ import { error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { VStack } from "@carbon/react";
-import type { LoaderFunctionArgs } from "@vercel/remix";
-import { defer, redirect } from "@vercel/remix";
 import { Suspense } from "react";
-import { Await, Outlet, useLoaderData, useParams } from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
+import {
+  Await,
+  defer,
+  Outlet,
+  redirect,
+  useLoaderData,
+  useParams
+} from "react-router";
 import { PanelProvider, ResizablePanels } from "~/components/Layout/Panels";
 import { getItemFiles } from "~/modules/items";
 import {

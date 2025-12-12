@@ -1,8 +1,8 @@
 import { error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
-import type { LoaderFunctionArgs } from "@vercel/remix";
 import { Suspense, useMemo } from "react";
+import type { LoaderFunctionArgs } from "react-router";
 import {
   Await,
   defer,

@@ -6,7 +6,7 @@ import {
   flash,
   updateCompanySession
 } from "@carbon/auth/session.server";
-import { redirect, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, redirect } from "react-router";
 import { getCompanies } from "~/modules/settings";
 import { path, requestReferrer } from "~/utils/path";
 

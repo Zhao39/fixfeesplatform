@@ -3,10 +3,13 @@ import type {
   AuthSession as SupabaseAuthSession,
   SupabaseClient
 } from "@supabase/supabase-js";
-import { redirect } from "@vercel/remix";
+import { redirect } from "react-router";
 import { REFRESH_ACCESS_TOKEN_THRESHOLD, VERCEL_URL } from "../config/env";
 import { getCarbon, getCarbonServiceRole } from "../lib/supabase";
+import { getCarbonAPIKeyClient } from "../lib/supabase/client";
+import type { AuthSession } from "../types";
 import { path } from "../utils/path";
+import { error } from "../utils/result";
 import {
   destroyAuthSession,
   flash,
@@ -14,10 +17,6 @@ import {
 } from "./session.server";
 import { getCompaniesForUser } from "./users";
 import { getUserClaims } from "./users.server";
-
-import { getCarbonAPIKeyClient } from "../lib/supabase/client";
-import type { AuthSession } from "../types";
-import { error } from "../utils/result";
 
 export async function createEmailAuthAccount(
   email: string,

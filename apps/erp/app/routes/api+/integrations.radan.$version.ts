@@ -1,7 +1,6 @@
 import { getCarbonServiceRole } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
-import type { LoaderFunctionArgs } from "@vercel/remix";
-import { json } from "@vercel/remix";
+import type { LoaderFunctionArgs } from "react-router";
 import { data } from "react-router";
 import { z } from "zod/v3";
 import { getJobDocuments } from "~/modules/production/production.service";

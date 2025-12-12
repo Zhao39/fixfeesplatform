@@ -5,10 +5,9 @@ import { validationError, validator } from "@carbon/form";
 import { Spinner } from "@carbon/react";
 import type { FileObject } from "@supabase/storage-js";
 import type { JSONContent } from "@tiptap/react";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
-import { json, redirect } from "@vercel/remix";
 import { Suspense, useRef } from "react";
-import { Await, useLoaderData, useParams } from "react-router";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
+import { Await, redirect, useLoaderData, useParams } from "react-router";
 import { useRouteData } from "~/hooks";
 import type { Opportunity, SalesOrder, SalesOrderLine } from "~/modules/sales";
 import {

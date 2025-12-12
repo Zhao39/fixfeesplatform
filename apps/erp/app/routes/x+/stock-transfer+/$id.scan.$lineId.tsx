@@ -20,8 +20,6 @@ import {
   ModalTitle,
   toast
 } from "@carbon/react";
-import type { ActionFunctionArgs } from "@vercel/remix";
-import { json, redirect } from "@vercel/remix";
 import { useEffect, useState } from "react";
 import {
   LuCheck,
@@ -30,7 +28,14 @@ import {
   LuTriangleAlert,
   LuX
 } from "react-icons/lu";
-import { data, useFetcher, useNavigate, useParams } from "react-router";
+import type { ActionFunctionArgs } from "react-router";
+import {
+  data,
+  redirect,
+  useFetcher,
+  useNavigate,
+  useParams
+} from "react-router";
 import { useRouteData } from "~/hooks";
 import type { StockTransfer, StockTransferLine } from "~/modules/inventory";
 import { stockTransferLineScanValidator } from "~/modules/inventory";

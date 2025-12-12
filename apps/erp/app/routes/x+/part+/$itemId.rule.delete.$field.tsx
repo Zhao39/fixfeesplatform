@@ -1,7 +1,6 @@
 import { assertIsPost, notFound } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
-import type { ActionFunctionArgs } from "@vercel/remix";
-import { json } from "@vercel/remix";
+import type { ActionFunctionArgs } from "react-router";
 import { deleteConfigurationRule } from "~/modules/items";
 
 export async function action({ request, params }: ActionFunctionArgs) {

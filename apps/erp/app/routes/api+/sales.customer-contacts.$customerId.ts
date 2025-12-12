@@ -1,9 +1,11 @@
 import { error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
-import type { LoaderFunctionArgs, SerializeFrom } from "@vercel/remix";
-import { json } from "@vercel/remix";
-import type { ClientLoaderFunctionArgs } from "react-router";
+import type {
+  ClientLoaderFunctionArgs,
+  LoaderFunctionArgs,
+  SerializeFrom
+} from "react-router";
 import { data } from "react-router";
 import { getCustomerContacts } from "~/modules/sales";
 import { customerContactsQuery } from "~/utils/react-query";

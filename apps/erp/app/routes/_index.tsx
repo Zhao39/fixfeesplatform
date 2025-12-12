@@ -1,6 +1,6 @@
 import { requireAuthSession } from "@carbon/auth/session.server";
-import type { LoaderFunctionArgs } from "@vercel/remix";
-import { redirect } from "@vercel/remix";
+import type { LoaderFunctionArgs } from "react-router";
+import { redirect } from "react-router";
 import { path } from "~/utils/path";
 
 export async function loader({ request }: LoaderFunctionArgs) {

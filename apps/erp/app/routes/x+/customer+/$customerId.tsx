@@ -2,9 +2,8 @@ import { error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { cn } from "@carbon/react";
-import type { LoaderFunctionArgs } from "@vercel/remix";
-import { json, redirect } from "@vercel/remix";
-import { Outlet } from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
+import { Outlet, redirect } from "react-router";
 import { usePermissions } from "~/hooks";
 import {
   getCustomer,

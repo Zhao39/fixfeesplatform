@@ -1,9 +1,8 @@
 import { error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
-import type { LoaderFunctionArgs } from "@vercel/remix";
-import { defer, redirect } from "@vercel/remix";
-import { Outlet } from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
+import { defer, Outlet, redirect } from "react-router";
 import {
   getItemFiles,
   getMakeMethods,

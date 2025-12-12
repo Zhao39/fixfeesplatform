@@ -7,14 +7,13 @@ import type { Theme } from "@carbon/utils";
 import { modeValidator, themes } from "@carbon/utils";
 import { QueryClient } from "@tanstack/react-query";
 import { Analytics } from "@vercel/analytics/react";
+import React, { useEffect } from "react";
 import type {
   ActionFunctionArgs,
   LinksFunction,
   LoaderFunctionArgs,
   MetaFunction
-} from "@vercel/remix";
-import { json } from "@vercel/remix";
-import React, { useEffect } from "react";
+} from "react-router";
 import {
   data,
   isRouteErrorResponse,

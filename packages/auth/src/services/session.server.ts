@@ -1,5 +1,5 @@
 import { redis } from "@carbon/kv";
-import { createCookieSessionStorage, redirect } from "@vercel/remix";
+import { createCookieSessionStorage, redirect } from "react-router";
 
 import {
   DOMAIN,

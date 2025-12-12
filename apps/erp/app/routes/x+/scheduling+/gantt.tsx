@@ -7,7 +7,6 @@ import {
   ResizablePanelGroup,
   useDebounce
 } from "@carbon/react";
-import { json } from "@vercel/remix";
 import type { LoaderFunctionArgs } from "react-router";
 import { type Location, useLoaderData } from "react-router";
 import type { GanttEvent } from "~/components/Gantt";

@@ -31,10 +31,15 @@ import {
   startOfWeek,
   toCalendarDate
 } from "@internationalized/date";
-import { json, type LoaderFunctionArgs, redirect } from "@vercel/remix";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { LuChevronLeft, LuChevronRight, LuSettings2 } from "react-icons/lu";
-import { useLoaderData, useNavigate, useSearchParams } from "react-router";
+import {
+  type LoaderFunctionArgs,
+  redirect,
+  useLoaderData,
+  useNavigate,
+  useSearchParams
+} from "react-router";
 import { SearchFilter } from "~/components";
 import { useLocations } from "~/components/Form/Location";
 import { ActiveFilters, Filter } from "~/components/Table/components/Filter";

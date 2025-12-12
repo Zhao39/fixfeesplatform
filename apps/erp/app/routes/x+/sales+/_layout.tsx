@@ -1,5 +1,5 @@
 import { VStack } from "@carbon/react";
-import type { MetaFunction } from "@vercel/remix";
+import type { MetaFunction } from "react-router";
 import { Outlet } from "react-router";
 import { GroupedContentSidebar } from "~/components/Layout";
 import { CollapsibleSidebarProvider } from "~/components/Layout/Navigation";

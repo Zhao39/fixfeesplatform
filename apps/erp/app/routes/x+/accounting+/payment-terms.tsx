@@ -1,7 +1,6 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { VStack } from "@carbon/react";
-import type { LoaderFunctionArgs } from "@vercel/remix";
-import { json } from "@vercel/remix";
+import type { LoaderFunctionArgs } from "react-router";
 import { Outlet, useLoaderData } from "react-router";
 import { getPaymentTerms } from "~/modules/accounting";
 import { PaymentTermsTable } from "~/modules/accounting/ui/PaymentTerms";

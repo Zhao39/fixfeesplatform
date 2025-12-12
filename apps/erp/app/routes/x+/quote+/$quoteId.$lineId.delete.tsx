@@ -1,8 +1,8 @@
 import { assertIsPost, error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
-import type { ActionFunctionArgs } from "@vercel/remix";
-import { data, json, redirect } from "react-router";
+import type { ActionFunctionArgs } from "react-router";
+import { data, redirect } from "react-router";
 import { deleteQuoteLine } from "~/modules/sales";
 import { path } from "~/utils/path";
 

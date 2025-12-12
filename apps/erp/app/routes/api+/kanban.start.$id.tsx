@@ -3,9 +3,13 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import type { Database } from "@carbon/database";
 import { Loading } from "@carbon/react";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { defer, type LoaderFunctionArgs } from "@vercel/remix";
 import { Suspense } from "react";
-import { Await, useLoaderData } from "react-router";
+import {
+  Await,
+  defer,
+  type LoaderFunctionArgs,
+  useLoaderData
+} from "react-router";
 import { Redirect } from "~/components/Redirect";
 import { getKanban } from "~/modules/inventory";
 import { getActiveJobOperationByJobId } from "~/modules/production";

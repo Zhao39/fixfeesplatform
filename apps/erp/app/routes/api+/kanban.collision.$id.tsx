@@ -2,10 +2,9 @@ import { error, notFound, success } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { Button, Heading } from "@carbon/react";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
-import { json, redirect } from "@vercel/remix";
 import { LuTriangleAlert } from "react-icons/lu";
-import { data, Link, useFetcher, useLoaderData } from "react-router";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
+import { data, Link, redirect, useFetcher, useLoaderData } from "react-router";
 
 import { getKanban } from "~/modules/inventory";
 import {

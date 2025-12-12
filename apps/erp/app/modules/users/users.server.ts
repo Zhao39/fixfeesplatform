@@ -10,7 +10,7 @@ import type { Database, Json } from "@carbon/database";
 import { redis } from "@carbon/kv";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { redirect } from "@vercel/remix";
+import { redirect } from "react-router";
 import { getSupplierContact } from "~/modules/purchasing";
 import { getCustomerContact } from "~/modules/sales";
 import type {

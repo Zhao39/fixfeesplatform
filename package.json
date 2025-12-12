@@ -80,7 +80,9 @@
   ],
   "packageManager": "npm@10.8.2",
   "dependencies": {
+    "@react-router/remix-routes-option-adapter": "^7.10.1",
     "fdir": "^6.5.0",
+    "remix-flat-routes": "^0.8.5",
     "sst": "3.17.14"
   }
 }

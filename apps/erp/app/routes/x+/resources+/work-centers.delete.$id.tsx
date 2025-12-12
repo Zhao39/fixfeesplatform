@@ -1,9 +1,11 @@
 import { error, success } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
-import type { LoaderFunctionArgs } from "@vercel/remix";
-import { redirect } from "@vercel/remix";
-import type { ClientActionFunctionArgs } from "react-router";
+import type {
+  ClientActionFunctionArgs,
+  LoaderFunctionArgs
+} from "react-router";
+import { redirect } from "react-router";
 import { deleteWorkCenter } from "~/modules/resources";
 import { path } from "~/utils/path";
 import { getCompanyId, workCentersQuery } from "~/utils/react-query";

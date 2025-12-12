@@ -1,9 +1,8 @@
 import { error, notFound } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
-import type { LoaderFunctionArgs } from "@vercel/remix";
-import { json, redirect } from "@vercel/remix";
-import { Outlet, useLoaderData, useNavigate } from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
+import { Outlet, redirect, useLoaderData, useNavigate } from "react-router";
 import { useUrlParams } from "~/hooks";
 import {
   getAccountCategory,
