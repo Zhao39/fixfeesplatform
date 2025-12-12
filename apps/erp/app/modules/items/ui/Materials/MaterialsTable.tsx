@@ -243,7 +243,7 @@ const MaterialsTable = memo(({ data, tags, count }: MaterialsTableProps) => {
         accessorKey: "itemPostingGroupId",
         header: "Item Group",
         cell: (item) => {
-          const itemPostingGroupId = item.getValue<string>();
+          const itemPostingGroupId = item.row.original.itemPostingGroupId;
           const itemPostingGroup = itemPostingGroups.find(
             (group) => group.value === itemPostingGroupId
           );
