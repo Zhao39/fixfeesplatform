@@ -24,10 +24,10 @@ import {
   parseAbsolute,
   toZoned
 } from "@internationalized/date";
-import type { LoaderFunctionArgs } from "@vercel/remix";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { LuSettings2, LuTriangleAlert } from "react-icons/lu";
-import { data, json, redirect, useLoaderData } from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
+import { data, redirect, useLoaderData } from "react-router";
 
 import type { ColumnFilter } from "~/components/Filter";
 import { ActiveFilters, Filter, useFilters } from "~/components/Filter";

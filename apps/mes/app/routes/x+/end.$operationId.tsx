@@ -2,7 +2,7 @@ import { error, getCarbonServiceRole, success } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { FunctionRegion } from "@supabase/supabase-js";
-import { redirect, type LoaderFunctionArgs } from "@vercel/remix";
+import { type LoaderFunctionArgs, redirect } from "react-router";
 import {
   finishJobOperation,
   getTrackedEntitiesByMakeMethodId,

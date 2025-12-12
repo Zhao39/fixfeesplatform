@@ -1,9 +1,8 @@
 import { error, getCarbonServiceRole } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
-import type { LoaderFunctionArgs } from "@vercel/remix";
-import { defer, redirect } from "@vercel/remix";
-import { useLoaderData, useParams } from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
+import { redirect, useLoaderData, useParams } from "react-router";
 import { JobOperation } from "~/components/JobOperation";
 import {
   getJobByOperationId,

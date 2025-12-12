@@ -1,8 +1,7 @@
 import { getCarbonServiceRole } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { FunctionRegion } from "@supabase/supabase-js";
-import { type ActionFunctionArgs, json } from "@vercel/remix";
-import { data } from "react-router";
+import { type ActionFunctionArgs, data } from "react-router";
 import { getTrackedEntity } from "~/services/operations.service";
 
 export async function action({ request, params }: ActionFunctionArgs) {

@@ -1,4 +1,4 @@
-import { redirect, type LoaderFunctionArgs } from "@vercel/remix";
+import { type LoaderFunctionArgs, redirect } from "react-router";
 import { modules } from "~/config";
 import { path } from "~/utils/path";
 

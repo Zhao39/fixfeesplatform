@@ -24,14 +24,13 @@ import {
 import { ItarLoginDisclaimer } from "@carbon/remix";
 import { Edition } from "@carbon/utils";
 import { Ratelimit } from "@upstash/ratelimit";
+import { LuCircleAlert } from "react-icons/lu";
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
   MetaFunction
-} from "@vercel/remix";
-import { json, redirect } from "@vercel/remix";
-import { LuCircleAlert } from "react-icons/lu";
-import { data, useFetcher, useSearchParams } from "react-router";
+} from "react-router";
+import { data, redirect, useFetcher, useSearchParams } from "react-router";
 
 import { path } from "~/utils/path";
 

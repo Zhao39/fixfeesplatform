@@ -2,7 +2,7 @@ import { error, getCarbonServiceRole } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { getLocalTimeZone, now } from "@internationalized/date";
-import { redirect, type LoaderFunctionArgs } from "@vercel/remix";
+import { type LoaderFunctionArgs, redirect } from "react-router";
 import {
   getTrackedEntitiesByMakeMethodId,
   startProductionEvent

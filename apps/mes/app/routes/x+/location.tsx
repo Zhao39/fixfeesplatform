@@ -1,7 +1,7 @@
 import { assertIsPost } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
-import type { ActionFunctionArgs } from "@vercel/remix";
-import { redirect } from "@vercel/remix";
+import type { ActionFunctionArgs } from "react-router";
+import { redirect } from "react-router";
 import { setLocation } from "~/services/location.server";
 import { path } from "~/utils/path";
 

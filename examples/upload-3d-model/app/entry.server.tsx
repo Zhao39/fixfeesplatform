@@ -1,6 +1,5 @@
-import { ServerRouter } from "react-router";
-import type { EntryContext } from "@vercel/remix";
-import { handleRequest } from "@vercel/remix";
+import type { EntryContext } from "react-router";
+import { handleRequest, ServerRouter } from "react-router";
 
 
 

@@ -24,11 +24,10 @@ import {
   cn,
   VStack
 } from "@carbon/react";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
-import { json, redirect } from "@vercel/remix";
 import { useEffect, useRef, useState } from "react";
 import { LuTriangleAlert } from "react-icons/lu";
-import { data, Link, useFetcher, useLocation } from "react-router";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
+import { data, Link, redirect, useFetcher, useLocation } from "react-router";
 import { path } from "~/utils/path";
 
 export async function loader({ request }: LoaderFunctionArgs) {

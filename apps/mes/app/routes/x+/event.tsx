@@ -3,9 +3,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import { getLocalTimeZone, now } from "@internationalized/date";
-import type { ActionFunctionArgs } from "@vercel/remix";
-import { json } from "@vercel/remix";
-import { data } from "react-router";
+import type { ActionFunctionArgs } from "react-router";
 import { productionEventValidator } from "~/services/models";
 import {
   endProductionEvent,

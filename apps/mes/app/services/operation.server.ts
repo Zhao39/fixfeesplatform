@@ -1,4 +1,4 @@
-import { createCookieSessionStorage } from "@vercel/remix";
+import { createCookieSessionStorage } from "react-router";
 
 const MES_FILTERS_KEY = "mes-filters";
 

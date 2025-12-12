@@ -1,11 +1,10 @@
 import { Input, Number, Select, ValidatedForm, validator } from "@carbon/form";
 import { Button, Heading, toast, TooltipProvider } from "@carbon/react";
-import { useFetcher, data } from "react-router";
-import type { ActionFunctionArgs } from "@vercel/remix";
-import { json } from "@vercel/remix";
 import { useEffect } from "react";
-import { z } from 'zod/v3';
+import type { ActionFunctionArgs } from "react-router";
+import { data, useFetcher } from "react-router";
 import { zfd } from "zod-form-data";
+import { z } from 'zod/v3';
 import { CONFIGURED_ITEM_ID } from "~/config";
 import { carbon } from "~/lib/carbon.server";
 

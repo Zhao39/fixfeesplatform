@@ -1,4 +1,6 @@
 import { Toaster } from "@carbon/react";
+import React from "react";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import {
   isRouteErrorResponse,
   Links,
@@ -9,9 +11,6 @@ import {
   useLoaderData,
   useRouteError,
 } from "react-router";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
-import { json } from "@vercel/remix";
-import React from "react";
 import Tailwind from "~/styles/tailwind.css?url";
 
 export function links() {

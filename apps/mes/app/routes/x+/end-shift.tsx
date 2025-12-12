@@ -1,7 +1,6 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { getLocalTimeZone, now } from "@internationalized/date";
-import type { ActionFunctionArgs } from "@vercel/remix";
-import { json } from "@vercel/remix";
+import type { ActionFunctionArgs } from "react-router";
 import { data } from "react-router";
 import { endProductionEvents } from "~/services/operations.service";
 

@@ -1,4 +1,4 @@
-import type { ActionFunctionArgs } from "@vercel/remix";
+import type { ActionFunctionArgs } from "react-router";
 import { ERP_URL } from "~/utils/path";
 
 export async function action({ request, params }: ActionFunctionArgs) {

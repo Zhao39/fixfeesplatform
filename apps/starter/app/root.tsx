@@ -6,13 +6,12 @@ import { useMode } from "@carbon/remix";
 import type { Theme } from "@carbon/utils";
 import { modeValidator, themes } from "@carbon/utils";
 import { Analytics } from "@vercel/analytics/react";
+import React, { useEffect } from "react";
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
   MetaFunction
-} from "@vercel/remix";
-import { json } from "@vercel/remix";
-import React, { useEffect } from "react";
+} from "react-router";
 import {
   data,
   isRouteErrorResponse,

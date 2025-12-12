@@ -1,12 +1,12 @@
 import { Button, cn, Progress, VStack } from "@carbon/react";
-import type { LoaderFunctionArgs } from "@vercel/remix";
 import {
   LuCircleCheck,
   LuCirclePlay,
   LuFlag,
   LuRotateCcw
 } from "react-icons/lu";
-import { json, Link, useParams } from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
+import { Link, useParams } from "react-router";
 import { modules } from "~/config";
 import { useProgress } from "~/hooks";
 import { path } from "~/utils/path";

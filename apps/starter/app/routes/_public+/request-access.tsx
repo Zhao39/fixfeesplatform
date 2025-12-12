@@ -1,7 +1,7 @@
 import { getAppUrl } from "@carbon/auth";
 import { Button } from "@carbon/react";
 import { SUPPORT_EMAIL } from "@carbon/utils";
-import type { MetaFunction } from "@vercel/remix";
+import type { MetaFunction } from "react-router";
 
 export const meta: MetaFunction = () => {
   return [

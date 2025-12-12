@@ -7,13 +7,12 @@ import {
   toast,
   TooltipProvider,
 } from "@carbon/react";
-import { useFetcher, data } from "react-router";
-import { json } from "@vercel/remix";
 import { useEffect, useState } from "react";
+import { data, useFetcher } from "react-router";
 
 import { ModelUpload } from "~/components/ModelUpload";
 
-import type { ActionFunctionArgs } from "@vercel/remix";
+import type { ActionFunctionArgs } from "react-router";
 import { carbon } from "~/lib/carbon.server";
 
 export async function action({ request }: ActionFunctionArgs) {

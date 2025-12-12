@@ -1,5 +1,5 @@
-import type { LoaderFunction } from "@vercel/remix";
-import { redirect } from "@vercel/remix";
+import type { LoaderFunction } from "react-router";
+import { redirect } from "react-router";
 import { path } from "~/utils/path";
 
 export const loader: LoaderFunction = async ({ request }) => {
