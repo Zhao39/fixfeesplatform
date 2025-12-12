@@ -54,7 +54,6 @@ import {
 } from "react-icons/ri";
 import {
   Await,
-  defer,
   Link,
   type LoaderFunctionArgs,
   useFetcher,
@@ -120,12 +119,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
       .limit(10)
   ]);
 
-  return defer({
+  return {
     openSalesOrders: openSalesOrders,
     openQuotes: openQuotes,
     openRFQs: openRFQs,
     assignedToMe: getSalesDocumentsAssignedToMe(client, userId, companyId)
-  });
+  };
 }
 
 export default function SalesDashboard() {

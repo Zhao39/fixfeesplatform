@@ -6,7 +6,7 @@ import { Menubar, VStack } from "@carbon/react";
 import { useRouteData } from "@carbon/remix";
 import { Suspense } from "react";
 import type { LoaderFunctionArgs } from "react-router";
-import { Await, defer, redirect, useLoaderData, useParams } from "react-router";
+import { Await, redirect, useLoaderData, useParams } from "react-router";
 import type { z } from "zod/v3";
 import { CadModel } from "~/components";
 import { usePermissions } from "~/hooks/usePermissions";
@@ -81,7 +81,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return defer({
+  return {
     makeMethod: makeMethod.data,
 
     methodMaterials:
@@ -109,7 +109,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     makeMethods: getMakeMethods(client, makeMethod.data.itemId, companyId),
     model: getModelByItemId(client, makeMethod.data.itemId),
     tags: tags.data ?? []
-  });
+  };
 }
 
 export default function MethodMaterialMakePage() {

@@ -9,7 +9,6 @@ import { Fragment, Suspense } from "react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import {
   Await,
-  defer,
   Outlet,
   redirect,
   useLoaderData,
@@ -61,7 +60,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     );
   }
 
-  return defer({
+  return {
     line: line.data,
     files: getSupplierInteractionLineDocuments(serviceRole, companyId, lineId),
     pricesByQuantity: (prices?.data ?? []).reduce<
@@ -70,7 +69,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
       acc[price.quantity] = price;
       return acc;
     }, {})
-  });
+  };
 };
 
 export async function action({ request, params }: ActionFunctionArgs) {

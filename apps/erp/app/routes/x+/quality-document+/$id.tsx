@@ -9,7 +9,6 @@ import { nanoid } from "nanoid";
 import { useState } from "react";
 import type { LoaderFunctionArgs } from "react-router";
 import {
-  defer,
   Outlet,
   redirect,
   useFetcher,
@@ -57,11 +56,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return defer({
+  return {
     document: document.data,
     versions: getQualityDocumentVersions(client, document.data, companyId),
     tags: tags.data ?? []
-  });
+  };
 }
 
 export default function QualityDocumentRoute() {

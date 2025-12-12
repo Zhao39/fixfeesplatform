@@ -9,7 +9,6 @@ import { Fragment } from "react/jsx-runtime";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import {
   Await,
-  defer,
   Outlet,
   redirect,
   useLoaderData,
@@ -50,10 +49,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return defer({
+  return {
     line: line?.data ?? null,
     files: getSupplierInteractionLineDocuments(client, companyId, lineId)
-  });
+  };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

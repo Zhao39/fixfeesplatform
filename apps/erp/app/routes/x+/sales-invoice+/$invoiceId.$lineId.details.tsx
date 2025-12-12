@@ -10,7 +10,6 @@ import { Fragment } from "react/jsx-runtime";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import {
   Await,
-  defer,
   Outlet,
   redirect,
   useLoaderData,
@@ -44,10 +43,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const itemId = salesInvoiceLine?.data?.itemId;
 
-  return defer({
+  return {
     salesInvoiceLine: salesInvoiceLine?.data ?? null,
     files: getOpportunityLineDocuments(client, companyId, lineId, itemId)
-  });
+  };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

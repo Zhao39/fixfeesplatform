@@ -3,7 +3,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { VStack } from "@carbon/react";
 import type { LoaderFunctionArgs } from "react-router";
-import { defer, Outlet, redirect, useParams } from "react-router";
+import { Outlet, redirect, useParams } from "react-router";
 import { PanelProvider, ResizablePanels } from "~/components/Layout/Panels";
 import { getCurrencyByCode } from "~/modules/accounting";
 import {
@@ -72,7 +72,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     exchangeRate = presentationCurrency.data.exchangeRate;
   }
 
-  return defer({
+  return {
     quote: quote.data,
     lines: lines.data ?? [],
     prices: prices.data ?? [],
@@ -83,7 +83,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     ),
     interaction: supplierInteraction.data,
     exchangeRate
-  });
+  };
 }
 
 export default function SupplierQuoteRoute() {

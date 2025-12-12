@@ -21,7 +21,7 @@ import {
   LuShieldCheck
 } from "react-icons/lu";
 import type { LoaderFunctionArgs } from "react-router";
-import { defer, useLoaderData, useParams } from "react-router";
+import { useLoaderData, useParams } from "react-router";
 import { z } from "zod/v3";
 import {
   BreadcrumbItem,
@@ -145,14 +145,14 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     getJobOperationAttachments(serviceRole, jobOperationIds ?? [])
   ]);
 
-  return defer({
+  return {
     customer: customer.data,
     company: company.data,
     salesOrderLines: salesOrderLines.data ?? [],
     jobOperationAttachments,
     count: salesOrderLines.count,
     thumbnails
-  });
+  };
 }
 
 export default function CustomerPortal() {

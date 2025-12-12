@@ -3,7 +3,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { VStack } from "@carbon/react";
 import type { LoaderFunctionArgs } from "react-router";
-import { defer, Outlet, redirect, useParams } from "react-router";
+import { Outlet, redirect, useParams } from "react-router";
 import { PanelProvider, ResizablePanels } from "~/components/Layout/Panels";
 import {
   getPurchaseOrder,
@@ -74,7 +74,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     getSupplierInteraction(client, purchaseOrder.data.supplierInteractionId)
   ]);
 
-  return defer({
+  return {
     purchaseOrder: purchaseOrder.data,
     purchaseOrderDelivery: purchaseOrderDelivery.data,
     lines: lines.data ?? [],
@@ -85,7 +85,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     ),
     interaction: interaction?.data,
     supplier: supplier?.data ?? null
-  });
+  };
 }
 
 export default function PurchaseOrderRoute() {

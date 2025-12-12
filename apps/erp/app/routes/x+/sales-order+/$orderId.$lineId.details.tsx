@@ -13,7 +13,6 @@ import { Fragment, Suspense } from "react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import {
   Await,
-  defer,
   Outlet,
   redirect,
   useLoaderData,
@@ -74,7 +73,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const itemId = line.data.itemId;
 
-  return defer({
+  return {
     line: line?.data ?? null,
     itemReplenishment:
       itemId && line.data.methodType === "Make"
@@ -83,7 +82,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     files: getOpportunityLineDocuments(serviceRole, companyId, lineId, itemId),
     jobs: jobs?.data ?? [],
     shipments: shipments?.data ?? []
-  });
+  };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

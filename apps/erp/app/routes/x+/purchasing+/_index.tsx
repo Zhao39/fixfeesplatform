@@ -55,7 +55,6 @@ import {
 } from "react-icons/lu";
 import {
   Await,
-  defer,
   Link,
   type LoaderFunctionArgs,
   useFetcher,
@@ -133,12 +132,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
         .limit(10)
     ]);
 
-  return defer({
+  return {
     openPurchaseOrders: openPurchaseOrders,
     openSupplierQuotes: openSupplierQuotes,
     openPurchaseInvoices: openPurchaseInvoices,
     assignedToMe: getPurchasingDocumentsAssignedToMe(client, userId, companyId)
-  });
+  };
 }
 
 export default function PurchaseDashboard() {

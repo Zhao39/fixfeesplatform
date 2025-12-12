@@ -3,7 +3,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { VStack } from "@carbon/react";
 import type { LoaderFunctionArgs } from "react-router";
-import { defer, Outlet, redirect, useParams } from "react-router";
+import { Outlet, redirect, useParams } from "react-router";
 import { PanelProvider, ResizablePanels } from "~/components/Layout/Panels";
 import {
   getCustomer,
@@ -69,7 +69,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       : Promise.resolve(null)
   ]);
 
-  return defer({
+  return {
     salesOrder: salesOrder.data,
     lines: lines.data ?? [],
     files: getOpportunityDocuments(client, companyId, opportunity.data.id),
@@ -82,7 +82,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     customer: customer?.data ?? null,
     quote: quote?.data ?? null,
     originatedFromQuote: !!opportunity.data.quotes[0]?.id
-  });
+  };
 }
 
 export default function SalesOrderRoute() {

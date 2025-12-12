@@ -8,7 +8,6 @@ import type { FileObject } from "@supabase/storage-js";
 import type { PostgrestResponse } from "@supabase/supabase-js";
 import type { LoaderFunctionArgs } from "react-router";
 import {
-  defer,
   Outlet,
   redirect,
   useLoaderData,
@@ -133,7 +132,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return defer({
+  return {
     quote: quote.data,
     customer: customer.data,
     lines: lines.data ?? [],
@@ -145,7 +144,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     opportunity: opportunity.data,
     exchangeRate,
     salesOrderLines: salesOrderLines?.data ?? null
-  });
+  };
 }
 
 export default function QuoteRoute() {

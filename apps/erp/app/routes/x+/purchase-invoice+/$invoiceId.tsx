@@ -3,7 +3,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { VStack } from "@carbon/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
-import { defer, Outlet, redirect, useParams } from "react-router";
+import { Outlet, redirect, useParams } from "react-router";
 import { PanelProvider, ResizablePanels } from "~/components/Layout";
 import {
   getPurchaseInvoice,
@@ -58,7 +58,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     getSupplierInteraction(client, purchaseInvoice.data.supplierInteractionId!)
   ]);
 
-  return defer({
+  return {
     purchaseInvoice: purchaseInvoice.data,
     purchaseInvoiceLines: purchaseInvoiceLines.data ?? [],
     purchaseInvoiceDelivery: purchaseInvoiceDelivery.data,
@@ -69,7 +69,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     ),
     interaction: interaction.data,
     supplier: supplier?.data ?? null
-  });
+  };
 }
 
 export async function action({ request }: ActionFunctionArgs) {

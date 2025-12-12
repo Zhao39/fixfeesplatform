@@ -5,7 +5,7 @@ import { validationError, validator } from "@carbon/form";
 import { VStack } from "@carbon/react";
 import { Suspense } from "react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
-import { Await, defer, redirect, useLoaderData, useParams } from "react-router";
+import { Await, redirect, useLoaderData, useParams } from "react-router";
 import { useRouteData } from "~/hooks";
 import { getBatchProperties } from "~/modules/inventory";
 import BatchPropertiesConfig from "~/modules/inventory/ui/Batches/BatchPropertiesConfig";
@@ -43,11 +43,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return defer({
+  return {
     toolPurchasing: toolPurchasingResult.data,
     batchProperties: getBatchProperties(client, [itemId], companyId),
     itemCostHistory: itemCostHistory.data ?? []
-  });
+  };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

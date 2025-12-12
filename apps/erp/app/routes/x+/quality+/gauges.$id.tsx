@@ -9,13 +9,7 @@ import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import { getLocalTimeZone, parseDate, today } from "@internationalized/date";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
-import {
-  defer,
-  redirect,
-  useLoaderData,
-  useNavigate,
-  useParams
-} from "react-router";
+import { redirect, useLoaderData, useNavigate, useParams } from "react-router";
 import { useRouteData } from "~/hooks";
 import type { GaugeType } from "~/modules/quality";
 import {
@@ -56,10 +50,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     throw redirect(path.to.gauges);
   }
 
-  return defer({
+  return {
     gauge: gauge.data,
     records: getGaugeCalibrationRecordsByGaugeId(serviceRole, id)
-  });
+  };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

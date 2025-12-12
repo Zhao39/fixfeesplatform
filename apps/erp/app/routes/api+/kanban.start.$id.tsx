@@ -4,12 +4,7 @@ import type { Database } from "@carbon/database";
 import { Loading } from "@carbon/react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { Suspense } from "react";
-import {
-  Await,
-  defer,
-  type LoaderFunctionArgs,
-  useLoaderData
-} from "react-router";
+import { Await, type LoaderFunctionArgs, useLoaderData } from "react-router";
 import { Redirect } from "~/components/Redirect";
 import { getKanban } from "~/modules/inventory";
 import { getActiveJobOperationByJobId } from "~/modules/production";
@@ -75,7 +70,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const { id } = params;
   if (!id) throw notFound("id not found");
 
-  return defer(await handleKanbanStart({ client, companyId, id }));
+  return await handleKanbanStart({ client, companyId, id });
 }
 
 export default function KanbanRedirectRoute() {

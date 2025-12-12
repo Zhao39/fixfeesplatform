@@ -9,7 +9,6 @@ import { nanoid } from "nanoid";
 import { useState } from "react";
 import type { LoaderFunctionArgs } from "react-router";
 import {
-  defer,
   Outlet,
   redirect,
   useFetcher,
@@ -55,11 +54,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return defer({
+  return {
     procedure: procedure.data,
     tags: tags.data ?? [],
     versions: getProcedureVersions(client, procedure.data, companyId)
-  });
+  };
 }
 
 export default function ProcedureRoute() {

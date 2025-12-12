@@ -6,7 +6,6 @@ import { Suspense } from "react";
 import type { LoaderFunctionArgs } from "react-router";
 import {
   Await,
-  defer,
   Outlet,
   redirect,
   useLoaderData,
@@ -68,7 +67,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return defer({
+  return {
     associations: getIssueAssociations(client, id, companyId),
     files: getItemFiles(client, id, companyId),
     nonConformance: nonConformance.data,
@@ -76,7 +75,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     requiredActions: requiredActions.data ?? [],
     suppliers: suppliers.data ?? [],
     tags: tags.data ?? []
-  });
+  };
 }
 
 export default function IssueRoute() {

@@ -3,7 +3,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { VStack } from "@carbon/react";
 import type { LoaderFunctionArgs } from "react-router";
-import { defer, Outlet, redirect, useParams } from "react-router";
+import { Outlet, redirect, useParams } from "react-router";
 import { PanelProvider } from "~/components/Layout";
 import {
   getBatchProperties,
@@ -60,7 +60,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       .filter((itemId) => itemId !== null);
   }
 
-  return defer({
+  return {
     receipt: receipt.data,
     receiptLines: receiptLines.data ?? [],
     receiptFiles: getReceiptFiles(serviceRole, companyId, receiptLineIds) ?? [],
@@ -69,7 +69,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       getBatchProperties(serviceRole, itemsWithBatchProperties, companyId) ??
       [],
     companySettings: getCompanySettings(serviceRole, companyId)
-  });
+  };
 }
 
 export default function ReceiptRoute() {

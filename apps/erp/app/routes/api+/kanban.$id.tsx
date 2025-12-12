@@ -7,12 +7,7 @@ import { getLocalTimeZone, today } from "@internationalized/date";
 import { FunctionRegion, type SupabaseClient } from "@supabase/supabase-js";
 import { tasks } from "@trigger.dev/sdk";
 import { Suspense } from "react";
-import {
-  Await,
-  defer,
-  type LoaderFunctionArgs,
-  useLoaderData
-} from "react-router";
+import { Await, type LoaderFunctionArgs, useLoaderData } from "react-router";
 import { Redirect } from "~/components/Redirect";
 
 import { getDefaultShelfForJob, getKanban } from "~/modules/inventory";
@@ -366,7 +361,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const { id } = params;
   if (!id) throw notFound("id not found");
 
-  return defer(await handleKanban({ client, companyId, userId, id }));
+  return await handleKanban({ client, companyId, userId, id });
 }
 
 export default function KanbanRedirectRoute() {

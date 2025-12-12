@@ -5,7 +5,7 @@ import type { JSONContent } from "@carbon/react";
 import { VStack } from "@carbon/react";
 import { Suspense } from "react";
 import type { LoaderFunctionArgs } from "react-router";
-import { Await, defer, redirect, useLoaderData, useParams } from "react-router";
+import { Await, redirect, useLoaderData, useParams } from "react-router";
 import { CadModel } from "~/components";
 import { usePermissions } from "~/hooks";
 import {
@@ -58,7 +58,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return defer({
+  return {
     materials:
       materials?.data.map((m) => ({
         ...m,
@@ -85,7 +85,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     ),
     model: getModelByQuoteLineId(client, lineId),
     tags: tags.data ?? []
-  });
+  };
 }
 
 export default function QuoteMakeMethodRoute() {

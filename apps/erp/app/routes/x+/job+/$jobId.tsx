@@ -5,7 +5,6 @@ import { Suspense, useMemo } from "react";
 import type { LoaderFunctionArgs } from "react-router";
 import {
   Await,
-  defer,
   Outlet,
   redirect,
   useLoaderData,
@@ -62,7 +61,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return defer({
+  return {
     job: job.data,
     tags: tags.data ?? [],
     files: getJobDocuments(client, companyId, job.data),
@@ -73,7 +72,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       job.data.itemId!,
       companyId
     )
-  });
+  };
 }
 
 export default function JobRoute() {

@@ -2,7 +2,7 @@ import { error, getCarbonServiceRole } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import type { LoaderFunctionArgs } from "react-router";
-import { defer, Outlet, redirect } from "react-router";
+import { Outlet, redirect } from "react-router";
 import {
   getItemFiles,
   getMakeMethods,
@@ -49,14 +49,14 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return defer({
+  return {
     materialSummary: materialSummary.data,
     files: getItemFiles(serviceRole, itemId, companyId),
     supplierParts: supplierParts.data ?? [],
     pickMethods: pickMethods.data ?? [],
     makeMethods: getMakeMethods(serviceRole, itemId, companyId),
     tags: tags.data ?? []
-  });
+  };
 }
 
 export default function MaterialRoute() {

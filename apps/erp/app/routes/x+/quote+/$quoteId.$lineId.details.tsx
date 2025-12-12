@@ -8,7 +8,6 @@ import { Fragment, Suspense, useMemo } from "react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import {
   Await,
-  defer,
   Outlet,
   redirect,
   useLoaderData,
@@ -72,7 +71,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
   const itemId = line.data.itemId!;
 
-  return defer({
+  return {
     line: line.data,
     operations: operations?.data ?? [],
     files: getOpportunityLineDocuments(serviceRole, companyId, lineId, itemId),
@@ -83,7 +82,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
       return acc;
     }, {}),
     relatedPrices: getRelatedPricesForQuoteLine(serviceRole, itemId, quoteId)
-  });
+  };
 };
 
 export async function action({ request, params }: ActionFunctionArgs) {

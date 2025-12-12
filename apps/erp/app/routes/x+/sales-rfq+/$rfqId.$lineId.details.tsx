@@ -8,7 +8,6 @@ import { Fragment, Suspense } from "react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import {
   Await,
-  defer,
   Outlet,
   redirect,
   useLoaderData,
@@ -52,10 +51,10 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
   const itemId = line.data.itemId;
 
-  return defer({
+  return {
     line: line.data,
     files: getOpportunityLineDocuments(serviceRole, companyId, lineId, itemId)
-  });
+  };
 };
 
 export async function action({ request, params }: ActionFunctionArgs) {

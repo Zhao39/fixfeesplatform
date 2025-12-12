@@ -5,7 +5,7 @@ import { validationError, validator } from "@carbon/form";
 import { type JSONContent, Spinner, VStack } from "@carbon/react";
 import { Suspense } from "react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
-import { Await, defer, redirect, useLoaderData, useParams } from "react-router";
+import { Await, redirect, useLoaderData, useParams } from "react-router";
 import { Documents } from "~/components";
 import { useRouteData } from "~/hooks";
 import type { IssueAssociationNode } from "~/modules/quality";
@@ -44,11 +44,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     throw new Error(nonConformance.error.message);
   }
 
-  return defer({
+  return {
     nonConformance: nonConformance.data,
     actionTasks: getIssueActionTasks(client, id, companyId),
     reviewers: getIssueReviewers(client, id, companyId)
-  });
+  };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
