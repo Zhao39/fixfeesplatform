@@ -627,7 +627,7 @@ export async function updateIntegrationMetadata(
       sanitize({
         metadata,
         updatedAt: new Date().toISOString(),
-        updatedBy,
+        updatedBy
       })
     )
     .eq("companyId", companyId)

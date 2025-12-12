@@ -13,7 +13,7 @@ export const BaseEntitySchema = z.object({
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
   lastSyncedAt: z.string().datetime().optional(),
-  remoteWasDeleted: z.boolean().optional(),
+  remoteWasDeleted: z.boolean().optional()
 });
 
 // Address schema (reusable)
@@ -24,14 +24,14 @@ export const AddressSchema = z.object({
   city: z.string().optional(),
   state: z.string().optional(),
   postalCode: z.string().optional(),
-  country: z.string().optional(),
+  country: z.string().optional()
 });
 
 // Phone number schema
 export const PhoneNumberSchema = z.object({
   type: z.enum(["home", "work", "mobile", "fax"]).optional(),
   number: z.string(),
-  isPrimary: z.boolean().optional(),
+  isPrimary: z.boolean().optional()
 });
 
 // Enhanced attachment schema with comprehensive file support
@@ -50,7 +50,7 @@ export const AttachmentSchema = BaseEntitySchema.extend({
     "expense",
     "bill",
     "receipt",
-    "journal_entry",
+    "journal_entry"
   ]),
   entityId: z.string(),
   attachmentType: z
@@ -60,7 +60,7 @@ export const AttachmentSchema = BaseEntitySchema.extend({
   isPublic: z.boolean().default(false),
   uploadedBy: z.string().optional(),
   checksum: z.string().optional(), // For file integrity
-  metadata: z.record(z.any()).optional(), // Provider-specific metadata
+  metadata: z.record(z.any()).optional() // Provider-specific metadata
 });
 
 // Account schema for chart of accounts
@@ -85,7 +85,7 @@ export const AccountSchema = BaseEntitySchema.extend({
     "long_term_liability",
     "cost_of_goods_sold",
     "other_income",
-    "other_expense",
+    "other_expense"
   ]),
   accountSubType: z.string().optional(),
   parentAccountId: z.string().optional(),
@@ -94,7 +94,7 @@ export const AccountSchema = BaseEntitySchema.extend({
   currency: z.string().default("USD"),
   taxCode: z.string().optional(),
   bankAccountNumber: z.string().optional(),
-  routingNumber: z.string().optional(),
+  routingNumber: z.string().optional()
 });
 
 // Enhanced customer schema
@@ -119,7 +119,7 @@ export const CustomerSchema = BaseEntitySchema.extend({
   notes: z.string().optional(),
   tags: z.array(z.string()).optional(),
   customFields: z.record(z.any()).optional(),
-  attachments: z.array(AttachmentSchema).optional(),
+  attachments: z.array(AttachmentSchema).optional()
 });
 
 // Vendor/Supplier schema
@@ -142,7 +142,7 @@ export const VendorSchema = BaseEntitySchema.extend({
   notes: z.string().optional(),
   tags: z.array(z.string()).optional(),
   customFields: z.record(z.any()).optional(),
-  attachments: z.array(AttachmentSchema).optional(),
+  attachments: z.array(AttachmentSchema).optional()
 });
 
 // Item/Product schema
@@ -163,7 +163,7 @@ export const ItemSchema = BaseEntitySchema.extend({
   isSold: z.boolean().default(true),
   isPurchased: z.boolean().default(false),
   taxCode: z.string().optional(),
-  customFields: z.record(z.any()).optional(),
+  customFields: z.record(z.any()).optional()
 });
 
 // Enhanced invoice schema with attachments
@@ -206,14 +206,14 @@ export const InvoiceSchema = BaseEntitySchema.extend({
           z.object({
             id: z.string(),
             name: z.string(),
-            value: z.string(),
+            value: z.string()
           })
         )
-        .optional(),
+        .optional()
     })
   ),
   attachments: z.array(AttachmentSchema).optional(),
-  customFields: z.record(z.any()).optional(),
+  customFields: z.record(z.any()).optional()
 });
 
 // Bill schema (for vendor bills)
@@ -253,14 +253,14 @@ export const BillSchema = BaseEntitySchema.extend({
           z.object({
             id: z.string(),
             name: z.string(),
-            value: z.string(),
+            value: z.string()
           })
         )
-        .optional(),
+        .optional()
     })
   ),
   attachments: z.array(AttachmentSchema).optional(),
-  customFields: z.record(z.any()).optional(),
+  customFields: z.record(z.any()).optional()
 });
 
 // Enhanced transaction schema with attachments and reconciliation
@@ -273,7 +273,7 @@ export const TransactionSchema = BaseEntitySchema.extend({
     "deposit",
     "withdrawal",
     "charge",
-    "refund",
+    "refund"
   ]),
   reference: z.string().optional(),
   description: z.string(),
@@ -305,12 +305,12 @@ export const TransactionSchema = BaseEntitySchema.extend({
       z.object({
         id: z.string(),
         name: z.string(),
-        value: z.string(),
+        value: z.string()
       })
     )
     .optional(),
   attachments: z.array(AttachmentSchema).optional(),
-  customFields: z.record(z.any()).optional(),
+  customFields: z.record(z.any()).optional()
 });
 
 // Expense schema
@@ -346,12 +346,12 @@ export const ExpenseSchema = BaseEntitySchema.extend({
       z.object({
         id: z.string(),
         name: z.string(),
-        value: z.string(),
+        value: z.string()
       })
     )
     .optional(),
   attachments: z.array(AttachmentSchema).optional(),
-  customFields: z.record(z.any()).optional(),
+  customFields: z.record(z.any()).optional()
 });
 
 // Journal Entry schema
@@ -376,17 +376,17 @@ export const JournalEntrySchema = BaseEntitySchema.extend({
           z.object({
             id: z.string(),
             name: z.string(),
-            value: z.string(),
+            value: z.string()
           })
         )
-        .optional(),
+        .optional()
     })
   ),
   totalDebit: z.number(),
   totalCredit: z.number(),
   notes: z.string().optional(),
   attachments: z.array(AttachmentSchema).optional(),
-  customFields: z.record(z.any()).optional(),
+  customFields: z.record(z.any()).optional()
 });
 
 // Payment schema
@@ -402,7 +402,7 @@ export const PaymentSchema = BaseEntitySchema.extend({
     "credit_card",
     "bank_transfer",
     "online",
-    "other",
+    "other"
   ]),
   accountId: z.string(),
   accountName: z.string(),
@@ -417,7 +417,7 @@ export const PaymentSchema = BaseEntitySchema.extend({
   fees: z.number().optional(),
   notes: z.string().optional(),
   attachments: z.array(AttachmentSchema).optional(),
-  customFields: z.record(z.any()).optional(),
+  customFields: z.record(z.any()).optional()
 });
 
 // Company info schema
@@ -436,7 +436,7 @@ export const CompanyInfoSchema = BaseEntitySchema.extend({
   logo: z.string().url().optional(),
   industry: z.string().optional(),
   employees: z.number().optional(),
-  customFields: z.record(z.any()).optional(),
+  customFields: z.record(z.any()).optional()
 });
 
 // Enhanced provider-specific metadata
@@ -447,7 +447,7 @@ export const ProviderMetadataSchema = z.object({
   syncHash: z.string().optional(),
   version: z.string().optional(),
   rawData: z.record(z.any()).optional(), // Store original provider data
-  customFields: z.record(z.any()).optional(),
+  customFields: z.record(z.any()).optional()
 });
 
 // Enhanced API Request/Response schemas
@@ -455,7 +455,7 @@ export const ApiRequestSchema = z.object({
   provider: z.enum(["xero", "sage", "quickbooks"]),
   includeAttachments: z.boolean().default(false),
   includeCustomFields: z.boolean().default(false),
-  includeRawData: z.boolean().default(false),
+  includeRawData: z.boolean().default(false)
 });
 
 export const PaginationSchema = z.object({
@@ -463,7 +463,7 @@ export const PaginationSchema = z.object({
   limit: z.number().min(1).max(100).default(20),
   total: z.number().optional(),
   hasNext: z.boolean().optional(),
-  cursor: z.string().optional(),
+  cursor: z.string().optional()
 });
 
 // Bulk export request schema
@@ -480,20 +480,20 @@ export const BulkExportSchema = z.object({
       "accounts",
       "items",
       "journal_entries",
-      "payments",
+      "payments"
     ])
   ),
   dateRange: z
     .object({
       startDate: z.string().datetime(),
-      endDate: z.string().datetime(),
+      endDate: z.string().datetime()
     })
     .optional(),
   includeAttachments: z.boolean().default(true),
   includeCustomFields: z.boolean().default(false),
   includeRawData: z.boolean().default(false),
   format: z.enum(["json", "csv", "xlsx"]).default("json"),
-  batchSize: z.number().min(1).max(1000).default(100),
+  batchSize: z.number().min(1).max(1000).default(100)
 });
 
 // Export types

@@ -18,7 +18,7 @@ import type {
   Pagination,
   Payment,
   Transaction,
-  Vendor,
+  Vendor
 } from "./models";
 
 export interface ProviderConfig {
@@ -107,7 +107,7 @@ export abstract class CoreProvider {
     this.auth = {
       accessToken: config.accessToken,
       refreshToken: config.refreshToken,
-      tenantId: config.tenantId,
+      tenantId: config.tenantId
     };
   }
 
@@ -370,7 +370,7 @@ export abstract class CoreProvider {
 
     const requestHeaders: Record<string, string> = {
       "Content-Type": "application/json",
-      ...(headers as Record<string, string>),
+      ...(headers as Record<string, string>)
     };
 
     if (this.auth?.accessToken) {
@@ -379,7 +379,7 @@ export abstract class CoreProvider {
 
     const requestOptions: RequestInit = {
       method,
-      headers: requestHeaders,
+      headers: requestHeaders
     };
 
     if (body && method !== "GET") {
@@ -411,7 +411,7 @@ export abstract class CoreProvider {
         updatedHeaders["Authorization"] = `Bearer ${this.auth.accessToken}`;
         return fetch(url.toString(), {
           ...requestOptions,
-          headers: updatedHeaders,
+          headers: updatedHeaders
         });
       } catch (error) {
         throw new Error("Authentication failed and refresh token is invalid");

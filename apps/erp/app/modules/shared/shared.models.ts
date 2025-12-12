@@ -107,7 +107,7 @@ export const suggestionValidator = z.object({
 
 export const oAuthCallbackSchema = z.object({
   code: z.string(),
-  state: z.string(),
+  state: z.string()
 });
 
 export const operationStepValidator = z

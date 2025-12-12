@@ -6,7 +6,7 @@ import {
   CardContent,
   CardFooter,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from "@carbon/react";
 import { useRouteData } from "@carbon/remix";
 import { Link, useFetcher, useNavigate } from "@remix-run/react";
@@ -14,7 +14,7 @@ import { path } from "~/utils/path";
 
 export function IntegrationCard({
   integration,
-  installed,
+  installed
 }: {
   integration: IntegrationConfig;
   installed: boolean;
@@ -52,7 +52,7 @@ export function IntegrationCard({
       const formData = new FormData();
       fetcher.submit(formData, {
         method: "post",
-        action: path.to.integration(integration.id),
+        action: path.to.integration(integration.id)
       });
     }
   };

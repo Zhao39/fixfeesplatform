@@ -143,7 +143,7 @@ export const QUICKBOOKS_CLIENT_SECRET = getEnv("QUICKBOOKS_CLIENT_SECRET", {
 
 export const QUICKBOOKS_WEBHOOK_SECRET = getEnv("QUICKBOOKS_WEBHOOK_SECRET", {
   isRequired: false,
-  isSecret: true,
+  isSecret: true
 });
 
 export const RESEND_DOMAIN =
@@ -208,7 +208,7 @@ export const XERO_CLIENT_SECRET = getEnv("XERO_CLIENT_SECRET", {
 });
 export const XERO_WEBHOOK_SECRET = getEnv("XERO_WEBHOOK_SECRET", {
   isRequired: false,
-  isSecret: true,
+  isSecret: true
 });
 
 /**

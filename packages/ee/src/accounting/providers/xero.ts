@@ -11,7 +11,7 @@ import type {
   JournalEntry,
   Payment,
   Transaction,
-  Vendor,
+  Vendor
 } from "../models";
 import type {
   ExportJobStatus,
@@ -20,7 +20,7 @@ import type {
   RateLimitInfo,
   SyncOptions,
   SyncResult,
-  WebhookEvent,
+  WebhookEvent
 } from "../service";
 import { CoreProvider } from "../service";
 
@@ -40,7 +40,7 @@ export class XeroProvider extends CoreProvider {
       client_id: this.config.clientId,
       redirect_uri: this.config.redirectUri || "",
       scope: scopes.join(" "),
-      state: crypto.randomUUID(),
+      state: crypto.randomUUID()
     });
 
     return `https://login.xero.com/identity/connect/authorize?${params.toString()}`;
@@ -53,13 +53,13 @@ export class XeroProvider extends CoreProvider {
         "Content-Type": "application/x-www-form-urlencoded",
         Authorization: `Basic ${btoa(
           `${this.config.clientId}:${this.config.clientSecret}`
-        )}`,
+        )}`
       },
       body: new URLSearchParams({
         grant_type: "authorization_code",
         code,
-        redirect_uri: this.config.redirectUri || "",
-      }),
+        redirect_uri: this.config.redirectUri || ""
+      })
     });
 
     if (!response.ok) {
@@ -71,7 +71,7 @@ export class XeroProvider extends CoreProvider {
     return {
       accessToken: data.access_token,
       refreshToken: data.refresh_token,
-      expiresAt: new Date(Date.now() + data.expires_in * 1000),
+      expiresAt: new Date(Date.now() + data.expires_in * 1000)
     };
   }
 
@@ -86,14 +86,14 @@ export class XeroProvider extends CoreProvider {
         "Content-Type": "application/x-www-form-urlencoded",
         Authorization: `Basic ${btoa(
           `${this.config.clientId}:${this.config.clientSecret}`
-        )}`,
+        )}`
       },
       body: new URLSearchParams({
         grant_type: "refresh_token",
         refresh_token: this.auth.refreshToken,
         client_id: this.config.clientId,
-        client_secret: this.config.clientSecret,
-      }),
+        client_secret: this.config.clientSecret
+      })
     });
 
     if (!response.ok) {
@@ -106,7 +106,7 @@ export class XeroProvider extends CoreProvider {
       accessToken: data.access_token,
       refreshToken: data.refresh_token,
       expiresAt: new Date(Date.now() + data.expires_in * 1000),
-      tenantId: this.auth.tenantId,
+      tenantId: this.auth.tenantId
     };
 
     this.setAuth(newAuth);
@@ -147,7 +147,7 @@ export class XeroProvider extends CoreProvider {
       Authorization: `Bearer ${this.auth.accessToken}`,
       Accept: "application/json",
       "Content-Type": "application/json",
-      ...(options.headers as Record<string, string>),
+      ...(options.headers as Record<string, string>)
     };
 
     if (tenantId) {
@@ -156,7 +156,7 @@ export class XeroProvider extends CoreProvider {
 
     const response = await fetch(url, {
       ...options,
-      headers: baseHeaders,
+      headers: baseHeaders
     });
 
     if (response.status === 401) {
@@ -164,7 +164,7 @@ export class XeroProvider extends CoreProvider {
 
       const retryHeaders: Record<string, string> = {
         ...baseHeaders,
-        Authorization: `Bearer ${this.auth.accessToken}`,
+        Authorization: `Bearer ${this.auth.accessToken}`
       };
 
       if (tenantId) {
@@ -173,7 +173,7 @@ export class XeroProvider extends CoreProvider {
 
       return fetch(url, {
         ...options,
-        headers: retryHeaders,
+        headers: retryHeaders
       });
     }
 
@@ -222,8 +222,8 @@ export class XeroProvider extends CoreProvider {
               city: xeroCustomer.Addresses[0].City,
               state: xeroCustomer.Addresses[0].Region,
               postalCode: xeroCustomer.Addresses[0].PostalCode,
-              country: xeroCustomer.Addresses[0].Country,
-            },
+              country: xeroCustomer.Addresses[0].Country
+            }
           ]
         : undefined,
       taxNumber: xeroCustomer.TaxNumber,
@@ -232,7 +232,7 @@ export class XeroProvider extends CoreProvider {
       createdAt: xeroCustomer.CreatedDateUTC || new Date().toISOString(),
       updatedAt: xeroCustomer.UpdatedDateUTC || new Date().toISOString(),
       firstName,
-      lastName,
+      lastName
     };
   }
 
@@ -264,8 +264,8 @@ export class XeroProvider extends CoreProvider {
               city: xeroVendor.Addresses[0].City,
               state: xeroVendor.Addresses[0].Region,
               postalCode: xeroVendor.Addresses[0].PostalCode,
-              country: xeroVendor.Addresses[0].Country,
-            },
+              country: xeroVendor.Addresses[0].Country
+            }
           ]
         : undefined,
       taxNumber: xeroVendor.TaxNumber,
@@ -274,7 +274,7 @@ export class XeroProvider extends CoreProvider {
       createdAt: xeroVendor.CreatedDateUTC || new Date().toISOString(),
       updatedAt: xeroVendor.UpdatedDateUTC || new Date().toISOString(),
       firstName,
-      lastName,
+      lastName
     };
   }
 
@@ -293,7 +293,7 @@ export class XeroProvider extends CoreProvider {
     const response = await this.makeRequest(
       `/Contacts${params.toString() ? `?${params.toString()}` : ""}`,
       {
-        headers,
+        headers
       }
     );
 
@@ -316,8 +316,8 @@ export class XeroProvider extends CoreProvider {
         page: 1,
         limit: customers.length,
         total: customers.length,
-        hasNext: false,
-      },
+        hasNext: false
+      }
     };
   }
 
@@ -380,15 +380,15 @@ export class XeroProvider extends CoreProvider {
               City: customer.addresses[0].city,
               Region: customer.addresses[0].state,
               PostalCode: customer.addresses[0].postalCode,
-              Country: customer.addresses[0].country,
-            },
+              Country: customer.addresses[0].country
+            }
           ]
-        : [],
+        : []
     };
 
     const response = await this.makeRequest("/Contacts", {
       method: "POST",
-      body: JSON.stringify({ Contacts: [xeroCustomer] }),
+      body: JSON.stringify({ Contacts: [xeroCustomer] })
     });
 
     if (!response.ok) {
@@ -722,7 +722,7 @@ export class XeroProvider extends CoreProvider {
         entityType: entityType as any,
         entityId,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       })) || []
     );
   }
@@ -903,7 +903,7 @@ export class XeroProvider extends CoreProvider {
     return {
       remaining: 100,
       reset: new Date(Date.now() + 60000),
-      limit: 100,
+      limit: 100
     };
   }
 
@@ -911,7 +911,7 @@ export class XeroProvider extends CoreProvider {
     return {
       name: "Xero",
       version: "2.0",
-      capabilities: ["customers", "invoices", "transactions", "attachments"],
+      capabilities: ["customers", "invoices", "transactions", "attachments"]
     };
   }
 }

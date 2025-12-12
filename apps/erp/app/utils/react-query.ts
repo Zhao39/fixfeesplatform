@@ -51,7 +51,7 @@ export const docsQuery = () => ({
 
 export const itemPostingGroupsQuery = (companyId: string | null) => ({
   queryKey: ["itemPostingGroups", companyId ?? "null"],
-  staleTime: RefreshRate.Low,
+  staleTime: RefreshRate.Low
 });
 
 export const locationsQuery = (companyId: string | null) => ({

@@ -13,13 +13,13 @@ import type {
   Expense,
   Invoice,
   Transaction,
-  Vendor,
+  Vendor
 } from "./models";
 import type {
   CoreProvider,
   ExportJobStatus,
   ProviderConfig,
-  SyncOptions,
+  SyncOptions
 } from "./service";
 
 export interface QueueJob {
@@ -84,7 +84,7 @@ export class ProviderManager {
       ...job,
       id: crypto.randomUUID(),
       scheduledAt: new Date(),
-      retry: 0,
+      retry: 0
     };
 
     if (this.queue) {
@@ -120,7 +120,7 @@ export class ProviderManager {
         const retryJob = {
           ...job,
           retry: job.retry + 1,
-          scheduledAt: new Date(Date.now() + delay),
+          scheduledAt: new Date(Date.now() + delay)
         };
 
         if (this.queue) {
@@ -144,7 +144,7 @@ export class ProviderManager {
         provider,
         method: "getCompanyInfo",
         args: [],
-        maxRetries: 3,
+        maxRetries: 3
       });
       throw new Error("Job queued - use webhook or polling to get result");
     }
@@ -171,7 +171,7 @@ export class ProviderManager {
         provider,
         method: "getAccounts",
         args: [options],
-        maxRetries: 3,
+        maxRetries: 3
       });
     }
 
@@ -193,7 +193,7 @@ export class ProviderManager {
         provider,
         method: "getAccount",
         args: [id],
-        maxRetries: 3,
+        maxRetries: 3
       });
     }
 
@@ -215,7 +215,7 @@ export class ProviderManager {
         provider,
         method: "createAccount",
         args: [account],
-        maxRetries: 3,
+        maxRetries: 3
       });
     }
 
@@ -241,7 +241,7 @@ export class ProviderManager {
         provider,
         method: "getCustomers",
         args: [options],
-        maxRetries: 3,
+        maxRetries: 3
       });
     }
 
@@ -263,7 +263,7 @@ export class ProviderManager {
         provider,
         method: "getCustomer",
         args: [id],
-        maxRetries: 3,
+        maxRetries: 3
       });
     }
 
@@ -285,7 +285,7 @@ export class ProviderManager {
         provider,
         method: "createCustomer",
         args: [customer],
-        maxRetries: 3,
+        maxRetries: 3
       });
     }
 
@@ -311,7 +311,7 @@ export class ProviderManager {
         provider,
         method: "getVendors",
         args: [options],
-        maxRetries: 3,
+        maxRetries: 3
       });
     }
 
@@ -333,7 +333,7 @@ export class ProviderManager {
         provider,
         method: "createVendor",
         args: [vendor],
-        maxRetries: 3,
+        maxRetries: 3
       });
     }
 
@@ -359,7 +359,7 @@ export class ProviderManager {
         provider,
         method: "getInvoices",
         args: [options],
-        maxRetries: 3,
+        maxRetries: 3
       });
     }
 
@@ -381,7 +381,7 @@ export class ProviderManager {
         provider,
         method: "getInvoice",
         args: [id],
-        maxRetries: 3,
+        maxRetries: 3
       });
     }
 
@@ -403,7 +403,7 @@ export class ProviderManager {
         provider,
         method: "createInvoice",
         args: [invoice],
-        maxRetries: 3,
+        maxRetries: 3
       });
     }
 
@@ -429,7 +429,7 @@ export class ProviderManager {
         provider,
         method: "getTransactions",
         args: [options],
-        maxRetries: 3,
+        maxRetries: 3
       });
     }
 
@@ -451,7 +451,7 @@ export class ProviderManager {
         provider,
         method: "createTransaction",
         args: [transaction],
-        maxRetries: 3,
+        maxRetries: 3
       });
     }
 
@@ -477,7 +477,7 @@ export class ProviderManager {
         provider,
         method: "getExpenses",
         args: [options],
-        maxRetries: 3,
+        maxRetries: 3
       });
     }
 
@@ -499,7 +499,7 @@ export class ProviderManager {
         provider,
         method: "createExpense",
         args: [expense],
-        maxRetries: 3,
+        maxRetries: 3
       });
     }
 
@@ -541,7 +541,7 @@ export class ProviderManager {
       status: "pending",
       progress: 0,
       createdAt: new Date(),
-      updatedAt: new Date(),
+      updatedAt: new Date()
     };
 
     this.exportJobs.set(jobId, exportJob);
@@ -552,7 +552,7 @@ export class ProviderManager {
       method: "startBulkExport",
       args: [request],
       maxRetries: 1, // Don't retry bulk exports
-      priority: "low", // Bulk exports are low priority
+      priority: "low" // Bulk exports are low priority
     });
 
     return jobId;
@@ -596,7 +596,7 @@ export class ProviderManager {
       provider,
       method: `get${entityType.charAt(0).toUpperCase() + entityType.slice(1)}`,
       args: [options],
-      maxRetries: 3,
+      maxRetries: 3
     }));
 
     // Execute all jobs in parallel
@@ -623,7 +623,7 @@ export class ProviderManager {
         provider,
         method: "bulkCreate",
         args: [entityType, entities],
-        maxRetries: 3,
+        maxRetries: 3
       });
     }
 
@@ -761,7 +761,7 @@ export class ProviderManager {
         (job) => job.status === "completed"
       ).length,
       failedExportJobs: exportJobsArray.filter((job) => job.status === "failed")
-        .length,
+        .length
     };
   }
 }

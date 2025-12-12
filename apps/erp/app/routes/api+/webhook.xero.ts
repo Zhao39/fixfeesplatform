@@ -23,7 +23,7 @@ import {
   getCarbonServiceRole,
   XERO_CLIENT_ID,
   XERO_CLIENT_SECRET,
-  XERO_WEBHOOK_SECRET,
+  XERO_WEBHOOK_SECRET
 } from "@carbon/auth";
 import { XeroProvider } from "@carbon/ee/xero";
 import { tasks } from "@trigger.dev/sdk/v3";
@@ -33,7 +33,7 @@ import crypto from "crypto";
 import { z } from "zod";
 
 export const config = {
-  runtime: "nodejs",
+  runtime: "nodejs"
 };
 
 const xeroEventValidator = z.object({
@@ -43,11 +43,11 @@ const xeroEventValidator = z.object({
       eventCategory: z.enum(["INVOICE", "CONTACT"]),
       eventType: z.enum(["CREATE", "UPDATE", "DELETE"]),
       resourceId: z.string(),
-      eventDateUtc: z.string(),
+      eventDateUtc: z.string()
     })
   ),
   firstEventSequence: z.number(),
-  lastEventSequence: z.number(),
+  lastEventSequence: z.number()
 });
 
 function verifyXeroSignature(payload: string, signature: string): boolean {
@@ -104,7 +104,7 @@ async function fetchInvoiceAndDetermineContactType(
       clientSecret: XERO_CLIENT_SECRET!,
       accessToken,
       refreshToken,
-      tenantId,
+      tenantId
     });
 
     // Fetch the invoice to get the contact ID and type
@@ -194,7 +194,7 @@ async function fetchContactAndDetermineType(
       clientSecret: XERO_CLIENT_SECRET!,
       accessToken,
       refreshToken,
-      tenantId,
+      tenantId
     });
 
     const data = await xeroProvider.getContact(contactId);
@@ -252,13 +252,13 @@ async function triggerAccountingSync(
       entityType: entity.entityType,
       entityId: entity.entityId,
       operation: entity.operation,
-      externalId: entity.entityId, // In Xero, the resource ID is the external ID
+      externalId: entity.entityId // In Xero, the resource ID is the external ID
     })),
     metadata: {
       tenantId: tenantId,
       webhookId: crypto.randomUUID(),
-      timestamp: new Date().toISOString(),
-    },
+      timestamp: new Date().toISOString()
+    }
   };
 
   // Trigger the background job using Trigger.dev
@@ -283,7 +283,7 @@ export async function action({ request }: ActionFunctionArgs) {
     return json(
       {
         success: false,
-        error: "Missing signature",
+        error: "Missing signature"
       },
       { status: 401 }
     );
@@ -296,7 +296,7 @@ export async function action({ request }: ActionFunctionArgs) {
     return json(
       {
         success: false,
-        error: "Invalid signature",
+        error: "Invalid signature"
       },
       { status: 401 }
     );
@@ -317,7 +317,7 @@ export async function action({ request }: ActionFunctionArgs) {
     return json(
       {
         success: false,
-        error: "Invalid JSON payload",
+        error: "Invalid JSON payload"
       },
       { status: 400 }
     );
@@ -330,7 +330,7 @@ export async function action({ request }: ActionFunctionArgs) {
     return json(
       {
         success: false,
-        error: "Invalid payload format",
+        error: "Invalid payload format"
       },
       { status: 400 }
     );
@@ -348,13 +348,16 @@ export async function action({ request }: ActionFunctionArgs) {
   const errors = [];
 
   // Group events by tenant ID for efficient processing
-  const eventsByTenant = events.reduce((acc, event) => {
-    if (!acc[event.tenantId]) {
-      acc[event.tenantId] = [];
-    }
-    acc[event.tenantId].push(event);
-    return acc;
-  }, {} as Record<string, typeof events>);
+  const eventsByTenant = events.reduce(
+    (acc, event) => {
+      if (!acc[event.tenantId]) {
+        acc[event.tenantId] = [];
+      }
+      acc[event.tenantId].push(event);
+      return acc;
+    },
+    {} as Record<string, typeof events>
+  );
 
   // Process events for each tenant
   for (const [tenantId, tenantEvents] of Object.entries(eventsByTenant)) {
@@ -373,7 +376,7 @@ export async function action({ request }: ActionFunctionArgs) {
         console.error(`No Xero integration found for tenant ${tenantId}`);
         errors.push({
           tenantId,
-          error: "Integration not found",
+          error: "Integration not found"
         });
         continue;
       }
@@ -387,7 +390,7 @@ export async function action({ request }: ActionFunctionArgs) {
         console.error(`No Xero integration found for tenant ${tenantId}`);
         errors.push({
           tenantId,
-          error: "Tenant ID not found in integrations",
+          error: "Tenant ID not found in integrations"
         });
         continue;
       }
@@ -432,7 +435,7 @@ export async function action({ request }: ActionFunctionArgs) {
               operation: eventType.toLowerCase() as
                 | "create"
                 | "update"
-                | "delete",
+                | "delete"
             });
 
             // Add as vendor
@@ -442,7 +445,7 @@ export async function action({ request }: ActionFunctionArgs) {
               operation: eventType.toLowerCase() as
                 | "create"
                 | "update"
-                | "delete",
+                | "delete"
             });
           } else {
             // Add as either customer or vendor based on the determination
@@ -452,7 +455,7 @@ export async function action({ request }: ActionFunctionArgs) {
               operation: eventType.toLowerCase() as
                 | "create"
                 | "update"
-                | "delete",
+                | "delete"
             });
           }
         } else if (eventCategory === "INVOICE") {
@@ -476,7 +479,7 @@ export async function action({ request }: ActionFunctionArgs) {
               operation: eventType.toLowerCase() as
                 | "create"
                 | "update"
-                | "delete",
+                | "delete"
             });
 
             // Also sync the associated contact
@@ -489,7 +492,7 @@ export async function action({ request }: ActionFunctionArgs) {
                   operation: eventType.toLowerCase() as
                     | "create"
                     | "update"
-                    | "delete",
+                    | "delete"
                 },
                 {
                   entityType: "vendor",
@@ -497,7 +500,7 @@ export async function action({ request }: ActionFunctionArgs) {
                   operation: eventType.toLowerCase() as
                     | "create"
                     | "update"
-                    | "delete",
+                    | "delete"
                 }
               );
             } else {
@@ -508,7 +511,7 @@ export async function action({ request }: ActionFunctionArgs) {
                 operation: eventType.toLowerCase() as
                   | "create"
                   | "update"
-                  | "delete",
+                  | "delete"
               });
             }
           } catch (error) {
@@ -520,7 +523,7 @@ export async function action({ request }: ActionFunctionArgs) {
               operation: eventType.toLowerCase() as
                 | "create"
                 | "update"
-                | "delete",
+                | "delete"
             });
           }
         } else {
@@ -540,14 +543,14 @@ export async function action({ request }: ActionFunctionArgs) {
             id: jobHandle.id,
             companyId,
             tenantId,
-            entityCount: entitiesToSync.length,
+            entityCount: entitiesToSync.length
           });
         } catch (error) {
           console.error("Failed to trigger sync job:", error);
           errors.push({
             tenantId,
             error:
-              error instanceof Error ? error.message : "Failed to trigger job",
+              error instanceof Error ? error.message : "Failed to trigger job"
           });
         }
       }
@@ -555,7 +558,7 @@ export async function action({ request }: ActionFunctionArgs) {
       console.error("Error processing events for tenant:", tenantId, error);
       errors.push({
         tenantId,
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: error instanceof Error ? error.message : "Unknown error"
       });
     }
   }
@@ -566,6 +569,6 @@ export async function action({ request }: ActionFunctionArgs) {
     jobsTriggered: syncJobs.length,
     jobs: syncJobs,
     errors: errors.length > 0 ? errors : undefined,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
 }

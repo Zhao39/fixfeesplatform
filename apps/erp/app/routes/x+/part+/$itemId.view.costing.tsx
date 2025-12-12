@@ -90,7 +90,7 @@ export default function PartCostingRoute() {
         initialValues={{
           ...itemCost,
           itemPostingGroupId: itemCost.itemPostingGroupId ?? undefined,
-          ...getCustomFields(itemCost.customFields),
+          ...getCustomFields(itemCost.customFields)
         }}
       />
       <ItemCostHistoryChart

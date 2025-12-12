@@ -26,7 +26,7 @@ import crypto from "crypto";
 import { z } from "zod";
 
 export const config = {
-  runtime: "nodejs",
+  runtime: "nodejs"
 };
 
 const quickbooksEventValidator = z.object({
@@ -38,12 +38,12 @@ const quickbooksEventValidator = z.object({
           z.object({
             id: z.string(),
             name: z.string(),
-            operation: z.enum(["Create", "Update", "Delete"]),
+            operation: z.enum(["Create", "Update", "Delete"])
           })
-        ),
-      }),
+        )
+      })
     })
-  ),
+  )
 });
 
 function verifyQuickBooksSignature(
@@ -88,13 +88,13 @@ async function triggerAccountingSync(
         | "create"
         | "update"
         | "delete",
-      externalId: entity.entityId, // In QuickBooks, the entity ID is the external ID
+      externalId: entity.entityId // In QuickBooks, the entity ID is the external ID
     })),
     metadata: {
       tenantId: realmId,
       webhookId: crypto.randomUUID(),
-      timestamp: new Date().toISOString(),
-    },
+      timestamp: new Date().toISOString()
+    }
   };
 
   // Trigger the background job using Trigger.dev
@@ -119,7 +119,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     return json(
       {
         success: false,
-        error: "Invalid payload format",
+        error: "Invalid payload format"
       },
       { status: 400 }
     );
@@ -134,7 +134,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     return json(
       {
         success: false,
-        error: "Missing signature",
+        error: "Missing signature"
       },
       { status: 401 }
     );
@@ -150,7 +150,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     return json(
       {
         success: false,
-        error: "Invalid signature",
+        error: "Invalid signature"
       },
       { status: 401 }
     );
@@ -183,7 +183,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
         console.error(`No QuickBooks integration found for realm ${realmId}`);
         errors.push({
           realmId,
-          error: "Integration not found",
+          error: "Integration not found"
         });
         continue;
       }
@@ -211,13 +211,13 @@ export async function action({ request, params }: ActionFunctionArgs) {
           entitiesToSync.push({
             entityType: "customer",
             entityId: id,
-            operation,
+            operation
           });
         } else if (name === "Vendor") {
           entitiesToSync.push({
             entityType: "vendor",
             entityId: id,
-            operation,
+            operation
           });
         } else {
           console.log(`Skipping unsupported entity type: ${name}`);
@@ -236,21 +236,21 @@ export async function action({ request, params }: ActionFunctionArgs) {
             id: jobHandle.id,
             companyId,
             realmId,
-            entityCount: entitiesToSync.length,
+            entityCount: entitiesToSync.length
           });
         } catch (error) {
           console.error("Failed to trigger sync job:", error);
           errors.push({
             realmId,
             error:
-              error instanceof Error ? error.message : "Failed to trigger job",
+              error instanceof Error ? error.message : "Failed to trigger job"
           });
         }
       }
     } catch (error) {
       console.error("Error processing event:", error);
       errors.push({
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: error instanceof Error ? error.message : "Unknown error"
       });
     }
   }
@@ -261,6 +261,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
     jobsTriggered: syncJobs.length,
     jobs: syncJobs,
     errors: errors.length > 0 ? errors : undefined,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
 }

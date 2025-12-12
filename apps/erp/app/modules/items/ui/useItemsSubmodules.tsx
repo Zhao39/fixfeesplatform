@@ -105,8 +105,8 @@ const itemsRoutes: AuthenticatedRouteGroup[] = [
         to: path.to.materialTypes,
         icon: <LuPuzzle />,
         role: "employee"
-      },
-    ],
+      }
+    ]
   },
   {
     name: "Configure",
@@ -115,7 +115,7 @@ const itemsRoutes: AuthenticatedRouteGroup[] = [
         name: "Groups",
         to: path.to.itemPostingGroups,
         role: "employee",
-        icon: <LuGroup />,
+        icon: <LuGroup />
       },
       {
         name: "Units",

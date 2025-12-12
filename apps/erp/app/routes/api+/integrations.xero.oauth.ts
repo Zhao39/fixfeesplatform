@@ -2,18 +2,18 @@ import { VERCEL_URL, XERO_CLIENT_ID, XERO_CLIENT_SECRET } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { Xero } from "@carbon/ee";
 import { XeroProvider } from "@carbon/ee/xero";
-import { json, redirect, type LoaderFunctionArgs } from "@vercel/remix";
+import { json, type LoaderFunctionArgs, redirect } from "@vercel/remix";
 import { upsertCompanyIntegration } from "~/modules/settings/settings.server";
 import { oAuthCallbackSchema } from "~/modules/shared";
 import { path } from "~/utils/path";
 
 export const config = {
-  runtime: "nodejs",
+  runtime: "nodejs"
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client, userId, companyId } = await requirePermissions(request, {
-    update: "settings",
+    update: "settings"
   });
 
   const url = new URL(request.url);
@@ -41,7 +41,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     const provider = new XeroProvider({
       clientId: XERO_CLIENT_ID,
       clientSecret: XERO_CLIENT_SECRET,
-      redirectUri: `${url.origin}/api/integrations/xero/oauth`,
+      redirectUri: `${url.origin}/api/integrations/xero/oauth`
     });
 
     // Exchange the authorization code for tokens
@@ -60,8 +60,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
         method: "GET",
         headers: {
           Authorization: `Bearer ${auth.accessToken}`,
-          "Content-Type": "application/json",
-        },
+          "Content-Type": "application/json"
+        }
       }
     );
 
@@ -94,10 +94,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
       // @ts-ignore
       metadata: {
         ...auth,
-        tenantId,
+        tenantId
       },
       updatedBy: userId,
-      companyId: companyId,
+      companyId: companyId
     });
 
     if (createdXeroIntegration?.data?.metadata) {

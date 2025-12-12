@@ -1,24 +1,24 @@
 import {
   QUICKBOOKS_CLIENT_ID,
   QUICKBOOKS_CLIENT_SECRET,
-  VERCEL_URL,
+  VERCEL_URL
 } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { QuickBooks } from "@carbon/ee";
 import { QuickBooksProvider } from "@carbon/ee/quickbooks";
-import { json, redirect, type LoaderFunctionArgs } from "@vercel/remix";
+import { json, type LoaderFunctionArgs, redirect } from "@vercel/remix";
 import z from "zod";
 import { upsertCompanyIntegration } from "~/modules/settings/settings.server";
 import { oAuthCallbackSchema } from "~/modules/shared";
 import { path } from "~/utils/path";
 
 export const config = {
-  runtime: "nodejs",
+  runtime: "nodejs"
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client, userId, companyId } = await requirePermissions(request, {
-    update: "settings",
+    update: "settings"
   });
 
   const url = new URL(request.url);
@@ -26,7 +26,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const quickbooksAuthResponse = oAuthCallbackSchema
     .extend({
-      realmId: z.string(),
+      realmId: z.string()
     })
     .safeParse(searchParams);
 
@@ -52,7 +52,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       clientSecret: QUICKBOOKS_CLIENT_SECRET,
       redirectUri: `${url.origin}/api/integrations/quickbooks/oauth`,
       environment:
-        process.env.NODE_ENV === "production" ? "production" : "sandbox",
+        process.env.NODE_ENV === "production" ? "production" : "sandbox"
     });
 
     // Exchange the authorization code for tokens
@@ -72,10 +72,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
         // @ts-ignore
         metadata: {
           ...auth,
-          tenantId: data.realmId,
+          tenantId: data.realmId
         },
         updatedBy: userId,
-        companyId: companyId,
+        companyId: companyId
       }
     );
 

@@ -11,14 +11,14 @@ import type {
   JournalEntry,
   Payment,
   Transaction,
-  Vendor,
+  Vendor
 } from "../models";
 import type {
   ProviderAuth,
   ProviderConfig,
   RateLimitInfo,
   SyncOptions,
-  SyncResult,
+  SyncResult
 } from "../service";
 import { CoreProvider } from "../service";
 
@@ -40,7 +40,7 @@ export class QuickBooksProvider extends CoreProvider {
       redirect_uri: this.config.redirectUri || "",
       response_type: "code",
       access_type: "offline",
-      state: crypto.randomUUID(),
+      state: crypto.randomUUID()
     });
 
     return `${this.discoveryUrl}?${params.toString()}`;
@@ -55,13 +55,13 @@ export class QuickBooksProvider extends CoreProvider {
           "Content-Type": "application/x-www-form-urlencoded",
           Authorization: `Basic ${btoa(
             `${this.config.clientId}:${this.config.clientSecret}`
-          )}`,
+          )}`
         },
         body: new URLSearchParams({
           grant_type: "authorization_code",
           code,
-          redirect_uri: this.config.redirectUri || "",
-        }),
+          redirect_uri: this.config.redirectUri || ""
+        })
       }
     );
 
@@ -74,7 +74,7 @@ export class QuickBooksProvider extends CoreProvider {
     return {
       accessToken: data.access_token,
       refreshToken: data.refresh_token,
-      expiresAt: new Date(Date.now() + data.expires_in * 1000),
+      expiresAt: new Date(Date.now() + data.expires_in * 1000)
     };
   }
 
@@ -91,12 +91,12 @@ export class QuickBooksProvider extends CoreProvider {
           "Content-Type": "application/x-www-form-urlencoded",
           Authorization: `Basic ${btoa(
             `${this.config.clientId}:${this.config.clientSecret}`
-          )}`,
+          )}`
         },
         body: new URLSearchParams({
           grant_type: "refresh_token",
-          refresh_token: this.auth.refreshToken,
-        }),
+          refresh_token: this.auth.refreshToken
+        })
       }
     );
 
@@ -110,7 +110,7 @@ export class QuickBooksProvider extends CoreProvider {
       accessToken: data.access_token,
       refreshToken: data.refresh_token,
       expiresAt: new Date(Date.now() + data.expires_in * 1000),
-      tenantId: this.auth.tenantId,
+      tenantId: this.auth.tenantId
     };
 
     this.setAuth(newAuth);
@@ -149,7 +149,7 @@ export class QuickBooksProvider extends CoreProvider {
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
       Accept: "application/json",
-      ...(options.headers as Record<string, string>),
+      ...(options.headers as Record<string, string>)
     };
 
     if (this.auth?.accessToken) {
@@ -158,7 +158,7 @@ export class QuickBooksProvider extends CoreProvider {
 
     const response = await fetch(url, {
       ...options,
-      headers,
+      headers
     });
 
     // Handle rate limiting
@@ -196,7 +196,7 @@ export class QuickBooksProvider extends CoreProvider {
       phone: qbCustomer.PrimaryPhone?.FreeFormNumber
         ? {
             number: qbCustomer.PrimaryPhone.FreeFormNumber,
-            type: "work" as any,
+            type: "work" as any
           }
         : undefined,
       addresses: this.transformAddresses(
@@ -212,7 +212,7 @@ export class QuickBooksProvider extends CoreProvider {
       createdAt: qbCustomer.MetaData?.CreateTime || new Date().toISOString(),
       updatedAt:
         qbCustomer.MetaData?.LastUpdatedTime || new Date().toISOString(),
-      syncToken: qbCustomer.SyncToken,
+      syncToken: qbCustomer.SyncToken
     };
   }
 
@@ -226,7 +226,7 @@ export class QuickBooksProvider extends CoreProvider {
       phone: qbVendor.PrimaryPhone?.FreeFormNumber
         ? {
             number: qbVendor.PrimaryPhone.FreeFormNumber,
-            type: "work" as any,
+            type: "work" as any
           }
         : undefined,
       addresses: this.transformAddresses(qbVendor.BillAddr),
@@ -237,7 +237,7 @@ export class QuickBooksProvider extends CoreProvider {
       balance: qbVendor.Balance,
       createdAt: qbVendor.MetaData?.CreateTime || new Date().toISOString(),
       updatedAt: qbVendor.MetaData?.LastUpdatedTime || new Date().toISOString(),
-      syncToken: qbVendor.SyncToken,
+      syncToken: qbVendor.SyncToken
     };
   }
 
@@ -252,7 +252,7 @@ export class QuickBooksProvider extends CoreProvider {
         city: billAddr.City,
         state: billAddr.CountrySubDivisionCode,
         postalCode: billAddr.PostalCode,
-        country: billAddr.Country,
+        country: billAddr.Country
       });
     }
 
@@ -264,7 +264,7 @@ export class QuickBooksProvider extends CoreProvider {
         city: shipAddr.City,
         state: shipAddr.CountrySubDivisionCode,
         postalCode: shipAddr.PostalCode,
-        country: shipAddr.Country,
+        country: shipAddr.Country
       });
     }
 
@@ -299,12 +299,12 @@ export class QuickBooksProvider extends CoreProvider {
           discount: line.DiscountLineDetail?.DiscountPercent,
           total: line.Amount,
           taxAmount: line.SalesItemLineDetail?.TaxCodeRef?.value,
-          accountId: line.SalesItemLineDetail?.ItemRef?.value,
+          accountId: line.SalesItemLineDetail?.ItemRef?.value
         })) || [],
       createdAt: qbInvoice.MetaData?.CreateTime || new Date().toISOString(),
       updatedAt:
         qbInvoice.MetaData?.LastUpdatedTime || new Date().toISOString(),
-      syncToken: qbInvoice.SyncToken,
+      syncToken: qbInvoice.SyncToken
     };
   }
 
@@ -335,7 +335,7 @@ export class QuickBooksProvider extends CoreProvider {
       notes: qbBill.PrivateNote,
       createdAt: qbBill.MetaData?.CreateTime || new Date().toISOString(),
       updatedAt: qbBill.MetaData?.LastUpdatedTime || new Date().toISOString(),
-      syncToken: qbBill.SyncToken,
+      syncToken: qbBill.SyncToken
     };
   }
 
@@ -353,7 +353,7 @@ export class QuickBooksProvider extends CoreProvider {
       quantityOnHand: qbItem.QtyOnHand?.quantity,
       createdAt: qbItem.MetaData?.CreateTime || new Date().toISOString(),
       updatedAt: qbItem.MetaData?.LastUpdatedTime || new Date().toISOString(),
-      syncToken: qbItem.SyncToken,
+      syncToken: qbItem.SyncToken
     };
   }
 
@@ -371,7 +371,7 @@ export class QuickBooksProvider extends CoreProvider {
       createdAt: qbAccount.MetaData?.CreateTime || new Date().toISOString(),
       updatedAt:
         qbAccount.MetaData?.LastUpdatedTime || new Date().toISOString(),
-      syncToken: qbAccount.SyncToken,
+      syncToken: qbAccount.SyncToken
     };
   }
 
@@ -452,7 +452,7 @@ export class QuickBooksProvider extends CoreProvider {
       createdAt: qbExpense.MetaData?.CreateTime || new Date().toISOString(),
       updatedAt:
         qbExpense.MetaData?.LastUpdatedTime || new Date().toISOString(),
-      syncToken: qbExpense.SyncToken,
+      syncToken: qbExpense.SyncToken
     };
   }
 
@@ -475,7 +475,7 @@ export class QuickBooksProvider extends CoreProvider {
       createdAt: qbPayment.MetaData?.CreateTime || new Date().toISOString(),
       updatedAt:
         qbPayment.MetaData?.LastUpdatedTime || new Date().toISOString(),
-      syncToken: qbPayment.SyncToken,
+      syncToken: qbPayment.SyncToken
     };
   }
 
@@ -500,11 +500,11 @@ export class QuickBooksProvider extends CoreProvider {
             City: customer.addresses[0].city,
             CountrySubDivisionCode: customer.addresses[0].state,
             PostalCode: customer.addresses[0].postalCode,
-            Country: customer.addresses[0].country,
+            Country: customer.addresses[0].country
           }
         : undefined,
       ResaleNum: customer.taxNumber,
-      Active: customer.isActive !== false,
+      Active: customer.isActive !== false
     };
   }
 
@@ -526,11 +526,11 @@ export class QuickBooksProvider extends CoreProvider {
             City: vendor.addresses[0].city,
             CountrySubDivisionCode: vendor.addresses[0].state,
             PostalCode: vendor.addresses[0].postalCode,
-            Country: vendor.addresses[0].country,
+            Country: vendor.addresses[0].country
           }
         : undefined,
       TaxIdentifier: vendor.taxNumber,
-      Active: vendor.isActive !== false,
+      Active: vendor.isActive !== false
     };
   }
 
@@ -560,14 +560,14 @@ export class QuickBooksProvider extends CoreProvider {
               city: company.CompanyAddr.City,
               state: company.CompanyAddr.CountrySubDivisionCode,
               postalCode: company.CompanyAddr.PostalCode,
-              country: company.CompanyAddr.Country,
-            },
+              country: company.CompanyAddr.Country
+            }
           ]
         : [],
       taxNumber: company.LegalAddr?.Line1, // QB doesn't have direct tax number
       baseCurrency: company.Country === "US" ? "USD" : "USD",
       createdAt: company.MetaData?.CreateTime || new Date().toISOString(),
-      updatedAt: company.MetaData?.LastUpdatedTime || new Date().toISOString(),
+      updatedAt: company.MetaData?.LastUpdatedTime || new Date().toISOString()
     };
   }
 
@@ -589,8 +589,8 @@ export class QuickBooksProvider extends CoreProvider {
         page: 1,
         limit: accounts.length,
         total: accounts.length,
-        hasNext: false,
-      },
+        hasNext: false
+      }
     };
   }
 
@@ -620,12 +620,12 @@ export class QuickBooksProvider extends CoreProvider {
       AcctNum: account.code,
       Description: account.description,
       AccountType: account.accountType,
-      Active: account.isActive !== false,
+      Active: account.isActive !== false
     };
 
     const response = await this.request("/account", {
       method: "POST",
-      body: JSON.stringify(qbAccount),
+      body: JSON.stringify(qbAccount)
     });
 
     if (!response.ok) {
@@ -644,7 +644,7 @@ export class QuickBooksProvider extends CoreProvider {
 
     const qbAccount: any = {
       Id: id,
-      SyncToken: existing.syncToken || "0",
+      SyncToken: existing.syncToken || "0"
     };
 
     if (account.name) qbAccount.Name = account.name;
@@ -654,7 +654,7 @@ export class QuickBooksProvider extends CoreProvider {
 
     const response = await this.request("/account", {
       method: "POST",
-      body: JSON.stringify(qbAccount),
+      body: JSON.stringify(qbAccount)
     });
 
     if (!response.ok) {
@@ -696,8 +696,8 @@ export class QuickBooksProvider extends CoreProvider {
         page: 1,
         limit: customers.length,
         total: customers.length,
-        hasNext: false,
-      },
+        hasNext: false
+      }
     };
   }
 
@@ -727,7 +727,7 @@ export class QuickBooksProvider extends CoreProvider {
 
     const response = await this.request("/customer", {
       method: "POST",
-      body: JSON.stringify(qbCustomer),
+      body: JSON.stringify(qbCustomer)
     });
 
     if (!response.ok) {
@@ -749,7 +749,7 @@ export class QuickBooksProvider extends CoreProvider {
 
     const qbCustomer: any = {
       Id: id,
-      SyncToken: existing.syncToken || "0",
+      SyncToken: existing.syncToken || "0"
     };
 
     if (customer.name) qbCustomer.Name = customer.name;
@@ -767,7 +767,7 @@ export class QuickBooksProvider extends CoreProvider {
         City: addr.city,
         CountrySubDivisionCode: addr.state,
         PostalCode: addr.postalCode,
-        Country: addr.country,
+        Country: addr.country
       };
     }
     if (customer.taxNumber) qbCustomer.ResaleNum = customer.taxNumber;
@@ -775,7 +775,7 @@ export class QuickBooksProvider extends CoreProvider {
 
     const response = await this.request("/customer", {
       method: "POST",
-      body: JSON.stringify(qbCustomer),
+      body: JSON.stringify(qbCustomer)
     });
 
     if (!response.ok) {
@@ -816,8 +816,8 @@ export class QuickBooksProvider extends CoreProvider {
         page: 1,
         limit: vendors.length,
         total: vendors.length,
-        hasNext: false,
-      },
+        hasNext: false
+      }
     };
   }
 
@@ -846,7 +846,7 @@ export class QuickBooksProvider extends CoreProvider {
 
     const response = await this.request("/vendor", {
       method: "POST",
-      body: JSON.stringify(qbVendor),
+      body: JSON.stringify(qbVendor)
     });
 
     if (!response.ok) {
@@ -865,7 +865,7 @@ export class QuickBooksProvider extends CoreProvider {
 
     const qbVendor: any = {
       Id: id,
-      SyncToken: existing.syncToken || "0",
+      SyncToken: existing.syncToken || "0"
     };
 
     if (vendor.name) qbVendor.Name = vendor.name;
@@ -882,7 +882,7 @@ export class QuickBooksProvider extends CoreProvider {
         City: addr.city,
         CountrySubDivisionCode: addr.state,
         PostalCode: addr.postalCode,
-        Country: addr.country,
+        Country: addr.country
       };
     }
     if (vendor.taxNumber) qbVendor.TaxIdentifier = vendor.taxNumber;
@@ -890,7 +890,7 @@ export class QuickBooksProvider extends CoreProvider {
 
     const response = await this.request("/vendor", {
       method: "POST",
-      body: JSON.stringify(qbVendor),
+      body: JSON.stringify(qbVendor)
     });
 
     if (!response.ok) {
@@ -924,8 +924,8 @@ export class QuickBooksProvider extends CoreProvider {
         page: 1,
         limit: items.length,
         total: items.length,
-        hasNext: false,
-      },
+        hasNext: false
+      }
     };
   }
 
@@ -956,12 +956,12 @@ export class QuickBooksProvider extends CoreProvider {
       Description: item.description,
       UnitPrice: item.unitPrice,
       Type: item.isSold ? "Service" : "NonInventory",
-      Active: item.isActive !== false,
+      Active: item.isActive !== false
     };
 
     const response = await this.request("/item", {
       method: "POST",
-      body: JSON.stringify(qbItem),
+      body: JSON.stringify(qbItem)
     });
 
     if (!response.ok) {
@@ -978,7 +978,7 @@ export class QuickBooksProvider extends CoreProvider {
 
     const qbItem: any = {
       Id: id,
-      SyncToken: existing.syncToken || "0",
+      SyncToken: existing.syncToken || "0"
     };
 
     if (item.name) qbItem.Name = item.name;
@@ -989,7 +989,7 @@ export class QuickBooksProvider extends CoreProvider {
 
     const response = await this.request("/item", {
       method: "POST",
-      body: JSON.stringify(qbItem),
+      body: JSON.stringify(qbItem)
     });
 
     if (!response.ok) {
@@ -1030,8 +1030,8 @@ export class QuickBooksProvider extends CoreProvider {
         page: 1,
         limit: invoices.length,
         total: invoices.length,
-        hasNext: false,
-      },
+        hasNext: false
+      }
     };
   }
 
@@ -1073,14 +1073,14 @@ export class QuickBooksProvider extends CoreProvider {
           SalesItemLineDetail: {
             ItemRef: { value: item.itemId },
             Qty: item.quantity,
-            UnitPrice: item.unitPrice,
-          },
-        })) || [],
+            UnitPrice: item.unitPrice
+          }
+        })) || []
     };
 
     const response = await this.request("/invoice", {
       method: "POST",
-      body: JSON.stringify(qbInvoice),
+      body: JSON.stringify(qbInvoice)
     });
 
     if (!response.ok) {
@@ -1099,7 +1099,7 @@ export class QuickBooksProvider extends CoreProvider {
 
     const qbInvoice: any = {
       Id: id,
-      SyncToken: existing.syncToken || "0",
+      SyncToken: existing.syncToken || "0"
     };
 
     if (invoice.customerId)
@@ -1118,14 +1118,14 @@ export class QuickBooksProvider extends CoreProvider {
         SalesItemLineDetail: {
           ItemRef: { value: item.itemId },
           Qty: item.quantity,
-          UnitPrice: item.unitPrice,
-        },
+          UnitPrice: item.unitPrice
+        }
       }));
     }
 
     const response = await this.request("/invoice", {
       method: "POST",
-      body: JSON.stringify(qbInvoice),
+      body: JSON.stringify(qbInvoice)
     });
 
     if (!response.ok) {
@@ -1146,8 +1146,8 @@ export class QuickBooksProvider extends CoreProvider {
       method: "POST",
       body: JSON.stringify({
         Id: id,
-        SyncToken: existing.syncToken || "0",
-      }),
+        SyncToken: existing.syncToken || "0"
+      })
     });
 
     if (!response.ok) {
@@ -1162,7 +1162,7 @@ export class QuickBooksProvider extends CoreProvider {
     const response = await this.request(
       `/invoice/${id}/send?sendTo=${options?.email || ""}`,
       {
-        method: "POST",
+        method: "POST"
       }
     );
 
@@ -1189,8 +1189,8 @@ export class QuickBooksProvider extends CoreProvider {
         page: 1,
         limit: bills.length,
         total: bills.length,
-        hasNext: false,
-      },
+        hasNext: false
+      }
     };
   }
 
@@ -1222,12 +1222,12 @@ export class QuickBooksProvider extends CoreProvider {
       DocNumber: bill.number,
       MemoRef: bill.reference ? { value: bill.reference } : undefined,
       PrivateNote: bill.notes,
-      TotalAmt: bill.total,
+      TotalAmt: bill.total
     };
 
     const response = await this.request("/bill", {
       method: "POST",
-      body: JSON.stringify(qbBill),
+      body: JSON.stringify(qbBill)
     });
 
     if (!response.ok) {
@@ -1244,7 +1244,7 @@ export class QuickBooksProvider extends CoreProvider {
 
     const qbBill: any = {
       Id: id,
-      SyncToken: existing.syncToken || "0",
+      SyncToken: existing.syncToken || "0"
     };
 
     if (bill.vendorId) qbBill.VendorRef = { value: bill.vendorId };
@@ -1257,7 +1257,7 @@ export class QuickBooksProvider extends CoreProvider {
 
     const response = await this.request("/bill", {
       method: "POST",
-      body: JSON.stringify(qbBill),
+      body: JSON.stringify(qbBill)
     });
 
     if (!response.ok) {
@@ -1276,8 +1276,8 @@ export class QuickBooksProvider extends CoreProvider {
       method: "POST",
       body: JSON.stringify({
         Id: id,
-        SyncToken: existing.syncToken || "0",
-      }),
+        SyncToken: existing.syncToken || "0"
+      })
     });
 
     if (!response.ok) {
@@ -1298,8 +1298,8 @@ export class QuickBooksProvider extends CoreProvider {
         page: 1,
         limit: 0,
         total: 0,
-        hasNext: false,
-      },
+        hasNext: false
+      }
     };
   }
 
@@ -1361,8 +1361,8 @@ export class QuickBooksProvider extends CoreProvider {
         page: 1,
         limit: expenses.length,
         total: expenses.length,
-        hasNext: false,
-      },
+        hasNext: false
+      }
     };
   }
 
@@ -1398,15 +1398,15 @@ export class QuickBooksProvider extends CoreProvider {
           DetailType: "AccountBasedExpenseLineDetail",
           Amount: expense.amount,
           AccountBasedExpenseLineDetail: {
-            AccountRef: { value: expense.accountId || expense.category },
-          },
-        },
-      ],
+            AccountRef: { value: expense.accountId || expense.category }
+          }
+        }
+      ]
     };
 
     const response = await this.request("/purchase", {
       method: "POST",
-      body: JSON.stringify(qbExpense),
+      body: JSON.stringify(qbExpense)
     });
 
     if (!response.ok) {
@@ -1425,7 +1425,7 @@ export class QuickBooksProvider extends CoreProvider {
 
     const qbExpense: any = {
       Id: id,
-      SyncToken: existing.syncToken || "0",
+      SyncToken: existing.syncToken || "0"
     };
 
     if (expense.vendorId) qbExpense.EntityRef = { value: expense.vendorId };
@@ -1438,15 +1438,15 @@ export class QuickBooksProvider extends CoreProvider {
           DetailType: "AccountBasedExpenseLineDetail",
           Amount: expense.amount,
           AccountBasedExpenseLineDetail: {
-            AccountRef: { value: expense.accountId || expense.category },
-          },
-        },
+            AccountRef: { value: expense.accountId || expense.category }
+          }
+        }
       ];
     }
 
     const response = await this.request("/purchase", {
       method: "POST",
-      body: JSON.stringify(qbExpense),
+      body: JSON.stringify(qbExpense)
     });
 
     if (!response.ok) {
@@ -1467,8 +1467,8 @@ export class QuickBooksProvider extends CoreProvider {
       method: "POST",
       body: JSON.stringify({
         Id: id,
-        SyncToken: existing.syncToken || "0",
-      }),
+        SyncToken: existing.syncToken || "0"
+      })
     });
 
     if (!response.ok) {
@@ -1513,7 +1513,7 @@ export class QuickBooksProvider extends CoreProvider {
         status: "posted" as any,
         currency: "USD",
         createdAt: entry.MetaData?.CreateTime || new Date().toISOString(),
-        updatedAt: entry.MetaData?.LastUpdatedTime || new Date().toISOString(),
+        updatedAt: entry.MetaData?.LastUpdatedTime || new Date().toISOString()
       })) || [];
 
     return {
@@ -1523,8 +1523,8 @@ export class QuickBooksProvider extends CoreProvider {
         page: 1,
         limit: journalEntries.length,
         total: journalEntries.length,
-        hasNext: false,
-      },
+        hasNext: false
+      }
     };
   }
 
@@ -1552,7 +1552,7 @@ export class QuickBooksProvider extends CoreProvider {
       status: "posted" as any,
       currency: "USD",
       createdAt: entry.MetaData?.CreateTime || new Date().toISOString(),
-      updatedAt: entry.MetaData?.LastUpdatedTime || new Date().toISOString(),
+      updatedAt: entry.MetaData?.LastUpdatedTime || new Date().toISOString()
     };
   }
 
@@ -1570,14 +1570,14 @@ export class QuickBooksProvider extends CoreProvider {
           Description: row.description,
           JournalEntryLineDetail: {
             PostingType: row.debitAmount ? "Debit" : "Credit",
-            AccountRef: { value: row.accountId },
-          },
-        })) || [],
+            AccountRef: { value: row.accountId }
+          }
+        })) || []
     };
 
     const response = await this.request("/journalentry", {
       method: "POST",
-      body: JSON.stringify(qbJournalEntry),
+      body: JSON.stringify(qbJournalEntry)
     });
 
     if (!response.ok) {
@@ -1596,7 +1596,7 @@ export class QuickBooksProvider extends CoreProvider {
       status: "posted" as any,
       currency: "USD",
       createdAt: entry.MetaData?.CreateTime || new Date().toISOString(),
-      updatedAt: entry.MetaData?.LastUpdatedTime || new Date().toISOString(),
+      updatedAt: entry.MetaData?.LastUpdatedTime || new Date().toISOString()
     };
   }
 
@@ -1611,7 +1611,7 @@ export class QuickBooksProvider extends CoreProvider {
 
     const qbJournalEntry: any = {
       Id: id,
-      SyncToken: existing.syncToken || "0",
+      SyncToken: existing.syncToken || "0"
     };
 
     if (journalEntry.date) qbJournalEntry.TxnDate = journalEntry.date;
@@ -1625,14 +1625,14 @@ export class QuickBooksProvider extends CoreProvider {
         Description: row.description,
         JournalEntryLineDetail: {
           PostingType: row.debitAmount ? "Debit" : "Credit",
-          AccountRef: { value: row.accountId },
-        },
+          AccountRef: { value: row.accountId }
+        }
       }));
     }
 
     const response = await this.request("/journalentry", {
       method: "POST",
-      body: JSON.stringify(qbJournalEntry),
+      body: JSON.stringify(qbJournalEntry)
     });
 
     if (!response.ok) {
@@ -1651,7 +1651,7 @@ export class QuickBooksProvider extends CoreProvider {
       status: "posted" as any,
       currency: "USD",
       createdAt: entry.MetaData?.CreateTime || new Date().toISOString(),
-      updatedAt: entry.MetaData?.LastUpdatedTime || new Date().toISOString(),
+      updatedAt: entry.MetaData?.LastUpdatedTime || new Date().toISOString()
     };
   }
 
@@ -1665,8 +1665,8 @@ export class QuickBooksProvider extends CoreProvider {
       method: "POST",
       body: JSON.stringify({
         Id: id,
-        SyncToken: existing.syncToken || "0",
-      }),
+        SyncToken: existing.syncToken || "0"
+      })
     });
 
     if (!response.ok) {
@@ -1697,8 +1697,8 @@ export class QuickBooksProvider extends CoreProvider {
         page: 1,
         limit: payments.length,
         total: payments.length,
-        hasNext: false,
-      },
+        hasNext: false
+      }
     };
   }
 
@@ -1730,12 +1730,12 @@ export class QuickBooksProvider extends CoreProvider {
       PaymentMethodRef: payment.paymentMethod
         ? { value: payment.paymentMethod }
         : undefined,
-      PaymentRefNum: payment.reference,
+      PaymentRefNum: payment.reference
     };
 
     const response = await this.request("/payment", {
       method: "POST",
-      body: JSON.stringify(qbPayment),
+      body: JSON.stringify(qbPayment)
     });
 
     if (!response.ok) {
@@ -1754,7 +1754,7 @@ export class QuickBooksProvider extends CoreProvider {
 
     const qbPayment: any = {
       Id: id,
-      SyncToken: existing.syncToken || "0",
+      SyncToken: existing.syncToken || "0"
     };
 
     if (payment.customerId)
@@ -1767,7 +1767,7 @@ export class QuickBooksProvider extends CoreProvider {
 
     const response = await this.request("/payment", {
       method: "POST",
-      body: JSON.stringify(qbPayment),
+      body: JSON.stringify(qbPayment)
     });
 
     if (!response.ok) {
@@ -1788,8 +1788,8 @@ export class QuickBooksProvider extends CoreProvider {
       method: "POST",
       body: JSON.stringify({
         Id: id,
-        SyncToken: existing.syncToken || "0",
-      }),
+        SyncToken: existing.syncToken || "0"
+      })
     });
 
     if (!response.ok) {
@@ -1830,7 +1830,7 @@ export class QuickBooksProvider extends CoreProvider {
         entityId,
         description: att.Note,
         createdAt: att.MetaData?.CreateTime || new Date().toISOString(),
-        updatedAt: att.MetaData?.LastUpdatedTime || new Date().toISOString(),
+        updatedAt: att.MetaData?.LastUpdatedTime || new Date().toISOString()
       })) || []
     );
   }
@@ -1863,7 +1863,7 @@ export class QuickBooksProvider extends CoreProvider {
       entityId: att.AttachableRef?.[0]?.EntityRef?.value,
       description: att.Note,
       createdAt: att.MetaData?.CreateTime || new Date().toISOString(),
-      updatedAt: att.MetaData?.LastUpdatedTime || new Date().toISOString(),
+      updatedAt: att.MetaData?.LastUpdatedTime || new Date().toISOString()
     };
   }
 
@@ -1891,7 +1891,7 @@ export class QuickBooksProvider extends CoreProvider {
       mimeType: attachment.mimeType,
       size: attachment.size,
       url: attachment.url,
-      description: attachment.description,
+      description: attachment.description
     };
   }
 
@@ -1943,7 +1943,7 @@ export class QuickBooksProvider extends CoreProvider {
       } catch (error) {
         failed.push({
           entity,
-          error: error instanceof Error ? error.message : "Unknown error",
+          error: error instanceof Error ? error.message : "Unknown error"
         });
       }
     }
@@ -1998,7 +1998,7 @@ export class QuickBooksProvider extends CoreProvider {
       } catch (error) {
         failed.push({
           id,
-          error: error instanceof Error ? error.message : "Unknown error",
+          error: error instanceof Error ? error.message : "Unknown error"
         });
       }
     }
@@ -2052,7 +2052,7 @@ export class QuickBooksProvider extends CoreProvider {
       } catch (error) {
         failed.push({
           id,
-          error: error instanceof Error ? error.message : "Unknown error",
+          error: error instanceof Error ? error.message : "Unknown error"
         });
       }
     }
@@ -2071,7 +2071,7 @@ export class QuickBooksProvider extends CoreProvider {
     return {
       jobId,
       status: "completed",
-      progress: 100,
+      progress: 100
     };
   }
 
@@ -2083,7 +2083,7 @@ export class QuickBooksProvider extends CoreProvider {
     return {
       remaining: 500, // QuickBooks allows 500 requests per minute
       reset: new Date(Date.now() + 60000),
-      limit: 500,
+      limit: 500
     };
   }
 
@@ -2102,8 +2102,8 @@ export class QuickBooksProvider extends CoreProvider {
         "payments",
         "journal_entries",
         "attachments",
-        "full_crud",
-      ],
+        "full_crud"
+      ]
     };
   }
 
@@ -2112,7 +2112,7 @@ export class QuickBooksProvider extends CoreProvider {
     return {
       jobId,
       status: "completed",
-      progress: 100,
+      progress: 100
     };
   }
 
@@ -2224,7 +2224,7 @@ export class QuickBooksProvider extends CoreProvider {
     return {
       fields: {},
       relationships: {},
-      actions: ["read", "create", "update", "delete"],
+      actions: ["read", "create", "update", "delete"]
     };
   }
 }
