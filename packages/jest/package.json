@@ -3,9 +3,6 @@
   "dependencies": {
     "ts-jest": "^26.5.0"
   },
-  "devDependencies": {
-    "eslint-config-carbon": "*"
-  },
   "private": true,
   "scripts": {
     "clean": "rimraf node_modules"

@@ -108,7 +108,6 @@ The monorepo follows the Turborepo convention of grouping packages into one of t
 
 | Package Name           | Description                                                             |
 | ---------------------- | ----------------------------------------------------------------------- |
-| `eslint-config-carbon` | Shared, extendable eslint configuration for apps and packages           |
 | `@carbon/database`     | Database schema, migrations and types                                   |
 | `@carbon/documents`    | Transactional PDFs and email templates                                  |
 | `@carbon/ee`           | Integration definitions and configurations                              |
