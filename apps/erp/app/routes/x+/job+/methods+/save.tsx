@@ -1,7 +1,8 @@
 import { getCarbonServiceRole } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { validationError, validator } from "@carbon/form";
-import { json, redirect, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json, redirect } from "@vercel/remix";
+import { data } from "react-router";
 import {
   getJobMethodValidator,
   upsertMakeMethodFromJob,
@@ -31,9 +32,9 @@ export async function action({ request }: ActionFunctionArgs) {
       userId
     });
 
-    return json({
+    return {
       error: jobMethod.error ? "Failed to save job method to make method" : null
-    });
+    };
   }
 
   if (type === "method") {
@@ -44,15 +45,15 @@ export async function action({ request }: ActionFunctionArgs) {
     });
 
     if (makeMethod.error) {
-      return json({
+      return {
         error: makeMethod.error
           ? "Failed to save job method to make method"
           : null
-      });
+      };
     }
 
     throw redirect(requestReferrer(request) ?? path.to.jobs);
   }
 
-  return json({ error: "Invalid type" }, { status: 400 });
+  return data({ error: "Invalid type" }, { status: 400 });
 }

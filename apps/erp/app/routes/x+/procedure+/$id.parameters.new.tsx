@@ -3,7 +3,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validator } from "@carbon/form";
 import type { ActionFunctionArgs } from "@vercel/remix";
-import { json } from "react-router";
+import { data, json } from "react-router";
 import { procedureParameterValidator } from "~/modules/production/production.models";
 import { upsertProcedureParameter } from "~/modules/production/production.service";
 
@@ -21,7 +21,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   );
 
   if (validation.error) {
-    return json(
+    return data(
       { success: false },
       await flash(
         request,
@@ -39,7 +39,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     createdBy: userId
   });
   if (create.error) {
-    return json(
+    return data(
       {
         success: false
       },
@@ -50,5 +50,5 @@ export async function action({ request, params }: ActionFunctionArgs) {
     );
   }
 
-  return json({ success: true });
+  return { success: true };
 }

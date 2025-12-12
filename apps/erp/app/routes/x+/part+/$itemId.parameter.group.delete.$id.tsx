@@ -16,13 +16,13 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const remove = await deleteConfigurationParameterGroup(client, id);
 
   if (remove.error) {
-    return json({
+    return {
       success: false,
       error: "Failed to delete configuration parameter group"
-    });
+    };
   }
 
-  return json({
+  return {
     success: true
-  });
+  };
 }

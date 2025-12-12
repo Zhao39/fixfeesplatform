@@ -45,10 +45,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     materialForms: materialForms.data ?? [],
     count: materialForms.count ?? 0
-  });
+  };
 }
 
 export default function MaterialFormsRoute() {

@@ -43,10 +43,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     processes: processes.data ?? [],
     count: processes.count ?? 0
-  });
+  };
 }
 
 export default function ProcessesRoute() {

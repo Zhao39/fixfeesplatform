@@ -80,20 +80,20 @@ type SelectedLine = {
 export async function loader({ params, request }: LoaderFunctionArgs) {
   const { id } = params;
   if (!id) {
-    return json({
+    return {
       state: QuoteState.NotFound,
       data: null
-    });
+    };
   }
 
   const serviceRole = getCarbonServiceRole();
   const quote = await getSupplierQuoteByExternalId(serviceRole, id);
 
   if (quote.error) {
-    return json({
+    return {
       state: QuoteState.NotFound,
       data: null
-    });
+    };
   }
 
   // Update lastAccessedAt on externalLink when the page is loaded
@@ -111,10 +111,10 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     new Date(quote.data.expirationDate) < new Date() &&
     quote.data.status === "Draft"
   ) {
-    return json({
+    return {
       state: QuoteState.Expired,
       data: null
-    });
+    };
   }
 
   const [company, companySettings, quoteLines, quoteLinePrices] =
@@ -158,7 +158,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       return acc;
     }, {}) ?? {};
 
-  return json({
+  return {
     state: QuoteState.Valid,
     data: {
       quote: quote.data,
@@ -168,7 +168,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       thumbnails: thumbnails,
       quoteLinePrices: quoteLinePrices.data ?? []
     }
-  });
+  };
 }
 
 // rounded icon in badge class name "rounded-full"

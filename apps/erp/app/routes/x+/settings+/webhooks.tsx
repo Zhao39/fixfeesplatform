@@ -56,11 +56,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     webhooks: webhooks.data ?? [],
     count: webhooks.count ?? 0,
     config: config.data
-  });
+  };
 }
 
 export default function WebhooksRoute() {

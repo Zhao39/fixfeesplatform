@@ -83,7 +83,7 @@ export async function loader({ request }: ActionFunctionArgs) {
     throw new Error("Failed to load plans");
   }
 
-  return json({ plans: plans.data?.filter((p) => p.public), companyId });
+  return { plans: plans.data?.filter((p) => p.public), companyId };
 }
 
 export async function action({ request }: ActionFunctionArgs) {

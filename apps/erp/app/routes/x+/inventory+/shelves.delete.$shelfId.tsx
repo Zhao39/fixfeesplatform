@@ -25,7 +25,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ shelf: shelf.data });
+  return { shelf: shelf.data };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

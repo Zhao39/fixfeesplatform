@@ -3,7 +3,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-import { Outlet, useLoaderData, useNavigate } from "react-router";
+import { data, Outlet, useLoaderData, useNavigate } from "react-router";
 import { useRouteData, useUrlParams } from "~/hooks";
 import type { AttributeDataType } from "~/modules/people";
 import { CustomFieldsTableDetail, getCustomFields } from "~/modules/settings";
@@ -35,7 +35,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ customFields: customFields.data, tags: tags.data });
+  return { customFields: customFields.data, tags: tags.data };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -46,7 +46,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const updateMap = (await request.formData()).get("updates") as string;
   if (!updateMap) {
-    return json(
+    return data(
       {},
       await flash(request, error(null, "Failed to receive a new sort order"))
     );
@@ -62,7 +62,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const updateSortOrders = await updateCustomFieldsSortOrder(client, updates);
   if (updateSortOrders.some((update) => update.error))
-    return json(
+    return data(
       {},
       await flash(
         request,

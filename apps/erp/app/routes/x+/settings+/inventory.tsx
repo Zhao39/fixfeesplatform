@@ -49,7 +49,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
         error(companySettings.error, "Failed to get company settings")
       )
     );
-  return json({ companySettings: companySettings.data });
+  return { companySettings: companySettings.data };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -67,7 +67,7 @@ export async function action({ request }: ActionFunctionArgs) {
       ).validate(formData);
 
       if (kanbanOutputValidation.error) {
-        return json({ success: false, message: "Invalid form data" });
+        return { success: false, message: "Invalid form data" };
       }
 
       const kanbanOutputResult = await updateKanbanOutputSetting(
@@ -76,15 +76,15 @@ export async function action({ request }: ActionFunctionArgs) {
         kanbanOutputValidation.data.kanbanOutput
       );
       if (kanbanOutputResult.error)
-        return json({
+        return {
           success: false,
           message: kanbanOutputResult.error.message
-        });
+        };
 
-      return json({ success: true, message: "Kanban output setting updated" });
+      return { success: true, message: "Kanban output setting updated" };
   }
 
-  return json({ success: false, message: "Invalid form data" });
+  return { success: false, message: "Invalid form data" };
 }
 
 const outputLabels: Record<(typeof kanbanOutputTypes)[number], string> = {

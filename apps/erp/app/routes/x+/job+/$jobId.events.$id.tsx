@@ -4,7 +4,7 @@ import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-import { useLoaderData } from "react-router";
+import { data, useLoaderData } from "react-router";
 import {
   getJobOperations,
   getProductionEvent,
@@ -42,7 +42,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     throw notFound("Failed to fetch production event");
   }
 
-  return json({ productionEvent: productionEvent.data, operationOptions });
+  return { productionEvent: productionEvent.data, operationOptions };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -74,7 +74,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   });
 
   if (update.error) {
-    return json(
+    return data(
       {},
       await flash(
         request,

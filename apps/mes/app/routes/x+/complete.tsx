@@ -10,6 +10,7 @@ import { validationError, validator } from "@carbon/form";
 import { FunctionRegion } from "@supabase/supabase-js";
 import type { ActionFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
+import { data } from "react-router";
 import { nonScrapQuantityValidator } from "~/services/models";
 import {
   finishJobOperation,
@@ -47,7 +48,7 @@ export async function action({ request }: ActionFunctionArgs) {
   ]);
 
   if (jobOperation.error || !jobOperation.data) {
-    return json(
+    return data(
       {},
       await flash(request, {
         ...error(jobOperation.error, "Failed to fetch job operation"),
@@ -84,7 +85,7 @@ export async function action({ request }: ActionFunctionArgs) {
       });
 
       if (finishOperation.error) {
-        return json(
+        return data(
           {},
           await flash(request, {
             ...error(finishOperation.error, "Failed to finish operation"),
@@ -124,7 +125,7 @@ export async function action({ request }: ActionFunctionArgs) {
     });
 
     if (response.error) {
-      return json(
+      return data(
         {},
         await flash(request, {
           ...error(response.error, "Failed to complete job operation"),
@@ -140,7 +141,7 @@ export async function action({ request }: ActionFunctionArgs) {
       });
 
       if (finishOperation.error) {
-        return json(
+        return data(
           {},
           await flash(request, {
             ...error(finishOperation.error, "Failed to finish operation"),
@@ -169,7 +170,7 @@ export async function action({ request }: ActionFunctionArgs) {
     });
 
     if (insertProduction.error) {
-      return json(
+      return data(
         {},
         await flash(request, {
           ...error(
@@ -209,7 +210,7 @@ export async function action({ request }: ActionFunctionArgs) {
       });
 
       if (finishOperation.error) {
-        return json(
+        return data(
           {},
           await flash(request, {
             ...error(finishOperation.error, "Failed to finish operation"),
@@ -227,7 +228,7 @@ export async function action({ request }: ActionFunctionArgs) {
       );
     }
 
-    return json(
+    return data(
       insertProduction.data,
       await flash(request, {
         ...success("Successfully completed part"),

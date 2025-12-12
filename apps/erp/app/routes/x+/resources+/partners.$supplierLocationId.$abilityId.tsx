@@ -32,9 +32,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     partner: partner.data
-  });
+  };
 }
 
 export async function action({ request }: ActionFunctionArgs) {

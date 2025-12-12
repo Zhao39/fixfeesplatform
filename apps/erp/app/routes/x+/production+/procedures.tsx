@@ -38,11 +38,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     getTagsList(client, companyId, "procedure")
   ]);
 
-  return json({
+  return {
     procedures: procedures.data ?? [],
     tags: tags.data ?? [],
     count: procedures.count ?? 0
-  });
+  };
 }
 
 export default function ProceduresRoute() {

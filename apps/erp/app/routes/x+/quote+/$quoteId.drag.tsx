@@ -9,6 +9,7 @@ import type { ActionFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
 import { generateObject } from "ai";
 import { nanoid } from "nanoid";
+import { data } from "react-router";
 import { z } from "zod/v3";
 import { upsertPart } from "~/modules/items";
 import {
@@ -43,7 +44,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const validation = quoteDragValidator.safeParse(JSON.parse(payload));
   if (!validation.success) {
-    return json({ error: validation.error.flatten() }, { status: 400 });
+    return data({ error: validation.error.flatten() }, { status: 400 });
   }
 
   const { name: fileName, path: documentPath, size, lineId } = validation.data;
@@ -291,5 +292,5 @@ export async function action({ request, params }: ActionFunctionArgs) {
     }
   }
 
-  return json({ success: true, quoteLineId: targetLineId });
+  return { success: true, quoteLineId: targetLineId };
 }

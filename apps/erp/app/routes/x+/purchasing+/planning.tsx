@@ -104,12 +104,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     items: (items.data ?? []) as PurchasingPlanningItem[],
     count: items.count ?? 0,
     periods: periods.data ?? [],
     locationId
-  });
+  };
 }
 
 export default function PurchasingPlanningRoute() {

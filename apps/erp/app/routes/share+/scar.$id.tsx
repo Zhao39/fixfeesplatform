@@ -27,7 +27,13 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
 import { useCallback, useRef, useState } from "react";
 import { LuChevronRight } from "react-icons/lu";
-import { useFetcher, useLoaderData, useParams, useSubmit } from "react-router";
+import {
+  data,
+  useFetcher,
+  useLoaderData,
+  useParams,
+  useSubmit
+} from "react-router";
 import z from "zod";
 import { zfd } from "zod-form-data";
 import { getSupplier } from "~/modules/purchasing";
@@ -76,11 +82,11 @@ const translations = {
 export async function loader({ params, request }: LoaderFunctionArgs) {
   const { id } = params;
   if (!id) {
-    return json({
+    return {
       state: IssueState.NotFound,
       data: null,
       strings: translations.en
-    });
+    };
   }
   const locale = (request.headers.get("Accept-Language") || "en-US").substring(
     0,
@@ -92,11 +98,11 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   const serviceRole = getCarbonServiceRole();
   const externalLink = await getExternalLink(serviceRole, id);
   if (!externalLink.data || !externalLink.data?.documentId) {
-    return json({
+    return {
       state: IssueState.NotFound,
       data: null,
       strings
-    });
+    };
   }
 
   const issue = await getIssueFromExternalLink(
@@ -104,11 +110,11 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     externalLink.data.documentId
   );
   if (!issue.data) {
-    return json({
+    return {
       state: IssueState.NotFound,
       data: null,
       strings
-    });
+    };
   }
 
   const [company, supplier, actionTasks] = await Promise.all([
@@ -122,7 +128,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     )
   ]);
 
-  return json({
+  return {
     state: IssueState.Valid,
     data: {
       issue: issue.data.nonConformance,
@@ -131,7 +137,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       actionTasks: actionTasks.data
     },
     strings
-  });
+  };
 }
 
 export const scarValidator = z.object({
@@ -206,7 +212,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     });
 
     if (statusUpdate.error) {
-      return json(
+      return data(
         {
           success: false
         },
@@ -217,7 +223,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       );
     }
 
-    return json(
+    return data(
       {
         success: true
       },
@@ -233,7 +239,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     });
 
     if (contentUpdate.error) {
-      return json(
+      return data(
         {
           success: false
         },
@@ -244,12 +250,12 @@ export async function action({ request, params }: ActionFunctionArgs) {
       );
     }
 
-    return json({ succes: true });
+    return { succes: true };
   }
 
-  return json({
+  return {
     success: true
-  });
+  };
 }
 
 const Header = ({

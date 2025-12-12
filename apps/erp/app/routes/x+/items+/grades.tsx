@@ -47,10 +47,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     materialGrades: materialGrades.data ?? [],
     count: materialGrades.count ?? 0
-  });
+  };
 }
 
 export default function MaterialGradesRoute() {

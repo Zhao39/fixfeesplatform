@@ -1,7 +1,8 @@
 import { getCarbonServiceRole } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
 import type { TrackedEntityAttributes } from "@carbon/utils";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
+import { data } from "react-router";
 
 export async function action({ request, context }: ActionFunctionArgs) {
   const { client, companyId } = await requirePermissions(request, {
@@ -28,7 +29,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
       .maybeSingle();
 
     if (batchQueryError) {
-      return json({ error: "Failed to query batch number" }, { status: 500 });
+      return data({ error: "Failed to query batch number" }, { status: 500 });
     }
 
     const trackedEntityId = trackedEntity?.id;
@@ -55,7 +56,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
 
     if (error) {
       console.error(error);
-      return json({ error: "Failed to update tracking" }, { status: 500 });
+      return data({ error: "Failed to update tracking" }, { status: 500 });
     }
   } else if (trackingType === "serial") {
     const serialNumber = formData.get("serialNumber") as string;
@@ -72,7 +73,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
         .maybeSingle();
 
     if (indexQueryError) {
-      return json(
+      return data(
         { error: "Failed to check serial number index" },
         { status: 500 }
       );
@@ -86,7 +87,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
         attributes["Receipt Line"] !== receiptLineId ||
         attributes["Receipt Line Index"] !== index
       ) {
-        return json(
+        return data(
           {
             error:
               "Serial number is already used for a different item or position"
@@ -113,14 +114,14 @@ export async function action({ request, context }: ActionFunctionArgs) {
       console.error(error);
       // Check if error is due to unique constraint violation
       if (error.message?.includes("duplicate key value")) {
-        return json(
+        return data(
           { error: "Serial number already exists for this item" },
           { status: 400 }
         );
       }
-      return json({ error: "Failed to update tracking" }, { status: 500 });
+      return data({ error: "Failed to update tracking" }, { status: 500 });
     }
   }
 
-  return json({ success: true });
+  return { success: true };
 }

@@ -29,7 +29,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ unitOfMeasure: unitOfMeasure.data });
+  return { unitOfMeasure: unitOfMeasure.data };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

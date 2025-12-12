@@ -20,10 +20,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
   );
 
   if (validation.error) {
-    return json({
+    return {
       success: false,
       message: "Invalid form data"
-    });
+    };
   }
 
   const { type, id, lineId, quantity } = validation.data;
@@ -42,10 +42,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
       if (itemError) {
         console.error(itemError);
-        return json({
+        return {
           success: false,
           message: "Failed to create issue item"
-        });
+        };
       }
       break;
 
@@ -61,10 +61,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
       if (customerError) {
         console.error(customerError);
-        return json({
+        return {
           success: false,
           message: "Failed to create issue customer"
-        });
+        };
       }
       break;
     case "suppliers":
@@ -79,10 +79,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
       if (supplierError) {
         console.error(supplierError);
-        return json({
+        return {
           success: false,
           message: "Failed to create issue supplier"
-        });
+        };
       }
       break;
     case "jobOperations":
@@ -93,10 +93,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
         .single();
       if (job.error) {
         console.error(job.error);
-        return json({
+        return {
           success: false,
           message: "Failed to create issue job operation"
-        });
+        };
       }
 
       const jobOperation = await client
@@ -112,10 +112,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
       if (jobOperation.error) {
         console.error(jobOperation.error);
-        return json({
+        return {
           success: false,
           message: "Failed to create issue job operation"
-        });
+        };
       }
       break;
     case "purchaseOrderLines":
@@ -126,10 +126,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
         .single();
       if (purchaseOrder.error) {
         console.error(purchaseOrder.error);
-        return json({
+        return {
           success: false,
           message: "Failed to create issue purchase order line"
-        });
+        };
       }
 
       const purchaseOrderLine = await client
@@ -145,10 +145,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
       if (purchaseOrderLine.error) {
         console.error(purchaseOrderLine.error);
-        return json({
+        return {
           success: false,
           message: "Failed to create issue purchase order line"
-        });
+        };
       }
       break;
     case "salesOrderLines":
@@ -159,10 +159,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
         .single();
       if (salesOrder.error) {
         console.error(salesOrder.error);
-        return json({
+        return {
           success: false,
           message: "Failed to create issue sales order line"
-        });
+        };
       }
 
       const salesOrderLine = await client
@@ -178,10 +178,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
       if (salesOrderLine.error) {
         console.error(salesOrderLine.error);
-        return json({
+        return {
           success: false,
           message: "Failed to create issue sales order line"
-        });
+        };
       }
       break;
     case "shipmentLines":
@@ -192,10 +192,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
         .single();
       if (shipment.error) {
         console.error(shipment.error);
-        return json({
+        return {
           success: false,
           message: "Failed to create issue shipment line"
-        });
+        };
       }
 
       const shipmentLine = await client
@@ -211,10 +211,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
       if (shipmentLine.error) {
         console.error(shipmentLine.error);
-        return json({
+        return {
           success: false,
           message: "Failed to create issue shipment line"
-        });
+        };
       }
       break;
     case "receiptLines":
@@ -225,10 +225,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
         .single();
       if (receipt.error) {
         console.error(receipt.error);
-        return json({
+        return {
           success: false,
           message: "Failed to create issue receipt line"
-        });
+        };
       }
 
       const receiptLine = await client
@@ -244,10 +244,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
       if (receiptLine.error) {
         console.error(receiptLine.error);
-        return json({
+        return {
           success: false,
           message: "Failed to create issue receipt line"
-        });
+        };
       }
       break;
     case "trackedEntities":
@@ -261,16 +261,16 @@ export async function action({ request, params }: ActionFunctionArgs) {
         });
 
       if (trackedEntityError) {
-        return json({
+        return {
           success: false,
           message: "Failed to create issue tracked entity"
-        });
+        };
       }
       break;
   }
 
-  return json({
+  return {
     success: true,
     message: "Association created"
-  });
+  };
 }

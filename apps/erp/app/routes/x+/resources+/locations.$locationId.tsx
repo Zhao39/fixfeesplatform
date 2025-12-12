@@ -34,9 +34,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     location: location.data
-  });
+  };
 }
 
 export async function action({ request }: ActionFunctionArgs) {

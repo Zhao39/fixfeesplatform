@@ -16,7 +16,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     .single();
   if (!model.data) throw notFound("model not found");
 
-  return json({ model: model.data });
+  return { model: model.data };
 }
 
 export default function ModelRoute() {

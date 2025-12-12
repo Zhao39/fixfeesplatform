@@ -38,14 +38,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     apiKeys:
       apiKeys.data?.map((apiKey) => ({
         ...apiKey,
         key: apiKey.key.substring(0, 12) + "…"
       })) ?? [],
     count: apiKeys.count ?? 0
-  });
+  };
 }
 
 export default function ApiKeysRoute() {

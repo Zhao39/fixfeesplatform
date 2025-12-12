@@ -1,6 +1,6 @@
 import { assertIsPost } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
 import { updateItemCost } from "~/modules/items";
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -21,12 +21,12 @@ export async function action({ request, params }: ActionFunctionArgs) {
   });
   if (update.error) {
     console.error("Failed to update item cost", update.error);
-    return json({
+    return {
       error: "Failed to update item cost"
-    });
+    };
   }
 
-  return json({
+  return {
     error: null
-  });
+  };
 }

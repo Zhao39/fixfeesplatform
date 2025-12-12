@@ -4,7 +4,7 @@ import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-import { useNavigate } from "react-router";
+import { data, useNavigate } from "react-router";
 import { materialFinishValidator, upsertMaterialFinish } from "~/modules/items";
 import MaterialFinishForm from "~/modules/items/ui/MaterialFinishes/MaterialFinishForm";
 
@@ -43,7 +43,7 @@ export async function action({ request }: ActionFunctionArgs) {
     companyId
   });
   if (insertMaterialFinish.error) {
-    return json(
+    return data(
       {},
       await flash(
         request,
@@ -54,7 +54,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const materialFinishId = insertMaterialFinish.data?.id;
   if (!materialFinishId) {
-    return json(
+    return data(
       {},
       await flash(
         request,

@@ -1,6 +1,7 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
 import type { ActionFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
+import { data } from "react-router";
 
 export async function action({ request }: ActionFunctionArgs) {
   const { client } = await requirePermissions(request, {
@@ -11,7 +12,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const id = formData.get("id") as string;
 
   if (!id) {
-    return json(
+    return data(
       { error: "Operation ID is required" },
       {
         status: 400
@@ -22,7 +23,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const { error } = await client.from("quoteOperation").delete().eq("id", id);
 
   if (error) {
-    return json(
+    return data(
       { success: false, error: error.message },
       {
         status: 400
@@ -30,5 +31,5 @@ export async function action({ request }: ActionFunctionArgs) {
     );
   }
 
-  return json({ success: true });
+  return { success: true };
 }

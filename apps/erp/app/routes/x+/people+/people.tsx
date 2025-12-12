@@ -55,12 +55,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     attributeCategories: attributeCategories.data,
     employeeTypes: employeeTypes.data ?? [],
     people: people.data?.filter((p) => !p.email?.includes("@carbon.ms")) ?? [],
     count: people.count
-  });
+  };
 }
 
 export default function ResourcesPeopleRoute() {

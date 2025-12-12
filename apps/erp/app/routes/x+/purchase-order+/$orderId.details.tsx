@@ -62,11 +62,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     purchaseOrderPayment: purchaseOrderPayment.data,
     internalNotes: (purchaseOrder.data?.internalNotes ?? {}) as JSONContent,
     externalNotes: (purchaseOrder.data?.externalNotes ?? {}) as JSONContent
-  });
+  };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

@@ -38,16 +38,16 @@ export async function action({ request, params }: ActionFunctionArgs) {
   });
 
   if (createMaterialSupplier.error) {
-    return json({
+    return {
       success: false,
       message: "Failed to create material supplier"
-    });
+    };
   }
 
-  return json({
+  return {
     success: true,
     message: "Material supplier created successfully"
-  });
+  };
 }
 
 export default function NewMaterialSupplierRoute() {

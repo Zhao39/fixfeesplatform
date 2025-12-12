@@ -42,9 +42,9 @@ export const handle: Handle = {
 export async function loader({ request }: LoaderFunctionArgs) {
   const theme = getTheme(request);
 
-  return json({
+  return {
     theme: theme ?? "zinc"
-  });
+  };
 }
 
 export async function action({ request }: ActionFunctionArgs) {

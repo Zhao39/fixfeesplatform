@@ -82,7 +82,6 @@ const Combobox = ({
         isLoading={isLoading}
         className="w-full"
       />
-
       {error ? (
         <FormErrorMessage>{error}</FormErrorMessage>
       ) : (

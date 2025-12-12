@@ -96,10 +96,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     pickMethod: pickMethod.data,
     item: item.data
-  });
+  };
 }
 
 export default function ItemInventoryRoute() {

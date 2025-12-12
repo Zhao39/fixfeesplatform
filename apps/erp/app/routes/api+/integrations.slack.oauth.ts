@@ -13,6 +13,7 @@ import {
   slackOAuthTokenResponseSchema
 } from "@carbon/ee/slack.server";
 import { json, type LoaderFunctionArgs, redirect } from "@vercel/remix";
+import { data } from "react-router";
 import { z } from "zod/v3";
 import { upsertCompanyIntegration } from "~/modules/settings/settings.server";
 import { path } from "~/utils/path";
@@ -28,7 +29,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const slackAuthResponse = slackOAuthCallbackSchema.safeParse(searchParams);
 
   if (!slackAuthResponse.success) {
-    return json({ error: "Invalid Slack auth response" }, { status: 400 });
+    return data({ error: "Invalid Slack auth response" }, { status: 400 });
   }
 
   const { data } = slackAuthResponse;
@@ -45,20 +46,20 @@ export async function loader({ request }: LoaderFunctionArgs) {
     .safeParse(JSON.parse(veryfiedState?.metadata ?? "{}"));
 
   if (!parsedMetadata.success) {
-    return json({ error: "Invalid metadata" }, { status: 400 });
+    return data({ error: "Invalid metadata" }, { status: 400 });
   }
 
   if (parsedMetadata.data.companyId !== companyId) {
-    return json({ error: "Invalid company" }, { status: 400 });
+    return data({ error: "Invalid company" }, { status: 400 });
   }
 
   if (parsedMetadata.data.userId !== userId) {
-    return json({ error: "Invalid user" }, { status: 400 });
+    return data({ error: "Invalid user" }, { status: 400 });
   }
 
   // Validate required environment variables
   if (!SLACK_CLIENT_ID || !SLACK_CLIENT_SECRET || !SLACK_OAUTH_REDIRECT_URL) {
-    return json({ error: "Slack OAuth not configured" }, { status: 500 });
+    return data({ error: "Slack OAuth not configured" }, { status: 500 });
   }
 
   try {
@@ -78,7 +79,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     });
 
     if (!response.ok) {
-      return json(
+      return data(
         { error: "Failed to exchange code for token - HTTP error" },
         { status: 500 }
       );
@@ -91,7 +92,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       responseData = JSON.parse(responseText);
       // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
     } catch (parseError) {
-      return json(
+      return data(
         { error: "Invalid JSON response from Slack" },
         { status: 500 }
       );
@@ -99,7 +100,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
     // Check if Slack returned an error
     if (!responseData.ok) {
-      return json(
+      return data(
         { error: `Slack OAuth error: ${responseData.error}` },
         { status: 400 }
       );
@@ -108,7 +109,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     const parsedJson = slackOAuthTokenResponseSchema.safeParse(responseData);
 
     if (!parsedJson.success) {
-      return json(
+      return data(
         { error: "Failed to parse Slack OAuth response" },
         { status: 500 }
       );
@@ -174,14 +175,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
       return redirect(redirectUrl);
     } else {
-      return json(
+      return data(
         { error: "Failed to save Slack integration" },
         { status: 500 }
       );
     }
     // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   } catch (err) {
-    return json(
+    return data(
       { error: "Failed to exchange code for token" },
       { status: 500 }
     );

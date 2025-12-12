@@ -39,9 +39,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     invitable: invitable.data ?? []
-  });
+  };
 }
 
 export async function action({ request }: ActionFunctionArgs) {

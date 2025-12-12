@@ -41,12 +41,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   if (operations.data?.length === 0) {
-    return json({
+    return {
       count: 0,
       events: [],
       workCenters: [],
       operations: []
-    });
+    };
   }
 
   const [events, workCenters] = await Promise.all([
@@ -67,12 +67,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     count: events.count ?? 0,
     events: events.data ?? [],
     workCenters: workCenters.data ?? [],
     operations: operations.data ?? []
-  });
+  };
 }
 
 export default function ProductionEventsRoute() {

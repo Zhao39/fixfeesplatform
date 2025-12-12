@@ -5,7 +5,7 @@ import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
 import type { ClientActionFunctionArgs } from "react-router";
-import { useLoaderData, useNavigate } from "react-router";
+import { data, useLoaderData, useNavigate } from "react-router";
 import type { PaymentTermCalculationMethod } from "~/modules/accounting";
 import {
   getPaymentTerm,
@@ -28,9 +28,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const paymentTerm = await getPaymentTerm(client, paymentTermId);
 
-  return json({
+  return {
     paymentTerm: paymentTerm?.data ?? null
-  });
+  };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -57,7 +57,7 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 
   if (updatePaymentTerm.error) {
-    return json(
+    return data(
       {},
       await flash(
         request,

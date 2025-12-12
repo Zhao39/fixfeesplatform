@@ -27,9 +27,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     locations: locations.data ?? []
-  });
+  };
 }
 
 export default function CustomerLocationsRoute() {

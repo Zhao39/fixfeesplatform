@@ -53,11 +53,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     count: workCenters.count ?? 0,
     workCenters: workCenters.data ?? [],
     locations: locations.data ?? []
-  });
+  };
 }
 
 export default function WorkCentersRoute() {

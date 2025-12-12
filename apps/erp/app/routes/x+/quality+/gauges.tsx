@@ -37,11 +37,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     getGaugeTypesList(client, companyId)
   ]);
 
-  return json({
+  return {
     gauges: gauges.data ?? [],
     count: gauges.count ?? 0,
     gaugeTypes: gaugeTypes.data ?? []
-  });
+  };
 }
 
 export default function GaugesRoute() {

@@ -2,7 +2,8 @@ import { assertIsPost, error, success } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
+import { data } from "react-router";
 import { itemValidator, updateItem } from "~/modules/items";
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -32,11 +33,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
   });
 
   if (update.error) {
-    return json(
+    return data(
       update.error,
       await flash(request, error(update.error, "Failed to update item"))
     );
   }
 
-  return json({ success: true }, await flash(request, success("Updated item")));
+  return data({ success: true }, await flash(request, success("Updated item")));
 }

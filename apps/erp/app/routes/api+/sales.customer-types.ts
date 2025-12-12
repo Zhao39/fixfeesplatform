@@ -10,7 +10,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     view: "sales"
   });
 
-  return json(await getCustomerTypesList(client, companyId));
+  return await getCustomerTypesList(client, companyId);
 }
 
 export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {

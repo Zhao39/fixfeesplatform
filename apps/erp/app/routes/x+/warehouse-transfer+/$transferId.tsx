@@ -55,10 +55,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     warehouseTransfer: warehouseTransfer.data,
     warehouseTransferLines: warehouseTransferLines.data ?? []
-  });
+  };
 }
 
 export default function WarehouseTransferRoute() {

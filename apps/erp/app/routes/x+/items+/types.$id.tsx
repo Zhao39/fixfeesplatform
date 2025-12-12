@@ -5,7 +5,7 @@ import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
 import type { ClientActionFunctionArgs } from "react-router";
-import { useLoaderData, useNavigate } from "react-router";
+import { data, useLoaderData, useNavigate } from "react-router";
 import {
   getMaterialType,
   materialTypeValidator,
@@ -37,9 +37,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     materialType: materialType?.data ?? null
-  });
+  };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -64,7 +64,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   });
 
   if (updateMaterialType.error) {
-    return json(
+    return data(
       {},
       await flash(
         request,

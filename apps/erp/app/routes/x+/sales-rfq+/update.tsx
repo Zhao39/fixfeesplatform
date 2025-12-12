@@ -1,5 +1,5 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
 
 export async function action({ request }: ActionFunctionArgs) {
   const { client, userId } = await requirePermissions(request, {
@@ -15,7 +15,7 @@ export async function action({ request }: ActionFunctionArgs) {
     typeof field !== "string" ||
     (typeof value !== "string" && value !== null)
   ) {
-    return json({ error: { message: "Invalid form data" }, data: null });
+    return { error: { message: "Invalid form data" }, data: null };
   }
 
   switch (field) {
@@ -28,17 +28,15 @@ export async function action({ request }: ActionFunctionArgs) {
     case "locationId":
     case "rfqDate":
     case "salesPersonId":
-      return json(
-        await client
-          .from("salesRfq")
-          .update({
-            [field]: value ? value : null,
-            updatedBy: userId,
-            updatedAt: new Date().toISOString()
-          })
-          .in("id", ids as string[])
-      );
+      return await client
+        .from("salesRfq")
+        .update({
+          [field]: value ? value : null,
+          updatedBy: userId,
+          updatedAt: new Date().toISOString()
+        })
+        .in("id", ids as string[]);
     default:
-      return json({ error: { message: "Invalid field" }, data: null });
+      return { error: { message: "Invalid field" }, data: null };
   }
 }

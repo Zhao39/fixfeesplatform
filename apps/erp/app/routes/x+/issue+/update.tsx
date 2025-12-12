@@ -1,7 +1,7 @@
 import { getCarbonServiceRole } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { FunctionRegion } from "@supabase/supabase-js";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
 
 export async function action({ request }: ActionFunctionArgs) {
   const { client, companyId, userId } = await requirePermissions(request, {
@@ -17,7 +17,7 @@ export async function action({ request }: ActionFunctionArgs) {
     typeof field !== "string" ||
     (typeof value !== "string" && value !== null)
   ) {
-    return json({ error: { message: "Invalid form data" }, data: null });
+    return { error: { message: "Invalid form data" }, data: null };
   }
 
   switch (field) {
@@ -36,10 +36,10 @@ export async function action({ request }: ActionFunctionArgs) {
 
       if (update.error) {
         console.error(update.error);
-        return json({
+        return {
           error: { message: "Failed to update issue" },
           data: null
-        });
+        };
       }
 
       const serviceRole = await getCarbonServiceRole();
@@ -57,7 +57,7 @@ export async function action({ request }: ActionFunctionArgs) {
         })
       );
 
-      return json({ data: update.data });
+      return { data: update.data };
     case "source":
     case "priority":
     case "name":
@@ -70,20 +70,18 @@ export async function action({ request }: ActionFunctionArgs) {
     case "quantity":
     case "itemId":
     case "supplierId":
-      return json(
-        await client
-          .from("nonConformance")
-          .update({
-            [field]: value ? value : null,
-            updatedBy: userId,
-            updatedAt: new Date().toISOString()
-          })
-          .in("id", ids as string[])
-      );
+      return await client
+        .from("nonConformance")
+        .update({
+          [field]: value ? value : null,
+          updatedBy: userId,
+          updatedAt: new Date().toISOString()
+        })
+        .in("id", ids as string[]);
     default:
-      return json({
+      return {
         error: { message: `Invalid field: ${field}` },
         data: null
-      });
+      };
   }
 }

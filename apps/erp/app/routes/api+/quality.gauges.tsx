@@ -13,5 +13,5 @@ export async function loader({ request }: LoaderFunctionArgs) {
     getGaugeTypesList(client, companyId)
   ]);
 
-  return json({ gauges: gauges.data ?? [], gaugeTypes: gaugeTypes.data ?? [] });
+  return { gauges: gauges.data ?? [], gaugeTypes: gaugeTypes.data ?? [] };
 }

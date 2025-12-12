@@ -37,7 +37,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     throw redirect(getAppUrl());
   }
 
-  return json({
+  return {
     session: {
       accessToken,
       expiresIn,
@@ -46,7 +46,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     company,
     companies: companies.data ?? [],
     user: user.data
-  });
+  };
 }
 
 export default function AuthenticatedRoute() {

@@ -41,12 +41,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   if (operations.data?.length === 0) {
-    return json({
+    return {
       count: 0,
       events: [],
       operations: [],
       scrapReasons: []
-    });
+    };
   }
 
   const [events, scrapReasons] = await Promise.all([
@@ -67,12 +67,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     count: events.count ?? 0,
     events: events.data ?? [],
     operations: operations.data ?? [],
     scrapReasons: scrapReasons.data ?? []
-  });
+  };
 }
 
 export default function ProductionQuantitiesRoute() {

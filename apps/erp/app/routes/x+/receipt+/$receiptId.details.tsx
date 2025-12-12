@@ -10,7 +10,7 @@ import { validationError, validator } from "@carbon/form";
 import type { JSONContent } from "@carbon/react";
 import type { ActionFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-import { useParams } from "react-router";
+import { data, useParams } from "react-router";
 import { useRouteData } from "~/hooks";
 import type { Receipt, ReceiptLine } from "~/modules/inventory";
 import {
@@ -43,7 +43,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const currentReceipt = await getReceipt(client, id);
   if (currentReceipt.error) {
-    return json(
+    return data(
       {},
       await flash(
         request,
@@ -119,7 +119,7 @@ export async function action({ request }: ActionFunctionArgs) {
     });
 
     if (updateReceipt.error) {
-      return json(
+      return data(
         {},
         await flash(
           request,

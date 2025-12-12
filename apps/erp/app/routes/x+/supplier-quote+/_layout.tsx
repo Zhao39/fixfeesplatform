@@ -19,7 +19,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     view: "purchasing"
   });
 
-  return json({});
+  return {};
 }
 
 export default function SupplierQuoteRoute() {

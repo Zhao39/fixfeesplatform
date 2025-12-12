@@ -5,7 +5,7 @@ import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
 import type { ClientActionFunctionArgs } from "react-router";
-import { useNavigate } from "react-router";
+import { data, useNavigate } from "react-router";
 import { materialTypeValidator, upsertMaterialType } from "~/modules/items";
 import MaterialTypeForm from "~/modules/items/ui/MaterialTypes/MaterialTypeForm";
 
@@ -43,7 +43,7 @@ export async function action({ request }: ActionFunctionArgs) {
     companyId
   });
   if (insertMaterialType.error) {
-    return json(
+    return data(
       {},
       await flash(
         request,
@@ -54,7 +54,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const materialTypeId = insertMaterialType.data?.id;
   if (!materialTypeId) {
-    return json(
+    return data(
       {},
       await flash(
         request,

@@ -1,7 +1,7 @@
 import { getCarbonServiceRole, notFound } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { validator } from "@carbon/form";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
 import { z } from "zod/v3";
 import { importCsv, importPermissions, importSchemas } from "~/modules/shared";
 
@@ -28,10 +28,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const validation = await validator(schema).validate(await request.formData());
 
   if (validation.error) {
-    return json({
+    return {
       success: false,
       message: "Validation failed"
-    });
+    };
   }
 
   const { filePath, enumMappings, ...columnMappings } = validation.data;
@@ -47,14 +47,14 @@ export async function action({ request, params }: ActionFunctionArgs) {
   });
 
   if (importResult.error) {
-    return json({
+    return {
       success: false,
       message: importResult.error.message
-    });
+    };
   }
 
-  return json({
+  return {
     success: true,
     message: "Import successful"
-  });
+  };
 }

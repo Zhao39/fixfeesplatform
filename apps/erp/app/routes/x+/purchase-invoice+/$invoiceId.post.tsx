@@ -21,10 +21,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
     .eq("id", invoiceId);
 
   if (setPendingState.error) {
-    return json({
+    return {
       success: false,
       message: "Failed to post purchase invoice"
-    });
+    };
   }
 
   try {
@@ -49,10 +49,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
         })
         .eq("id", invoiceId);
 
-      return json({
+      return {
         success: false,
         message: "Failed to post purchase invoice"
-      });
+      };
     }
 
     // Check if we should update prices on invoice post
@@ -81,10 +81,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
           })
           .eq("id", invoiceId);
 
-        return json({
+        return {
           success: false,
           message: "Failed to update prices"
-        });
+        };
       }
     }
     // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
@@ -96,14 +96,14 @@ export async function action({ request, params }: ActionFunctionArgs) {
       })
       .eq("id", invoiceId);
 
-    return json({
+    return {
       success: false,
       message: "Failed to post purchase invoice"
-    });
+    };
   }
 
-  return json({
+  return {
     success: true,
     message: "Purchase invoice posted successfully"
-  });
+  };
 }

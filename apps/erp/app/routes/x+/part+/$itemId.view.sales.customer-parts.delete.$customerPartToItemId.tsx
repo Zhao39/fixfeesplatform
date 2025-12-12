@@ -31,7 +31,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ customerPart: customerPart.data });
+  return { customerPart: customerPart.data };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

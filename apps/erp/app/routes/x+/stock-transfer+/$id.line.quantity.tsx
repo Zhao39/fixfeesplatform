@@ -3,6 +3,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import type { ActionFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
+import { data } from "react-router";
 
 export async function action({ request, params }: ActionFunctionArgs) {
   assertIsPost(request);
@@ -21,7 +22,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const trackedEntityId = formData.get("trackedEntityId") as string | undefined;
 
   if (!lineId || !Number.isFinite(pickedQuantity)) {
-    return json(
+    return data(
       {
         success: false
       },
@@ -36,7 +37,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     .single();
 
   if (!stockTransferLine.data) {
-    return json(
+    return data(
       {
         success: false
       },
@@ -63,7 +64,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     (stockTransferLine.data.requiresSerialTracking ||
       stockTransferLine.data.requiresBatchTracking)
   ) {
-    return json(
+    return data(
       {
         success: false
       },
@@ -92,7 +93,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   );
 
   if (functionError) {
-    return json(
+    return data(
       {
         success: false
       },
@@ -106,7 +107,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     );
   }
 
-  return json(
+  return data(
     {
       success: true
     },

@@ -53,10 +53,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     count: purchasOrders.count ?? 0,
     purchasOrders: purchasOrders.data ?? []
-  });
+  };
 }
 
 export default function PurchaseOrdersSearchRoute() {

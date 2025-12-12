@@ -55,11 +55,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     count: suppliers.count ?? 0,
     suppliers: suppliers.data,
     supplierTypes: supplierTypes.data
-  });
+  };
 }
 
 export default function UsersSuppliersRoute() {

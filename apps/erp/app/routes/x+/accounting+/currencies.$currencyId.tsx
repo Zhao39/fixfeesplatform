@@ -5,7 +5,7 @@ import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
 import type { ClientActionFunctionArgs } from "react-router";
-import { useLoaderData } from "react-router";
+import { data, useLoaderData } from "react-router";
 import {
   currencyValidator,
   getCurrency,
@@ -27,9 +27,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const currency = await getCurrency(client, currencyId);
 
-  return json({
+  return {
     currency: currency?.data ?? null
-  });
+  };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -57,7 +57,7 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 
   if (updateCurrency.error) {
-    return json(
+    return data(
       {},
       await flash(
         request,

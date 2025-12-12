@@ -50,10 +50,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     count: salesInvoices.count ?? 0,
     salesInvoices: salesInvoices.data ?? []
-  });
+  };
 }
 
 export default function SalesInvoicesSearchRoute() {

@@ -26,7 +26,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ materialSubstance: materialSubstance.data });
+  return { materialSubstance: materialSubstance.data };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

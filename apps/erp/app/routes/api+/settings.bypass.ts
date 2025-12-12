@@ -6,7 +6,7 @@ export async function loader() {
     const bypassList = STRIPE_BYPASS_COMPANY_IDS.split(",").map((id: string) =>
       id.trim()
     );
-    return json({ bypassList });
+    return { bypassList };
   }
-  return json({ bypassList: [] });
+  return { bypassList: [] };
 }

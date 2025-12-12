@@ -456,7 +456,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   // Combine all jobs for sales orders and tags
   const allJobs = [...filteredJobs, ...filteredUnscheduledJobs];
 
-  return json({
+  return {
     columns,
     items: [...unscheduledItems, ...scheduledItems] satisfies JobItem[],
     salesOrders: Object.entries(
@@ -486,7 +486,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     locationId,
     view,
     currentDate: currentDate.toString()
-  });
+  };
 }
 
 const defaultDisplaySettings: DisplaySettings = {

@@ -1,6 +1,7 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { generateQRCodeBuffer } from "@carbon/documents/qr";
 import { json, type LoaderFunctionArgs } from "@vercel/remix";
+import { data } from "react-router";
 import { getKanban } from "~/modules/inventory/inventory.service";
 import { path } from "~/utils/path";
 
@@ -19,7 +20,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const kanban = await getKanban(client, id);
 
   if (kanban.error) {
-    return json({ error: "Unauthorized" }, { status: 401 });
+    return data({ error: "Unauthorized" }, { status: 401 });
   }
 
   const url = new URL(request.url);

@@ -2,7 +2,8 @@ import { notFound } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import type { Database } from "@carbon/database";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { json, redirect, type LoaderFunctionArgs } from "@vercel/remix";
+import { json, type LoaderFunctionArgs, redirect } from "@vercel/remix";
+import { data } from "react-router";
 import { getKanban } from "~/modules/inventory";
 import { getActiveJobOperationByJobId } from "~/modules/production";
 import { path } from "~/utils/path";
@@ -59,7 +60,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const result = await handleKanbanComplete({ client, companyId, id });
 
   if (result.error || !result.data) {
-    return json({ error: result.error }, { status: 400 });
+    return data({ error: result.error }, { status: 400 });
   }
 
   throw redirect(result.data);

@@ -6,7 +6,7 @@ import { useRouteData } from "@carbon/remix";
 import { getLocalTimeZone, startOfWeek, today } from "@internationalized/date";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-import { useNavigate } from "react-router";
+import { data, useNavigate } from "react-router";
 import { demandProjectionValidator } from "~/modules/production/production.models";
 import { upsertDemandProjections } from "~/modules/production/production.service";
 import DemandProjectionForm from "~/modules/production/ui/Projection/DemandProjectionForm";
@@ -31,7 +31,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     throw new Error("Failed to load periods");
   }
 
-  return json({ periods: periods.data ?? [] });
+  return { periods: periods.data ?? [] };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -76,7 +76,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   if (demandProjections.length === 0) {
-    return json(
+    return data(
       {},
       await flash(request, error(null, "No forecast quantities provided"))
     );
@@ -85,7 +85,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const result = await upsertDemandProjections(client, demandProjections);
 
   if (result.error) {
-    return json(
+    return data(
       {},
       await flash(
         request,

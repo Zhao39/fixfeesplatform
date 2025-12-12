@@ -15,6 +15,7 @@ import { tasks } from "@trigger.dev/sdk";
 import type { ActionFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
 import { nanoid } from "nanoid";
+import { data } from "react-router";
 import { resendInviteValidator } from "~/modules/users";
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -59,7 +60,7 @@ export async function action({ request }: ActionFunctionArgs) {
       .single();
 
     if (invite.error || !invite.data) {
-      return json(
+      return data(
         {},
         await flash(
           request,
@@ -90,7 +91,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
     console.log(invitationEmail);
 
-    return json(
+    return data(
       {},
       await flash(request, success("Successfully resent invite"))
     );
@@ -106,12 +107,12 @@ export async function action({ request }: ActionFunctionArgs) {
           }
         }))
       );
-      return json(
+      return data(
         {},
         await flash(request, success("Successfully added invites to queue"))
       );
     } catch (e) {
-      return json(
+      return data(
         {},
         await flash(request, error(e, "Failed to reinvite users"))
       );

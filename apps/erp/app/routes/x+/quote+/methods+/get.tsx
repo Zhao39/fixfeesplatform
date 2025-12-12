@@ -1,7 +1,8 @@
 import { getCarbonServiceRole } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { validationError, validator } from "@carbon/form";
-import { json, redirect, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json, redirect } from "@vercel/remix";
+import { data } from "react-router";
 import {
   copyQuoteLine,
   getMethodValidator,
@@ -50,9 +51,9 @@ export async function action({ request }: ActionFunctionArgs) {
       lineMethodPayload
     );
 
-    return json({
+    return {
       error: lineMethod.error ? "Failed to get quote line method" : null
-    });
+    };
   }
 
   if (type === "quoteLine") {
@@ -67,9 +68,9 @@ export async function action({ request }: ActionFunctionArgs) {
       userId
     });
 
-    return json({
+    return {
       error: copyLine.error ? "Failed to copy quote line" : null
-    });
+    };
   }
 
   if (type === "method") {
@@ -95,15 +96,15 @@ export async function action({ request }: ActionFunctionArgs) {
     );
 
     if (makeMethod.error) {
-      return json({
+      return {
         error: makeMethod.error
           ? "Failed to insert quote material make method"
           : null
-      });
+      };
     }
 
     throw redirect(requestReferrer(request) ?? path.to.quotes);
   }
 
-  return json({ error: "Invalid type" }, { status: 400 });
+  return data({ error: "Invalid type" }, { status: 400 });
 }

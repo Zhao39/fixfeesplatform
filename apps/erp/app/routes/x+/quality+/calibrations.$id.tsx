@@ -46,10 +46,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     record: record.data,
     files: files ?? []
-  });
+  };
 }
 
 export async function action({ request }: ActionFunctionArgs) {

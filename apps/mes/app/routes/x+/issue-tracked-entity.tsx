@@ -3,6 +3,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { FunctionRegion } from "@supabase/supabase-js";
 import type { ActionFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
+import { data } from "react-router";
 import { issueTrackedEntityValidator } from "~/services/models";
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -13,7 +14,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const validation = issueTrackedEntityValidator.safeParse(payload);
 
   if (!validation.success) {
-    return json(
+    return data(
       { success: false, message: "Failed to validate payload" },
       { status: 400 }
     );
@@ -36,7 +37,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   if (issue.error) {
     console.error(issue.error);
-    return json(
+    return data(
       { success: false, message: "Failed to issue material" },
       { status: 400 }
     );
@@ -44,9 +45,9 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const splitEntities = issue.data?.splitEntities || [];
 
-  return json({
+  return {
     success: true,
     message: "Material issued successfully",
     splitEntities
-  });
+  };
 }

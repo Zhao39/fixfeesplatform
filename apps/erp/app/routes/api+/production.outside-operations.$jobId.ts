@@ -3,6 +3,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import type { LoaderFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
+import { data } from "react-router";
 import { getOutsideOperationsByJobId } from "~/modules/production";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -13,9 +14,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const { jobId } = params;
 
   if (!jobId)
-    return json({
+    return {
       data: []
-    });
+    };
 
   const operations = await getOutsideOperationsByJobId(
     authorized.client,
@@ -23,7 +24,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     authorized.companyId
   );
   if (operations.error) {
-    return json(
+    return data(
       operations,
       await flash(
         request,
@@ -32,5 +33,5 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json(operations);
+  return operations;
 }

@@ -2,7 +2,8 @@ import { assertIsPost, error, success } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validator } from "@carbon/form";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
+import { data } from "react-router";
 import { upsertMethodOperationStep } from "~/modules/items";
 import { operationStepValidator } from "~/modules/shared";
 
@@ -14,14 +15,14 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const { id } = params;
   if (!id) {
-    return json({ success: false, message: "Invalid operation step id" });
+    return { success: false, message: "Invalid operation step id" };
   }
 
   const formData = await request.formData();
   const validation = await validator(operationStepValidator).validate(formData);
 
   if (validation.error) {
-    return json({ success: false, message: "Invalid form data" });
+    return { success: false, message: "Invalid form data" };
   }
 
   const { id: _id, ...data } = validation.data;
@@ -35,7 +36,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     updatedAt: new Date().toISOString()
   });
   if (update.error) {
-    return json(
+    return data(
       {
         id: null
       },
@@ -48,7 +49,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const methodOperationStepId = update.data?.id;
   if (!methodOperationStepId) {
-    return json(
+    return data(
       {
         id: null
       },
@@ -59,7 +60,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     );
   }
 
-  return json(
+  return data(
     { id: methodOperationStepId },
     await flash(request, success("Method operation step updated"))
   );

@@ -220,7 +220,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       return true;
     }) ?? [];
 
-  return json({
+  return {
     columns: filteredWorkCenters
       .map((wc) => ({
         id: wc.id!,
@@ -295,7 +295,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     ).map(([tag]) => tag),
     tags: tags.data ?? [],
     locationId
-  });
+  };
 }
 
 const defaultDisplaySettings: DisplaySettings = {

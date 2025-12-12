@@ -27,7 +27,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ customerPortal: customerPortal.data });
+  return { customerPortal: customerPortal.data };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

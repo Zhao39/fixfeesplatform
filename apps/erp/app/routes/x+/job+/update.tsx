@@ -2,7 +2,7 @@ import { getCarbonServiceRole } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import type { recalculateTask } from "@carbon/jobs/trigger/recalculate";
 import { tasks } from "@trigger.dev/sdk";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
 import {
   calculateJobPriority,
   recalculateJobRequirements,
@@ -20,28 +20,26 @@ export async function action({ request }: ActionFunctionArgs) {
   const value = formData.get("value");
 
   if (typeof field !== "string") {
-    return json({ error: { message: "Invalid form data" }, data: null });
+    return { error: { message: "Invalid form data" }, data: null };
   }
 
   const serviceRole = await getCarbonServiceRole();
 
   if (field === "delete") {
-    return json(
-      await client
-        .from("job")
-        .delete()
-        .in("id", ids as string[])
-        .eq("companyId", companyId)
-    );
+    return await client
+      .from("job")
+      .delete()
+      .in("id", ids as string[])
+      .eq("companyId", companyId);
   }
   if (typeof value !== "string" && value !== null) {
-    return json({ error: { message: "Invalid form data" }, data: null });
+    return { error: { message: "Invalid form data" }, data: null };
   }
 
   switch (field) {
     case "itemId":
       if (!value) {
-        return json({ error: { message: "Invalid form data" }, data: null });
+        return { error: { message: "Invalid form data" }, data: null };
       }
 
       const [item, manufacturing] = await Promise.all([
@@ -94,11 +92,11 @@ export async function action({ request }: ActionFunctionArgs) {
       ]);
 
       if (itemUpdate.error) {
-        return json(itemUpdate);
+        return itemUpdate;
       }
 
       if (makeMethodUpdate.error) {
-        return json(makeMethodUpdate);
+        return makeMethodUpdate;
       }
 
       for await (const id of ids) {
@@ -121,7 +119,7 @@ export async function action({ request }: ActionFunctionArgs) {
         });
       }
 
-      return json(itemUpdate);
+      return itemUpdate;
     case "deadlineType":
     case "dueDate":
       // When dueDate or deadlineType changes, recalculate priority
@@ -135,7 +133,7 @@ export async function action({ request }: ActionFunctionArgs) {
           .single();
 
         if (currentJob.error || !currentJob.data) {
-          return json(currentJob);
+          return currentJob;
         }
 
         // Determine the new dueDate and deadlineType after this update
@@ -145,10 +143,10 @@ export async function action({ request }: ActionFunctionArgs) {
           field === "deadlineType" ? value : currentJob.data.deadlineType;
 
         if (!newDeadlineType) {
-          return json({
+          return {
             error: { message: "Invalid deadline type" },
             data: null
-          });
+          };
         }
 
         // Calculate new priority
@@ -177,28 +175,26 @@ export async function action({ request }: ActionFunctionArgs) {
           .eq("companyId", companyId);
 
         if (updateResult.error) {
-          return json(updateResult);
+          return updateResult;
         }
       }
 
-      return json({ error: null, data: null });
+      return { error: null, data: null };
     case "customerId":
     case "jobId":
     case "locationId":
     case "shelfId":
     case "startDate":
     case "unitOfMeasureCode":
-      return json(
-        await client
-          .from("job")
-          .update({
-            [field]: value ? value : null,
-            updatedBy: userId,
-            updatedAt: new Date().toISOString()
-          })
-          .in("id", ids as string[])
-          .eq("companyId", companyId)
-      );
+      return await client
+        .from("job")
+        .update({
+          [field]: value ? value : null,
+          updatedBy: userId,
+          updatedAt: new Date().toISOString()
+        })
+        .in("id", ids as string[])
+        .eq("companyId", companyId);
     case "quantity":
     case "scrapQuantity":
       const quantityUpdate = await client
@@ -212,7 +208,7 @@ export async function action({ request }: ActionFunctionArgs) {
         .eq("companyId", companyId);
 
       if (quantityUpdate.error) {
-        return json(quantityUpdate);
+        return quantityUpdate;
       }
 
       for await (const id of ids) {
@@ -223,31 +219,29 @@ export async function action({ request }: ActionFunctionArgs) {
         });
         if (recalculate.error) {
           console.error(recalculate.error);
-          return json(recalculate);
+          return recalculate;
         }
       }
 
-      return json(quantityUpdate);
+      return quantityUpdate;
     case "salesOrderId":
     case "salesOrderLineId":
       if (!value) {
-        return json(
-          await client
-            .from("job")
-            .update({ salesOrderId: null, salesOrderLineId: null })
-            .in("id", ids as string[])
-            .eq("companyId", companyId)
-        );
+        return await client
+          .from("job")
+          .update({ salesOrderId: null, salesOrderLineId: null })
+          .in("id", ids as string[])
+          .eq("companyId", companyId);
       } else {
-        return json({
+        return {
           error: { message: `Invalid value: ${value} for field: ${field}` },
           data: null
-        });
+        };
       }
     default:
-      return json({
+      return {
         error: { message: `Invalid field: ${field}` },
         data: null
-      });
+      };
   }
 }

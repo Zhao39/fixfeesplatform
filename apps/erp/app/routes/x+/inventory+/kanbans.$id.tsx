@@ -4,7 +4,7 @@ import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-import { useLoaderData, useNavigate } from "react-router";
+import { data, useLoaderData, useNavigate } from "react-router";
 import {
   getKanban,
   KanbanForm,
@@ -24,9 +24,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const kanban = await getKanban(client, id);
 
-  return json({
+  return {
     kanban: kanban?.data ?? null
-  });
+  };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -52,7 +52,7 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 
   if (updateKanban.error) {
-    return json(
+    return data(
       {},
       await flash(request, error(updateKanban.error, "Failed to update kanban"))
     );

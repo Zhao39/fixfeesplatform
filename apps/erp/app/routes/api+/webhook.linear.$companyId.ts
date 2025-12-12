@@ -3,24 +3,25 @@ import { syncIssueFromLinearSchema } from "@carbon/jobs/trigger/linear";
 import { tasks } from "@trigger.dev/sdk";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
+import { data } from "react-router";
 import { getIntegration } from "../../modules/settings";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { companyId } = params;
   if (!companyId) {
-    return json({ success: false }, { status: 400 });
+    return data({ success: false }, { status: 400 });
   }
 
-  return json({
+  return {
     success: true
-  });
+  };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
   const { companyId } = params;
 
   if (!companyId) {
-    return json({ success: false }, { status: 400 });
+    return data({ success: false }, { status: 400 });
   }
 
   const serviceRole = getCarbonServiceRole();
@@ -31,21 +32,21 @@ export async function action({ request, params }: ActionFunctionArgs) {
       "Linear webhook: integration query failed",
       integration.error
     );
-    return json(
+    return data(
       { success: false, error: "Integration query failed" },
       { status: 400 }
     );
   }
 
   if (!integration.data) {
-    return json(
+    return data(
       { success: false, error: "Integration not configured" },
       { status: 400 }
     );
   }
 
   if (!integration.data.active) {
-    return json(
+    return data(
       { success: false, error: "Integration not active" },
       { status: 400 }
     );
@@ -59,7 +60,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   });
 
   if (!parsed.success) {
-    return json(
+    return data(
       { success: false, error: parsed.error.format() },
       { status: 400 }
     );
@@ -67,9 +68,9 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   try {
     await tasks.trigger("sync-issue-from-linear", parsed.data);
-    return json({ success: true });
+    return { success: true };
   } catch (err) {
     console.error("Linear webhook: failed to trigger task", err);
-    return json({ success: false }, { status: 500 });
+    return data({ success: false }, { status: 500 });
   }
 }

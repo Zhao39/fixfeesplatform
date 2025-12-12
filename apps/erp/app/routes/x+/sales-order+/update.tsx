@@ -1,5 +1,5 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
 import { getCurrencyByCode } from "~/modules/accounting";
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -16,7 +16,7 @@ export async function action({ request }: ActionFunctionArgs) {
     typeof field !== "string" ||
     (typeof value !== "string" && value !== null)
   ) {
-    return json({ error: { message: "Invalid form data" }, data: null });
+    return { error: { message: "Invalid form data" }, data: null };
   }
 
   switch (field) {
@@ -36,31 +36,27 @@ export async function action({ request }: ActionFunctionArgs) {
             companyId,
             currencyCode
           );
-          return json(
-            await client
-              .from("salesOrder")
-              .update({
-                customerId: value ?? undefined,
-                currencyCode: currencyCode ?? undefined,
-                exchangeRate: currency.data?.exchangeRate ?? 1,
-                updatedBy: userId,
-                updatedAt: new Date().toISOString()
-              })
-              .in("id", ids as string[])
-          );
+          return await client
+            .from("salesOrder")
+            .update({
+              customerId: value ?? undefined,
+              currencyCode: currencyCode ?? undefined,
+              exchangeRate: currency.data?.exchangeRate ?? 1,
+              updatedBy: userId,
+              updatedAt: new Date().toISOString()
+            })
+            .in("id", ids as string[]);
         }
       }
 
-      return json(
-        await client
-          .from("salesOrder")
-          .update({
-            customerId: value ?? undefined,
-            updatedBy: userId,
-            updatedAt: new Date().toISOString()
-          })
-          .in("id", ids as string[])
-      );
+      return await client
+        .from("salesOrder")
+        .update({
+          customerId: value ?? undefined,
+          updatedBy: userId,
+          updatedAt: new Date().toISOString()
+        })
+        .in("id", ids as string[]);
     case "currencyCode":
       if (value) {
         const currency = await getCurrencyByCode(
@@ -69,17 +65,15 @@ export async function action({ request }: ActionFunctionArgs) {
           value as string
         );
         if (currency.data) {
-          return json(
-            await client
-              .from("salesOrder")
-              .update({
-                currencyCode: value as string,
-                exchangeRate: currency.data.exchangeRate,
-                updatedBy: userId,
-                updatedAt: new Date().toISOString()
-              })
-              .in("id", ids as string[])
-          );
+          return await client
+            .from("salesOrder")
+            .update({
+              currencyCode: value as string,
+              exchangeRate: currency.data.exchangeRate,
+              updatedBy: userId,
+              updatedAt: new Date().toISOString()
+            })
+            .in("id", ids as string[]);
         }
       }
     // don't break -- just let it catch the next case
@@ -93,29 +87,25 @@ export async function action({ request }: ActionFunctionArgs) {
     case "locationId":
     case "orderDate":
     case "salesPersonId":
-      return json(
-        await client
-          .from("salesOrder")
-          .update({
-            [field]: value ? value : null,
-            updatedBy: userId,
-            updatedAt: new Date().toISOString()
-          })
-          .in("id", ids as string[])
-      );
+      return await client
+        .from("salesOrder")
+        .update({
+          [field]: value ? value : null,
+          updatedBy: userId,
+          updatedAt: new Date().toISOString()
+        })
+        .in("id", ids as string[]);
     case "receiptPromisedDate":
     case "receiptRequestedDate":
-      return json(
-        await client
-          .from("salesOrderShipment")
-          .update({
-            [field]: value ? value : null,
-            updatedBy: userId,
-            updatedAt: new Date().toISOString()
-          })
-          .in("id", ids as string[])
-      );
+      return await client
+        .from("salesOrderShipment")
+        .update({
+          [field]: value ? value : null,
+          updatedBy: userId,
+          updatedAt: new Date().toISOString()
+        })
+        .in("id", ids as string[]);
     default:
-      return json({ error: { message: "Invalid field" }, data: null });
+      return { error: { message: "Invalid field" }, data: null };
   }
 }

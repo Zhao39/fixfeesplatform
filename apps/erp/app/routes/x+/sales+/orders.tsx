@@ -53,10 +53,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     count: salesOrders.count ?? 0,
     salesOrders: salesOrders.data ?? []
-  });
+  };
 }
 
 export default function SalesOrdersSearchRoute() {

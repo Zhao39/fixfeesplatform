@@ -25,7 +25,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ group: group.data });
+  return { group: group.data };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

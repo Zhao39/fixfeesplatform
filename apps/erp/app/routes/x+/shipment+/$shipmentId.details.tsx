@@ -11,7 +11,7 @@ import type { JSONContent } from "@carbon/react";
 import { FunctionRegion } from "@supabase/supabase-js";
 import type { ActionFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-import { useParams } from "react-router";
+import { data, useParams } from "react-router";
 import { useRouteData } from "~/hooks";
 import type { Shipment, ShipmentLine } from "~/modules/inventory";
 import {
@@ -46,7 +46,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const currentShipment = await getShipment(client, id);
   if (currentShipment.error) {
-    return json(
+    return data(
       {},
       await flash(
         request,
@@ -155,7 +155,7 @@ export async function action({ request }: ActionFunctionArgs) {
     });
 
     if (updateShipment.error) {
-      return json(
+      return data(
         {},
         await flash(
           request,

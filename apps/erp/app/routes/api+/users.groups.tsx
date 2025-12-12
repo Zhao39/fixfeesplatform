@@ -4,6 +4,7 @@ import { flash } from "@carbon/auth/session.server";
 import type { LoaderFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
 import { arrayToTree } from "performant-array-to-tree";
+import { data } from "react-router";
 import type { Group } from "~/modules/users";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -29,13 +30,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const groups = await query;
 
   if (groups.error) {
-    return json(
+    return data(
       { groups: [], error: groups.error },
       await flash(request, error(groups.error, "Failed to load groups"))
     );
   }
 
-  return json({
+  return {
     groups: arrayToTree(groups.data) as Group[]
-  });
+  };
 }

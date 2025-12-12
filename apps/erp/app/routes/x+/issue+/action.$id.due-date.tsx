@@ -1,6 +1,7 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { validator } from "@carbon/form";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
+import { data } from "react-router";
 import { z } from "zod/v3";
 import { zfd } from "zod-form-data";
 
@@ -17,7 +18,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const validated = await validator(updateDueDateSchema).validate(formData);
   if (validated.error) {
-    return json({ error: "Invalid form data" }, { status: 400 });
+    return data({ error: "Invalid form data" }, { status: 400 });
   }
 
   const { error } = await client
@@ -28,8 +29,8 @@ export async function action({ request }: ActionFunctionArgs) {
     .eq("id", validated.data.id);
 
   if (error) {
-    return json({ error: error.message }, { status: 400 });
+    return data({ error: error.message }, { status: 400 });
   }
 
-  return json({ success: true });
+  return { success: true };
 }

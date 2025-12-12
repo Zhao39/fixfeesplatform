@@ -50,12 +50,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     data: salesGroups.data ?? [],
     count: salesGroups.count ?? 0,
     itemPostingGroups: itemPostingGroups.data ?? [],
     customerTypes: customerTypes.data ?? []
-  });
+  };
 }
 
 export default function SalesPostingGroupsRoute() {

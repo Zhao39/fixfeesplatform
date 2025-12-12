@@ -46,10 +46,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     count: quotes.count ?? 0,
     quotes: quotes.data ?? []
-  });
+  };
 }
 
 export default function QuotesRoute() {

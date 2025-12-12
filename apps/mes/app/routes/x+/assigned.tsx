@@ -36,10 +36,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     getWorkCentersByLocation(serviceRole, location)
   ]);
 
-  return json({
+  return {
     operations: operations?.data?.map(makeDurations) ?? [],
     workCenters: workCenters?.data ?? []
-  });
+  };
 }
 
 export default function AssignedRoute() {

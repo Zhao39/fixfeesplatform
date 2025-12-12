@@ -51,11 +51,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     count: parts.count ?? 0,
     parts: parts.data ?? [],
     tags: tags.data ?? []
-  });
+  };
 }
 
 export default function PartsSearchRoute() {

@@ -16,13 +16,13 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const remove = await deleteConfigurationRule(client, field, itemId);
 
   if (remove.error) {
-    return json({
+    return {
       success: false,
       error: "Failed to delete configuration rule"
-    });
+    };
   }
 
-  return json({
+  return {
     success: true
-  });
+  };
 }

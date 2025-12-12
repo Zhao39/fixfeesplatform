@@ -42,9 +42,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     category: category.data
-  });
+  };
 }
 
 export default function PersonAttributeCategoryRoute() {

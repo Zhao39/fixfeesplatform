@@ -23,7 +23,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ account: account.data });
+  return { account: account.data };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

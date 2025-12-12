@@ -37,17 +37,17 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     daysBetween < 1 ||
     daysBetween > 500
   )
-    return json({
+    return {
       data: [],
       previousPeriodData: []
-    });
+    };
 
   const kpi = KPIs.find((k) => k.key === key);
   if (!kpi)
-    return json({
+    return {
       data: [],
       previousPeriodData: []
-    });
+    };
 
   switch (kpi.key) {
     case "purchaseOrderCount":
@@ -96,7 +96,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
             .sort((a, b) => a.date.localeCompare(b.date))
         );
 
-        return json({ data, previousPeriodData });
+        return { data, previousPeriodData };
       } else {
         const [groupedData, previousGroupedData] = [
           groupDataByMonth(orders.data ?? [], {
@@ -127,7 +127,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
             .sort((a, b) => a.monthKey.localeCompare(b.monthKey))
         );
 
-        return json({ data, previousPeriodData });
+        return { data, previousPeriodData };
       }
     }
 
@@ -177,7 +177,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
             .sort((a, b) => a.date.localeCompare(b.date))
         );
 
-        return json({ data, previousPeriodData });
+        return { data, previousPeriodData };
       } else {
         const [groupedData, previousGroupedData] = [
           groupDataByMonth(invoices.data ?? [], {
@@ -208,7 +208,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
             .sort((a, b) => a.monthKey.localeCompare(b.monthKey))
         );
 
-        return json({ data, previousPeriodData });
+        return { data, previousPeriodData };
       }
     }
 
@@ -264,7 +264,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
             .sort((a, b) => a.date.localeCompare(b.date))
         );
 
-        return json({ data, previousPeriodData });
+        return { data, previousPeriodData };
       } else {
         const [groupedData, previousGroupedData] = [
           groupDataByMonth(
@@ -302,7 +302,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
             .sort((a, b) => a.monthKey.localeCompare(b.monthKey))
         );
 
-        return json({ data, previousPeriodData });
+        return { data, previousPeriodData };
       }
     }
 

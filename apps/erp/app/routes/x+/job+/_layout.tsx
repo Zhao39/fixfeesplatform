@@ -19,7 +19,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     view: "production"
   });
 
-  return json({});
+  return {};
 }
 
 export default function JobRoute() {

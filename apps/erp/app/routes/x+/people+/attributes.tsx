@@ -52,11 +52,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     count: categories.count ?? 0,
     categories: categories.data ?? [],
     dataTypes: dataTypes.data ?? []
-  });
+  };
 }
 
 export default function UserAttributesRoute() {

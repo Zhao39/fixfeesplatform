@@ -4,9 +4,10 @@ import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
+import { data } from "react-router";
 import {
-  GroupForm,
   deleteGroup,
+  GroupForm,
   groupValidator,
   insertGroup,
   upsertGroupMembers
@@ -31,7 +32,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const createGroup = await insertGroup(client, { name, companyId });
   if (createGroup.error) {
-    return json(
+    return data(
       {},
       await flash(request, error(createGroup.error, "Failed to insert group"))
     );
@@ -39,7 +40,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const groupId = createGroup.data?.id;
   if (!groupId) {
-    return json(
+    return data(
       {},
       await flash(request, error(createGroup, "Failed to insert group"))
     );
@@ -53,7 +54,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   if (insertGroupMembers.error) {
     await deleteGroup(client, groupId);
-    return json(
+    return data(
       {},
       await flash(
         request,

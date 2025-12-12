@@ -26,7 +26,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ materialForm: materialForm.data });
+  return { materialForm: materialForm.data };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

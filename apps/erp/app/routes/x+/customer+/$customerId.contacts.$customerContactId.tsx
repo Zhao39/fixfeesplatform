@@ -42,9 +42,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     contact: contact.data
-  });
+  };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

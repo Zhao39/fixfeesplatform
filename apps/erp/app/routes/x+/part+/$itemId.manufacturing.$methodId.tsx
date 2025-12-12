@@ -94,7 +94,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     makeMethod: makeMethod.data,
     methodMaterials:
       methodMaterials.data?.map((m) => ({
@@ -122,7 +122,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     configurationRules: partManufacturing.data?.requiresConfiguration
       ? await getConfigurationRules(client, itemId, companyId)
       : []
-  });
+  };
 }
 
 export default function PartManufacturing() {

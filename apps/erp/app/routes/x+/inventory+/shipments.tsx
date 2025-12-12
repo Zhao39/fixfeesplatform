@@ -44,10 +44,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     shipments: shipments.data ?? [],
     count: shipments.count ?? 0
-  });
+  };
 }
 
 export default function ShipmentsRoute() {

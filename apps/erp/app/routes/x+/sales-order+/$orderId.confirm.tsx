@@ -37,10 +37,10 @@ export async function action(args: ActionFunctionArgs) {
 
     const { orderId } = params;
     if (!orderId) {
-      return json({
+      return {
         success: false,
         message: "Could not find orderId"
-      });
+      };
     }
 
     let file: ArrayBuffer;
@@ -52,17 +52,17 @@ export async function action(args: ActionFunctionArgs) {
       getSalesOrder(serviceRole, orderId)
     ]);
     if (salesOrder.error) {
-      return json({
+      return {
         success: false,
         message: "Failed to get sales order"
-      });
+      };
     }
 
     if (salesOrder.data.companyId !== companyId) {
-      return json({
+      return {
         success: false,
         message: "You are not authorized to confirm this sales order"
-      });
+      };
     }
 
     const acceptLanguage = request.headers.get("accept-language");
@@ -79,10 +79,10 @@ export async function action(args: ActionFunctionArgs) {
       const pdf = await pdfLoader(pdfArgs);
 
       if (pdf.headers.get("content-type") !== "application/pdf") {
-        return json({
+        return {
           success: false,
           message: "Failed to generate PDF"
-        });
+        };
       }
 
       file = await pdf.arrayBuffer();
@@ -103,10 +103,10 @@ export async function action(args: ActionFunctionArgs) {
         });
 
       if (documentFileUpload.error) {
-        return json({
+        return {
           success: false,
           message: "Failed to upload file"
-        });
+        };
       }
 
       const createDocument = await upsertDocument(serviceRole, {
@@ -122,17 +122,17 @@ export async function action(args: ActionFunctionArgs) {
       });
 
       if (createDocument.error) {
-        return json({
+        return {
           success: false,
           message: "Failed to create document"
-        });
+        };
       }
       // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
     } catch (err) {
-      return json({
+      return {
         success: false,
         message: "Failed to generate PDF"
-      });
+      };
     }
 
     const validation = await validator(salesConfirmValidator).validate(
@@ -140,10 +140,10 @@ export async function action(args: ActionFunctionArgs) {
     );
 
     if (validation.error) {
-      return json({
+      return {
         success: false,
         message: "Invalid form data"
-      });
+      };
     }
 
     const { notification, customerContact } = validation.data;
@@ -152,10 +152,10 @@ export async function action(args: ActionFunctionArgs) {
       case "Email":
         try {
           if (!customerContact) {
-            return json({
+            return {
               success: false,
               message: "Customer contact is required"
-            });
+            };
           }
 
           const [
@@ -177,41 +177,41 @@ export async function action(args: ActionFunctionArgs) {
           ]);
 
           if (!customer?.data?.contact) {
-            return json({
+            return {
               success: false,
               message: "Failed to get customer contact"
-            });
+            };
           }
           if (!company.data) {
-            return json({
+            return {
               success: false,
               message: "Failed to get company"
-            });
+            };
           }
           if (!seller.data) {
-            return json({
+            return {
               success: false,
               message: "Failed to get user"
-            });
+            };
           }
           if (!salesOrder.data) {
-            return json({
+            return {
               success: false,
               message: "Failed to get sales order"
-            });
+            };
           }
           if (!salesOrderLocations.data) {
-            return json({
+            return {
               success: false,
               message: "Failed to get sales order locations"
-            });
+            };
           }
 
           if (!paymentTerms.data) {
-            return json({
+            return {
               success: false,
               message: "Failed to get payment terms"
-            });
+            };
           }
 
           const emailTemplate = SalesOrderEmail({
@@ -252,20 +252,20 @@ export async function action(args: ActionFunctionArgs) {
           });
           // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
         } catch (err) {
-          return json({
+          return {
             success: false,
             message: "Failed to send email"
-          });
+          };
         }
         break;
       case undefined:
       case "None":
         break;
       default:
-        return json({
+        return {
           success: false,
           message: "Invalid notification type"
-        });
+        };
     }
 
     const orderLines = await getSalesOrderLines(serviceRole, orderId);
@@ -283,10 +283,10 @@ export async function action(args: ActionFunctionArgs) {
       .eq("id", orderId);
 
     if (confirm.error) {
-      return json({
+      return {
         success: false,
         message: "Failed to confirm sales order"
-      });
+      };
     }
 
     await runMRP(getCarbonServiceRole(), {
@@ -296,15 +296,15 @@ export async function action(args: ActionFunctionArgs) {
       userId: userId
     });
 
-    return json({
+    return {
       success: true,
       message: "Sales order confirmed"
-    });
+    };
   } catch (err) {
-    return json({
+    return {
       success: false,
       message:
         err instanceof Error ? err.message : "An unexpected error occurred"
-    });
+    };
   }
 }

@@ -5,7 +5,7 @@ import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
 import type { ClientActionFunctionArgs } from "react-router";
-import { useLoaderData, useNavigate } from "react-router";
+import { data, useLoaderData, useNavigate } from "react-router";
 import {
   getSupplierType,
   supplierTypeValidator,
@@ -43,9 +43,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     supplierType: supplierType.data
-  });
+  };
 }
 
 export async function clientAction({ serverAction }: ClientActionFunctionArgs) {
@@ -80,7 +80,7 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 
   if (updateSupplierType.error) {
-    return json(
+    return data(
       {},
       await flash(
         request,

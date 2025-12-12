@@ -1,8 +1,8 @@
-import { json, type ActionFunctionArgs } from "@vercel/remix";
-
 import { assertIsPost, error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
+import { data } from "react-router";
 import type { JobOperation } from "~/modules/production";
 import { updateJobOperationStatus } from "~/modules/production";
 
@@ -18,11 +18,11 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const update = await updateJobOperationStatus(client, id, status, userId);
   if (update.error) {
-    return json(
+    return data(
       {},
       await flash(request, error(update.error, "Failed to update status"))
     );
   }
 
-  return json({});
+  return {};
 }

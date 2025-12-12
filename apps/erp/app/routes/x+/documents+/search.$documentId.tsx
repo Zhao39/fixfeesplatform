@@ -30,9 +30,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     document: document.data
-  });
+  };
 }
 
 export async function action({ request }: ActionFunctionArgs) {

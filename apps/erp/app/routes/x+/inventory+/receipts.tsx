@@ -43,10 +43,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     receipts: receipts.data ?? [],
     count: receipts.count ?? 0
-  });
+  };
 }
 
 export default function ReceiptsRoute() {

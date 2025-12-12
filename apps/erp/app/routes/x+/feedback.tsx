@@ -2,7 +2,7 @@ import { getCarbonServiceRole, SUPABASE_URL } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { validator } from "@carbon/form";
 import { getSlackClient } from "@carbon/lib/slack.server";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
 import { feedbackValidator } from "~/modules/shared";
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -12,10 +12,10 @@ export async function action({ request }: ActionFunctionArgs) {
   const validation = await validator(feedbackValidator).validate(formData);
 
   if (validation.error) {
-    return json({
+    return {
       success: false,
       message: "Failed to submit feedback"
-    });
+    };
   }
 
   const { attachmentPath, feedback, location } = validation.data;
@@ -44,10 +44,10 @@ export async function action({ request }: ActionFunctionArgs) {
   ]);
 
   if (insertFeedback.error) {
-    return json({
+    return {
       success: false,
       message: "Failed to submit feedback"
-    });
+    };
   }
 
   let channel = "#feedback";
@@ -90,5 +90,5 @@ export async function action({ request }: ActionFunctionArgs) {
     ]
   });
 
-  return json({ success: true, message: "Feedback submitted" });
+  return { success: true, message: "Feedback submitted" };
 }

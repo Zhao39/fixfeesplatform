@@ -1,7 +1,7 @@
 import { assertIsPost } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { validator } from "@carbon/form";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
 import {
   batchPropertyOrderValidator,
   updateBatchPropertyOrder
@@ -23,10 +23,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   if (validation.error) {
     console.error(validation.error);
-    return json({
+    return {
       success: false,
       error: "Invalid form data"
-    });
+    };
   }
 
   const upsert = await updateBatchPropertyOrder(client, {
@@ -36,13 +36,13 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   if (upsert.error) {
     console.error(upsert.error);
-    return json({
+    return {
       success: false,
       error: upsert.error.message
-    });
+    };
   }
 
-  return json({
+  return {
     success: true
-  });
+  };
 }

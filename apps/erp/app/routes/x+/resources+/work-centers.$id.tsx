@@ -36,7 +36,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ workCenter: workCenter.data });
+  return { workCenter: workCenter.data };
 }
 
 export async function action({ request }: ActionFunctionArgs) {

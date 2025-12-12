@@ -47,10 +47,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     materialFinishes: materialFinishes.data ?? [],
     count: materialFinishes.count ?? 0
-  });
+  };
 }
 
 export default function MaterialFinishesRoute() {

@@ -1,5 +1,6 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
+import { data } from "react-router";
 import { z } from "zod/v3";
 import { updateIssueActionProcesses } from "~/modules/quality/quality.service";
 
@@ -20,7 +21,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const validated = updateProcessesSchema.safeParse(body);
 
   if (!validated.success) {
-    return json({ error: "Invalid request data" }, { status: 400 });
+    return data({ error: "Invalid request data" }, { status: 400 });
   }
 
   const { processIds = [] } = validated.data;
@@ -33,8 +34,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
   });
 
   if (updateProcesses.error) {
-    return json({ error: updateProcesses.error.message }, { status: 400 });
+    return data({ error: updateProcesses.error.message }, { status: 400 });
   }
 
-  return json({ success: true });
+  return { success: true };
 }

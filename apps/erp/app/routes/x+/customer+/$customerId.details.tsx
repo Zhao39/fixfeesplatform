@@ -4,7 +4,7 @@ import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-import { useParams } from "react-router";
+import { data, useParams } from "react-router";
 import { useRouteData } from "~/hooks";
 import type { CustomerDetail } from "~/modules/sales";
 import { customerValidator, upsertCustomer } from "~/modules/sales";
@@ -47,7 +47,7 @@ export async function action({ request }: ActionFunctionArgs) {
     );
   }
 
-  return json(null, await flash(request, success("Updated customer")));
+  return data(null, await flash(request, success("Updated customer")));
 }
 
 export default function CustomerEditRoute() {

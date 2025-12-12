@@ -44,10 +44,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     warehouseTransfers: warehouseTransfers.data ?? [],
     count: warehouseTransfers.count ?? 0
-  });
+  };
 }
 
 export default function WarehouseTransfersRoute() {

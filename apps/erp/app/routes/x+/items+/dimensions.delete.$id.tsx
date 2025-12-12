@@ -26,7 +26,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ materialDimension: materialDimension.data });
+  return { materialDimension: materialDimension.data };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

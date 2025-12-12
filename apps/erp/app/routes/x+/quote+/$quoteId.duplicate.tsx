@@ -18,10 +18,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const quoteId = String(formData.get("quoteId"));
 
   if (!quoteId)
-    return json({
+    return {
       success: false,
       message: "Invalid form data"
-    });
+    };
 
   const serviceRole = await getCarbonServiceRole();
 
@@ -33,16 +33,16 @@ export async function action({ request, params }: ActionFunctionArgs) {
   });
 
   if (copy.error) {
-    return json({
+    return {
       success: false,
       message: "Failed to duplicate quote"
-    });
+    };
   }
 
-  return json({
+  return {
     success: true,
     data: {
       newQuoteId: copy.data?.newQuoteId
     }
-  });
+  };
 }

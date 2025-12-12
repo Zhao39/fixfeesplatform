@@ -26,7 +26,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ materialGrade: materialGrade.data });
+  return { materialGrade: materialGrade.data };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

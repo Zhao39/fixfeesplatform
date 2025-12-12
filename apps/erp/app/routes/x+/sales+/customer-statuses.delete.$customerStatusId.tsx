@@ -27,7 +27,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ customerStatus: customerStatus.data });
+  return { customerStatus: customerStatus.data };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

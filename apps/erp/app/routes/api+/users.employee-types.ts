@@ -9,5 +9,5 @@ export async function loader({ request }: LoaderFunctionArgs) {
     role: "employee"
   });
 
-  return json(await getEmployeeTypes(client, companyId));
+  return await getEmployeeTypes(client, companyId);
 }

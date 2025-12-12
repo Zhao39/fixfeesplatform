@@ -5,7 +5,7 @@ import { Button, Heading } from "@carbon/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
 import { LuTriangleAlert } from "react-icons/lu";
-import { Link, useFetcher, useLoaderData } from "react-router";
+import { data, Link, useFetcher, useLoaderData } from "react-router";
 
 import { getKanban } from "~/modules/inventory";
 import {
@@ -31,16 +31,16 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const job = await getJob(client, kanban.data.jobId!);
   if (job.error) {
-    return json({
+    return {
       existingJob: null,
       id
-    });
+    };
   }
 
-  return json({
+  return {
     existingJob: job.data,
     id
-  });
+  };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -57,7 +57,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   });
 
   if (kanbanUpdate.error) {
-    return json(
+    return data(
       { success: false },
       await flash(request, error("Failed to cancel job"))
     );

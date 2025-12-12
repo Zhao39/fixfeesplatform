@@ -46,10 +46,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     count: materials.count ?? 0,
     materials: materials.data ?? []
-  });
+  };
 }
 
 export default function MethodMaterialsRoute() {

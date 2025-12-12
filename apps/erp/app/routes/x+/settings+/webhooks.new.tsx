@@ -4,7 +4,7 @@ import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-import { useNavigate } from "react-router";
+import { data, useNavigate } from "react-router";
 import { upsertWebhook, webhookValidator } from "~/modules/settings";
 import { WebhookForm } from "~/modules/settings/ui/Webhooks";
 import { getParams, path } from "~/utils/path";
@@ -36,7 +36,7 @@ export async function action({ request }: ActionFunctionArgs) {
     createdBy: userId
   });
   if (createWebhook.error) {
-    return json(
+    return data(
       {},
       await flash(
         request,

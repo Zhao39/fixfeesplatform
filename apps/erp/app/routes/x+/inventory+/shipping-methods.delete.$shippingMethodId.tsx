@@ -28,7 +28,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ shippingMethod: shippingMethod.data });
+  return { shippingMethod: shippingMethod.data };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

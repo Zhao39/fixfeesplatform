@@ -8,5 +8,5 @@ export async function loader({ request }: LoaderFunctionArgs) {
     view: "purchasing"
   });
 
-  return json(await getSupplierStatusesList(client, companyId));
+  return await getSupplierStatusesList(client, companyId);
 }

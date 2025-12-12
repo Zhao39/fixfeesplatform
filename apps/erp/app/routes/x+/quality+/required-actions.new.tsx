@@ -24,7 +24,7 @@ export async function action({ request }: ActionFunctionArgs) {
   );
 
   if (validation.error) {
-    return json({ success: false, message: "Invalid form data" });
+    return { success: false, message: "Invalid form data" };
   }
 
   const { name, active } = validation.data;

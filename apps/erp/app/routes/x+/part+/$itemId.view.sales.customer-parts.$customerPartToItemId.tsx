@@ -35,10 +35,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const itemData = await getItem(client, customerPart.data.itemId);
   const readableId = itemData?.data?.readableIdWithRevision;
 
-  return json({
+  return {
     customerPart: customerPart?.data ?? null,
     readableId
-  });
+  };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

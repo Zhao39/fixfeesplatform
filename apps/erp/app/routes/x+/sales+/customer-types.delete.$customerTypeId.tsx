@@ -28,7 +28,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ customerType: customerType.data });
+  return { customerType: customerType.data };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

@@ -8,7 +8,7 @@ import { currenciesQuery } from "~/utils/react-query";
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client } = await requirePermissions(request, {});
 
-  return json(await getCurrenciesList(client));
+  return await getCurrenciesList(client);
 }
 
 export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {

@@ -10,6 +10,7 @@ import { validationError, validator } from "@carbon/form";
 import { FunctionRegion } from "@supabase/supabase-js";
 import type { ActionFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
+import { data } from "react-router";
 import { scrapQuantityValidator } from "~/services/models";
 import { insertScrapQuantity } from "~/services/operations.service";
 
@@ -34,7 +35,7 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 
   if (insertScrap.error) {
-    return json(
+    return data(
       {},
       await flash(
         request,
@@ -61,7 +62,7 @@ export async function action({ request }: ActionFunctionArgs) {
     );
   }
 
-  return json(
+  return data(
     insertScrap.data,
     await flash(request, success("Scrap quantity recorded successfully"))
   );

@@ -16,14 +16,14 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const lineDelete = await deleteReceiptLine(client, id);
 
   if (lineDelete.error) {
-    return json({
+    return {
       success: false,
       message: lineDelete.error.message
-    });
+    };
   }
 
-  return json({
+  return {
     success: true,
     message: "Receipt line deleted successfully"
-  });
+  };
 }

@@ -8,5 +8,5 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const table = url.searchParams.get("table");
 
-  return json(await getTagsList(client, companyId, table as string | null));
+  return await getTagsList(client, companyId, table as string | null);
 }

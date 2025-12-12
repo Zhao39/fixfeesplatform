@@ -45,12 +45,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     supplier: supplier.data,
     contacts: contacts.data ?? [],
     locations: locations.data ?? [],
     tags: tags.data ?? []
-  });
+  };
 }
 
 export default function SupplierRoute() {

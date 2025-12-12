@@ -1,7 +1,7 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
 import type { Database } from "@carbon/database";
 import { getMaterialDescription, getMaterialId } from "@carbon/utils";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
 import { getCompanySettings } from "~/modules/settings";
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -15,7 +15,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const value = formData.get("value");
 
   if (typeof field !== "string" || typeof value !== "string") {
-    return json({ error: { message: "Invalid form data" }, data: null });
+    return { error: { message: "Invalid form data" }, data: null };
   }
 
   console.log({ field, value });
@@ -28,48 +28,42 @@ export async function action({ request }: ActionFunctionArgs) {
     case "unitOfMeasureCode":
       // For other fields, just update the specified field
       if (field === "replenishmentSystem" && value !== "Buy and Make") {
-        return json(
-          await client
-            .from("item")
-            .update({
-              // @ts-expect-error
-              [field]: value,
-              // @ts-expect-error
-              defaultMethodType: value,
-              updatedBy: userId,
-              updatedAt: new Date().toISOString()
-            })
-            .in("id", items as string[])
-            .eq("companyId", companyId)
-        );
-      }
-      if (field === "defaultMethodType" && value !== "Pick") {
-        return json(
-          await client
-            .from("item")
-            .update({
-              // @ts-expect-error
-              defaultMethodType: value,
-              // @ts-expect-error
-              replenishmentSystem: value,
-              updatedBy: userId,
-              updatedAt: new Date().toISOString()
-            })
-            .in("id", items as string[])
-            .eq("companyId", companyId)
-        );
-      }
-      return json(
-        await client
+        return await client
           .from("item")
           .update({
+            // @ts-expect-error
             [field]: value,
+            // @ts-expect-error
+            defaultMethodType: value,
             updatedBy: userId,
             updatedAt: new Date().toISOString()
           })
           .in("id", items as string[])
-          .eq("companyId", companyId)
-      );
+          .eq("companyId", companyId);
+      }
+      if (field === "defaultMethodType" && value !== "Pick") {
+        return await client
+          .from("item")
+          .update({
+            // @ts-expect-error
+            defaultMethodType: value,
+            // @ts-expect-error
+            replenishmentSystem: value,
+            updatedBy: userId,
+            updatedAt: new Date().toISOString()
+          })
+          .in("id", items as string[])
+          .eq("companyId", companyId);
+      }
+      return await client
+        .from("item")
+        .update({
+          [field]: value,
+          updatedBy: userId,
+          updatedAt: new Date().toISOString()
+        })
+        .in("id", items as string[])
+        .eq("companyId", companyId);
     case "gradeId":
     case "dimensionId":
     case "finishId":
@@ -215,7 +209,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
                 if (itemUpdateResult.error) {
                   console.error(`Item update error:`, itemUpdateResult.error);
-                  return json(itemUpdateResult);
+                  return itemUpdateResult;
                 }
               }
 
@@ -253,10 +247,10 @@ export async function action({ request }: ActionFunctionArgs) {
 
               if (update.error) {
                 console.error(`Material update error:`, update.error);
-                return json({
+                return {
                   error: { message: update.error.message },
                   data: null
-                });
+                };
               }
             } else {
               console.log(
@@ -268,10 +262,10 @@ export async function action({ request }: ActionFunctionArgs) {
           }
         }
 
-        return json({
+        return {
           data: null,
           error: null
-        });
+        };
       } else {
         const materialItems = await client
           .from("item")
@@ -282,7 +276,7 @@ export async function action({ request }: ActionFunctionArgs) {
           ...new Set(materialItems.data?.map((item) => item.readableId) ?? [])
         ];
         if (materialIds.length === 0) {
-          return json({ error: { message: "No materials found" }, data: null });
+          return { error: { message: "No materials found" }, data: null };
         }
 
         let updateData: Database["public"]["Tables"]["material"]["Update"] = {
@@ -304,32 +298,28 @@ export async function action({ request }: ActionFunctionArgs) {
           updateData.materialTypeId = null;
         }
 
-        return json(
-          await client
-            .from("material")
-            .update(updateData)
-            .in("id", materialIds as string[])
-            .eq("companyId", companyId)
-        );
+        return await client
+          .from("material")
+          .update(updateData)
+          .in("id", materialIds as string[])
+          .eq("companyId", companyId);
       }
     case "active":
-      return json(
-        await client
-          .from("item")
-          .update({
-            active: value === "on",
-            updatedBy: userId,
-            updatedAt: new Date().toISOString()
-          })
-          .in("id", items as string[])
-          .eq("companyId", companyId)
-      );
+      return await client
+        .from("item")
+        .update({
+          active: value === "on",
+          updatedBy: userId,
+          updatedAt: new Date().toISOString()
+        })
+        .in("id", items as string[])
+        .eq("companyId", companyId);
     case "partId":
       if (items.length > 1) {
-        return json({
+        return {
           error: { message: "Cannot update multiple items" },
           data: null
-        });
+        };
       }
       const [item] = items as string[];
       const itemData = await client
@@ -341,11 +331,11 @@ export async function action({ request }: ActionFunctionArgs) {
         .single();
 
       if (itemData.error) {
-        return json(itemData);
+        return itemData;
       }
       if (itemData.data?.type !== "Part") {
         console.error("itemData.data?.type", itemData.data?.type);
-        return json({ error: { message: "Item is not a part" }, data: null });
+        return { error: { message: "Item is not a part" }, data: null };
       }
 
       const currentReadableId = itemData.data?.readableId;
@@ -357,7 +347,7 @@ export async function action({ request }: ActionFunctionArgs) {
         .eq("companyId", companyId);
       if (relatedItems.error) {
         console.error(relatedItems.error);
-        return json(relatedItems);
+        return relatedItems;
       }
       const relatedItemIds = relatedItems.data?.map((item) => item.id);
       if (relatedItemIds) {
@@ -384,20 +374,20 @@ export async function action({ request }: ActionFunctionArgs) {
         if (partUpdate.error) {
           console.error("partUpdate error");
           console.error(partUpdate.error);
-          return json(partUpdate);
+          return partUpdate;
         }
         if (itemUpdates.error) {
           console.error("itemUpdates error");
           console.error(itemUpdates.error);
         }
-        return json(itemUpdates);
+        return itemUpdates;
       }
     case "consumableId":
       if (items.length > 1) {
-        return json({
+        return {
           error: { message: "Cannot update multiple items" },
           data: null
-        });
+        };
       }
       const [consumableItem] = items as string[];
       const consumableData = await client
@@ -409,13 +399,13 @@ export async function action({ request }: ActionFunctionArgs) {
         .single();
 
       if (consumableData.error) {
-        return json(consumableData);
+        return consumableData;
       }
       if (consumableData.data?.type !== "Consumable") {
-        return json({
+        return {
           error: { message: "Item is not a consumable" },
           data: null
-        });
+        };
       }
 
       const currentConsumableId = consumableData.data?.readableId;
@@ -427,7 +417,7 @@ export async function action({ request }: ActionFunctionArgs) {
         .eq("companyId", companyId);
       if (relatedConsumables.error) {
         console.error(relatedConsumables.error);
-        return json(relatedConsumables);
+        return relatedConsumables;
       }
       const relatedConsumableIds = relatedConsumables.data?.map(
         (item) => item.id
@@ -456,20 +446,20 @@ export async function action({ request }: ActionFunctionArgs) {
         if (consumableUpdate.error) {
           console.error("consumableUpdate error");
           console.error(consumableUpdate.error);
-          return json(consumableUpdate);
+          return consumableUpdate;
         }
         if (consumableItemUpdates.error) {
           console.error("consumableItemUpdates error");
           console.error(consumableItemUpdates.error);
         }
-        return json(consumableItemUpdates);
+        return consumableItemUpdates;
       }
     case "materialId":
       if (items.length > 1) {
-        return json({
+        return {
           error: { message: "Cannot update multiple items" },
           data: null
-        });
+        };
       }
       const [materialItem] = items as string[];
       const materialData = await client
@@ -481,13 +471,13 @@ export async function action({ request }: ActionFunctionArgs) {
         .single();
 
       if (materialData.error) {
-        return json(materialData);
+        return materialData;
       }
       if (materialData.data?.type !== "Material") {
-        return json({
+        return {
           error: { message: "Item is not a material" },
           data: null
-        });
+        };
       }
 
       const currentMaterialId = materialData.data?.readableId;
@@ -499,7 +489,7 @@ export async function action({ request }: ActionFunctionArgs) {
         .eq("companyId", companyId);
       if (relatedMaterials.error) {
         console.error(relatedMaterials.error);
-        return json(relatedMaterials);
+        return relatedMaterials;
       }
       const relatedMaterialIds = relatedMaterials.data?.map((item) => item.id);
       if (relatedMaterialIds) {
@@ -526,20 +516,20 @@ export async function action({ request }: ActionFunctionArgs) {
         if (materialUpdate.error) {
           console.error("materialUpdate error");
           console.error(materialUpdate.error);
-          return json(materialUpdate);
+          return materialUpdate;
         }
         if (materialItemUpdates.error) {
           console.error("materialItemUpdates error");
           console.error(materialItemUpdates.error);
         }
-        return json(materialItemUpdates);
+        return materialItemUpdates;
       }
     case "toolId":
       if (items.length > 1) {
-        return json({
+        return {
           error: { message: "Cannot update multiple items" },
           data: null
-        });
+        };
       }
       const [toolItem] = items as string[];
       const toolData = await client
@@ -551,10 +541,10 @@ export async function action({ request }: ActionFunctionArgs) {
         .single();
 
       if (toolData.error) {
-        return json(toolData);
+        return toolData;
       }
       if (toolData.data?.type !== "Tool") {
-        return json({ error: { message: "Item is not a tool" }, data: null });
+        return { error: { message: "Item is not a tool" }, data: null };
       }
 
       const currentToolId = toolData.data?.readableId;
@@ -566,7 +556,7 @@ export async function action({ request }: ActionFunctionArgs) {
         .eq("companyId", companyId);
       if (relatedTools.error) {
         console.error(relatedTools.error);
-        return json(relatedTools);
+        return relatedTools;
       }
       const relatedToolIds = relatedTools.data?.map((item) => item.id);
       if (relatedToolIds) {
@@ -593,15 +583,15 @@ export async function action({ request }: ActionFunctionArgs) {
         if (toolUpdate.error) {
           console.error("toolUpdate error");
           console.error(toolUpdate.error);
-          return json(toolUpdate);
+          return toolUpdate;
         }
         if (toolItemUpdates.error) {
           console.error("toolItemUpdates error");
           console.error(toolItemUpdates.error);
         }
-        return json(toolItemUpdates);
+        return toolItemUpdates;
       }
     default:
-      return json({ error: { message: "Invalid field" }, data: null });
+      return { error: { message: "Invalid field" }, data: null };
   }
 }

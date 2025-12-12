@@ -23,7 +23,7 @@ import type { LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
 import posthog from "posthog-js";
 import type { ShouldRevalidateFunction } from "react-router";
-import { Outlet, useLoaderData, useNavigate } from "react-router";
+import { data, Outlet, useLoaderData, useNavigate } from "react-router";
 import { AppSidebar } from "~/components";
 import RealtimeDataProvider from "~/components/RealtimeDataProvider";
 import { getLocation, setLocation } from "~/services/location.server";
@@ -91,7 +91,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     throw new Error(`No locations found for ${company.name}`);
   }
 
-  return json(
+  return data(
     {
       session: {
         accessToken,

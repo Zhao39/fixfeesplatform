@@ -4,7 +4,7 @@ import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-import { useLoaderData, useNavigate } from "react-router";
+import { data, useLoaderData, useNavigate } from "react-router";
 import {
   gaugeTypeValidator,
   getGaugeType,
@@ -32,9 +32,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     gaugeType: gaugeType.data
-  });
+  };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -61,7 +61,7 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 
   if (updateGaugeType.error) {
-    return json(
+    return data(
       {},
       await flash(
         request,

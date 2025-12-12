@@ -50,10 +50,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     partners: partners.data ?? [],
     count: partners.count ?? 0
-  });
+  };
 }
 
 export default function Route() {

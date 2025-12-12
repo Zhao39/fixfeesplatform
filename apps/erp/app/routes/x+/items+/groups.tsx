@@ -54,11 +54,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     itemPostingGroups: itemPostingGroups.data ?? [],
     count: itemPostingGroups.count ?? 0,
     accounts: accounts.data ?? []
-  });
+  };
 }
 
 export default function ItemPostingGroupsRoute() {

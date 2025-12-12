@@ -46,10 +46,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     count: stepRecords.count ?? 0,
     stepRecords: stepRecords.data ?? []
-  });
+  };
 }
 
 export default function JobOperationStepRecordsRoute() {

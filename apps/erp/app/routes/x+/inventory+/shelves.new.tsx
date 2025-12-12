@@ -5,7 +5,7 @@ import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
 import type { ClientActionFunctionArgs } from "react-router";
-import { useNavigate, useSearchParams } from "react-router";
+import { data, useNavigate, useSearchParams } from "react-router";
 import { useUser } from "~/hooks";
 import { ShelfForm, shelfValidator, upsertShelf } from "~/modules/inventory";
 import { setCustomFields } from "~/utils/form";
@@ -45,7 +45,7 @@ export async function action({ request }: ActionFunctionArgs) {
     createdBy: userId
   });
   if (createShelf.error) {
-    return json(
+    return data(
       {},
       await flash(request, error(createShelf.error, "Failed to insert shelf"))
     );

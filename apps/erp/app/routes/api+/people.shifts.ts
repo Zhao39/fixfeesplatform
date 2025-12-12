@@ -9,5 +9,5 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const location = url.searchParams.get("location");
 
-  return json(await getShiftsList(authorized.client, location));
+  return await getShiftsList(authorized.client, location);
 }

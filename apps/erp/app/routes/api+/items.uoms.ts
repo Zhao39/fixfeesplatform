@@ -8,7 +8,7 @@ import { getCompanyId, uomsQuery } from "~/utils/react-query";
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client, companyId } = await requirePermissions(request, {});
 
-  return json(await getUnitOfMeasuresList(client, companyId));
+  return await getUnitOfMeasuresList(client, companyId);
 }
 
 export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {

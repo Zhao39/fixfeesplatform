@@ -5,7 +5,7 @@ import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
 import type { ClientActionFunctionArgs } from "react-router";
-import { useNavigate } from "react-router";
+import { data, useNavigate } from "react-router";
 import { procedureValidator } from "~/modules/production/production.models";
 import { upsertProcedure } from "~/modules/production/production.service";
 import ProcedureForm from "~/modules/production/ui/Procedures/ProcedureForm";
@@ -40,7 +40,7 @@ export async function action({ request }: ActionFunctionArgs) {
     contentJSON = content ? JSON.parse(content) : {};
     // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   } catch (e) {
-    return json(
+    return data(
       {},
       await flash(
         request,
@@ -60,7 +60,7 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 
   if (insertProcedure.error || !insertProcedure.data?.id) {
-    return json(
+    return data(
       {},
       await flash(
         request,

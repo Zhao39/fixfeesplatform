@@ -27,7 +27,7 @@ import {
 import type { LoaderFunctionArgs } from "@vercel/remix";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { LuSettings2, LuTriangleAlert } from "react-icons/lu";
-import { json, redirect, useLoaderData } from "react-router";
+import { data, json, redirect, useLoaderData } from "react-router";
 
 import type { ColumnFilter } from "~/components/Filter";
 import { ActiveFilters, Filter, useFilters } from "~/components/Filter";
@@ -213,7 +213,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     new Set(filteredOperations.flatMap((op) => op.tags || []))
   ).sort();
 
-  return json(
+  return data(
     {
       columns: filteredWorkCenters
         .map((wc) => ({

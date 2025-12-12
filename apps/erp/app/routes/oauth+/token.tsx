@@ -1,6 +1,7 @@
 import { getCarbonServiceRole } from "@carbon/auth";
 import { validator } from "@carbon/form";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
+import { data } from "react-router";
 import { z } from "zod/v3";
 
 const oauthTokenValidator = z.object({
@@ -19,7 +20,7 @@ export async function action({ request }: ActionFunctionArgs) {
   );
 
   if (validation.error) {
-    return json({ data: null, error: "Invalid request" }, { status: 400 });
+    return data({ data: null, error: "Invalid request" }, { status: 400 });
   }
 
   const {
@@ -36,7 +37,7 @@ export async function action({ request }: ActionFunctionArgs) {
   ]);
 
   if (!oauthClient.data || oauthClient.data.clientSecret !== client_secret) {
-    return json(
+    return data(
       {
         data: null,
         error: "Invalid client credentials"
@@ -47,7 +48,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   if (grant_type === "authorization_code") {
     if (!code || !redirect_uri) {
-      return json(
+      return data(
         {
           data: null,
           error: "Invalid request"
@@ -66,7 +67,7 @@ export async function action({ request }: ActionFunctionArgs) {
       oauthCode.data.clientId !== client_id ||
       oauthCode.data.redirectUri !== redirect_uri
     ) {
-      return json(
+      return data(
         {
           data: null,
           error: "Invalid authorization code"
@@ -94,7 +95,7 @@ export async function action({ request }: ActionFunctionArgs) {
     ]);
 
     if (tokenResult.error) {
-      return json(
+      return data(
         { data: null, error: "Failed to create token" },
         { status: 500 }
       );
@@ -103,7 +104,7 @@ export async function action({ request }: ActionFunctionArgs) {
     // Delete the used authorization code
     await client.from("oauthCode").delete().eq("code", code);
 
-    return json({
+    return {
       data: {
         access_token: accessToken,
         token_type: "Bearer",
@@ -111,10 +112,10 @@ export async function action({ request }: ActionFunctionArgs) {
         refresh_token: refreshToken
       },
       error: null
-    });
+    };
   } else if (grant_type === "refresh_token") {
     if (!refresh_token) {
-      return json(
+      return data(
         {
           data: null,
           error: "Invalid request"
@@ -133,7 +134,7 @@ export async function action({ request }: ActionFunctionArgs) {
     ]);
 
     if (!tokenResult.data || tokenResult.data.clientId !== client_id) {
-      return json(
+      return data(
         { data: null, error: "Invalid refresh token" },
         { status: 400 }
       );
@@ -153,24 +154,23 @@ export async function action({ request }: ActionFunctionArgs) {
     ]);
 
     if (updateResult.error) {
-      return json(
+      return data(
         { error: "server_error", error_description: "Failed to refresh token" },
         { status: 500 }
       );
     }
 
-    return json({
+    return {
       data: {
         access_token: newAccessToken,
         token_type: "Bearer",
         expires_in: 3600
       },
       error: null
-    });
+    };
   }
 
-  // This should never happen due to the validator, but TypeScript doesn't know that
-  return json(
+  return data(
     {
       data: null,
       error: "Unsupported grant type"

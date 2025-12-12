@@ -106,12 +106,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     projections: projections.data ?? [],
     count: projections.data?.length ?? 0,
     locationId,
     periods: periods.data ?? []
-  });
+  };
 }
 
 export default function DemandProjectionsRoute() {

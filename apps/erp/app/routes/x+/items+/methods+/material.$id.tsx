@@ -2,7 +2,8 @@ import { assertIsPost, error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
+import { data } from "react-router";
 import { methodMaterialValidator, upsertMethodMaterial } from "~/modules/items";
 import { setCustomFields } from "~/utils/form";
 
@@ -34,7 +35,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     customFields: setCustomFields(formData)
   });
   if (updateMethodMaterial.error) {
-    return json(
+    return data(
       {
         id: null
       },
@@ -47,7 +48,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const methodMaterialId = updateMethodMaterial.data?.id;
   if (!methodMaterialId) {
-    return json(
+    return data(
       {
         id: null
       },
@@ -58,9 +59,9 @@ export async function action({ request, params }: ActionFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     id: methodMaterialId,
     success: true,
     message: "Material updated"
-  });
+  };
 }

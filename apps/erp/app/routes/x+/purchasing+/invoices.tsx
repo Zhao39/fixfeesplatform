@@ -52,10 +52,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     count: purchaseInvoices.count ?? 0,
     purchaseInvoices: purchaseInvoices.data ?? []
-  });
+  };
 }
 
 export default function PurchaseInvoicesSearchRoute() {

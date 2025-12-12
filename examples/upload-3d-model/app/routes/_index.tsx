@@ -7,7 +7,7 @@ import {
   toast,
   TooltipProvider,
 } from "@carbon/react";
-import { useFetcher } from "react-router";
+import { useFetcher, data } from "react-router";
 import { json } from "@vercel/remix";
 import { useEffect, useState } from "react";
 
@@ -22,16 +22,16 @@ export async function action({ request }: ActionFunctionArgs) {
 
   if (!file || !(file instanceof File)) {
     console.warn("No valid file provided in request");
-    return json({ error: "No file provided", data: null }, { status: 400 });
+    return data({ error: "No file provided", data: null }, { status: 400 });
   }
 
   const upload = await carbon.uploadModel(file);
 
   if (upload.error) {
-    return json({ error: upload.error.message, data: null }, { status: 500 });
+    return data({ error: upload.error.message, data: null }, { status: 500 });
   }
 
-  return json(upload);
+  return upload;
 }
 
 export default function Route() {

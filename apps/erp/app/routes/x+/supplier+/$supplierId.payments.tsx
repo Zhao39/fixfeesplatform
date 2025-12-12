@@ -34,9 +34,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     supplierPayment: supplierPayment.data
-  });
+  };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

@@ -56,12 +56,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     count: documents.count ?? 0,
     documents: (documents.data ?? []) as Document[],
     labels: labels.data ?? [],
     extensions: extensions.data?.map(({ extension }) => extension) ?? []
-  });
+  };
 }
 
 export default function DocumentsAllRoute() {

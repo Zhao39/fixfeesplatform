@@ -10,11 +10,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const table = url.searchParams.get("table");
 
   if (!table) {
-    return json({
+    return {
       data: [],
       error: null
-    });
+    };
   }
 
-  return json(await getSequencesList(client, table, companyId));
+  return await getSequencesList(client, table, companyId);
 }

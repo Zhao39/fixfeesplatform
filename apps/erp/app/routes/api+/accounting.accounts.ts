@@ -18,5 +18,5 @@ export async function loader({ request }: LoaderFunctionArgs) {
     classes
   });
 
-  return json(result);
+  return result;
 }

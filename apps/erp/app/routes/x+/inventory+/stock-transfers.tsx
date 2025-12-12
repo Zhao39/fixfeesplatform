@@ -79,11 +79,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     stockTransfers: stockTransfers.data ?? [],
     count: stockTransfers.count ?? 0,
     locationId
-  });
+  };
 }
 
 export default function StockTransfersRoute() {

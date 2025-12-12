@@ -8,7 +8,7 @@ import { getCompanyId, shippingMethodsQuery } from "~/utils/react-query";
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client, companyId } = await requirePermissions(request, {});
 
-  return json(await getShippingMethodsList(client, companyId));
+  return await getShippingMethodsList(client, companyId);
 }
 
 export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {

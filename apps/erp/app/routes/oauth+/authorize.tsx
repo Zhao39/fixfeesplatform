@@ -2,7 +2,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { validator } from "@carbon/form";
 import { Button } from "@carbon/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
-import { Form, json, redirect, useLoaderData } from "react-router";
+import { data, Form, json, redirect, useLoaderData } from "react-router";
 import { z } from "zod/v3";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -44,7 +44,7 @@ export async function action({ request }: ActionFunctionArgs) {
   );
 
   if (validation.error) {
-    return json({ error: "Invalid request" }, { status: 400 });
+    return data({ error: "Invalid request" }, { status: 400 });
   }
 
   const { client_id, redirect_uri, state } = validation.data;
@@ -58,7 +58,7 @@ export async function action({ request }: ActionFunctionArgs) {
     !oauthClient.data ||
     !oauthClient.data.redirectUris.includes(redirect_uri)
   ) {
-    return json({ error: "Invalid client or redirect URI" }, { status: 400 });
+    return data({ error: "Invalid client or redirect URI" }, { status: 400 });
   }
 
   // Generate and store authorization code
@@ -78,7 +78,7 @@ export async function action({ request }: ActionFunctionArgs) {
   ]);
 
   if (codeResult.error) {
-    return json(
+    return data(
       { error: "Failed to create authorization code" },
       { status: 500 }
     );

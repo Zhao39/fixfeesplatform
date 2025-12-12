@@ -4,7 +4,7 @@ import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-import { useLoaderData } from "react-router";
+import { data, useLoaderData } from "react-router";
 import {
   getSequence,
   SequenceForm,
@@ -30,9 +30,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     sequence: sequence?.data ?? null
-  });
+  };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -57,7 +57,7 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 
   if (update.error) {
-    return json(
+    return data(
       {},
       await flash(request, error(update.error, "Failed to update sequence"))
     );

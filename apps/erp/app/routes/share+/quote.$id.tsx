@@ -221,11 +221,11 @@ const translations = {
 export async function loader({ params, request }: LoaderFunctionArgs) {
   const { id } = params;
   if (!id) {
-    return json({
+    return {
       state: QuoteState.NotFound,
       data: null,
       strings: translations.en
-    });
+    };
   }
   const locale = (request.headers.get("Accept-Language") || "en-US").substring(
     0,
@@ -238,11 +238,11 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   const quote = await getQuoteByExternalId(serviceRole, id);
 
   if (quote.error) {
-    return json({
+    return {
       state: QuoteState.NotFound,
       data: null,
       strings
-    });
+    };
   }
 
   if (
@@ -250,11 +250,11 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     new Date(quote.data.expirationDate) < new Date() &&
     quote.data.status === "Sent"
   ) {
-    return json({
+    return {
       state: QuoteState.Expired,
       data: null,
       strings
-    });
+    };
   }
 
   const [
@@ -327,7 +327,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       return acc;
     }, {}) ?? {};
 
-  return json({
+  return {
     state: QuoteState.Valid,
     data: {
       quote: quote.data,
@@ -352,7 +352,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       salesOrderLines: salesOrderLines?.data ?? null
     },
     strings
-  });
+  };
 }
 
 const Header = ({

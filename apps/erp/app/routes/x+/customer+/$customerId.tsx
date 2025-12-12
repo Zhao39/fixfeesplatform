@@ -46,12 +46,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     customer: customer.data,
     contacts: contacts.data ?? [],
     locations: locations.data ?? [],
     tags: tags.data ?? []
-  });
+  };
 }
 
 export default function CustomerRoute() {

@@ -3,7 +3,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validator } from "@carbon/form";
 import type { ActionFunctionArgs } from "@vercel/remix";
-import { json } from "react-router";
+import { data, json } from "react-router";
 import {
   trainingQuestionValidator,
   upsertTrainingQuestion
@@ -29,7 +29,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   );
 
   if (validation.error) {
-    return json(
+    return data(
       { success: false },
       await flash(request, error(validation.error, "Failed to update question"))
     );
@@ -59,7 +59,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   });
 
   if (update.error) {
-    return json(
+    return data(
       { success: false },
       await flash(
         request,
@@ -68,5 +68,5 @@ export async function action({ request, params }: ActionFunctionArgs) {
     );
   }
 
-  return json({ success: true });
+  return { success: true };
 }

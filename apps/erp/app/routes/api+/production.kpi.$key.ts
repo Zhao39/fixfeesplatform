@@ -46,17 +46,17 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     daysBetween < 1 ||
     daysBetween > 500
   )
-    return json({
+    return {
       data: [],
       previousPeriodData: []
-    });
+    };
 
   const kpi = KPIs.find((k) => k.key === key);
   if (!kpi)
-    return json({
+    return {
       data: [],
       previousPeriodData: []
-    });
+    };
 
   switch (kpi.key) {
     case "utilization": {
@@ -163,10 +163,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
           .sort((a, b) => b.value - a.value)
       );
 
-      return json({
+      return {
         data,
         previousPeriodData
-      });
+      };
     }
     case "estimatesVsActuals": {
       const jobs = await client
@@ -180,10 +180,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         .not("completedDate", "is", null);
 
       if (jobs.error || !jobs.data || jobs.data.length === 0) {
-        return json({
+        return {
           data: [],
           previousPeriodData: []
-        });
+        };
       }
 
       const [jobOperations, productionEvents] = await Promise.all([
@@ -259,10 +259,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         });
       }
 
-      return json({
+      return {
         data: data.sort((a, b) => a.difference - b.difference),
         previousPeriodData: []
-      });
+      };
     }
 
     case "completionTime": {
@@ -297,10 +297,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
           .sort((a, b) => b.value - a.value)
       );
 
-      return json({
+      return {
         data,
         previousPeriodData
-      });
+      };
     }
     default:
       throw new Error(`Invalid KPI key: ${key}`);

@@ -51,10 +51,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     materialDimensions: materialDimensions.data ?? [],
     count: materialDimensions.count ?? 0
-  });
+  };
 }
 
 export default function MaterialDimensionsRoute() {

@@ -4,7 +4,7 @@ import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
-import { useNavigate } from "react-router";
+import { data, useNavigate } from "react-router";
 import { ApiKeyForm, apiKeyValidator, upsertApiKey } from "~/modules/settings";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -37,7 +37,7 @@ export async function action({ request }: ActionFunctionArgs) {
     createdBy: userId
   });
   if (insertApiKey.error) {
-    return json(
+    return data(
       {},
       await flash(
         request,
@@ -48,13 +48,13 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const key = insertApiKey.data?.key;
   if (!key) {
-    return json(
+    return data(
       {},
       await flash(request, error(insertApiKey, "Failed to create API key"))
     );
   }
 
-  return json({ key }, { status: 201 });
+  return data({ key }, { status: 201 });
 }
 
 export default function NewApiKeyRoute() {

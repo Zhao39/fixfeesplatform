@@ -53,7 +53,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       ) || []
   };
 
-  return json({ group });
+  return { group };
 }
 
 export async function action({ request }: ActionFunctionArgs) {

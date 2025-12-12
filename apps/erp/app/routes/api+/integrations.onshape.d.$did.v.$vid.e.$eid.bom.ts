@@ -16,35 +16,35 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const { did } = params;
   if (!did) {
-    return json({
+    return {
       data: [],
       error: "Document ID is required"
-    });
+    };
   }
 
   const { vid } = params;
   if (!vid) {
-    return json({
+    return {
       data: [],
       error: "Version ID is required"
-    });
+    };
   }
 
   const { eid } = params;
   if (!eid) {
-    return json({
+    return {
       data: [],
       error: "Element ID is required"
-    });
+    };
   }
 
   const integration = await getIntegration(client, "onshape", companyId);
 
   if (integration.error || !integration.data) {
-    return json({
+    return {
       data: [],
       error: integration.error
-    });
+    };
   }
 
   const integrationMetadata = OnshapeConfig.schema.safeParse(
@@ -52,10 +52,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   );
 
   if (!integrationMetadata.success) {
-    return json({
+    return {
       data: [],
       error: integrationMetadata.error
-    });
+    };
   }
 
   const onshapeClient = new OnshapeClient({
@@ -185,23 +185,22 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         };
       });
 
-      // Return the transformed data instead of the raw response
-      return json({
+      return {
         data: {
           rows: flattenedDataWithMetadata
         },
         error: null
-      });
+      };
     }
-    return json({
+    return {
       data: [],
       error: "No BOM data found"
-    });
+    };
   } catch (error) {
     console.error(error);
-    return json({
+    return {
       data: [],
       error: error
-    });
+    };
   }
 }

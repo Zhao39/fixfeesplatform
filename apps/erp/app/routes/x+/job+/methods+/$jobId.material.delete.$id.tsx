@@ -1,7 +1,8 @@
 import { assertIsPost, error, getCarbonServiceRole } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
+import { data } from "react-router";
 import {
   deleteJobMaterial,
   recalculateJobOperationDependencies
@@ -24,7 +25,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const deleteMaterial = await deleteJobMaterial(client, id);
   if (deleteMaterial.error) {
-    return json(
+    return data(
       {
         id: null
       },
@@ -45,7 +46,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   );
 
   if (recalculateResult?.error) {
-    return json(
+    return data(
       {
         success: false,
         error: "Failed to recalculate job operation dependencies"
@@ -54,7 +55,5 @@ export async function action({ request, params }: ActionFunctionArgs) {
     );
   }
 
-  // TODO: if it is a make method -- we should get the tree from the jobMakeMethod with parentMaterialId = id, and delete everything that comes back
-
-  return json({});
+  return {};
 }

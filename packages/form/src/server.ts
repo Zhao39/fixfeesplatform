@@ -1,4 +1,4 @@
-import { json } from "react-router";
+import { data, json } from "react-router";
 import type { FORM_DEFAULTS_FIELD } from "./internal/constants";
 import { formDefaultValuesKey } from "./internal/constants";
 import type {
@@ -25,7 +25,7 @@ export function validationError(
   repopulateFields?: unknown,
   init?: ResponseInit
 ) {
-  return json<ValidationErrorResponseData>(
+  return data(
     {
       fieldErrors: error.fieldErrors,
       subaction: error.subaction,

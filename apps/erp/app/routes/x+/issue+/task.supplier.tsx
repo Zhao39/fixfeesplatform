@@ -1,7 +1,8 @@
 import { error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
+import { data } from "react-router";
 
 export async function action({ request, params }: ActionFunctionArgs) {
   const { client, userId } = await requirePermissions(request, {
@@ -14,21 +15,21 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const table = formData.get("table") as string;
 
   if (!id) {
-    return json(
+    return data(
       { success: false },
       await flash(request, error(null, "Task ID is required"))
     );
   }
 
   if (!table) {
-    return json(
+    return data(
       { success: false },
       await flash(request, error(null, "Table is required"))
     );
   }
 
   if (table !== "nonConformanceActionTask") {
-    return json(
+    return data(
       { success: false },
       await flash(request, error(null, "Invalid table"))
     );
@@ -45,7 +46,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     .maybeSingle();
 
   if (result.error) {
-    return json(
+    return data(
       { success: false },
       await flash(
         request,
@@ -55,11 +56,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
   }
 
   if (!result.data) {
-    return json(
+    return data(
       { success: false },
       await flash(request, error(null, "Task not found"))
     );
   }
 
-  return json({ success: true });
+  return { success: true };
 }

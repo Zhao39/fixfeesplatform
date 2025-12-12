@@ -47,10 +47,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     materialTypes: materialTypes.data ?? [],
     count: materialTypes.count ?? 0
-  });
+  };
 }
 
 export default function MaterialTypesRoute() {

@@ -1,8 +1,8 @@
-import { json, type ActionFunctionArgs } from "@vercel/remix";
-
 import { assertIsPost, error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
+import { data } from "react-router";
 import { updateMethodOperationStepOrder } from "~/modules/production";
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -16,14 +16,14 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const { operationId } = params;
   if (!operationId) {
-    return json(
+    return data(
       {},
       await flash(request, error(null, "Failed to receive an operation id"))
     );
   }
 
   if (!updateMap) {
-    return json(
+    return data(
       {},
       await flash(request, error(null, "Failed to receive a new sort order"))
     );
@@ -42,7 +42,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     updates
   );
   if (updateSortOrders.some((update) => update.error))
-    return json(
+    return data(
       {},
       await flash(
         request,
@@ -50,5 +50,5 @@ export async function action({ request, params }: ActionFunctionArgs) {
       )
     );
 
-  return json({ success: true });
+  return { success: true };
 }

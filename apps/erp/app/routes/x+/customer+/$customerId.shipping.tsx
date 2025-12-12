@@ -33,9 +33,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     customerShipping: customerShipping.data
-  });
+  };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

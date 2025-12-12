@@ -12,7 +12,7 @@ import {
 } from "@carbon/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-import { useLoaderData } from "react-router";
+import { data, useLoaderData } from "react-router";
 import {
   accountProfileValidator,
   getAccount,
@@ -40,7 +40,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ user: user.data });
+  return { user: user.data };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -66,7 +66,7 @@ export async function action({ request }: ActionFunctionArgs) {
       about
     });
     if (updateAccount.error)
-      return json(
+      return data(
         {},
         await flash(
           request,
@@ -74,7 +74,7 @@ export async function action({ request }: ActionFunctionArgs) {
         )
       );
 
-    return json({}, await flash(request, success("Updated profile")));
+    return data({}, await flash(request, success("Updated profile")));
   }
 
   if (formData.get("intent") === "photo") {

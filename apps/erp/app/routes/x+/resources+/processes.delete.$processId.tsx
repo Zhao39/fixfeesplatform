@@ -27,9 +27,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     process: process.data
-  });
+  };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

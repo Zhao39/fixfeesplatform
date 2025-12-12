@@ -1,6 +1,6 @@
 import { Input, Number, Select, ValidatedForm, validator } from "@carbon/form";
 import { Button, Heading, toast, TooltipProvider } from "@carbon/react";
-import { useFetcher } from "react-router";
+import { useFetcher, data } from "react-router";
 import type { ActionFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
 import { useEffect } from "react";
@@ -23,14 +23,11 @@ export async function action({ request }: ActionFunctionArgs) {
   );
 
   if (validation.error) {
-    return json(
-      {
-        success: false,
-        message: "Invalid form data",
-        data: null,
-      },
-      { status: 500 }
-    );
+    return data({
+      success: false,
+      message: "Invalid form data",
+      data: null,
+    }, { status: 500 });
   }
 
   const { email, material, height, width, length } = validation.data;
@@ -42,25 +39,19 @@ export async function action({ request }: ActionFunctionArgs) {
   ]); // Replace with actual email from form
 
   if (customer.error) {
-    return json(
-      {
-        success: false,
-        message: "Failed to get customer from email",
-        data: null,
-      },
-      { status: 500 }
-    );
+    return data({
+      success: false,
+      message: "Failed to get customer from email",
+      data: null,
+    }, { status: 500 });
   }
 
   if (sequence.error) {
-    return json(
-      {
-        success: false,
-        message: "Failed to get next sequence",
-        data: null,
-      },
-      { status: 500 }
-    );
+    return data({
+      success: false,
+      message: "Failed to get next sequence",
+      data: null,
+    }, { status: 500 });
   }
 
   const quoteId = sequence.data;
@@ -74,14 +65,11 @@ export async function action({ request }: ActionFunctionArgs) {
 
   if (quoteInsert.error || !quoteInsert.data) {
     console.error(quoteInsert.error);
-    return json(
-      {
-        success: false,
-        message: "Failed to create quote",
-        data: null,
-      },
-      { status: 500 }
-    );
+    return data({
+      success: false,
+      message: "Failed to create quote",
+      data: null,
+    }, { status: 500 });
   }
 
   const configuration = {
@@ -103,14 +91,11 @@ export async function action({ request }: ActionFunctionArgs) {
 
   if (quoteLineInsert.error || !quoteLineInsert.data) {
     console.error(quoteLineInsert.error);
-    return json(
-      {
-        success: false,
-        message: "Failed to create quote line",
-        data: null,
-      },
-      { status: 500 }
-    );
+    return data({
+      success: false,
+      message: "Failed to create quote line",
+      data: null,
+    }, { status: 500 });
   }
 
   const upsertMethod = await carbon.upsertQuoteLineMethod({
@@ -122,24 +107,21 @@ export async function action({ request }: ActionFunctionArgs) {
 
   if (upsertMethod.error) {
     console.error(upsertMethod.error);
-    return json(
-      {
-        success: false,
-        message: "Failed to create quote line method",
-        data: null,
-      },
-      { status: 500 }
-    );
+    return data({
+      success: false,
+      message: "Failed to create quote line method",
+      data: null,
+    }, { status: 500 });
   }
 
-  return json({
+  return {
     success: true,
     message: `Quote created: ${quoteInsert.data.quoteId}`,
     data: {
       quoteId: quoteInsert.data.quoteId,
       id: quoteInsert.data.id,
     },
-  });
+  };
 }
 
 export default function Route() {

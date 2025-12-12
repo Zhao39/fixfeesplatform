@@ -4,7 +4,7 @@ import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-import { useLoaderData, useNavigate } from "react-router";
+import { data, useLoaderData, useNavigate } from "react-router";
 import { customerPortalValidator } from "~/modules/sales";
 import CustomerPortalForm from "~/modules/sales/ui/CustomerPortals/CustomerPortalForm";
 import { getCustomerPortal, upsertExternalLink } from "~/modules/shared";
@@ -32,9 +32,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     customerPortal: customerPortal.data
-  });
+  };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -63,7 +63,7 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 
   if (updateCustomerPortal.error) {
-    return json(
+    return data(
       {},
       await flash(
         request,

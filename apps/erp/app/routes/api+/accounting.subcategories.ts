@@ -3,6 +3,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import type { LoaderFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
+import { data } from "react-router";
 import { getAccountSubcategoriesByCategory } from "~/modules/accounting";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -15,9 +16,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const accountCategoryId = searchParams.get("accountCategoryId") as string;
 
   if (!accountCategoryId || accountCategoryId === "undefined")
-    return json({
+    return {
       data: []
-    });
+    };
 
   const subcategories = await getAccountSubcategoriesByCategory(
     client,
@@ -25,7 +26,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     companyId
   );
   if (subcategories.error) {
-    return json(
+    return data(
       subcategories,
       await flash(
         request,
@@ -34,5 +35,5 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json(subcategories);
+  return subcategories;
 }

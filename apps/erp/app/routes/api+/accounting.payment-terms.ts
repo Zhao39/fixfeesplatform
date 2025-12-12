@@ -8,7 +8,7 @@ import { getCompanyId, paymentTermsQuery } from "~/utils/react-query";
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client, companyId } = await requirePermissions(request, {});
 
-  return json(await getPaymentTermsList(client, companyId));
+  return await getPaymentTermsList(client, companyId);
 }
 
 export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {

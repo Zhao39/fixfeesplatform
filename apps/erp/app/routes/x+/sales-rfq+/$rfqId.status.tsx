@@ -51,10 +51,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
       });
     } catch (err) {
       console.error("Failed to trigger notification", err);
-      return json({
+      return {
         success: false,
         message: "Failed to send notification"
-      });
+      };
     }
   }
 

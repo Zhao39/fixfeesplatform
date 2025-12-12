@@ -46,11 +46,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     count: tables.count ?? 0,
     tables: tables.data ?? [],
     dataTypes: dataTypes.data ?? []
-  });
+  };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -62,7 +62,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const value = formData.get("value");
 
   if (typeof value !== "string" || typeof table !== "string") {
-    return json({ error: { message: "Invalid table" }, data: null });
+    return { error: { message: "Invalid table" }, data: null };
   }
 
   const result = await client
@@ -75,7 +75,7 @@ export async function action({ request }: ActionFunctionArgs) {
     })
     .in(getIdField(table), ids as string[]);
 
-  return json(result);
+  return result;
 }
 
 function getIdField(table: string) {

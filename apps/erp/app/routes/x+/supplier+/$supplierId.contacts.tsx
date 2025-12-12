@@ -27,9 +27,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     contacts: contacts.data ?? []
-  });
+  };
 }
 
 export default function SupplierContactsRoute() {

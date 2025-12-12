@@ -1,6 +1,7 @@
 import { assertIsPost } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
+import { data } from "react-router";
 import {
   quoteLineAdditionalChargesValidator,
   upsertQuoteLineAdditionalCharges
@@ -22,7 +23,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     (formData.get("additionalCharges") ?? "{}") as string
   );
   if (!additionalCharges)
-    return json(
+    return data(
       {
         data: null,
         errors: { additionalCharges: "Additional charges are required" }
@@ -33,7 +34,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const parsedCharges =
     quoteLineAdditionalChargesValidator.safeParse(additionalCharges);
   if (parsedCharges.success === false) {
-    return json(
+    return data(
       { data: null, errors: parsedCharges.error.errors?.[0].message },
       { status: 400 }
     );
@@ -47,11 +48,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
   });
 
   if (error) {
-    return json(
+    return data(
       { data: null, errors: { form: error.message } },
       { status: 400 }
     );
   }
 
-  return json({ data: { id }, error: null });
+  return { data: { id }, error: null };
 }

@@ -41,13 +41,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     baseCurrency: baseCurrency.data,
     balanceSheetAccounts:
       accounts.data.filter((a) => a.incomeBalance === "Balance Sheet") ?? [],
     incomeStatementAccounts:
       accounts.data.filter((a) => a.incomeBalance === "Income Statement") ?? []
-  });
+  };
 }
 
 export default function AccountingRoute() {

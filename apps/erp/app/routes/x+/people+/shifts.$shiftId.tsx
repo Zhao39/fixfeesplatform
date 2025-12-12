@@ -27,9 +27,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     shift: shift.data
-  });
+  };
 }
 
 export async function action({ request }: ActionFunctionArgs) {

@@ -5,7 +5,7 @@ import { validationError, validator } from "@carbon/form";
 import { ScrollArea } from "@carbon/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-import { useLoaderData, useNavigate } from "react-router";
+import { data, useLoaderData, useNavigate } from "react-router";
 import { issueWorkflowValidator } from "~/modules/quality/quality.models";
 import {
   getRequiredActionsList,
@@ -21,9 +21,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const requiredActions = await getRequiredActionsList(client, companyId);
 
-  return json({
+  return {
     requiredActions: requiredActions.data ?? []
-  });
+  };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -48,7 +48,7 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 
   if (insertIssueWorkflow.error || !insertIssueWorkflow.data?.id) {
-    return json(
+    return data(
       {},
       await flash(
         request,

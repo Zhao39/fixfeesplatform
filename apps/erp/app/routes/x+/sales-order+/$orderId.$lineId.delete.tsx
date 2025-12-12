@@ -27,7 +27,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ salesOrderLine: salesOrderLine.data });
+  return { salesOrderLine: salesOrderLine.data };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

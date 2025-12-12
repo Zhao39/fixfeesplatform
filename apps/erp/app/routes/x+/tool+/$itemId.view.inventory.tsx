@@ -130,13 +130,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     toolInventory: toolInventory.data,
     itemShelfQuantities: itemShelfQuantities.data,
     quantities: quantities.data,
     itemId,
     locationId
-  });
+  };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

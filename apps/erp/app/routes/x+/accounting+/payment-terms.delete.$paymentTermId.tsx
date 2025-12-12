@@ -28,7 +28,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ paymentTerm: paymentTerm.data });
+  return { paymentTerm: paymentTerm.data };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

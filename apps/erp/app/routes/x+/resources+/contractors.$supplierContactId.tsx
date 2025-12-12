@@ -31,9 +31,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     contractor: contractor.data
-  });
+  };
 }
 
 export async function action({ request }: ActionFunctionArgs) {

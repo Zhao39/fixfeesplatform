@@ -31,10 +31,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
   );
 
   if (!validation.success) {
-    return json({
+    return {
       success: false,
       message: "Invalid form data"
-    });
+    };
   }
 
   // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
@@ -51,10 +51,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
   );
 
   if (createWarehouseTransferLine.error) {
-    return json({
+    return {
       success: false,
       message: "Failed to create warehouse transfer line"
-    });
+    };
   }
 
   return redirect(path.to.warehouseTransfer(transferId));

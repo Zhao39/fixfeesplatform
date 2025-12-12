@@ -46,10 +46,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     count: rfqs.count ?? 0,
     rfqs: rfqs.data ?? []
-  });
+  };
 }
 
 export default function RFQsRoute() {

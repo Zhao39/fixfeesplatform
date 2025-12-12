@@ -21,5 +21,5 @@ export async function action({ request }: ActionFunctionArgs) {
     userId
   });
 
-  return json(result);
+  return result;
 }

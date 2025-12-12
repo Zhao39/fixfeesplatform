@@ -30,9 +30,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     subcategory: subcategory.data
-  });
+  };
 }
 
 export default function EditAccountSubcategoryRoute() {

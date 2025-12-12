@@ -19,13 +19,13 @@ export function links() {
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  return json({
+  return {
     env: {},
-  });
+  };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  return json({});
+  return {};
 }
 
 function Document({

@@ -3,6 +3,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { onShapeDataValidator } from "@carbon/ee/onshape";
 import { FunctionRegion } from "@supabase/supabase-js";
 import { type ActionFunctionArgs, json } from "@vercel/remix";
+import { data } from "react-router";
 
 export async function action({ request }: ActionFunctionArgs) {
   const { client, companyId, userId } = await requirePermissions(request, {
@@ -18,7 +19,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const rows = formData.get("rows");
 
   if (!makeMethodId || !rows) {
-    return json(
+    return data(
       { success: false, message: "Missing required fields" },
       { status: 400 }
     );
@@ -31,7 +32,7 @@ export async function action({ request }: ActionFunctionArgs) {
     .single();
 
   if (record.data?.companyId !== companyId) {
-    return json(
+    return data(
       { success: false, message: "Invalid make method id" },
       { status: 400 }
     );
@@ -60,14 +61,14 @@ export async function action({ request }: ActionFunctionArgs) {
     ]);
 
     if (sync.error) {
-      return json(
+      return data(
         { success: false, message: "Failed to sync onshape data" },
         { status: 400 }
       );
     }
 
     if (item.error) {
-      return json(
+      return data(
         { success: false, message: "Failed to get item" },
         { status: 400 }
       );
@@ -93,11 +94,11 @@ export async function action({ request }: ActionFunctionArgs) {
     // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   } catch (error) {
     console.error("Failed to sync onshape data");
-    return json(
+    return data(
       { success: false, message: "Invalid rows data" },
       { status: 400 }
     );
   }
 
-  return json({ success: true, message: "Synced successfully" });
+  return { success: true, message: "Synced successfully" };
 }

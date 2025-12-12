@@ -33,7 +33,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ attributeCategory: attributeCategory.data });
+  return { attributeCategory: attributeCategory.data };
 }
 
 export async function action({ request }: ActionFunctionArgs) {

@@ -1,5 +1,5 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
 
 export async function action({ request }: ActionFunctionArgs) {
   const { client, userId } = await requirePermissions(request, {
@@ -12,23 +12,21 @@ export async function action({ request }: ActionFunctionArgs) {
   const value = formData.get("value");
 
   if (typeof field !== "string" || typeof value !== "string") {
-    return json({ error: { message: "Invalid form data" }, data: null });
+    return { error: { message: "Invalid form data" }, data: null };
   }
 
   switch (field) {
     case "name":
-      return json(
-        await client
-          .from("nonConformanceWorkflow")
-          .update({
-            [field]: value,
-            updatedBy: userId,
-            updatedAt: new Date().toISOString()
-          })
-          .in("id", ids as string[])
-      );
+      return await client
+        .from("nonConformanceWorkflow")
+        .update({
+          [field]: value,
+          updatedBy: userId,
+          updatedAt: new Date().toISOString()
+        })
+        .in("id", ids as string[]);
 
     default:
-      return json({ error: { message: "Invalid field" }, data: null });
+      return { error: { message: "Invalid field" }, data: null };
   }
 }

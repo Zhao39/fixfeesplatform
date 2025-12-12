@@ -23,7 +23,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const resizeSettings = await getResizableGanttSettings(request);
 
-  return json({
+  return {
     trace: {
       events: [
         {
@@ -300,7 +300,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       rootStartedAt: new Date()
     },
     resizeSettings
-  });
+  };
 }
 
 function getSpanId(location: Location<any>): string | undefined {

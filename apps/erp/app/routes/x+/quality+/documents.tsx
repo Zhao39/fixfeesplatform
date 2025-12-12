@@ -38,11 +38,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     getTagsList(client, companyId, "qualityDocument")
   ]);
 
-  return json({
+  return {
     qualityDocuments: qualityDocuments.data ?? [],
     count: qualityDocuments.count ?? 0,
     tags: tags.data ?? []
-  });
+  };
 }
 
 export default function QualityDocumentsRoute() {

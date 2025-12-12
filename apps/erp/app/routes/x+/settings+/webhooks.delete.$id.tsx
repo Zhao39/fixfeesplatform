@@ -24,9 +24,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     webhook: webhook.data
-  });
+  };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

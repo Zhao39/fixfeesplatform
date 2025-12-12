@@ -8,7 +8,7 @@ import { docsQuery } from "~/utils/react-query";
 export async function loader({ request }: LoaderFunctionArgs) {
   await requirePermissions(request, {});
 
-  return json(swaggerDocsSchema);
+  return swaggerDocsSchema;
 }
 
 export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {

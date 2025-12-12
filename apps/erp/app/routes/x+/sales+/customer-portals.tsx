@@ -26,7 +26,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const { limit, offset, sorts, filters } =
     getGenericQueryFilters(searchParams);
 
-  return json({
+  return {
     appUrl: getAppUrl(),
     ...(await getCustomerPortals(client, companyId, {
       search,
@@ -35,7 +35,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       sorts,
       filters
     }))
-  });
+  };
 }
 
 export default function CustomerPortalsRoute() {

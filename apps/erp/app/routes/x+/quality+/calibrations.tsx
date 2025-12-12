@@ -43,12 +43,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
       getCompanySettings(client, companyId)
     ]);
 
-  return json({
+  return {
     gaugeCalibrationRecords: gaugeCalibrationRecords.data ?? [],
     count: gaugeCalibrationRecords.count ?? 0,
     gaugeTypes: gaugeTypes.data ?? [],
     useMetric: companySettings.data?.useMetric ?? false
-  });
+  };
 }
 
 export default function GaugesRoute() {

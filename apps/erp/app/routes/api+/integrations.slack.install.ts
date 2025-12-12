@@ -10,5 +10,5 @@ export async function loader({ request }: LoaderFunctionArgs) {
     userId
   });
 
-  return json({ url });
+  return { url };
 }

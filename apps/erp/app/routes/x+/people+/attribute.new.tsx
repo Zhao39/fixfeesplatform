@@ -4,6 +4,7 @@ import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
+import { data } from "react-router";
 import { attributeValidator, insertAttribute } from "~/modules/people";
 import { path } from "~/utils/path";
 
@@ -38,7 +39,7 @@ export async function action({ request }: ActionFunctionArgs) {
     createdBy: userId
   });
   if (createAttribute.error) {
-    return json(
+    return data(
       {},
       await flash(
         request,

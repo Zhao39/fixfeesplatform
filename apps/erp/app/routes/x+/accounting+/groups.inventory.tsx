@@ -51,12 +51,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     data: inventoryGroups.data ?? [],
     itemPostingGroups: itemPostingGroups.data ?? [],
     locations: locations.data ?? [],
     count: inventoryGroups.count ?? 0
-  });
+  };
 }
 
 export default function InventoryPostingGroupsRoute() {

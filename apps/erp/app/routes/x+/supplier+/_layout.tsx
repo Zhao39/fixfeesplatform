@@ -33,11 +33,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     getShippingTermsList(client, companyId)
   ]);
 
-  return json({
+  return {
     supplierStatuses: supplierStatuses.data ?? [],
     supplierTypes: supplierTypes.data ?? []
     // shippingTerms: shippingTerms.data ?? [],
-  });
+  };
 }
 
 export default function SupplierRoute() {

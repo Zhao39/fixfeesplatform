@@ -27,7 +27,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ supplierStatus: supplierStatus.data });
+  return { supplierStatus: supplierStatus.data };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

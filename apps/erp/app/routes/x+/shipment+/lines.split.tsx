@@ -2,7 +2,7 @@ import { assertIsPost, getCarbonServiceRole } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { validator } from "@carbon/form";
 import { FunctionRegion } from "@supabase/supabase-js";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
 import { splitValidator } from "~/modules/inventory";
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -15,9 +15,9 @@ export async function action({ request }: ActionFunctionArgs) {
   const validation = await validator(splitValidator).validate(formData);
 
   if (validation.error) {
-    return json({
+    return {
       success: false
-    });
+    };
   }
 
   const { documentId, documentLineId, quantity, locationId } = validation.data;
@@ -29,15 +29,15 @@ export async function action({ request }: ActionFunctionArgs) {
     .single();
 
   if (shipmentLine.error) {
-    return json({
+    return {
       success: false
-    });
+    };
   }
 
   if (shipmentLine.data.companyId !== companyId) {
-    return json({
+    return {
       success: false
-    });
+    };
   }
 
   const serviceRole = getCarbonServiceRole();
@@ -58,10 +58,10 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 
   if (salesOrderShipment.error) {
-    return json({
+    return {
       success: false
-    });
+    };
   }
 
-  return json({ success: true });
+  return { success: true };
 }

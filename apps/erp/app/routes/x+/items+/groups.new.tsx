@@ -4,7 +4,7 @@ import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-import { useNavigate } from "react-router";
+import { data, useNavigate } from "react-router";
 import {
   itemPostingGroupValidator,
   upsertItemPostingGroup
@@ -48,7 +48,7 @@ export async function action({ request }: ActionFunctionArgs) {
     customFields: setCustomFields(formData)
   });
   if (insertItemPostingGroup.error) {
-    return json(
+    return data(
       {},
       await flash(
         request,
@@ -59,7 +59,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const itemPostingGroupId = insertItemPostingGroup.data?.id;
   if (!itemPostingGroupId) {
-    return json(
+    return data(
       {},
       await flash(
         request,

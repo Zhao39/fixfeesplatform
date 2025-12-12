@@ -5,7 +5,8 @@ import {
   linkActionToLinearIssue,
   unlinkActionFromLinearIssue
 } from "@carbon/ee/linear";
-import { type ActionFunction, type LoaderFunction, json } from "@vercel/remix";
+import { type ActionFunction, json, type LoaderFunction } from "@vercel/remix";
+import { data } from "react-router";
 import { getIssueAction } from "~/modules/quality/quality.service";
 
 const linear = new LinearClient();
@@ -56,7 +57,7 @@ export const action: ActionFunction = async ({ request }) => {
         });
 
         if (!linked || linked.data?.length === 0) {
-          return json({ success: false, message: "Failed to link issue" });
+          return { success: false, message: "Failed to link issue" };
         }
 
         const nonConformanceId = linked.data?.[0].nonConformanceId;
@@ -71,7 +72,7 @@ export const action: ActionFunction = async ({ request }) => {
           }`
         });
 
-        return json({ success: true, message: "Linked successfully" });
+        return { success: true, message: "Linked successfully" };
       }
 
       case "DELETE": {
@@ -93,15 +94,15 @@ export const action: ActionFunction = async ({ request }) => {
         });
 
         if (unlinked.error) {
-          return json({ success: false, message: "Failed to unlink issue" });
+          return { success: false, message: "Failed to unlink issue" };
         }
 
-        return json({ success: true, message: "Unlinked successfully" });
+        return { success: true, message: "Unlinked successfully" };
       }
     }
   } catch (error) {
     console.error("Linear issue link action error:", error);
-    return json(
+    return data(
       { success: false, message: `Failed to process request` },
       { status: 400 }
     );
@@ -116,5 +117,5 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   const issues = await linear.listIssues(companyId, query);
 
-  return json({ issues });
+  return { issues };
 };

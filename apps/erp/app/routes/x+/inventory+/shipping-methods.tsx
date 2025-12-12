@@ -46,10 +46,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     shippingMethods: shippingMethods.data ?? [],
     count: shippingMethods.count ?? 0
-  });
+  };
 }
 
 export default function ShippingMethodsRoute() {

@@ -3,6 +3,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { getLocalTimeZone, startOfWeek, today } from "@internationalized/date";
 import { json, type LoaderFunctionArgs } from "@vercel/remix";
+import { data } from "react-router";
 import {
   getItemDemand,
   getItemQuantities,
@@ -45,7 +46,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   });
 
   if (periods.error) {
-    return json(
+    return data(
       defaultResponse,
       await flash(request, error(periods.error, "Failed to load periods"))
     );
@@ -80,13 +81,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   ]);
 
   if (demand.actuals.length === 0 && demand.forecasts.length === 0) {
-    return json(
+    return data(
       defaultResponse,
       await flash(request, error(null, "Failed to load demand"))
     );
   }
 
-  return json({
+  return {
     demand: demand.actuals,
     demandForecast: demand.forecasts,
     supply: [
@@ -102,5 +103,5 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     openJobMaterials: openJobMaterials.data ?? [],
     openProductionOrders: openProductionOrders.data ?? [],
     openPurchaseOrderLines: openPurchaseOrderLines.data ?? []
-  });
+  };
 }

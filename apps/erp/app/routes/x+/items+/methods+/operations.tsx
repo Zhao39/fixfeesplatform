@@ -46,10 +46,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     count: operations.count ?? 0,
     operations: operations.data ?? []
-  });
+  };
 }
 
 export default function MethodOperationsRoute() {

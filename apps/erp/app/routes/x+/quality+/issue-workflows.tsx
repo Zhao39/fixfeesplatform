@@ -34,10 +34,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     filters
   });
 
-  return json({
+  return {
     procedures: procedures.data ?? [],
     count: procedures.count ?? 0
-  });
+  };
 }
 
 export default function IssueWorkflowsRoute() {

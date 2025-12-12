@@ -30,7 +30,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ purchaseInvoiceLine: purchaseInvoiceLine.data });
+  return { purchaseInvoiceLine: purchaseInvoiceLine.data };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

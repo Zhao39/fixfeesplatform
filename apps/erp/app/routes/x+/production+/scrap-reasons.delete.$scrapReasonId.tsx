@@ -27,7 +27,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ scrapReason: scrapReason.data });
+  return { scrapReason: scrapReason.data };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

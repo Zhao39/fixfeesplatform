@@ -36,7 +36,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ settings: settings.data });
+  return { settings: settings.data };
 }
 
 export async function action({ request }: ActionFunctionArgs) {

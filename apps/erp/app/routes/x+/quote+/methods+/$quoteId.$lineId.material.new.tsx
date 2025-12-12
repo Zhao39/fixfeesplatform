@@ -2,7 +2,8 @@ import { assertIsPost, error, getCarbonServiceRole } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
+import { data } from "react-router";
 import {
   quoteMaterialValidator,
   upsertQuoteMaterial,
@@ -41,7 +42,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     customFields: setCustomFields(formData)
   });
   if (insertQuoteMaterial.error) {
-    return json(
+    return data(
       {
         id: null
       },
@@ -54,7 +55,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const quoteMaterialId = insertQuoteMaterial.data?.id;
   if (!quoteMaterialId) {
-    return json(
+    return data(
       {
         id: null
       },
@@ -72,7 +73,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       .eq("id", quoteMaterialId)
       .single();
     if (materialMakeMethod.error) {
-      return json(
+      return data(
         {
           id: null
         },
@@ -90,7 +91,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     });
 
     if (makeMethod.error) {
-      return json(
+      return data(
         {
           id: quoteMaterialId
         },
@@ -102,9 +103,9 @@ export async function action({ request, params }: ActionFunctionArgs) {
     }
   }
 
-  return json({
+  return {
     id: quoteMaterialId,
     success: true,
     message: "Material created"
-  });
+  };
 }

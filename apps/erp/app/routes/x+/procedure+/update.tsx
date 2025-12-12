@@ -14,7 +14,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const value = formData.get("value");
 
   if (typeof field !== "string" || typeof value !== "string") {
-    return json({ error: { message: "Invalid form data" }, data: null });
+    return { error: { message: "Invalid form data" }, data: null };
   }
 
   switch (field) {
@@ -22,30 +22,26 @@ export async function action({ request }: ActionFunctionArgs) {
     case "name":
     case "status":
     case "processId":
-      return json(
-        await client
-          .from("procedure")
-          .update({
-            [field]: value,
-            updatedBy: userId,
-            updatedAt: new Date().toISOString()
-          })
-          .in("id", ids as string[])
-      );
+      return await client
+        .from("procedure")
+        .update({
+          [field]: value,
+          updatedBy: userId,
+          updatedAt: new Date().toISOString()
+        })
+        .in("id", ids as string[]);
     case "tags":
-      return json(
-        await client
-          .from("procedure")
-          .update({
-            [field]: formData.getAll("value") as string[],
-            updatedBy: userId,
-            updatedAt: new Date().toISOString()
-          })
-          .in("id", ids as string[])
-      );
+      return await client
+        .from("procedure")
+        .update({
+          [field]: formData.getAll("value") as string[],
+          updatedBy: userId,
+          updatedAt: new Date().toISOString()
+        })
+        .in("id", ids as string[]);
 
     default:
-      return json({ error: { message: "Invalid field" }, data: null });
+      return { error: { message: "Invalid field" }, data: null };
   }
 }
 

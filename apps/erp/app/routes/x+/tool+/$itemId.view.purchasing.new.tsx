@@ -24,10 +24,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const validation = await validator(supplierPartValidator).validate(formData);
 
   if (validation.error) {
-    return json({
+    return {
       success: false,
       message: "Invalid form data"
-    });
+    };
   }
 
   // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
@@ -41,16 +41,16 @@ export async function action({ request, params }: ActionFunctionArgs) {
   });
 
   if (createToolSupplier.error) {
-    return json({
+    return {
       success: false,
       message: "Failed to create tool supplier"
-    });
+    };
   }
 
-  return json({
+  return {
     success: true,
     message: "Tool supplier created"
-  });
+  };
 }
 
 export default function NewToolSupplierRoute() {

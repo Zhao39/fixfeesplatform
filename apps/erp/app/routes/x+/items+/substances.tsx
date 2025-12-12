@@ -45,10 +45,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     materialSubstances: materialSubstances.data ?? [],
     count: materialSubstances.count ?? 0
-  });
+  };
 }
 
 export default function MaterialSubstancesRoute() {

@@ -3,6 +3,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import type { ActionFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
+import { data } from "react-router";
 import { deleteTrainingQuestion } from "~/modules/resources";
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -21,7 +22,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   );
 
   if (deleteQuestion.error) {
-    return json(
+    return data(
       {
         success: false
       },
@@ -32,7 +33,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     );
   }
 
-  return json(
+  return data(
     {
       success: true
     },

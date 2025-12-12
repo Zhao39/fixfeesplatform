@@ -19,7 +19,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     throw new Error("Course ID is required");
   }
 
-  return json({});
+  return {};
 };
 
 export default function CourseRoute() {

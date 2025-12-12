@@ -25,9 +25,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     holiday: holiday.data
-  });
+  };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

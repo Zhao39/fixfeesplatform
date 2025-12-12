@@ -4,7 +4,7 @@ import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-import { useNavigate, useSearchParams } from "react-router";
+import { data, useNavigate, useSearchParams } from "react-router";
 import { useUser } from "~/hooks";
 import { KanbanForm, kanbanValidator, upsertKanban } from "~/modules/inventory";
 import { getParams, path } from "~/utils/path";
@@ -41,7 +41,7 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 
   if (createKanban.error) {
-    return json(
+    return data(
       {},
       await flash(request, error(createKanban.error, "Failed to insert kanban"))
     );

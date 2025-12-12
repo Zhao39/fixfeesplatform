@@ -14,6 +14,7 @@ import type {
 import { json } from "@vercel/remix";
 import React, { useEffect } from "react";
 import {
+  data,
   isRouteErrorResponse,
   Links,
   Meta,
@@ -56,7 +57,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const sessionFlash = await getSessionFlash(request);
 
-  return json(
+  return data(
     {
       env: {
         CARBON_EDITION,
@@ -81,12 +82,12 @@ export async function action({ request }: ActionFunctionArgs) {
   );
 
   if (validation.error) {
-    return json(error(validation.error, "Invalid mode"), {
+    return data(error(validation.error, "Invalid mode"), {
       status: 400
     });
   }
 
-  return json(
+  return data(
     {},
     {
       headers: { "Set-Cookie": setMode(validation.data.mode) }

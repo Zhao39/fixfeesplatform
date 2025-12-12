@@ -84,10 +84,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     training: training.data,
     assignments: (assignmentStatus.data ?? []) as TrainingAssignmentStatusItem[]
-  });
+  };
 }
 
 function StatusBadge({ status }: { status: string }) {

@@ -17,20 +17,20 @@ export async function action({ request }: ActionFunctionArgs) {
   const validation = await validator(revisionValidator).validate(formData);
 
   if (validation.error) {
-    return json({ success: false, error: "Invalid form data" });
+    return { success: false, error: "Invalid form data" };
   }
 
   if (!validation.data.copyFromId) {
-    return json({
+    return {
       success: false,
       error: "Copy from ID is required for a new revision"
-    });
+    };
   }
 
   const currentItem = await getItem(client, validation.data.copyFromId);
 
   if (currentItem.error) {
-    return json({ success: false, error: "Failed to get current item" });
+    return { success: false, error: "Failed to get current item" };
   }
 
   const result = await createRevision(getCarbonServiceRole(), {
@@ -40,30 +40,30 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 
   if (result.error) {
-    return json({ success: false, error: "Failed to create revision" });
+    return { success: false, error: "Failed to create revision" };
   }
 
   switch (currentItem.data.type) {
     case "Part":
-      return json({ success: true, link: path.to.partDetails(result.data.id) });
+      return { success: true, link: path.to.partDetails(result.data.id) };
     case "Material":
-      return json({
+      return {
         success: true,
         link: path.to.materialDetails(result.data.id)
-      });
+      };
     case "Tool":
-      return json({ success: true, link: path.to.toolDetails(result.data.id) });
+      return { success: true, link: path.to.toolDetails(result.data.id) };
     case "Consumable":
-      return json({
+      return {
         success: true,
         link: path.to.consumableDetails(result.data.id)
-      });
+      };
     case "Service":
-      return json({
+      return {
         success: true,
         link: path.to.serviceDetails(result.data.id)
-      });
+      };
     default:
-      return json({ success: true, link: path.to.items });
+      return { success: true, link: path.to.items };
   }
 }

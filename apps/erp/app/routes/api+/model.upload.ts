@@ -2,7 +2,7 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
 import type { modelThumbnailTask } from "@carbon/jobs/trigger/model-thumbnail";
 import { tasks } from "@trigger.dev/sdk";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
 
 export async function action({ request }: ActionFunctionArgs) {
   const { client, companyId, userId } = await requirePermissions(request, {
@@ -77,7 +77,7 @@ export async function action({ request }: ActionFunctionArgs) {
     modelId
   });
 
-  return json({
+  return {
     success: true
-  });
+  };
 }

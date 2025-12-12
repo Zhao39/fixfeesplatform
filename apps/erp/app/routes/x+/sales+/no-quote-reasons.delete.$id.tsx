@@ -27,7 +27,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ noQuoteReason: noQuoteReason.data });
+  return { noQuoteReason: noQuoteReason.data };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

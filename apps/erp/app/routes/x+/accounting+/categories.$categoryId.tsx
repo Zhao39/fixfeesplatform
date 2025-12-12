@@ -38,7 +38,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ accountCategory: accountCategory.data });
+  return { accountCategory: accountCategory.data };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

@@ -6,7 +6,7 @@ import { NotificationEvent } from "@carbon/notifications";
 import { tasks } from "@trigger.dev/sdk";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
-import { redirect, useLoaderData, useNavigate } from "react-router";
+import { data, redirect, useLoaderData, useNavigate } from "react-router";
 import {
   getTrainingsList,
   TrainingAssignmentForm,
@@ -37,9 +37,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     trainings: (trainings.data ?? []) as TrainingListItem[]
-  });
+  };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -67,7 +67,7 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 
   if (result.error) {
-    return json(
+    return data(
       { error: result.error.message },
       {
         status: 500,

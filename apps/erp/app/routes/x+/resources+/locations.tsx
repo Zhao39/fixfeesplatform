@@ -43,10 +43,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     locations: locations.data ?? [],
     count: locations.count ?? 0
-  });
+  };
 }
 
 export default function LocationsRoute() {

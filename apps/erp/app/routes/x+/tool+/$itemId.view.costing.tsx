@@ -37,10 +37,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     itemCost: itemCost.data,
     itemCostHistory: itemCostHistory.data ?? []
-  });
+  };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

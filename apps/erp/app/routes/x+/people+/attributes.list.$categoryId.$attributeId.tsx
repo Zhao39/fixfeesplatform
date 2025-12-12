@@ -28,9 +28,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     attribute: attribute.data
-  });
+  };
 }
 
 export default function EditAttributeRoute() {

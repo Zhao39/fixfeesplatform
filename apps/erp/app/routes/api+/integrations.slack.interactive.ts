@@ -8,7 +8,8 @@ import {
 } from "@carbon/ee/slack.server";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { FunctionRegion } from "@supabase/supabase-js";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
+import { data } from "react-router";
 import { z } from "zod/v3";
 import {
   getIssueTypesList,
@@ -57,7 +58,7 @@ export async function action({ request }: ActionFunctionArgs) {
     const payloadString = formData.get("payload") as string;
 
     if (!payloadString) {
-      return json({ error: "Missing payload" }, { status: 400 });
+      return data({ error: "Missing payload" }, { status: 400 });
     }
 
     let payload = slackInteractivePayloadSchema.safeParse(
@@ -69,7 +70,7 @@ export async function action({ request }: ActionFunctionArgs) {
         "Slack payload validation error:",
         JSON.stringify(payload.error)
       );
-      return json(
+      return data(
         {
           response_type: "ephemeral",
           text: "Invalid payload format received."
@@ -81,10 +82,10 @@ export async function action({ request }: ActionFunctionArgs) {
     const serviceRole = await getCarbonServiceRole();
 
     if (!payload.data.team?.id) {
-      return json({
+      return {
         response_type: "ephemeral",
         text: "Invalid payload: missing team information."
-      });
+      };
     }
 
     const integration = await getSlackIntegrationByTeamId(
@@ -94,10 +95,10 @@ export async function action({ request }: ActionFunctionArgs) {
 
     if (!integration.data?.[0] || integration.error) {
       console.error("Failed to get Slack integration", integration.error);
-      return json({
+      return {
         response_type: "ephemeral",
         text: "Slack integration not found for this workspace."
-      });
+      };
     }
 
     const { companyId, metadata } = integration.data?.[0];
@@ -105,10 +106,10 @@ export async function action({ request }: ActionFunctionArgs) {
 
     if (!slackToken) {
       console.error("Slack token not found");
-      return json({
+      return {
         response_type: "ephemeral",
         text: "Slack token not found. Please reconfigure the integration."
-      });
+      };
     }
 
     switch (payload.data.type) {
@@ -128,17 +129,17 @@ export async function action({ request }: ActionFunctionArgs) {
         );
 
       case "view_closed":
-        return json({ ok: true });
+        return { ok: true };
 
       default:
-        return json({
+        return {
           response_type: "ephemeral",
           text: `Unknown interaction type: ${payload.data.type}`
-        });
+        };
     }
   } catch (error) {
     console.error("Slack interactive error:", error);
-    return json(
+    return data(
       {
         response_type: "ephemeral",
         text: "An error occurred processing your interaction. Please try again."
@@ -156,7 +157,7 @@ async function handleBlockActions(
   const action = payload.actions?.[0];
 
   if (!action) {
-    return json({ ok: true });
+    return { ok: true };
   }
 
   // Handle other block actions here as needed
@@ -164,11 +165,10 @@ async function handleBlockActions(
 
   switch (action.action_id) {
     case "view_in_carbon":
-      // This action just opens a URL, so we don't need to handle it
-      return json({ ok: true });
+      return { ok: true };
 
     default:
-      return json({ ok: true });
+      return { ok: true };
   }
 }
 
@@ -191,7 +191,7 @@ async function handleShortcut(
       );
 
     default:
-      return json({ ok: true });
+      return { ok: true };
   }
 }
 
@@ -202,10 +202,10 @@ async function handleCreateNcrShortcut(
   serviceRole: any
 ) {
   if (!payload.trigger_id) {
-    return json({
+    return {
       response_type: "ephemeral",
       text: "Missing trigger ID for modal interaction."
-    });
+    };
   }
 
   try {
@@ -358,13 +358,13 @@ async function handleCreateNcrShortcut(
       }
     });
 
-    return json({ ok: true });
+    return { ok: true };
   } catch (error) {
     console.error("Error opening Issue modal:", error);
-    return json({
+    return {
       response_type: "ephemeral",
       text: "Failed to open Issue form. Please try again."
-    });
+    };
   }
 }
 
@@ -379,7 +379,7 @@ async function handleViewSubmission(
   const view = payload.view;
 
   if (view.callback_id !== "create_ncr_modal") {
-    return json({ ok: true });
+    return { ok: true };
   }
 
   try {
@@ -478,17 +478,17 @@ async function handleViewSubmission(
       console.error("Error creating thread:", threadResult.error);
     }
 
-    return json({
+    return {
       response_action: "clear"
-    });
+    };
   } catch (error) {
     console.error("Error creating Issue:", error);
 
-    return json({
+    return {
       response_action: "errors",
       errors: {
         title_block: "Failed to create Issue. Please try again."
       }
-    });
+    };
   }
 }

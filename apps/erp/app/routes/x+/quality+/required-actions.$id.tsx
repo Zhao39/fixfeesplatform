@@ -31,7 +31,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ requiredAction: result.data });
+  return { requiredAction: result.data };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -49,7 +49,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   );
 
   if (validation.error) {
-    return json({ success: false, message: "Invalid form data" });
+    return { success: false, message: "Invalid form data" };
   }
 
   const { name, active } = validation.data;

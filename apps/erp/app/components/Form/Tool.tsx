@@ -1,8 +1,8 @@
 import type { ComboboxProps } from "@carbon/form";
 import { useControlField, useField } from "@carbon/form";
 import {
-  cn,
   CreatableCombobox,
+  cn,
   FormControl,
   FormErrorMessage,
   FormHelperText,
@@ -112,7 +112,6 @@ const Tool = ({ name, label, helperText, ...props }: ToolSelectProps) => {
           helperText && <FormHelperText>{helperText}</FormHelperText>
         )}
       </FormControl>
-
       {newToolsModal.isOpen && (
         <ToolForm
           type="modal"

@@ -3,6 +3,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import type { ActionFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
+import { data } from "react-router";
 import { getCurrentSequence } from "~/modules/settings";
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -20,7 +21,7 @@ export async function action({ request }: ActionFunctionArgs) {
     !currentSequence ||
     currentSequence === "undefined"
   )
-    return json(
+    return data(
       { data: null },
       await flash(
         request,
@@ -30,7 +31,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const verifyCurrent = await getCurrentSequence(client, table, companyId);
   if (verifyCurrent.error) {
-    return json(
+    return data(
       verifyCurrent,
       await flash(
         request,
@@ -43,14 +44,14 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   if (verifyCurrent.data !== currentSequence) {
-    return json({
+    return {
       data: null,
       error: "Sequence has changed since last request"
-    });
+    };
   }
 
-  return json({
+  return {
     data: currentSequence,
     error: null
-  });
+  };
 }

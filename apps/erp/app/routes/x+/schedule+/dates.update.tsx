@@ -15,10 +15,10 @@ export async function action({ request }: ActionFunctionArgs) {
   );
 
   if (validation.error) {
-    return json({
+    return {
       success: false,
       message: "Invalid form data"
-    });
+    };
   }
 
   // Parse the columnId to determine the due date
@@ -47,7 +47,7 @@ export async function action({ request }: ActionFunctionArgs) {
     .eq("id", validation.data.id);
 
   if (error) {
-    return json({ success: false, message: error.message });
+    return { success: false, message: error.message };
   }
 
   // Trigger background job rescheduling
@@ -58,5 +58,5 @@ export async function action({ request }: ActionFunctionArgs) {
     console.error("Failed to trigger job reschedule:", rescheduleError);
   }
 
-  return json({ success: true });
+  return { success: true };
 }

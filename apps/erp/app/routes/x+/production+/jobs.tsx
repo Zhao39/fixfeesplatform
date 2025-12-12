@@ -50,12 +50,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     count: jobs.count ?? 0,
     jobs: jobs.data ?? [],
     locations: locations.data ?? [],
     tags: tags.data ?? []
-  });
+  };
 }
 
 export default function JobsRoute() {

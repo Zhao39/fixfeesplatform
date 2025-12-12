@@ -26,15 +26,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const { limit, offset, sorts, filters } =
     getGenericQueryFilters(searchParams);
 
-  return json(
-    await getUnitOfMeasures(client, companyId, {
-      search,
-      limit,
-      offset,
-      sorts,
-      filters
-    })
-  );
+  return await getUnitOfMeasures(client, companyId, {
+    search,
+    limit,
+    offset,
+    sorts,
+    filters
+  });
 }
 
 export default function UnitOfMeasuresRoute() {

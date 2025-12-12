@@ -47,12 +47,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     holidays: holidays.data ?? [],
     years:
       years?.data?.map((d) => d.year as number).sort((a, b) => b - a) ?? [],
     count: holidays.count ?? 0
-  });
+  };
 }
 
 export default function Route() {

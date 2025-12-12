@@ -49,5 +49,5 @@ export async function action({ request }: ActionFunctionArgs) {
     );
   }
 
-  return json({ document: createDocument.data });
+  return { document: createDocument.data };
 }

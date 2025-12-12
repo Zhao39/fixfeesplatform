@@ -47,9 +47,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     chartOfAccounts: chartOfAccounts.data ?? []
-  });
+  };
 }
 
 export default function ChartOfAccountsRoute() {

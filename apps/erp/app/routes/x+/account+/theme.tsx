@@ -2,6 +2,7 @@ import { assertIsPost } from "@carbon/auth";
 import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
+import { data } from "react-router";
 import { themeValidator } from "~/modules/settings";
 import { getTheme, setTheme } from "~/services/theme.server";
 import type { Handle } from "~/utils/handle";
@@ -15,9 +16,9 @@ export const handle: Handle = {
 export async function loader({ request }: LoaderFunctionArgs) {
   const theme = getTheme(request);
 
-  return json({
+  return {
     theme: theme ?? "zinc"
-  });
+  };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -30,7 +31,7 @@ export async function action({ request }: ActionFunctionArgs) {
     return validationError(validation.error);
   }
 
-  return json(
+  return data(
     {},
     {
       headers: { "Set-Cookie": setTheme(validation.data.theme) }

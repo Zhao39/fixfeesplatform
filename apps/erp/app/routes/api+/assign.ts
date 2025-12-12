@@ -3,7 +3,8 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { NotificationEvent } from "@carbon/notifications";
 import { tasks } from "@trigger.dev/sdk";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
+import { data } from "react-router";
 import { assign } from "~/modules/shared/shared.server";
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -18,7 +19,7 @@ export async function action({ request }: ActionFunctionArgs) {
     const result = await assign(client, { table, id, assignee });
 
     if (result.error) {
-      return json(
+      return data(
         { success: false },
         await flash(request, error(result.error, "Failed to assign"))
       );
@@ -67,7 +68,7 @@ export async function action({ request }: ActionFunctionArgs) {
             from: userId
           });
         } catch (err) {
-          return json(
+          return data(
             {},
             await flash(request, error(err, "Failed to notify user"))
           );
@@ -75,9 +76,9 @@ export async function action({ request }: ActionFunctionArgs) {
       }
     }
 
-    return json({ success: true });
+    return { success: true };
   } else {
-    return json(
+    return data(
       { success: false },
       await flash(request, error(null, "Failed to assign"))
     );

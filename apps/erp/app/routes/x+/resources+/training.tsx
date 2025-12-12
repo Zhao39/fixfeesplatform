@@ -53,11 +53,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     trainings: trainings.data ?? [],
     count: trainings.count ?? 0,
     tags: tags.data ?? []
-  });
+  };
 }
 
 export default function TrainingsRoute() {

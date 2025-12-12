@@ -26,7 +26,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ materialType: materialType.data });
+  return { materialType: materialType.data };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

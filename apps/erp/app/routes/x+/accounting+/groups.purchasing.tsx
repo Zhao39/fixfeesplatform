@@ -54,12 +54,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     data: purchasingGroups.data ?? [],
     itemPostingGroups: itemPostingGroups.data ?? [],
     supplierTypes: supplierTypes.data ?? [],
     count: purchasingGroups.count ?? 0
-  });
+  };
 }
 
 export default function PurchasingPostingGroupsRoute() {

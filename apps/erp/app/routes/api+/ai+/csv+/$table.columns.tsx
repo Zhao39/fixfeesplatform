@@ -52,10 +52,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
       temperature: 0.2
     });
 
-    return json(object);
+    return object;
   } catch (error) {
     console.error(error);
-    return json({} as Record<string, string>);
+    return {} as Record<string, string>;
   }
 }
 

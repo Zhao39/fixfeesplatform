@@ -47,10 +47,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     departments: departments.data ?? [],
     count: departments.count ?? 0
-  });
+  };
 }
 
 export default function Route() {

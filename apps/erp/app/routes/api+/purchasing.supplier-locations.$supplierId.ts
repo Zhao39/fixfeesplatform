@@ -4,6 +4,7 @@ import { flash } from "@carbon/auth/session.server";
 import type { LoaderFunctionArgs, SerializeFrom } from "@vercel/remix";
 import { json } from "@vercel/remix";
 import type { ClientLoaderFunctionArgs } from "react-router";
+import { data } from "react-router";
 import { getSupplierLocations } from "~/modules/purchasing";
 import { supplierLocationsQuery } from "~/utils/react-query";
 
@@ -15,13 +16,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const { supplierId } = params;
 
   if (!supplierId)
-    return json({
+    return {
       data: []
-    });
+    };
 
   const locations = await getSupplierLocations(authorized.client, supplierId);
   if (locations.error) {
-    return json(
+    return data(
       locations,
       await flash(
         request,
@@ -30,7 +31,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json(locations);
+  return locations;
 }
 
 export async function clientLoader({

@@ -27,7 +27,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ nonConformanceType: nonConformanceType.data });
+  return { nonConformanceType: nonConformanceType.data };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

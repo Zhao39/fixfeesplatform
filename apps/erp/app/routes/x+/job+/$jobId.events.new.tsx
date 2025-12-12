@@ -4,7 +4,7 @@ import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-import { useLoaderData } from "react-router";
+import { data, useLoaderData } from "react-router";
 import {
   getJobOperations,
   productionEventValidator,
@@ -29,7 +29,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       value: operation.id
     })) ?? [];
 
-  return json({ operationOptions });
+  return { operationOptions };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -63,7 +63,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     createdBy: userId
   });
   if (insert.error) {
-    return json(
+    return data(
       {},
       await flash(
         request,

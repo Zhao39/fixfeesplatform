@@ -12,7 +12,8 @@ import type { userAdminTask } from "@carbon/jobs/trigger/user-admin";
 import { updateSubscriptionQuantityForCompany } from "@carbon/stripe/stripe.server";
 import { Edition } from "@carbon/utils";
 import { tasks } from "@trigger.dev/sdk";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
+import { data } from "react-router";
 import { revokeInviteValidator } from "~/modules/users";
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -38,7 +39,7 @@ export async function action({ request }: ActionFunctionArgs) {
     .in("id", users);
 
   if (usersToRevoke.error) {
-    return json(
+    return data(
       { success: false },
       await flash(
         request,
@@ -50,7 +51,7 @@ export async function action({ request }: ActionFunctionArgs) {
   if (usersToRevoke.data.length == 1) {
     const deactivate = await deactivateUser(serviceRole, users[0], companyId);
     if (!deactivate.success) {
-      return json(
+      return data(
         {},
         await flash(
           request,
@@ -82,7 +83,7 @@ export async function action({ request }: ActionFunctionArgs) {
     .eq("companyId", companyId);
 
   if (deleteInvites.error) {
-    return json(
+    return data(
       { success: false },
       await flash(
         request,
@@ -91,7 +92,7 @@ export async function action({ request }: ActionFunctionArgs) {
     );
   }
 
-  return json(
+  return data(
     {},
     await flash(request, success("Successfully revoked invites"))
   );

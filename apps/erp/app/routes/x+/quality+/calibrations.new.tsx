@@ -30,18 +30,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const gaugeId = url.searchParams.get("gaugeId");
 
   if (id) {
-    return json({
+    return {
       id,
       gaugeId,
       files: await getQualityFiles(client, id, companyId)
-    });
+    };
   }
 
-  return json({
+  return {
     id: nanoid(),
     gaugeId,
     files: [] as FileObject[]
-  });
+  };
 }
 
 export async function action({ request }: ActionFunctionArgs) {

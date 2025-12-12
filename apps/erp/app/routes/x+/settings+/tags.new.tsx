@@ -1,5 +1,6 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
+import { data } from "react-router";
 import { insertTag } from "~/modules/shared";
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -10,7 +11,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const table = formData.get("table");
 
   if (typeof name !== "string" || typeof table !== "string") {
-    return json(
+    return data(
       { success: false, message: "Invalid form data" },
       { status: 400 }
     );
@@ -24,11 +25,11 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 
   if (tag.error) {
-    return json(
+    return data(
       { success: false, message: tag.error.message },
       { status: 500 }
     );
   }
 
-  return json({ success: true, tag });
+  return { success: true, tag };
 }

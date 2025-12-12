@@ -33,10 +33,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     filters
   });
 
-  return json({
+  return {
     data: employeeTypes.data ?? [],
     count: employeeTypes.count ?? 0
-  });
+  };
 }
 
 export default function EmployeeTypesRoute() {

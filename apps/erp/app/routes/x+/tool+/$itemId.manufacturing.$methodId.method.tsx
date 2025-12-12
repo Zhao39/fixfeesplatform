@@ -36,7 +36,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const tags = await getTagsList(client, companyId, "operation");
 
-  return json({ tags: tags.data ?? [] });
+  return { tags: tags.data ?? [] };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

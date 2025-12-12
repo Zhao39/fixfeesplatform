@@ -1,6 +1,6 @@
 import { assertIsPost, getCarbonServiceRole } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
-import { json, redirect, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json, redirect } from "@vercel/remix";
 import { activateMethodVersion } from "~/modules/items/items.service";
 import { requestReferrer } from "~/utils/path";
 
@@ -15,7 +15,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const { id } = params;
   if (!id) {
-    return json({ success: false, message: "Invalid operation tool id" });
+    return { success: false, message: "Invalid operation tool id" };
   }
 
   const update = await activateMethodVersion(getCarbonServiceRole(), {
@@ -25,17 +25,17 @@ export async function action({ request, params }: ActionFunctionArgs) {
   });
 
   if (update.error) {
-    return json({
+    return {
       success: false,
       message: "Failed to activate method version"
-    });
+    };
   }
 
   if (!methodToReplace) {
-    return json({
+    return {
       success: false,
       message: "Method to replace is required"
-    });
+    };
   }
 
   const redirectPath = requestReferrer(request)?.replace(
@@ -44,10 +44,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
   );
 
   if (!redirectPath) {
-    return json({
+    return {
       success: false,
       message: "Failed to redirect to the correct page"
-    });
+    };
   }
 
   return redirect(redirectPath);

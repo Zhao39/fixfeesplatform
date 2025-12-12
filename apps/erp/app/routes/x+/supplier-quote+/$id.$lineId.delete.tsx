@@ -2,7 +2,7 @@ import { assertIsPost, error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import type { ActionFunctionArgs } from "@vercel/remix";
-import { json, redirect } from "react-router";
+import { data, json, redirect } from "react-router";
 import { deleteSupplierQuoteLine } from "~/modules/purchasing";
 import { path } from "~/utils/path";
 
@@ -19,7 +19,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const deleteLine = await deleteSupplierQuoteLine(client, lineId);
 
   if (deleteLine.error) {
-    return json(
+    return data(
       path.to.supplierQuoteLine(id, lineId),
       await flash(
         request,

@@ -16,10 +16,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const integration = await getIntegration(client, "onshape", companyId);
 
   if (integration.error || !integration.data) {
-    return json({
+    return {
       data: [],
       error: integration.error
-    });
+    };
   }
 
   const integrationMetadata = OnshapeConfig.schema.safeParse(
@@ -27,10 +27,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
   );
 
   if (!integrationMetadata.success) {
-    return json({
+    return {
       data: [],
       error: integrationMetadata.error
-    });
+    };
   }
 
   const onshapeClient = new OnshapeClient({
@@ -60,18 +60,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
       offset += limit;
     }
 
-    return json({
+    return {
       data: { items: allDocuments },
       error: null
-    });
+    };
   } catch (error) {
     console.error(error);
-    return json({
+    return {
       data: null,
       error:
         error instanceof Error
           ? error.message
           : "Failed to get documents from Onshape"
-    });
+    };
   }
 }

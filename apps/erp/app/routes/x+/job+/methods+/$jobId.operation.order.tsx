@@ -1,8 +1,8 @@
-import { json, type ActionFunctionArgs } from "@vercel/remix";
-
 import { assertIsPost, error, getCarbonServiceRole } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
+import { data } from "react-router";
 import {
   recalculateJobOperationDependencies,
   updateJobOperationOrder
@@ -19,14 +19,14 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const { jobId } = params;
   if (!jobId) {
-    return json(
+    return data(
       {},
       await flash(request, error(null, "Failed to receive a job id"))
     );
   }
 
   if (!updateMap) {
-    return json(
+    return data(
       {},
       await flash(request, error(null, "Failed to receive a new sort order"))
     );
@@ -42,7 +42,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const updateSortOrders = await updateJobOperationOrder(client, updates);
   if (updateSortOrders.some((update) => update.error))
-    return json(
+    return data(
       {},
       await flash(
         request,
@@ -60,7 +60,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       }
     );
     if (recalculateDependencies.error)
-      return json(
+      return data(
         {},
         await flash(
           request,
@@ -68,7 +68,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
         )
       );
   } else {
-    return json(
+    return data(
       {},
       await flash(
         request,

@@ -6,5 +6,5 @@ import { getDepartmentsList } from "~/modules/people";
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client, companyId } = await requirePermissions(request, {});
 
-  return json(await getDepartmentsList(client, companyId));
+  return await getDepartmentsList(client, companyId);
 }

@@ -122,7 +122,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     throw redirect(path.to.onboarding.root);
   }
 
-  return json({
+  return {
     session: {
       accessToken,
       expiresIn,
@@ -140,7 +140,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     role: claims?.role,
     user: user.data,
     savedViews: savedViews.data ?? []
-  });
+  };
 }
 
 export default function AuthenticatedRoute() {

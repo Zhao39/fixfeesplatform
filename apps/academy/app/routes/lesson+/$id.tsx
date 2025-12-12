@@ -10,7 +10,7 @@ import {
   LuCirclePlay,
   LuFlag
 } from "react-icons/lu";
-import { json, Link, useFetcher, useParams } from "react-router";
+import { data, json, Link, useFetcher, useParams } from "react-router";
 import Share from "~/components/Share";
 import { useProgress } from "~/hooks";
 import { path } from "~/utils/path";
@@ -33,14 +33,14 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     throw new Error("Lesson not found");
   }
 
-  return json({});
+  return {};
 };
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const { id: lessonId } = params;
 
   if (!lessonId) {
-    return json(
+    return data(
       { success: false, message: "Lesson ID is required" },
       { status: 400 }
     );
@@ -48,7 +48,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
   const context = getLessonContext(lessonId);
   if (!context) {
-    return json(
+    return data(
       { success: false, message: "Lesson not found" },
       { status: 404 }
     );
@@ -57,7 +57,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   // Check if user is authenticated
   const session = await getOrRefreshAuthSession(request);
   if (!session) {
-    return json(
+    return data(
       { success: false, message: "Authentication required" },
       { status: 401 }
     );
@@ -73,13 +73,13 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   });
 
   if (insert.error) {
-    return json(
+    return data(
       { success: false, message: "Failed to complete lesson" },
       { status: 500 }
     );
   }
 
-  return json({ success: true });
+  return { success: true };
 };
 export default function LessonRoute() {
   const { lessonCompletions, challengeAttempts } = useProgress();

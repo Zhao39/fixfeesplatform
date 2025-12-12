@@ -4,7 +4,7 @@ import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-import { useLoaderData, useNavigate } from "react-router";
+import { data, useLoaderData, useNavigate } from "react-router";
 import {
   customerStatusValidator,
   getCustomerStatus,
@@ -35,9 +35,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     customerStatus: customerStatus.data
-  });
+  };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -66,7 +66,7 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 
   if (updateCustomerStatus.error) {
-    return json(
+    return data(
       {},
       await flash(
         request,

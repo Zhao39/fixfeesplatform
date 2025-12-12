@@ -42,11 +42,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     shifts: shifts.data ?? [],
     locations: locations.data ?? [],
     count: shifts.count ?? 0
-  });
+  };
 }
 
 export default function ShiftsRoute() {

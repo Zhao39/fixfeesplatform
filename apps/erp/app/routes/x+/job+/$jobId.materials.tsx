@@ -61,10 +61,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     count: materials.count ?? 0,
     materials: materials.data ?? []
-  });
+  };
 }
 
 export default function JobMaterialsRoute() {

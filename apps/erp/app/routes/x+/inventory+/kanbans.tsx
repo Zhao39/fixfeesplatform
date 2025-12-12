@@ -82,12 +82,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     count: kanbans.count ?? 0,
     kanbans: kanbans.data ?? [],
     kanbanOutput: kanbanOutput.data?.kanbanOutput ?? "qrcode",
     locationId
-  });
+  };
 }
 
 export default function KanbansRoute() {

@@ -33,11 +33,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     // getShippingTermsList(client, companyId),
   ]);
 
-  return json({
+  return {
     customerStatuses: customerStatuses.data ?? [],
     customerTypes: customerTypes.data ?? []
     // shippingTerms: shippingTerms.data ?? [],
-  });
+  };
 }
 
 export default function CustomerRoute() {

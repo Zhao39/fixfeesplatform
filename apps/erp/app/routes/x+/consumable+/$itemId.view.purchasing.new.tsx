@@ -38,16 +38,16 @@ export async function action({ request, params }: ActionFunctionArgs) {
   });
 
   if (createConsumableSupplier.error) {
-    return json({
+    return {
       success: false,
       message: "Failed to create consumable supplier"
-    });
+    };
   }
 
-  return json({
+  return {
     success: true,
     message: "Consumable supplier created successfully"
-  });
+  };
 }
 
 export default function NewConsumableSupplierRoute() {

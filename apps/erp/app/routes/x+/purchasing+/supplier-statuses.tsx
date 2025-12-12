@@ -26,15 +26,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const { limit, offset, sorts, filters } =
     getGenericQueryFilters(searchParams);
 
-  return json(
-    await getSupplierStatuses(client, companyId, {
-      search,
-      limit,
-      offset,
-      sorts,
-      filters
-    })
-  );
+  return await getSupplierStatuses(client, companyId, {
+    search,
+    limit,
+    offset,
+    sorts,
+    filters
+  });
 }
 
 export default function SupplierStatusesRoute() {

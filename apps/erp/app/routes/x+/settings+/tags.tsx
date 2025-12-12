@@ -1,5 +1,5 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
 
 export async function action({ request }: ActionFunctionArgs) {
   const { client, userId } = await requirePermissions(request, {});
@@ -23,7 +23,7 @@ export async function action({ request }: ActionFunctionArgs) {
     console.error(result.error);
   }
 
-  return json(result);
+  return result;
 }
 
 function getIdField(table: string) {

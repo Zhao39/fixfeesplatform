@@ -78,10 +78,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     materialPlanning: materialPlanning.data,
     locationId
-  });
+  };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

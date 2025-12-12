@@ -10,7 +10,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     view: "production"
   });
 
-  return json(await getProceduresList(client, companyId));
+  return await getProceduresList(client, companyId);
 }
 
 export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {

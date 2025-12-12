@@ -23,7 +23,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ kanban: kanban.data });
+  return { kanban: kanban.data };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

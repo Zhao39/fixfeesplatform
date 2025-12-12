@@ -50,11 +50,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     count: materials.count ?? 0,
     materials: materials.data ?? [],
     tags: tags.data ?? []
-  });
+  };
 }
 
 export default function MaterialsSearchRoute() {

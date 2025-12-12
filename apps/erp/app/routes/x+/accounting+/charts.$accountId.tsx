@@ -4,7 +4,7 @@ import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-import { useLoaderData } from "react-router";
+import { data, useLoaderData } from "react-router";
 import {
   accountValidator,
   getAccount,
@@ -25,9 +25,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const account = await getAccount(client, accountId);
 
-  return json({
+  return {
     account: account?.data ?? null
-  });
+  };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -54,7 +54,7 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 
   if (updateAccount.error) {
-    return json(
+    return data(
       {},
       await flash(
         request,

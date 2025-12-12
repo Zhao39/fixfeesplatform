@@ -49,7 +49,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
         error(companySettings.error, "Failed to get company settings")
       )
     );
-  return json({ companySettings: companySettings.data });
+  return { companySettings: companySettings.data };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -63,7 +63,7 @@ export async function action({ request }: ActionFunctionArgs) {
   );
 
   if (validation.error) {
-    return json({ success: false, message: "Invalid form data" });
+    return { success: false, message: "Invalid form data" };
   }
 
   const update = await client
@@ -74,13 +74,12 @@ export async function action({ request }: ActionFunctionArgs) {
     })
     .eq("id", companyId);
 
-  if (update.error)
-    return json({ success: false, message: update.error.message });
+  if (update.error) return { success: false, message: update.error.message };
 
-  return json({
+  return {
     success: true,
     message: "Gauge calibration notification settings updated"
-  });
+  };
 }
 
 export default function QualitySettingsRoute() {

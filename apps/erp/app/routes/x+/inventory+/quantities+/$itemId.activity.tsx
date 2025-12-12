@@ -70,12 +70,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     initialItemLedgers: itemLedgerRecords.data,
     itemId,
     companyId,
     locationId
-  });
+  };
 }
 
 export default function ItemInventoryActivityRoute() {

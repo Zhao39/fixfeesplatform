@@ -33,6 +33,7 @@ import { motion } from "framer-motion";
 import React, { useEffect } from "react";
 import { LuChevronDown, LuFingerprint, LuMoon, LuSun } from "react-icons/lu";
 import {
+  data,
   isRouteErrorResponse,
   Link,
   Links,
@@ -115,7 +116,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const sessionFlash = await getSessionFlash(request);
 
-  return json(
+  return data(
     {
       challengeAttempts,
       env: {
@@ -143,12 +144,12 @@ export async function action({ request }: ActionFunctionArgs) {
   );
 
   if (validation.error) {
-    return json(error(validation.error, "Invalid mode"), {
+    return data(error(validation.error, "Invalid mode"), {
       status: 400
     });
   }
 
-  return json(
+  return data(
     {},
     {
       headers: { "Set-Cookie": setMode(validation.data.mode) }

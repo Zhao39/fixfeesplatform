@@ -3,7 +3,8 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validator } from "@carbon/form";
 import { FunctionRegion } from "@supabase/supabase-js";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
+import { data } from "react-router";
 import { procedureSyncValidator } from "~/modules/production";
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -16,7 +17,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const validation = await validator(procedureSyncValidator).validate(formData);
 
   if (validation.error) {
-    return json(
+    return data(
       { success: false },
       await flash(request, error(validation.error, "Invalid form data"))
     );
@@ -35,7 +36,7 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 
   if (sync.error) {
-    return json(
+    return data(
       { success: false },
       await flash(request, error(sync.error, "Failed to sync procedure"))
     );

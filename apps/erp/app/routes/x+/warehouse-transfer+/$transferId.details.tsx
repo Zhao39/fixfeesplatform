@@ -4,7 +4,7 @@ import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-import { useParams } from "react-router";
+import { data, useParams } from "react-router";
 import { useRouteData } from "~/hooks";
 import type {
   WarehouseTransfer,
@@ -49,7 +49,7 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 
   if (updateTransfer.error) {
-    return json(
+    return data(
       {},
       await flash(
         request,

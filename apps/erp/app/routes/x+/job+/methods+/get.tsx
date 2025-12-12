@@ -1,7 +1,8 @@
 import { getCarbonServiceRole } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { validationError, validator } from "@carbon/form";
-import { json, redirect, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json, redirect } from "@vercel/remix";
+import { data } from "react-router";
 import {
   getJobMethodValidator,
   recalculateJobOperationDependencies,
@@ -62,20 +63,20 @@ export async function action({ request }: ActionFunctionArgs) {
     ]);
 
     if (calculateQuantities.error) {
-      return json({
+      return {
         error: "Failed to calculate job quantities"
-      });
+      };
     }
 
     if (calculateDependencies.error) {
-      return json({
+      return {
         error: "Failed to calculate job dependencies"
-      });
+      };
     }
 
-    return json({
+    return {
       error: jobMethod.error ? "Failed to get job method" : null
-    });
+    };
   }
 
   if (type === "method") {
@@ -96,15 +97,15 @@ export async function action({ request }: ActionFunctionArgs) {
     );
 
     if (makeMethod.error) {
-      return json({
+      return {
         error: makeMethod.error
           ? "Failed to update method from job method"
           : null
-      });
+      };
     }
 
     throw redirect(requestReferrer(request) ?? path.to.jobs);
   }
 
-  return json({ error: "Invalid type" }, { status: 400 });
+  return data({ error: "Invalid type" }, { status: 400 });
 }

@@ -84,13 +84,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     count: inventoryItems.count ?? 0,
     inventoryItems: (inventoryItems.data ?? []) as InventoryItem[],
     locationId,
     forms: forms.data ?? [],
     substances: substances.data ?? []
-  });
+  };
 }
 
 export default function QuantitiesRoute() {

@@ -46,10 +46,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     throw redirect(path.to.stockTransfers);
   }
 
-  return json({
+  return {
     stockTransfer: stockTransfer.data,
     stockTransferLines: stockTransferLines.data ?? []
-  });
+  };
 }
 
 export default function StockTransferRoute() {

@@ -17,11 +17,11 @@ export async function action({ request }: ActionFunctionArgs) {
   const validation = await validator(savedViewValidator).validate(formData);
 
   if (validation.error) {
-    return json({
+    return {
       success: false,
       id: null,
       message: "Invalid form data"
-    });
+    };
   }
 
   const { state, ...data } = validation.data;
@@ -39,32 +39,31 @@ export async function action({ request }: ActionFunctionArgs) {
 
     if (result.error) {
       console.error(result.error);
-      return json({
+      return {
         success: false,
         id: null,
         message: result.error.message
-      });
+      };
     }
 
     if (data.id) {
-      return json({
+      return {
         success: true,
         id: data.id,
         message: "View updated"
-      });
+      };
     }
 
-    return json({
+    return {
       success: true,
       id: result.data.id,
       message: "View saved"
-    });
-    // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
-  } catch (error) {
-    return json({
+    };
+  } catch (_error) {
+    return {
       success: false,
       id: null,
       message: "Invalid state"
-    });
+    };
   }
 }

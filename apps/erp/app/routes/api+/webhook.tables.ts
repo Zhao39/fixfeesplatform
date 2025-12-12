@@ -8,7 +8,7 @@ import { getCompanyId, webhookTablesQuery } from "~/utils/react-query";
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client } = await requirePermissions(request, {});
 
-  return json(await getWebhookTables(client));
+  return await getWebhookTables(client);
 }
 
 export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {

@@ -25,9 +25,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     })
   ]);
 
-  return json({
+  return {
     operations: operations?.data?.map(makeDurations) ?? []
-  });
+  };
 }
 
 export default function ActiveRoute() {

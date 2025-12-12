@@ -28,7 +28,7 @@ import type {
 } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
 import { LuCircleAlert } from "react-icons/lu";
-import { Link, useFetcher, useSearchParams } from "react-router";
+import { data, Link, useFetcher, useSearchParams } from "react-router";
 import { z } from "zod/v3";
 
 import type { FormActionData, Result } from "~/types";
@@ -66,7 +66,7 @@ export async function action({ request }: ActionFunctionArgs): FormActionData {
   const { success } = await ratelimit.limit(ip);
 
   if (!success) {
-    return json(
+    return data(
       error(null, "Rate limit exceeded"),
       await flash(request, error(null, "Rate limit exceeded"))
     );
@@ -77,7 +77,7 @@ export async function action({ request }: ActionFunctionArgs): FormActionData {
   );
 
   if (validation.error) {
-    return json(error(validation.error, "Invalid verification code"));
+    return error(validation.error, "Invalid verification code");
   }
 
   const { email, code, redirectTo } = validation.data;
@@ -86,7 +86,7 @@ export async function action({ request }: ActionFunctionArgs): FormActionData {
   const isCodeValid = await verifyEmailCode(email, code);
 
   if (!isCodeValid) {
-    return json(
+    return data(
       error(null, "Invalid or expired verification code"),
       await flash(request, error(null, "Invalid or expired verification code"))
     );
@@ -98,7 +98,7 @@ export async function action({ request }: ActionFunctionArgs): FormActionData {
   const user = await createEmailAuthAccount(email, temporaryPassword);
 
   if (!user) {
-    return json(
+    return data(
       error(null, "Failed to create user account"),
       await flash(request, error(null, "Failed to create user account"))
     );
@@ -108,7 +108,7 @@ export async function action({ request }: ActionFunctionArgs): FormActionData {
   const authSession = await signInWithEmail(email, temporaryPassword);
 
   if (!authSession) {
-    return json(
+    return data(
       error(null, "Failed to sign in user"),
       await flash(request, error(null, "Failed to sign in user"))
     );

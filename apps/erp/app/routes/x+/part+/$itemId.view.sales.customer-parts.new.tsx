@@ -25,9 +25,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const itemData = await getItem(client, itemId);
   const readableId = itemData?.data?.readableIdWithRevision;
 
-  return json({
+  return {
     readableId
-  });
+  };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

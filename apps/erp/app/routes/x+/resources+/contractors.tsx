@@ -53,11 +53,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     contractors: contractors.data ?? [],
     abilities: abilities.data ?? [],
     count: contractors.count ?? 0
-  });
+  };
 }
 
 export default function Route() {

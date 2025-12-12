@@ -45,10 +45,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     trackedEntities: trackedEntities.data ?? [],
     count: trackedEntities.count ?? 0
-  });
+  };
 }
 
 export default function TraceabilityRoute() {

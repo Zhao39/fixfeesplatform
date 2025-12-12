@@ -4,7 +4,7 @@ import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-import { useLoaderData } from "react-router";
+import { data, useLoaderData } from "react-router";
 import {
   getProductionQuantity,
   productionQuantityValidator,
@@ -23,9 +23,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const productionQuantity = await getProductionQuantity(client, id);
 
-  return json({
+  return {
     productionQuantity: productionQuantity?.data ?? null
-  });
+  };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -62,7 +62,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   });
 
   if (update.error) {
-    return json(
+    return data(
       {},
       await flash(
         request,

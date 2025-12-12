@@ -1,3 +1,4 @@
+import { requirePermissions } from "@carbon/auth/auth.server";
 import {
   Card,
   CardContent,
@@ -8,7 +9,10 @@ import {
   ScrollArea,
   VStack
 } from "@carbon/react";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
+import { LuMoon, LuSun } from "react-icons/lu";
+import { data } from "react-router";
+import { useRouteData } from "~/hooks";
 import type { Company } from "~/modules/settings";
 import {
   CompanyLogoForm,
@@ -17,10 +21,6 @@ import {
   updateLogoLight,
   updateLogoLightIcon
 } from "~/modules/settings";
-
-import { requirePermissions } from "@carbon/auth/auth.server";
-import { LuMoon, LuSun } from "react-icons/lu";
-import { useRouteData } from "~/hooks";
 import type { Handle } from "~/utils/handle";
 import { path } from "~/utils/path";
 
@@ -40,27 +40,27 @@ export async function action({ request }: ActionFunctionArgs) {
   const path = formData.get("path") as string | null;
 
   if (typeof mode !== "string" || typeof icon !== "string") {
-    return json({ error: "Invalid form data" }, { status: 400 });
+    return data({ error: "Invalid form data" }, { status: 400 });
   }
 
   if (mode === "light" && icon === "false") {
     const { error } = await updateLogoLight(client, companyId, path);
-    if (error) return json({ error: "Failed to update logo" }, { status: 500 });
+    if (error) return data({ error: "Failed to update logo" }, { status: 500 });
   }
   if (mode === "dark" && icon === "false") {
     const { error } = await updateLogoDark(client, companyId, path);
-    if (error) return json({ error: "Failed to update logo" }, { status: 500 });
+    if (error) return data({ error: "Failed to update logo" }, { status: 500 });
   }
   if (mode === "light" && icon === "true") {
     const { error } = await updateLogoLightIcon(client, companyId, path);
-    if (error) return json({ error: "Failed to update logo" }, { status: 500 });
+    if (error) return data({ error: "Failed to update logo" }, { status: 500 });
   }
   if (mode === "dark" && icon === "true") {
     const { error } = await updateLogoDarkIcon(client, companyId, path);
-    if (error) return json({ error: "Failed to update logo" }, { status: 500 });
+    if (error) return data({ error: "Failed to update logo" }, { status: 500 });
   }
 
-  return json({ success: true });
+  return { success: true };
 }
 
 export default function LogosRoute() {

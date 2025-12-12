@@ -41,11 +41,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     getRequiredActionsList(client, companyId)
   ]);
 
-  return json({
+  return {
     workflows: workflows.data ?? [],
     types: types.data ?? [],
     requiredActions: requiredActions.data ?? []
-  });
+  };
 }
 
 export async function action({ request }: ActionFunctionArgs) {

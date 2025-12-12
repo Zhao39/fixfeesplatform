@@ -4,6 +4,7 @@ import { flash } from "@carbon/auth/session.server";
 import type { LoaderFunctionArgs, SerializeFrom } from "@vercel/remix";
 import { json } from "@vercel/remix";
 import type { ClientLoaderFunctionArgs } from "react-router";
+import { data } from "react-router";
 import { getSupplierProcessesByProcess } from "~/modules/purchasing";
 import { supplierProcessesQuery } from "~/utils/react-query";
 
@@ -13,16 +14,16 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const { processId } = params;
 
   if (!processId)
-    return json({
+    return {
       data: []
-    });
+    };
 
   const processes = await getSupplierProcessesByProcess(
     authorized.client,
     processId
   );
   if (processes.error) {
-    return json(
+    return data(
       processes,
       await flash(
         request,
@@ -31,7 +32,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json(processes);
+  return processes;
 }
 
 export async function clientLoader({

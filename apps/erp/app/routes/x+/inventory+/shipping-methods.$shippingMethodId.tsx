@@ -5,7 +5,7 @@ import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
 import type { ClientActionFunctionArgs } from "react-router";
-import { useLoaderData, useNavigate } from "react-router";
+import { data, useLoaderData, useNavigate } from "react-router";
 import type { ShippingCarrier } from "~/modules/inventory";
 import {
   getShippingMethod,
@@ -28,9 +28,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const shippingMethod = await getShippingMethod(client, shippingMethodId);
 
-  return json({
+  return {
     shippingMethod: shippingMethod?.data ?? null
-  });
+  };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -59,7 +59,7 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 
   if (updateShippingMethod.error) {
-    return json(
+    return data(
       {},
       await flash(
         request,

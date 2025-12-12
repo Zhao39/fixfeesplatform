@@ -5,7 +5,7 @@ import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
 import type { ClientActionFunctionArgs } from "react-router";
-import { useLoaderData, useNavigate } from "react-router";
+import { data, useLoaderData, useNavigate } from "react-router";
 import {
   getUnitOfMeasure,
   unitOfMeasureValidator,
@@ -27,9 +27,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const unitOfMeasure = await getUnitOfMeasure(client, uomId, companyId);
 
-  return json({
+  return {
     unitOfMeasure: unitOfMeasure?.data ?? null
-  });
+  };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -56,7 +56,7 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 
   if (updateUnitOfMeasure.error) {
-    return json(
+    return data(
       {},
       await flash(
         request,

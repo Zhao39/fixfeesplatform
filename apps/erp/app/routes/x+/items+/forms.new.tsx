@@ -4,7 +4,7 @@ import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-import { useNavigate } from "react-router";
+import { data, useNavigate } from "react-router";
 import { materialFormValidator, upsertMaterialForm } from "~/modules/items";
 import { MaterialShapeForm } from "~/modules/items/ui/MaterialShapes";
 import { setCustomFields } from "~/utils/form";
@@ -43,7 +43,7 @@ export async function action({ request }: ActionFunctionArgs) {
     customFields: setCustomFields(formData)
   });
   if (insertMaterialForm.error) {
-    return json(
+    return data(
       {},
       await flash(
         request,
@@ -54,7 +54,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const materialFormId = insertMaterialForm.data?.id;
   if (!materialFormId) {
-    return json(
+    return data(
       {},
       await flash(
         request,

@@ -4,7 +4,8 @@ import { flash } from "@carbon/auth/session.server";
 import type { notifyTask } from "@carbon/jobs/trigger/notify";
 import { NotificationEvent } from "@carbon/notifications";
 import { tasks } from "@trigger.dev/sdk";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
+import { data } from "react-router";
 import { z } from "zod/v3";
 
 export const messagingNotifySchema = z.discriminatedUnion("type", [
@@ -73,15 +74,15 @@ export async function action({ request }: ActionFunctionArgs) {
 
         break;
       default:
-        return json(
+        return data(
           { success: false },
           await flash(request, error(null, "Invalid payload"))
         );
     }
 
-    return json({ success: true });
+    return { success: true };
   } else {
-    return json(
+    return data(
       { success: false },
       await flash(request, error(null, "Failed to notify user"))
     );

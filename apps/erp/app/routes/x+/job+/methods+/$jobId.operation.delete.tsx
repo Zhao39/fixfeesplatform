@@ -2,6 +2,7 @@ import { getCarbonServiceRole } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import type { ActionFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
+import { data } from "react-router";
 import { recalculateJobOperationDependencies } from "~/modules/production/production.service";
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -11,7 +12,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const { jobId } = params;
   if (!jobId) {
-    return json(
+    return data(
       { error: "Job ID is required" },
       {
         status: 400
@@ -21,7 +22,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const formData = await request.formData();
   const id = formData.get("id") as string;
   if (!id) {
-    return json(
+    return data(
       { error: "Operation ID is required" },
       {
         status: 400
@@ -32,7 +33,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const { error } = await client.from("jobOperation").delete().eq("id", id);
 
   if (error) {
-    return json(
+    return data(
       { success: false, error: error.message },
       {
         status: 400
@@ -50,7 +51,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   );
 
   if (recalculateResult?.error) {
-    return json(
+    return data(
       {
         success: false,
         error: "Failed to recalculate job operation dependencies"
@@ -59,5 +60,5 @@ export async function action({ request, params }: ActionFunctionArgs) {
     );
   }
 
-  return json({ success: true });
+  return { success: true };
 }

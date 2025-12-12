@@ -1,7 +1,8 @@
 import { assertIsPost, error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
+import { data } from "react-router";
 import { deleteJobOperationParameter } from "~/modules/production";
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -20,7 +21,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     id
   );
   if (deleteOperationParameter.error) {
-    return json(
+    return data(
       {
         id: null
       },
@@ -34,5 +35,5 @@ export async function action({ request, params }: ActionFunctionArgs) {
     );
   }
 
-  return json({});
+  return {};
 }

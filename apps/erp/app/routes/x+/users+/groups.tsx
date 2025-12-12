@@ -5,7 +5,7 @@ import { VStack } from "@carbon/react";
 import type { LoaderFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
 import { arrayToTree } from "performant-array-to-tree";
-import { Outlet, useLoaderData } from "react-router";
+import { data, Outlet, useLoaderData } from "react-router";
 import type { Group } from "~/modules/users";
 import { GroupsTable, getGroups } from "~/modules/users";
 import type { Handle } from "~/utils/handle";
@@ -40,17 +40,17 @@ export async function loader({ request }: LoaderFunctionArgs) {
   });
 
   if (groups.error) {
-    return json(
+    return data(
       { groups: [], count: 0, error: groups.error },
       await flash(request, error(groups.error, "Failed to load groups"))
     );
   }
 
-  return json({
+  return {
     groups: (groups.data ? arrayToTree(groups.data) : []) as Group[],
     error: null,
     count: groups.count ?? 0
-  });
+  };
 }
 
 export default function GroupsRoute() {

@@ -24,7 +24,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ gaugeType: gaugeType.data });
+  return { gaugeType: gaugeType.data };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

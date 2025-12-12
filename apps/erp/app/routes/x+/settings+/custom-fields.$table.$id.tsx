@@ -4,6 +4,7 @@ import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import {
+  data,
   json,
   redirect,
   useLoaderData,
@@ -42,7 +43,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ customField: customField.data });
+  return { customField: customField.data };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -71,7 +72,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     updatedBy: userId
   });
   if (update.error) {
-    return json(
+    return data(
       {},
       await flash(request, error(update.error, "Failed to update custom field"))
     );

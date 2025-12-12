@@ -3,6 +3,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import type { ActionFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
+import { data } from "react-router";
 import { deleteTraining } from "~/modules/resources";
 import { path } from "~/utils/path";
 
@@ -17,7 +18,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const mutation = await deleteTraining(client, id);
   if (mutation.error) {
-    return json(
+    return data(
       {
         success: false
       },

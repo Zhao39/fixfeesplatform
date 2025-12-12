@@ -51,9 +51,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     internalNotes: (invoice.data?.internalNotes ?? {}) as JSONContent
-  });
+  };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

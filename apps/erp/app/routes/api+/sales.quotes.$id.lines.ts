@@ -9,7 +9,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   });
 
   const { id } = params;
-  if (!id) return json({ data: [], error: null });
+  if (!id) return { data: [], error: null };
 
-  return json(await getQuoteLinesList(client, id));
+  return await getQuoteLinesList(client, id);
 }

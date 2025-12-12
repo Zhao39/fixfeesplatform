@@ -46,12 +46,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
     console.error(actions.error);
   }
 
-  return json({
+  return {
     actions: actions.data ?? [],
     count: actions.count ?? 0,
     issueTypes: issueTypes.data ?? [],
     requiredActions: requiredActions.data ?? []
-  });
+  };
 }
 
 export default function ActionsRoute() {

@@ -2,7 +2,8 @@ import { assertIsPost, error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { notifyTaskStatusChanged } from "@carbon/ee/notifications";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
+import { data } from "react-router";
 import type { IssueInvestigationTask } from "~/modules/quality";
 import { updateIssueTaskStatus } from "~/modules/quality";
 import { getCompanyIntegrations } from "~/modules/settings/settings.server";
@@ -17,7 +18,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const formData = await request.formData();
   const id = formData.get("id") as string;
   if (id !== params.id) {
-    return json(
+    return data(
       {},
       await flash(request, error("Invalid task ID", "Invalid task ID"))
     );
@@ -38,7 +39,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     userId
   });
   if (update.error) {
-    return json(
+    return data(
       {},
       await flash(request, error(update.error, "Failed to update status"))
     );
@@ -67,5 +68,5 @@ export async function action({ request, params }: ActionFunctionArgs) {
     // Continue without blocking the main operation
   }
 
-  return json({});
+  return {};
 }

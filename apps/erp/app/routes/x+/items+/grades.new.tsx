@@ -4,7 +4,7 @@ import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-import { useNavigate } from "react-router";
+import { data, useNavigate } from "react-router";
 import { materialGradeValidator, upsertMaterialGrade } from "~/modules/items";
 import MaterialGradeForm from "~/modules/items/ui/MaterialGrades/MaterialGradeForm";
 
@@ -41,7 +41,7 @@ export async function action({ request }: ActionFunctionArgs) {
     companyId
   });
   if (insertMaterialGrade.error) {
-    return json(
+    return data(
       {},
       await flash(
         request,
@@ -52,7 +52,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const materialGradeId = insertMaterialGrade.data?.id;
   if (!materialGradeId) {
-    return json(
+    return data(
       {},
       await flash(
         request,

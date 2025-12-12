@@ -14,6 +14,7 @@ import {
 } from "@carbon/react";
 import type { ActionFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
+import { data } from "react-router";
 import { useRouteData } from "~/hooks";
 import type { Company as CompanyType } from "~/modules/settings";
 import {
@@ -47,12 +48,12 @@ export async function action({ request }: ActionFunctionArgs) {
     updatedBy: userId
   });
   if (update.error)
-    return json(
+    return data(
       {},
       await flash(request, error(update.error, "Failed to update company"))
     );
 
-  return json({}, await flash(request, success("Updated company")));
+  return data({}, await flash(request, success("Updated company")));
 }
 
 export default function Company() {

@@ -28,9 +28,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     processes: processes.data
-  });
+  };
 }
 
 export default function SupplierPaymentRoute() {

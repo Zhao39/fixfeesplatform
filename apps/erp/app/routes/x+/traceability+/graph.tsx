@@ -105,7 +105,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       .select("*")
       .in("id", uniqueActivityIds);
 
-    return json({
+    return {
       entities: [
         ...(entity?.data ? [entity.data] : []),
         ...(descendants?.data ?? []),
@@ -119,7 +119,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       inputs: inputs?.data ?? [],
       outputs: outputs?.data ?? [],
       activities: activities?.data ?? []
-    });
+    };
   }
 
   if (trackedActivityId) {
@@ -198,12 +198,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
       ...(additionalActivities?.data || [])
     ];
 
-    return json({
+    return {
       entities: directEntities?.data ?? [],
       inputs: allInputs,
       outputs: allOutputs,
       activities: allActivities
-    });
+    };
   }
 
   throw new Error("Invalid query parameters");

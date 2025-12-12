@@ -12,10 +12,10 @@ export async function action({ request }: ActionFunctionArgs) {
   );
 
   if (validation.error) {
-    return json({
+    return {
       success: false,
       message: "Invalid form data"
-    });
+    };
   }
 
   const { error } = await client
@@ -29,8 +29,8 @@ export async function action({ request }: ActionFunctionArgs) {
     .eq("id", validation.data.id);
 
   if (error) {
-    return json({ success: false, message: error.message });
+    return { success: false, message: error.message };
   }
 
-  return json({ success: true });
+  return { success: true };
 }

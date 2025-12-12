@@ -78,11 +78,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     count: shelves.count ?? 0,
     shelves: shelves.data ?? [],
     locationId
-  });
+  };
 }
 
 export default function ShelvesRoute() {

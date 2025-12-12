@@ -2,7 +2,8 @@ import { assertIsPost, error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
+import { data } from "react-router";
 import { upsertJobOperationStep } from "~/modules/production";
 import { operationStepValidator } from "~/modules/shared";
 
@@ -26,7 +27,7 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 
   if (insert.error) {
-    return json(
+    return data(
       {
         id: null
       },
@@ -39,7 +40,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const jobOperationStepId = insert.data?.id;
   if (!jobOperationStepId) {
-    return json(
+    return data(
       {
         id: null
       },
@@ -50,5 +51,5 @@ export async function action({ request }: ActionFunctionArgs) {
     );
   }
 
-  return json({ id: jobOperationStepId });
+  return { id: jobOperationStepId };
 }

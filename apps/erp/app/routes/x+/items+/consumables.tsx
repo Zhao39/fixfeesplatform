@@ -53,11 +53,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     count: consumables.count ?? 0,
     consumables: consumables.data ?? [],
     tags: tags.data ?? []
-  });
+  };
 }
 
 export default function ConsumablesSearchRoute() {

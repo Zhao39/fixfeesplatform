@@ -3,7 +3,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs } from "@vercel/remix";
-import { json, redirect, useNavigate, useParams } from "react-router";
+import { data, json, redirect, useNavigate, useParams } from "react-router";
 import { useRouteData } from "~/hooks";
 import type { AttributeDataType } from "~/modules/people";
 import { CustomFieldForm, customFieldValidator } from "~/modules/settings";
@@ -37,7 +37,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     createdBy: userId
   });
   if (create.error) {
-    return json(
+    return data(
       {},
       await flash(request, error(create.error, "Failed to insert custom field"))
     );

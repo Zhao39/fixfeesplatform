@@ -2,7 +2,8 @@ import { assertIsPost, error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
+import { data } from "react-router";
 import { upsertMethodOperationParameter } from "~/modules/items";
 import { operationParameterValidator } from "~/modules/shared";
 
@@ -27,7 +28,7 @@ export async function action({ request }: ActionFunctionArgs) {
     createdBy: userId
   });
   if (insert.error) {
-    return json(
+    return data(
       {
         id: null
       },
@@ -40,7 +41,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const methodOperationParameterId = insert.data?.id;
   if (!methodOperationParameterId) {
-    return json(
+    return data(
       {
         id: null
       },
@@ -51,5 +52,5 @@ export async function action({ request }: ActionFunctionArgs) {
     );
   }
 
-  return json({ id: methodOperationParameterId });
+  return { id: methodOperationParameterId };
 }

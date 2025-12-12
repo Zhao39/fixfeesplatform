@@ -49,12 +49,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     count: customers.count ?? 0,
     customers: customers.data ?? [],
     customerStatuses: customerStatuses.data ?? [],
     tags: tags.data ?? []
-  });
+  };
 }
 
 export default function SalesCustomersRoute() {

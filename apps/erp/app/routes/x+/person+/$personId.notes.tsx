@@ -28,9 +28,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     notes: notes.data
-  });
+  };
 }
 
 export default function PersonNotesRoute() {

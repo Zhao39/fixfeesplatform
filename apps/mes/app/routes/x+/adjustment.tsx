@@ -1,7 +1,7 @@
 import { assertIsPost, getCarbonServiceRole } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { validationError, validator } from "@carbon/form";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
 import {
   insertManualInventoryAdjustment,
   inventoryAdjustmentValidator
@@ -35,13 +35,13 @@ export async function action({ request }: ActionFunctionArgs) {
         ? "Insufficient quantity for negative adjustment"
         : "Failed to create manual inventory adjustment";
 
-    return json({
+    return {
       success: false,
       message: flashMessage
-    });
+    };
   }
 
-  return json({
+  return {
     success: true
-  });
+  };
 }

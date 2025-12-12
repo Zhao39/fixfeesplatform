@@ -2,6 +2,7 @@ import { getCarbonServiceRole } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import type { LoaderFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
+import { data } from "react-router";
 import { z } from "zod/v3";
 import { getJobDocuments } from "~/modules/production/production.service";
 import { getCompanyIntegration } from "~/modules/settings/settings.server";
@@ -15,7 +16,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const integration = await getCompanyIntegration(client, companyId, "radan");
   if (!integration) {
-    return json(
+    return data(
       { success: false, error: "Integration not active" },
       { status: 400 }
     );
@@ -23,13 +24,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const metadata = integrationMetadataParser.safeParse(integration.metadata);
   if (!metadata.success) {
-    return json({ success: false, error: "Invalid metadata" }, { status: 400 });
+    return data({ success: false, error: "Invalid metadata" }, { status: 400 });
   }
 
   const { processes } = metadata.data;
 
   if (!params.version) {
-    return json(
+    return data(
       { success: false, error: "Version is required" },
       { status: 400 }
     );
@@ -42,7 +43,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     });
 
     if (result.error) {
-      return json(
+      return data(
         { success: false, error: result.error.message },
         { status: 500 }
       );
@@ -76,11 +77,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       })
     );
 
-    return json({ success: true, data: enrichedData });
+    return { success: true, data: enrichedData };
   }
 
-  return json({
+  return {
     success: false,
     error: `version ${params.version} is invalid`
-  });
+  };
 }

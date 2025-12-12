@@ -53,12 +53,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     count: suppliers.count ?? 0,
     suppliers: suppliers.data ?? [],
     supplierStatuses: supplierStatuses.data ?? [],
     tags: tags.data ?? []
-  });
+  };
 }
 
 export default function PurchasingSuppliersRoute() {

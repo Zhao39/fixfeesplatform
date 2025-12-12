@@ -41,11 +41,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     partUnitSalePrice: partUnitSalePrice.data,
     customerParts: customerParts.data,
     itemId
-  });
+  };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

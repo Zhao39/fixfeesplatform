@@ -104,7 +104,6 @@ const CreatableCombobox = forwardRef<HTMLButtonElement, CreatableComboboxProps>(
             onChange(newValue?.replace(/"/g, '\\"') ?? "");
           }}
         />
-
         {error ? (
           <FormErrorMessage>{error}</FormErrorMessage>
         ) : (

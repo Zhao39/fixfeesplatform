@@ -50,10 +50,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     training: training.data,
     tags: tags.data ?? []
-  });
+  };
 }
 
 export default function TrainingRoute() {

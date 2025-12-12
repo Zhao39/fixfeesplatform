@@ -80,10 +80,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     {} as Record<string, string[]>
   );
 
-  return json({
+  return {
     summary: (summary.data ?? []) as TrainingAssignmentSummaryItem[],
     assignmentsByTraining
-  });
+  };
 }
 
 const TrainingAssignmentsTable = memo(

@@ -50,7 +50,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
         error(companySettings.error, "Failed to get company settings")
       )
     );
-  return json({ companySettings: companySettings.data });
+  return { companySettings: companySettings.data };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -62,7 +62,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const validation = await validator(jobCompletedValidator).validate(formData);
 
   if (validation.error) {
-    return json({ success: false, message: "Invalid form data" });
+    return { success: false, message: "Invalid form data" };
   }
 
   const update = await client
@@ -75,10 +75,9 @@ export async function action({ request }: ActionFunctionArgs) {
     })
     .eq("id", companyId);
 
-  if (update.error)
-    return json({ success: false, message: update.error.message });
+  if (update.error) return { success: false, message: update.error.message };
 
-  return json({ success: true, message: "Job notification settings updated" });
+  return { success: true, message: "Job notification settings updated" };
 }
 
 export default function ProductionSettingsRoute() {

@@ -31,7 +31,7 @@ import type {
 } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
 import { LuCircleAlert } from "react-icons/lu";
-import { useFetcher, useSearchParams } from "react-router";
+import { data, useFetcher, useSearchParams } from "react-router";
 
 import { path } from "~/utils/path";
 
@@ -60,7 +60,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const { success } = await ratelimit.limit(ip);
 
   if (!success) {
-    return json(
+    return data(
       error(null, "Rate limit exceeded"),
       await flash(request, error(null, "Rate limit exceeded"))
     );
@@ -71,7 +71,7 @@ export async function action({ request }: ActionFunctionArgs) {
   );
 
   if (validation.error) {
-    return json(error(validation.error, "Invalid email address"));
+    return error(validation.error, "Invalid email address");
   }
 
   const { email } = validation.data;
@@ -81,20 +81,19 @@ export async function action({ request }: ActionFunctionArgs) {
     const magicLink = await sendMagicLink(email);
 
     if (!magicLink) {
-      return json(
+      return data(
         error(magicLink, "Failed to send magic link"),
         await flash(request, error(magicLink, "Failed to send magic link"))
       );
     }
   } else {
-    // Enterprise edition does not support signup
-    return json(
+    return data(
       { success: false, message: "Invalid email/password combination" },
       await flash(request, error(null, "Failed to sign in"))
     );
   }
 
-  return json({ success: true });
+  return { success: true };
 }
 
 export default function LoginRoute() {

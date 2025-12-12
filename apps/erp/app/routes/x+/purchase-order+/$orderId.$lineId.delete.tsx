@@ -28,7 +28,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ purchaseOrderLine: purchaseOrderLine.data });
+  return { purchaseOrderLine: purchaseOrderLine.data };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

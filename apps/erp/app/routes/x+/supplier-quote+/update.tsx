@@ -1,6 +1,6 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { getLocalTimeZone, today } from "@internationalized/date";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
 import { getCurrencyByCode } from "~/modules/accounting";
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -17,7 +17,7 @@ export async function action({ request }: ActionFunctionArgs) {
     typeof field !== "string" ||
     (typeof value !== "string" && value !== null)
   ) {
-    return json({ error: { message: "Invalid form data" }, data: null });
+    return { error: { message: "Invalid form data" }, data: null };
   }
 
   switch (field) {
@@ -32,30 +32,26 @@ export async function action({ request }: ActionFunctionArgs) {
 
         if (supplier.data?.currencyCode) {
           currencyCode = supplier.data.currencyCode;
-          return json(
-            await client
-              .from("supplierQuote")
-              .update({
-                supplierId: value ?? undefined,
-                currencyCode: currencyCode ? currencyCode : undefined,
-                updatedBy: userId,
-                updatedAt: new Date().toISOString()
-              })
-              .in("id", ids as string[])
-          );
+          return await client
+            .from("supplierQuote")
+            .update({
+              supplierId: value ?? undefined,
+              currencyCode: currencyCode ? currencyCode : undefined,
+              updatedBy: userId,
+              updatedAt: new Date().toISOString()
+            })
+            .in("id", ids as string[]);
         }
       }
 
-      return json(
-        await client
-          .from("supplierQuote")
-          .update({
-            supplierId: value ?? undefined,
-            updatedBy: userId,
-            updatedAt: new Date().toISOString()
-          })
-          .in("id", ids as string[])
-      );
+      return await client
+        .from("supplierQuote")
+        .update({
+          supplierId: value ?? undefined,
+          updatedBy: userId,
+          updatedAt: new Date().toISOString()
+        })
+        .in("id", ids as string[]);
     case "currencyCode":
       const currency = await getCurrencyByCode(
         client,
@@ -63,17 +59,15 @@ export async function action({ request }: ActionFunctionArgs) {
         value as string
       );
       if (currency.data) {
-        return json(
-          await client
-            .from("supplierQuote")
-            .update({
-              currencyCode: value,
-              exchangeRate: currency.data.exchangeRate,
-              updatedBy: userId,
-              updatedAt: new Date().toISOString()
-            })
-            .in("id", ids as string[])
-        );
+        return await client
+          .from("supplierQuote")
+          .update({
+            currencyCode: value,
+            exchangeRate: currency.data.exchangeRate,
+            updatedBy: userId,
+            updatedAt: new Date().toISOString()
+          })
+          .in("id", ids as string[]);
       }
     // don't break -- just let it catch the next case
 
@@ -81,34 +75,30 @@ export async function action({ request }: ActionFunctionArgs) {
     case "supplierLocationId":
     case "supplierReference":
     case "quotedDate":
-      return json(
-        await client
-          .from("supplierQuote")
-          .update({
-            [field]: value ? value : null,
-            updatedBy: userId,
-            updatedAt: new Date().toISOString()
-          })
-          .in("id", ids as string[])
-      );
+      return await client
+        .from("supplierQuote")
+        .update({
+          [field]: value ? value : null,
+          updatedBy: userId,
+          updatedAt: new Date().toISOString()
+        })
+        .in("id", ids as string[]);
 
     case "expirationDate":
-      return json(
-        await client
-          .from("supplierQuote")
-          .update({
-            status: value
-              ? today(getLocalTimeZone()).toString() > value
-                ? "Expired"
-                : "Active"
-              : "Active",
-            expirationDate: value ? value : null,
-            updatedBy: userId,
-            updatedAt: new Date().toISOString()
-          })
-          .in("id", ids as string[])
-      );
+      return await client
+        .from("supplierQuote")
+        .update({
+          status: value
+            ? today(getLocalTimeZone()).toString() > value
+              ? "Expired"
+              : "Active"
+            : "Active",
+          expirationDate: value ? value : null,
+          updatedBy: userId,
+          updatedAt: new Date().toISOString()
+        })
+        .in("id", ids as string[]);
     default:
-      return json({ error: { message: "Invalid field" }, data: null });
+      return { error: { message: "Invalid field" }, data: null };
   }
 }

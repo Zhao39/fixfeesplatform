@@ -30,7 +30,7 @@ import {
   LuTriangleAlert,
   LuX
 } from "react-icons/lu";
-import { useFetcher, useNavigate, useParams } from "react-router";
+import { data, useFetcher, useNavigate, useParams } from "react-router";
 import { useRouteData } from "~/hooks";
 import type { StockTransfer, StockTransferLine } from "~/modules/inventory";
 import { stockTransferLineScanValidator } from "~/modules/inventory";
@@ -45,7 +45,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const payload = await request.json();
   const validated = stockTransferLineScanValidator.safeParse(payload);
   if (!validated.success) {
-    return json(
+    return data(
       { success: false, message: "Invalid form data" },
       await flash(request, error(validated.error.message, "Invalid form data"))
     );
@@ -60,7 +60,7 @@ export async function action({ request }: ActionFunctionArgs) {
   ]);
 
   if (stockTransferLine.error || itemShelfQuantities.error) {
-    return json(
+    return data(
       {
         success: false,
         message: "Failed to load stock transfer line or item shelf quantities"
@@ -107,7 +107,7 @@ export async function action({ request }: ActionFunctionArgs) {
   );
 
   if (functionError) {
-    return json(
+    return data(
       { success: false, message: "Failed to pick line" },
       await flash(
         request,

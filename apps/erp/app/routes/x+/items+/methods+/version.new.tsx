@@ -2,7 +2,8 @@ import { assertIsPost, error, getCarbonServiceRole } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
-import { json, redirect, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json, redirect } from "@vercel/remix";
+import { data } from "react-router";
 import {
   copyMakeMethod,
   makeMethodVersionValidator,
@@ -31,7 +32,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     createdBy: userId
   });
   if (insertMethodOperation.error) {
-    return json(
+    return data(
       {
         id: null
       },
@@ -46,7 +47,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const itemId = insertMethodOperation.data?.itemId;
   const itemType = insertMethodOperation.data?.type;
   if (!methodOperationId || !itemType) {
-    return json(
+    return data(
       {
         id: null
       },
@@ -65,10 +66,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
   });
 
   if (copy.error) {
-    return json({
+    return {
       success: false,
       message: "Failed to copy make method"
-    });
+    };
   }
 
   // @ts-expect-error

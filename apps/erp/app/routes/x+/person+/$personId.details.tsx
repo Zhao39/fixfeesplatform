@@ -25,9 +25,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     user: account.data
-  });
+  };
 }
 
 export default function PersonProfileRoute() {

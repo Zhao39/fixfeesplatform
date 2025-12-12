@@ -70,10 +70,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     companySettings: companySettings.data,
     terms: terms.data
-  });
+  };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -91,7 +91,7 @@ export async function action({ request }: ActionFunctionArgs) {
       ).validate(formData);
 
       if (validation.error) {
-        return json({ success: false, message: "Invalid form data" });
+        return { success: false, message: "Invalid form data" };
       }
 
       const result = await updatePurchasePriceUpdateTimingSetting(
@@ -101,16 +101,16 @@ export async function action({ request }: ActionFunctionArgs) {
       );
 
       if (result.error) {
-        return json({ success: false, message: result.error.message });
+        return { success: false, message: result.error.message };
       }
 
-      return json({
+      return {
         success: true,
         message: "Purchase price update timing updated"
-      });
+      };
   }
 
-  return json({ success: false, message: "Unknown intent" });
+  return { success: false, message: "Unknown intent" };
 }
 
 export default function PurchasingSettingsRoute() {

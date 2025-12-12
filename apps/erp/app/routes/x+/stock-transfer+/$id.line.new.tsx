@@ -5,7 +5,7 @@ import { validationError, validator } from "@carbon/form";
 import { useRouteData } from "@carbon/remix";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-import { useNavigate, useParams } from "react-router";
+import { data, useNavigate, useParams } from "react-router";
 import {
   stockTransferLineValidator,
   upsertStockTransferLine
@@ -51,7 +51,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     createdBy: userId
   });
   if (insertStockTransferLine.error) {
-    return json(
+    return data(
       {},
       await flash(
         request,

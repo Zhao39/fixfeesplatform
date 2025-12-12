@@ -4,6 +4,7 @@ import { tasks } from "@trigger.dev/sdk";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
 import crypto from "crypto";
+import { data } from "react-router";
 import { z } from "zod/v3";
 import { getIntegration } from "~/modules/settings/settings.service";
 
@@ -30,18 +31,18 @@ function createHmacSignature(
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { companyId } = params;
   if (!companyId) {
-    return json({ success: false }, { status: 400 });
+    return data({ success: false }, { status: 400 });
   }
 
-  return json({
+  return {
     success: true
-  });
+  };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
   const { companyId } = params;
   if (!companyId) {
-    return json({ success: false }, { status: 400 });
+    return data({ success: false }, { status: 400 });
   }
 
   const serviceRole = await getCarbonServiceRole();
@@ -52,7 +53,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   );
 
   if (paperlessPartsIntegration.error || !paperlessPartsIntegration.data) {
-    return json({ success: false }, { status: 400 });
+    return data({ success: false }, { status: 400 });
   }
 
   try {
@@ -75,7 +76,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       request.headers.get("paperless-parts-signature") ||
       request.headers.get("Paperless-Parts-Signature");
     if (!signatureHeader) {
-      return json({ success: false }, { status: 401 });
+      return data({ success: false }, { status: 401 });
     }
 
     // Parse timestamp and signature from header
@@ -84,7 +85,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     const signature = signaturePart.replace("v1=", "");
 
     if (!timestamp || !signature) {
-      return json({ success: false }, { status: 401 });
+      return data({ success: false }, { status: 401 });
     }
 
     const expectedSignature = createHmacSignature(
@@ -94,7 +95,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     );
 
     if (signature !== expectedSignature) {
-      return json({ success: false }, { status: 401 });
+      return data({ success: false }, { status: 401 });
     }
 
     const payload = JSON.parse(payloadText);
@@ -106,9 +107,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
       payload
     });
 
-    return json({ success: true });
-    // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
-  } catch (err) {
-    return json({ success: false }, { status: 500 });
+    return { success: true };
+  } catch (_err) {
+    return data({ success: false }, { status: 500 });
   }
 }

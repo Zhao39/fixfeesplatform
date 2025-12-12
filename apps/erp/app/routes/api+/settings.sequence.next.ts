@@ -3,6 +3,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import type { LoaderFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
+import { data } from "react-router";
 import { getNextSequence } from "~/modules/settings";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -13,14 +14,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const table = searchParams.get("table") as string;
 
   if (!table || table === "undefined")
-    return json(
+    return data(
       { data: null },
       await flash(request, error(request, "Bad request for next sequence"))
     );
 
   const nextSequence = await getNextSequence(client, table, companyId);
   if (nextSequence.error) {
-    return json(
+    return data(
       nextSequence,
       await flash(
         request,
@@ -29,5 +30,5 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json(nextSequence);
+  return nextSequence;
 }

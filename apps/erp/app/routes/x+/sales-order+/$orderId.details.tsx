@@ -70,12 +70,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     internalNotes: (order.data?.internalNotes ?? {}) as JSONContent,
     externalNotes: (order.data?.externalNotes ?? {}) as JSONContent,
     payment: payment.data || null,
     shipment: shipment.data || null
-  });
+  };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

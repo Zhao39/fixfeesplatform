@@ -50,11 +50,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     count: tools.count ?? 0,
     tools: tools.data ?? [],
     tags: tags.data ?? []
-  });
+  };
 }
 
 export default function ToolsSearchRoute() {

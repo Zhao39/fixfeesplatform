@@ -1,6 +1,7 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
 import type { LoaderFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
+import { data } from "react-router";
 import { getMaterialGradeList } from "~/modules/items";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -10,10 +11,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   });
 
   if (!params.substanceId) {
-    return json({ error: "Substance ID is required" }, { status: 400 });
+    return data({ error: "Substance ID is required" }, { status: 400 });
   }
 
-  return json(
-    await getMaterialGradeList(client, params.substanceId, companyId)
-  );
+  return await getMaterialGradeList(client, params.substanceId, companyId);
 }

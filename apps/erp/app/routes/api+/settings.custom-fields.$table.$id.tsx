@@ -3,6 +3,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import type { LoaderFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
+import { data } from "react-router";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, companyId } = await requirePermissions(request, {});
@@ -10,9 +11,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const { table, id } = params;
 
   if (!table || !id)
-    return json({
+    return {
       data: []
-    });
+    };
 
   const values = await client.rpc("get_custom_field_unique_values", {
     table_name: table,
@@ -20,7 +21,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     company_id: companyId
   });
   if (values.error) {
-    return json(
+    return data(
       [],
       await flash(
         request,
@@ -34,5 +35,5 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     name: value.value
   }));
 
-  return json({ data: options, error: null });
+  return { data: options, error: null };
 }

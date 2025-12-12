@@ -1,6 +1,7 @@
 import { assertIsPost } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
+import { data } from "react-router";
 import { z } from "zod/v3";
 import { upsertQuoteLinePrices } from "~/modules/sales";
 
@@ -29,14 +30,14 @@ export async function action({ request, params }: ActionFunctionArgs) {
   );
 
   if (unitCostsByQuantity.success === false) {
-    return json(
+    return data(
       { data: null, errors: unitCostsByQuantity.error.errors?.[0].message },
       { status: 400 }
     );
   }
 
   if (quantities.success === false) {
-    return json(
+    return data(
       { data: null, errors: quantities.error.errors?.[0].message },
       { status: 400 }
     );
@@ -59,11 +60,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
   );
   if (insertLinePrices.error) {
     console.error(insertLinePrices.error);
-    return json(
+    return data(
       { data: null, error: insertLinePrices.error.message },
       { status: 400 }
     );
   }
 
-  return json({ data: null, error: null });
+  return { data: null, error: null };
 }

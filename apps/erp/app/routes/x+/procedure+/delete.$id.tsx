@@ -4,6 +4,7 @@ import { flash } from "@carbon/auth/session.server";
 import type { ActionFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
 import type { ClientActionFunctionArgs } from "react-router";
+import { data } from "react-router";
 import { deleteProcedure } from "~/modules/production/production.service";
 import { path } from "~/utils/path";
 import { getCompanyId, proceduresQuery } from "~/utils/react-query";
@@ -19,7 +20,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const mutation = await deleteProcedure(client, id);
   if (mutation.error) {
-    return json(
+    return data(
       {
         success: false
       },

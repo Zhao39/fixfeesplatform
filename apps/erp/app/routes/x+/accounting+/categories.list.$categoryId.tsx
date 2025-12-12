@@ -48,10 +48,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({
+  return {
     accountCategory: accountCategory.data,
     accountSubcategories: accountSubcategories.data ?? []
-  });
+  };
 }
 
 export default function AccountCategoryListRoute() {

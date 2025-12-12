@@ -1,7 +1,8 @@
 import { getCarbonServiceRole } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { FunctionRegion } from "@supabase/supabase-js";
-import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json } from "@vercel/remix";
+import { data } from "react-router";
 import { getTrackedEntity } from "~/services/operations.service";
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -17,7 +18,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const trackedEntity = await getTrackedEntity(client, trackedEntityId);
   if (trackedEntity.error) {
-    return json(
+    return data(
       { success: false, message: "Failed to get tracked entity" },
       { status: 400 }
     );
@@ -37,11 +38,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
   });
 
   if (issue.error) {
-    return json(
+    return data(
       { success: false, message: "Failed to scrape entity" },
       { status: 400 }
     );
   }
 
-  return json({ success: true, message: "Entity scraped successfully" });
+  return { success: true, message: "Entity scraped successfully" };
 }

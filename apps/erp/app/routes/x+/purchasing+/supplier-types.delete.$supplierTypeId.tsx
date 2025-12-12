@@ -29,7 +29,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  return json({ supplierType: supplierType.data });
+  return { supplierType: supplierType.data };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

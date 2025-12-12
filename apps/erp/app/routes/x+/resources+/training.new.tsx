@@ -4,7 +4,7 @@ import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-import { useNavigate } from "react-router";
+import { data, useNavigate } from "react-router";
 import {
   TrainingForm,
   trainingValidator,
@@ -40,7 +40,7 @@ export async function action({ request }: ActionFunctionArgs) {
     contentJSON = content ? JSON.parse(content) : {};
     // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
   } catch (e) {
-    return json(
+    return data(
       {},
       await flash(
         request,
@@ -60,7 +60,7 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 
   if (insertTraining.error || !insertTraining.data?.id) {
-    return json(
+    return data(
       {},
       await flash(
         request,

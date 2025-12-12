@@ -1,7 +1,7 @@
 import { getCarbonServiceRole } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { validationError, validator } from "@carbon/form";
-import { json, redirect, type ActionFunctionArgs } from "@vercel/remix";
+import { type ActionFunctionArgs, json, redirect } from "@vercel/remix";
 import { copyItem, getMethodValidator } from "~/modules/items";
 import { path, requestReferrer } from "~/utils/path";
 
@@ -26,9 +26,9 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 
   if (upsert.error) {
-    return json({
+    return {
       error: upsert.error ? "Failed to save method" : null
-    });
+    };
   }
 
   throw redirect(requestReferrer(request) ?? path.to.items);
