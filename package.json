@@ -17,10 +17,10 @@
   },
   "lint-staged": {
     "(apps|packages)/**/*.{js,ts,jsx,tsx}": [
-      "biome check --write"
+      "biome check --write --no-errors-on-unmatched"
     ],
     "*.json": [
-      "biome check --write"
+      "biome check --write --no-errors-on-unmatched"
     ]
   },
   "private": true,
