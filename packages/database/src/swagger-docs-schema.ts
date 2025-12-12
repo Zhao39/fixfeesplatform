@@ -31336,7 +31336,7 @@ export default {
             $ref: "#/parameters/rowFilter.riskRegister.likelihood",
           },
           {
-            $ref: "#/parameters/rowFilter.riskRegister.score",
+            $ref: "#/parameters/rowFilter.riskRegister.sourceId",
           },
           {
             $ref: "#/parameters/rowFilter.riskRegister.status",
@@ -31352,33 +31352,6 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.riskRegister.updatedAt",
-          },
-          {
-            $ref: "#/parameters/rowFilter.riskRegister.itemId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.riskRegister.itemMasterId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.riskRegister.quoteLineId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.riskRegister.jobId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.riskRegister.workCenterId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.riskRegister.supplierId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.riskRegister.supplierMasterId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.riskRegister.customerId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.riskRegister.customerMasterId",
           },
           {
             $ref: "#/parameters/select",
@@ -31461,7 +31434,7 @@ export default {
             $ref: "#/parameters/rowFilter.riskRegister.likelihood",
           },
           {
-            $ref: "#/parameters/rowFilter.riskRegister.score",
+            $ref: "#/parameters/rowFilter.riskRegister.sourceId",
           },
           {
             $ref: "#/parameters/rowFilter.riskRegister.status",
@@ -31477,33 +31450,6 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.riskRegister.updatedAt",
-          },
-          {
-            $ref: "#/parameters/rowFilter.riskRegister.itemId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.riskRegister.itemMasterId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.riskRegister.quoteLineId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.riskRegister.jobId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.riskRegister.workCenterId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.riskRegister.supplierId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.riskRegister.supplierMasterId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.riskRegister.customerId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.riskRegister.customerMasterId",
           },
           {
             $ref: "#/parameters/preferReturn",
@@ -31540,7 +31486,7 @@ export default {
             $ref: "#/parameters/rowFilter.riskRegister.likelihood",
           },
           {
-            $ref: "#/parameters/rowFilter.riskRegister.score",
+            $ref: "#/parameters/rowFilter.riskRegister.sourceId",
           },
           {
             $ref: "#/parameters/rowFilter.riskRegister.status",
@@ -31556,33 +31502,6 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.riskRegister.updatedAt",
-          },
-          {
-            $ref: "#/parameters/rowFilter.riskRegister.itemId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.riskRegister.itemMasterId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.riskRegister.quoteLineId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.riskRegister.jobId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.riskRegister.workCenterId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.riskRegister.supplierId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.riskRegister.supplierMasterId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.riskRegister.customerId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.riskRegister.customerMasterId",
           },
           {
             $ref: "#/parameters/body.riskRegister",
@@ -76939,16 +76858,16 @@ export default {
         },
         source: {
           enum: [
-            "GENERAL",
-            "ITEM",
-            "ITEM_MASTER",
-            "QUOTE_LINE",
-            "JOB",
-            "WORK_CENTER",
-            "SUPPLIER",
-            "SUPPLIER_MASTER",
-            "CUSTOMER",
-            "CUSTOMER_MASTER",
+            "General",
+            "Item",
+            "Item Master",
+            "Quote Line",
+            "Job",
+            "Work Center",
+            "Supplier",
+            "Supplier Master",
+            "Customer",
+            "Customer Master",
           ],
           format: 'public."riskSource"',
           type: "string",
@@ -76961,13 +76880,13 @@ export default {
           format: "integer",
           type: "integer",
         },
-        score: {
-          format: "integer",
-          type: "integer",
+        sourceId: {
+          format: "text",
+          type: "string",
         },
         status: {
-          default: "OPEN",
-          enum: ["OPEN", "IN_REVIEW", "MITIGATING", "CLOSED", "ACCEPTED"],
+          default: "Open",
+          enum: ["Open", "In Review", "Mitigating", "Closed", "Accepted"],
           format: 'public."riskStatus"',
           type: "string",
         },
@@ -76990,54 +76909,6 @@ export default {
         },
         updatedAt: {
           format: "timestamp with time zone",
-          type: "string",
-        },
-        itemId: {
-          description:
-            "Note:\nThis is a Foreign Key to `item.id`.<fk table='item' column='id'/>",
-          format: "text",
-          type: "string",
-        },
-        itemMasterId: {
-          format: "text",
-          type: "string",
-        },
-        quoteLineId: {
-          description:
-            "Note:\nThis is a Foreign Key to `quoteLine.id`.<fk table='quoteLine' column='id'/>",
-          format: "text",
-          type: "string",
-        },
-        jobId: {
-          description:
-            "Note:\nThis is a Foreign Key to `job.id`.<fk table='job' column='id'/>",
-          format: "text",
-          type: "string",
-        },
-        workCenterId: {
-          description:
-            "Note:\nThis is a Foreign Key to `workCenter.id`.<fk table='workCenter' column='id'/>",
-          format: "text",
-          type: "string",
-        },
-        supplierId: {
-          description:
-            "Note:\nThis is a Foreign Key to `supplier.id`.<fk table='supplier' column='id'/>",
-          format: "text",
-          type: "string",
-        },
-        supplierMasterId: {
-          format: "text",
-          type: "string",
-        },
-        customerId: {
-          description:
-            "Note:\nThis is a Foreign Key to `customer.id`.<fk table='customer' column='id'/>",
-          format: "text",
-          type: "string",
-        },
-        customerMasterId: {
-          format: "text",
           type: "string",
         },
       },
@@ -106421,8 +106292,8 @@ export default {
       in: "query",
       type: "string",
     },
-    "rowFilter.riskRegister.score": {
-      name: "score",
+    "rowFilter.riskRegister.sourceId": {
+      name: "sourceId",
       required: false,
       in: "query",
       type: "string",
@@ -106453,60 +106324,6 @@ export default {
     },
     "rowFilter.riskRegister.updatedAt": {
       name: "updatedAt",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.riskRegister.itemId": {
-      name: "itemId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.riskRegister.itemMasterId": {
-      name: "itemMasterId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.riskRegister.quoteLineId": {
-      name: "quoteLineId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.riskRegister.jobId": {
-      name: "jobId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.riskRegister.workCenterId": {
-      name: "workCenterId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.riskRegister.supplierId": {
-      name: "supplierId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.riskRegister.supplierMasterId": {
-      name: "supplierMasterId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.riskRegister.customerId": {
-      name: "customerId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.riskRegister.customerMasterId": {
-      name: "customerMasterId",
       required: false,
       in: "query",
       type: "string",
