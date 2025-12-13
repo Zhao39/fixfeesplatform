@@ -1,3 +1,4 @@
+import { ValidatedForm } from "@carbon/form";
 import {
   Card,
   CardContent,
@@ -24,9 +25,12 @@ import {
 } from "@carbon/utils";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { Link } from "@remix-run/react";
 import { cva } from "class-variance-authority";
+import { FaTasks } from "react-icons/fa";
 import {
   LuCalendarDays,
+  LuCircleCheck,
   LuClipboardCheck,
   LuEllipsisVertical,
   LuFlashlight,
@@ -40,14 +44,9 @@ import {
   LuTrash,
   LuUsers
 } from "react-icons/lu";
-
-import { Link } from "@remix-run/react";
 import { RiProgress8Line } from "react-icons/ri";
-import { Assignee, CustomerAvatar, EmployeeAvatarGroup } from "~/components";
-
-import { ValidatedForm } from "@carbon/form";
-import { FaTasks } from "react-icons/fa";
 import { z } from "zod/v3";
+import { Assignee, CustomerAvatar, EmployeeAvatarGroup } from "~/components";
 import { Tags } from "~/components/Form";
 import { useTags } from "~/hooks/useTags";
 import { getDeadlineIcon } from "~/modules/production/ui/Jobs/Deadline";
@@ -285,7 +284,7 @@ export function ItemCard({ item, isOverlay, progressByItemId }: ItemCardProps) {
                     : 0
                 }
               />
-              <FaTasks className="text-muted-foreground w-4 h-4" />
+              <LuCircleCheck className="text-muted-foreground w-4 h-4" />
             </HStack>
           )}
       </CardHeader>

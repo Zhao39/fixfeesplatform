@@ -25,6 +25,7 @@ import { AiOutlinePartition } from "react-icons/ai";
 import { FaTasks } from "react-icons/fa";
 import {
   LuCalendarDays,
+  LuCircleCheck,
   LuEllipsisVertical,
   LuFlashlight,
   LuFlashlightOff,
@@ -313,14 +314,22 @@ export function JobCard({ item, isOverlay, progressByItemId }: JobCardProps) {
             <span className="text-sm">{formatDate(item.dueDate)}</span>
           </HStack>
         )}
+        {displaySettings.showDueDate && item.completedDate && (
+          <HStack className="justify-start space-x-2">
+            <LuCircleCheck className="text-emerald-500" />
+            <span className="text-sm">
+              Completed {formatDate(item.completedDate)}
+            </span>
+          </HStack>
+        )}
 
         {displaySettings.showQuantity &&
           Number.isFinite(item.quantity) &&
           Number(item.quantity) > 0 && (
             <HStack className="justify-start space-x-2">
-              <FaTasks className="text-muted-foreground" />
+              <LuCircleCheck className="text-muted-foreground" />
               <span className="text-sm">
-                {item.quantityCompleted ?? 0} / {item.quantity} completed
+                {item.quantityCompleted ?? 0}/{item.quantity} completed
               </span>
             </HStack>
           )}
