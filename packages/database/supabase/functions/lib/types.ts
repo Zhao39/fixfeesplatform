@@ -1698,6 +1698,7 @@ export type Database = {
           isBoolean: boolean
           isCustomer: boolean
           isDate: boolean
+          isFile: boolean
           isList: boolean
           isNumeric: boolean
           isSupplier: boolean
@@ -1710,6 +1711,7 @@ export type Database = {
           isBoolean?: boolean
           isCustomer?: boolean
           isDate?: boolean
+          isFile?: boolean
           isList?: boolean
           isNumeric?: boolean
           isSupplier?: boolean
@@ -1722,6 +1724,7 @@ export type Database = {
           isBoolean?: boolean
           isCustomer?: boolean
           isDate?: boolean
+          isFile?: boolean
           isList?: boolean
           isNumeric?: boolean
           isSupplier?: boolean
@@ -36564,6 +36567,7 @@ export type Database = {
           userId: string
           valueBoolean: boolean | null
           valueDate: string | null
+          valueFile: string | null
           valueNumeric: number | null
           valueText: string | null
           valueUser: string | null
@@ -36578,6 +36582,7 @@ export type Database = {
           userId: string
           valueBoolean?: boolean | null
           valueDate?: string | null
+          valueFile?: string | null
           valueNumeric?: number | null
           valueText?: string | null
           valueUser?: string | null
@@ -36592,6 +36597,7 @@ export type Database = {
           userId?: string
           valueBoolean?: boolean | null
           valueDate?: string | null
+          valueFile?: string | null
           valueNumeric?: number | null
           valueText?: string | null
           valueUser?: string | null
@@ -41730,6 +41736,7 @@ export type Database = {
           finish: string | null
           grade: string | null
           id: string | null
+          itemPostingGroupId: string | null
           itemTrackingType:
             | Database["public"]["Enums"]["itemTrackingType"]
             | null
@@ -41920,6 +41927,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
+          },
+          {
+            foreignKeyName: "itemCost_itemPostingGroupId_fkey"
+            columns: ["itemPostingGroupId"]
+            isOneToOne: false
+            referencedRelation: "itemPostingGroup"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "material_materialFormId_fkey"
@@ -50144,6 +50158,7 @@ export type Database = {
           itemId: string
           itemReadableId: string
           jobId: string
+          jobMakeMethodId: string
           operationCount: number
           priority: number
           quantity: number
@@ -50838,6 +50853,7 @@ export type Database = {
           itemId: string
           itemReadableId: string
           jobId: string
+          jobMakeMethodId: string
           operationCount: number
           priority: number
           quantity: number

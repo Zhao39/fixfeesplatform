@@ -1698,6 +1698,7 @@ export type Database = {
           isBoolean: boolean
           isCustomer: boolean
           isDate: boolean
+          isFile: boolean
           isList: boolean
           isNumeric: boolean
           isSupplier: boolean
@@ -1710,6 +1711,7 @@ export type Database = {
           isBoolean?: boolean
           isCustomer?: boolean
           isDate?: boolean
+          isFile?: boolean
           isList?: boolean
           isNumeric?: boolean
           isSupplier?: boolean
@@ -1722,6 +1724,7 @@ export type Database = {
           isBoolean?: boolean
           isCustomer?: boolean
           isDate?: boolean
+          isFile?: boolean
           isList?: boolean
           isNumeric?: boolean
           isSupplier?: boolean
@@ -36856,9 +36859,13 @@ export type Database = {
           valueBoolean: boolean | null
           valueDate: string | null
 <<<<<<< HEAD
+<<<<<<< HEAD
           valueFile: string | null
 =======
 >>>>>>> 01b6a4d5a (refactor: generate types)
+=======
+          valueFile: string | null
+>>>>>>> a56d9a3b6 (refactor: rebase and regenerate types)
           valueNumeric: number | null
           valueText: string | null
           valueUser: string | null
@@ -36874,9 +36881,13 @@ export type Database = {
           valueBoolean?: boolean | null
           valueDate?: string | null
 <<<<<<< HEAD
+<<<<<<< HEAD
           valueFile?: string | null
 =======
 >>>>>>> 01b6a4d5a (refactor: generate types)
+=======
+          valueFile?: string | null
+>>>>>>> a56d9a3b6 (refactor: rebase and regenerate types)
           valueNumeric?: number | null
           valueText?: string | null
           valueUser?: string | null
@@ -36892,9 +36903,13 @@ export type Database = {
           valueBoolean?: boolean | null
           valueDate?: string | null
 <<<<<<< HEAD
+<<<<<<< HEAD
           valueFile?: string | null
 =======
 >>>>>>> 01b6a4d5a (refactor: generate types)
+=======
+          valueFile?: string | null
+>>>>>>> a56d9a3b6 (refactor: rebase and regenerate types)
           valueNumeric?: number | null
           valueText?: string | null
           valueUser?: string | null
@@ -42222,6 +42237,7 @@ export type Database = {
           finish: string | null
           grade: string | null
           id: string | null
+          itemPostingGroupId: string | null
           itemTrackingType:
             | Database["public"]["Enums"]["itemTrackingType"]
             | null
@@ -42412,6 +42428,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
+          },
+          {
+            foreignKeyName: "itemCost_itemPostingGroupId_fkey"
+            columns: ["itemPostingGroupId"]
+            isOneToOne: false
+            referencedRelation: "itemPostingGroup"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "material_materialFormId_fkey"
@@ -50842,9 +50865,13 @@ export type Database = {
           itemReadableId: string
           jobId: string
 <<<<<<< HEAD
+<<<<<<< HEAD
           jobMakeMethodId: string
 =======
 >>>>>>> 01b6a4d5a (refactor: generate types)
+=======
+          jobMakeMethodId: string
+>>>>>>> a56d9a3b6 (refactor: rebase and regenerate types)
           operationCount: number
           priority: number
           quantity: number
@@ -51557,9 +51584,13 @@ export type Database = {
           itemReadableId: string
           jobId: string
 <<<<<<< HEAD
+<<<<<<< HEAD
           jobMakeMethodId: string
 =======
 >>>>>>> 01b6a4d5a (refactor: generate types)
+=======
+          jobMakeMethodId: string
+>>>>>>> a56d9a3b6 (refactor: rebase and regenerate types)
           operationCount: number
           priority: number
           quantity: number

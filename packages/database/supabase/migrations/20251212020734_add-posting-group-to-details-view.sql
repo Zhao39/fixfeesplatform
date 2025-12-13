@@ -82,7 +82,7 @@ BEGIN
     ir."revisions",
     p."customFields",
     p."tags",
-    p."itemPostingGroupId",
+    ic."itemPostingGroupId",
     i."createdBy",
     i."createdAt",
     i."updatedBy",
@@ -91,7 +91,7 @@ BEGIN
   LEFT JOIN "item" i ON i."readableId" = p."id" AND i."companyId" = p."companyId"
   LEFT JOIN item_revisions ir ON true
   LEFT JOIN (
-    SELECT 
+    SELECT
       ps."itemId",
       string_agg(ps."supplierPartId", ',') AS "supplierIds"
     FROM "supplierPart" ps
@@ -99,6 +99,7 @@ BEGIN
   ) ps ON ps."itemId" = i.id
   LEFT JOIN "modelUpload" mu ON mu.id = i."modelUploadId"
   LEFT JOIN "unitOfMeasure" uom ON uom.code = i."unitOfMeasureCode" AND uom."companyId" = i."companyId"
+  LEFT JOIN "itemCost" ic ON ic."itemId" = i.id
   WHERE i."id" = item_id;
 END;
 $$ LANGUAGE plpgsql;
@@ -187,7 +188,7 @@ BEGIN
     ir."revisions",
     t."customFields",
     t."tags",
-    t."itemPostingGroupId",
+    ic."itemPostingGroupId",
     i."createdBy",
     i."createdAt",
     i."updatedBy",
@@ -196,7 +197,7 @@ BEGIN
   LEFT JOIN "item" i ON i."readableId" = t."id" AND i."companyId" = t."companyId"
   LEFT JOIN item_revisions ir ON true
   LEFT JOIN (
-    SELECT 
+    SELECT
       ps."itemId",
       string_agg(ps."supplierPartId", ',') AS "supplierIds"
     FROM "supplierPart" ps
@@ -204,6 +205,7 @@ BEGIN
   ) ps ON ps."itemId" = i.id
   LEFT JOIN "modelUpload" mu ON mu.id = i."modelUploadId"
   LEFT JOIN "unitOfMeasure" uom ON uom.code = i."unitOfMeasureCode" AND uom."companyId" = i."companyId"
+  LEFT JOIN "itemCost" ic ON ic."itemId" = i.id
   WHERE i."id" = item_id;
 END;
 $$ LANGUAGE plpgsql;
@@ -273,7 +275,7 @@ SELECT
   m."materialFormId",
   m."customFields",
   m."tags",
-  m."itemPostingGroupId",
+  ic."itemPostingGroupId",
   i."createdBy",
   i."createdAt",
   i."updatedBy",
@@ -296,4 +298,5 @@ FROM "material" m
   LEFT JOIN "materialDimension" md ON m."dimensionId" = md."id"
   LEFT JOIN "materialFinish" mfin ON m."finishId" = mfin."id"
   LEFT JOIN "materialGrade" mg ON m."gradeId" = mg."id"
-  LEFT JOIN "materialType" mt ON m."materialTypeId" = mt."id";
+  LEFT JOIN "materialType" mt ON m."materialTypeId" = mt."id"
+  LEFT JOIN "itemCost" ic ON ic."itemId" = i.id;

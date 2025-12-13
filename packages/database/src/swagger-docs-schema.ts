@@ -37864,6 +37864,9 @@ export default {
             $ref: "#/parameters/rowFilter.materials.tags",
           },
           {
+            $ref: "#/parameters/rowFilter.materials.itemPostingGroupId",
+          },
+          {
             $ref: "#/parameters/rowFilter.materials.createdBy",
           },
           {
@@ -79596,6 +79599,12 @@ export default {
           },
           type: "array",
         },
+        itemPostingGroupId: {
+          description:
+            "Note:\nThis is a Foreign Key to `itemPostingGroup.id`.<fk table='itemPostingGroup' column='id'/>",
+          format: "text",
+          type: "string",
+        },
         createdBy: {
           description:
             "Note:\nThis is a Foreign Key to `user.id`.<fk table='user' column='id'/>",
@@ -109369,6 +109378,12 @@ export default {
     },
     "rowFilter.materials.tags": {
       name: "tags",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.materials.itemPostingGroupId": {
+      name: "itemPostingGroupId",
       required: false,
       in: "query",
       type: "string",

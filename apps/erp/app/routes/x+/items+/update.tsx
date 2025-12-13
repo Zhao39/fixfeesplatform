@@ -3,7 +3,6 @@ import type { Database } from "@carbon/database";
 import { getMaterialDescription, getMaterialId } from "@carbon/utils";
 import { type ActionFunctionArgs } from "react-router";
 
-
 import { getCompanySettings } from "~/modules/settings";
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -646,31 +645,6 @@ export async function action({ request }: ActionFunctionArgs) {
           console.error(toolItemUpdates.error);
         }
         return toolItemUpdates;
-      }
-    default:
-      return { error: { message: "Invalid field" }, data: null };
-  }
-}
-      }
-    default:
-      return { error: { message: "Invalid field" }, data: null };
-  }
-}
-      }
-    default:
-      return { error: { message: "Invalid field" }, data: null };
-  }
-}
-      }
-    default:
-      return { error: { message: "Invalid field" }, data: null };
-  }
-}
-      }
-    default:
-      return { error: { message: "Invalid field" }, data: null };
-  }
-}
       }
     default:
       return { error: { message: "Invalid field" }, data: null };
