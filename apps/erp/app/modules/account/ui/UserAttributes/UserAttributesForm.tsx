@@ -6,7 +6,7 @@ import {
   Switch,
   toast,
   useDisclosure,
-  VStack,
+  VStack
 } from "@carbon/react";
 import { parseDate } from "@internationalized/date";
 import { useLocale } from "@react-aria/i18n";
@@ -875,15 +875,5 @@ function UpdateRemoveButtons({
     </HStack>
   );
 }
-
-export default UserAttributesForm;
-
-export default UserAttributesForm;
-
-export default UserAttributesForm;
-
-export default UserAttributesForm;
-
-export default UserAttributesForm;
 
 export default UserAttributesForm;
