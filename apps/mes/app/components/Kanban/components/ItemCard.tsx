@@ -12,13 +12,16 @@ import {
   TooltipContent,
   TooltipTrigger
 } from "@carbon/react";
+import { useRouteData } from "@carbon/remix";
 import {
   convertDateStringToIsoString,
   formatDate,
   formatDurationMilliseconds,
   formatRelativeTime
 } from "@carbon/utils";
+import { Link } from "@remix-run/react";
 import { cva } from "class-variance-authority";
+import { FaTasks } from "react-icons/fa";
 import {
   LuCalendarDays,
   LuCircleCheck,
@@ -29,15 +32,10 @@ import {
   LuTimer,
   LuTrash
 } from "react-icons/lu";
-
-import { Link } from "@remix-run/react";
-import { FaTasks } from "react-icons/fa";
 import { RiProgress8Line } from "react-icons/ri";
 import { AlmostDoneIcon } from "~/assets/icons/AlmostDoneIcon";
 import { InProgressStatusIcon } from "~/assets/icons/InProgressStatusIcon";
 import { TodoStatusIcon } from "~/assets/icons/TodoStatusIcon";
-
-import { useRouteData } from "@carbon/remix";
 import Avatar from "~/components/Avatar";
 import EmployeeAvatar from "~/components/EmployeeAvatar";
 import { DeadlineIcon } from "~/components/Icons";
@@ -181,7 +179,7 @@ export function ItemCard({
                       : 0
                   }
                 />
-                <FaTasks className="text-muted-foreground w-4 h-4" />
+                <LuCircleCheck className="text-muted-foreground w-4 h-4" />
               </HStack>
             )}
         </CardHeader>
