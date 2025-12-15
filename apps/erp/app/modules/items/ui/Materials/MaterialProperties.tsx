@@ -295,7 +295,9 @@ const MaterialProperties = () => {
                     size="sm"
                     className="p-1"
                     onClick={() =>
-                      copyToClipboard(routeData?.materialSummary?.id ?? "")
+                      copyToClipboard(
+                        routeData?.materialSummary?.readableId ?? ""
+                      )
                     }
                   >
                     <LuCopy className="w-3 h-3" />
