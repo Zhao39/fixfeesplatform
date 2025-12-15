@@ -8,7 +8,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import { FunctionRegion } from "@supabase/supabase-js";
-import type { ActionFunctionArgs } from "react-router";
+import { type ActionFunctionArgs, data } from "react-router";
 import { scrapQuantityValidator } from "~/services/models";
 import { insertScrapQuantity } from "~/services/operations.service";
 
@@ -24,10 +24,10 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
-  const { trackedEntityId, trackingType, ...data } = validation.data;
+  const { trackedEntityId, trackingType, ...d } = validation.data;
 
   const insertScrap = await insertScrapQuantity(client, {
-    ...data,
+    ...d,
     companyId,
     createdBy: userId
   });

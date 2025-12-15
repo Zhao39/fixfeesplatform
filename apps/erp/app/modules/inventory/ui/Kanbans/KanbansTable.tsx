@@ -45,6 +45,7 @@ import {
   EmployeeAvatar,
   Hyperlink,
   ItemThumbnail,
+  MethodItemTypeIcon,
   New,
   SupplierAvatar,
   Table
@@ -52,6 +53,7 @@ import {
 import { Enumerable } from "~/components/Enumerable";
 import { useLocations } from "~/components/Form/Location";
 import { usePermissions, useUrlParams } from "~/hooks";
+import { getLinkToItemDetails } from "~/modules/items/ui/Item/ItemForm";
 import type { kanbanOutputTypes } from "~/modules/settings/settings.models";
 import { useSuppliers } from "~/stores";
 import { useItems } from "~/stores/items";
@@ -533,6 +535,7 @@ const KanbansTable = memo(
       (row: Kanban) => {
         const canUpdate = permissions.can("update", "inventory");
         const canDelete = permissions.can("delete", "inventory");
+        const canViewItems = permissions.can("view", "inventory");
 
         return (
           <>
@@ -544,6 +547,27 @@ const KanbansTable = memo(
                 </Link>
               </MenuItem>
             )}
+            {canViewItems &&
+              row.itemId &&
+              (() => {
+                const item = items.find((i) => i.id === row.itemId);
+                const itemType = item?.type;
+                // Only show link for supported types (Service and Fixture not yet supported)
+                if (
+                  itemType === "Service" ||
+                  itemType === "Fixture" ||
+                  !itemType
+                )
+                  return null;
+                return (
+                  <MenuItem asChild>
+                    <Link to={getLinkToItemDetails(itemType, row.itemId)}>
+                      <MethodItemTypeIcon type={itemType} />
+                      View Item Master
+                    </Link>
+                  </MenuItem>
+                );
+              })()}
             {canDelete && (
               <MenuItem destructive asChild>
                 <Link to={`${path.to.deleteKanban(row.id!)}?${params}`}>

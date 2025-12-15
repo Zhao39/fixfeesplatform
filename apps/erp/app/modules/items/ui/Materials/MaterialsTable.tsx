@@ -1,5 +1,6 @@
 import {
   Badge,
+  Button,
   Checkbox,
   DropdownMenuContent,
   DropdownMenuGroup,
@@ -32,6 +33,7 @@ import {
   LuExpand,
   LuGitPullRequestArrow,
   LuGlassWater,
+  LuGroup,
   LuPaintBucket,
   LuPencil,
   LuPuzzle,
@@ -44,7 +46,7 @@ import {
 } from "react-icons/lu";
 import { RxCodesandboxLogo } from "react-icons/rx";
 import { TbTargetArrow } from "react-icons/tb";
-import { useFetcher, useNavigate } from "react-router";
+import { Link, useFetcher, useNavigate } from "react-router";
 import {
   EmployeeAvatar,
   Hyperlink,
@@ -55,6 +57,7 @@ import {
   TrackingTypeIcon
 } from "~/components";
 import { Enumerable } from "~/components/Enumerable";
+import { useItemPostingGroups } from "~/components/Form/ItemPostingGroup";
 import { useUnitOfMeasure } from "~/components/Form/UnitOfMeasure";
 import { ConfirmDelete } from "~/components/Modals";
 import { useFilters } from "~/components/Table/components/Filter/useFilters";
@@ -84,6 +87,7 @@ const MaterialsTable = memo(({ data, tags, count }: MaterialsTableProps) => {
 
   const [people] = usePeople();
   const unitsOfMeasure = useUnitOfMeasure();
+  const itemPostingGroups = useItemPostingGroups();
   const customColumns = useCustomColumns<Material>("material");
 
   const filters = useFilters();
@@ -233,6 +237,27 @@ const MaterialsTable = memo(({ data, tags, count }: MaterialsTableProps) => {
                 label: name
               })) ?? []
           }
+        }
+      },
+      {
+        accessorKey: "itemPostingGroupId",
+        header: "Item Group",
+        cell: (item) => {
+          const itemPostingGroupId = item.row.original.itemPostingGroupId;
+          const itemPostingGroup = itemPostingGroups.find(
+            (group) => group.value === itemPostingGroupId
+          );
+          return <Enumerable value={itemPostingGroup?.label ?? null} />;
+        },
+        meta: {
+          filter: {
+            type: "static",
+            options: itemPostingGroups.map((group) => ({
+              value: group.value,
+              label: <Enumerable value={group.label} />
+            }))
+          },
+          icon: <LuGroup />
         }
       },
       {
@@ -395,6 +420,7 @@ const MaterialsTable = memo(({ data, tags, count }: MaterialsTableProps) => {
   }, [
     materialSubstanceId,
     materialFormId,
+    itemPostingGroups,
     unitsOfMeasure,
     tags,
     people,
@@ -416,7 +442,8 @@ const MaterialsTable = memo(({ data, tags, count }: MaterialsTableProps) => {
         | "materialFormId"
         | "materialSubstanceId"
         | "defaultMethodType"
-        | "itemTrackingType",
+        | "itemTrackingType"
+        | "itemPostingGroupId",
       value: string
     ) => {
       const formData = new FormData();
@@ -441,6 +468,27 @@ const MaterialsTable = memo(({ data, tags, count }: MaterialsTableProps) => {
           <DropdownMenuLabel>Update</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>Item Group</DropdownMenuSubTrigger>
+              <DropdownMenuPortal>
+                <DropdownMenuSubContent>
+                  {itemPostingGroups.map((group) => (
+                    <DropdownMenuItem
+                      key={group.value}
+                      onClick={() =>
+                        onBulkUpdate(
+                          selectedRows,
+                          "itemPostingGroupId",
+                          group.value
+                        )
+                      }
+                    >
+                      <Enumerable value={group.label} />
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuSubContent>
+              </DropdownMenuPortal>
+            </DropdownMenuSub>
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 Default Method Type
@@ -487,7 +535,7 @@ const MaterialsTable = memo(({ data, tags, count }: MaterialsTableProps) => {
         </DropdownMenuContent>
       );
     },
-    [onBulkUpdate]
+    [onBulkUpdate, itemPostingGroups]
   );
 
   const renderContextMenu = useMemo(() => {
@@ -563,7 +611,12 @@ const MaterialsTable = memo(({ data, tags, count }: MaterialsTableProps) => {
         ]}
         primaryAction={
           permissions.can("create", "parts") && (
-            <New label="Material" to={path.to.newMaterial} />
+            <div className="flex items-center gap-2">
+              <Button variant="secondary" leftIcon={<LuGroup />} asChild>
+                <Link to={path.to.itemPostingGroups}>Item Groups</Link>
+              </Button>
+              <New label="Material" to={path.to.newMaterial} />
+            </div>
           )
         }
         renderActions={renderActions}

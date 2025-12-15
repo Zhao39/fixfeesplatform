@@ -1351,6 +1351,9 @@ export default {
             $ref: "#/parameters/rowFilter.consumables.tags",
           },
           {
+            $ref: "#/parameters/rowFilter.consumables.itemPostingGroupId",
+          },
+          {
             $ref: "#/parameters/rowFilter.consumables.createdBy",
           },
           {
@@ -37321,6 +37324,9 @@ export default {
             $ref: "#/parameters/rowFilter.parts.tags",
           },
           {
+            $ref: "#/parameters/rowFilter.parts.itemPostingGroupId",
+          },
+          {
             $ref: "#/parameters/rowFilter.parts.createdBy",
           },
           {
@@ -37856,6 +37862,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.materials.tags",
+          },
+          {
+            $ref: "#/parameters/rowFilter.materials.itemPostingGroupId",
           },
           {
             $ref: "#/parameters/rowFilter.materials.createdBy",
@@ -39239,6 +39248,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.tools.tags",
+          },
+          {
+            $ref: "#/parameters/rowFilter.tools.itemPostingGroupId",
           },
           {
             $ref: "#/parameters/rowFilter.tools.createdBy",
@@ -62416,6 +62428,12 @@ export default {
           },
           type: "array",
         },
+        itemPostingGroupId: {
+          description:
+            "Note:\nThis is a Foreign Key to `itemPostingGroup.id`.<fk table='itemPostingGroup' column='id'/>",
+          format: "text",
+          type: "string",
+        },
         createdBy: {
           description:
             "Note:\nThis is a Foreign Key to `user.id`.<fk table='user' column='id'/>",
@@ -79276,6 +79294,12 @@ export default {
           },
           type: "array",
         },
+        itemPostingGroupId: {
+          description:
+            "Note:\nThis is a Foreign Key to `itemPostingGroup.id`.<fk table='itemPostingGroup' column='id'/>",
+          format: "text",
+          type: "string",
+        },
         createdBy: {
           description:
             "Note:\nThis is a Foreign Key to `user.id`.<fk table='user' column='id'/>",
@@ -79574,6 +79598,12 @@ export default {
             type: "string",
           },
           type: "array",
+        },
+        itemPostingGroupId: {
+          description:
+            "Note:\nThis is a Foreign Key to `itemPostingGroup.id`.<fk table='itemPostingGroup' column='id'/>",
+          format: "text",
+          type: "string",
         },
         createdBy: {
           description:
@@ -80211,6 +80241,12 @@ export default {
             type: "string",
           },
           type: "array",
+        },
+        itemPostingGroupId: {
+          description:
+            "Note:\nThis is a Foreign Key to `itemPostingGroup.id`.<fk table='itemPostingGroup' column='id'/>",
+          format: "text",
+          type: "string",
         },
         createdBy: {
           description:
@@ -89881,6 +89917,12 @@ export default {
     },
     "rowFilter.consumables.tags": {
       name: "tags",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.consumables.itemPostingGroupId": {
+      name: "itemPostingGroupId",
       required: false,
       in: "query",
       type: "string",
@@ -108953,6 +108995,12 @@ export default {
       in: "query",
       type: "string",
     },
+    "rowFilter.parts.itemPostingGroupId": {
+      name: "itemPostingGroupId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
     "rowFilter.parts.createdBy": {
       name: "createdBy",
       required: false,
@@ -109330,6 +109378,12 @@ export default {
     },
     "rowFilter.materials.tags": {
       name: "tags",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.materials.itemPostingGroupId": {
+      name: "itemPostingGroupId",
       required: false,
       in: "query",
       type: "string",
@@ -110035,6 +110089,12 @@ export default {
     },
     "rowFilter.tools.tags": {
       name: "tags",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.tools.itemPostingGroupId": {
+      name: "itemPostingGroupId",
       required: false,
       in: "query",
       type: "string",

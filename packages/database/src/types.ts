@@ -38589,6 +38589,7 @@ export type Database = {
           defaultMethodType: Database["public"]["Enums"]["methodType"] | null
           description: string | null
           id: string | null
+          itemPostingGroupId: string | null
           itemTrackingType:
             | Database["public"]["Enums"]["itemTrackingType"]
             | null
@@ -38774,6 +38775,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
+          },
+          {
+            foreignKeyName: "itemCost_itemPostingGroupId_fkey"
+            columns: ["itemPostingGroupId"]
+            isOneToOne: false
+            referencedRelation: "itemPostingGroup"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -41831,6 +41839,7 @@ export type Database = {
           finish: string | null
           grade: string | null
           id: string | null
+          itemPostingGroupId: string | null
           itemTrackingType:
             | Database["public"]["Enums"]["itemTrackingType"]
             | null
@@ -42021,6 +42030,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
+          },
+          {
+            foreignKeyName: "itemCost_itemPostingGroupId_fkey"
+            columns: ["itemPostingGroupId"]
+            isOneToOne: false
+            referencedRelation: "itemPostingGroup"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "material_materialFormId_fkey"
@@ -42662,14 +42678,14 @@ export type Database = {
           },
           {
             foreignKeyName: "partner_id_fkey"
-            columns: ["supplierLocationId"]
+            columns: ["id"]
             isOneToOne: false
             referencedRelation: "supplierLocation"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "partner_id_fkey"
-            columns: ["id"]
+            columns: ["supplierLocationId"]
             isOneToOne: false
             referencedRelation: "supplierLocation"
             referencedColumns: ["id"]
@@ -42722,6 +42738,7 @@ export type Database = {
           defaultMethodType: Database["public"]["Enums"]["methodType"] | null
           description: string | null
           id: string | null
+          itemPostingGroupId: string | null
           itemTrackingType:
             | Database["public"]["Enums"]["itemTrackingType"]
             | null
@@ -42885,6 +42902,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
+          },
+          {
+            foreignKeyName: "itemCost_itemPostingGroupId_fkey"
+            columns: ["itemPostingGroupId"]
+            isOneToOne: false
+            referencedRelation: "itemPostingGroup"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -44034,14 +44058,14 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["customerCountryCode"]
+            columns: ["supplierCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
           },
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["supplierCountryCode"]
+            columns: ["customerCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
@@ -46554,14 +46578,14 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["invoiceCountryCode"]
+            columns: ["customerCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
           },
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["customerCountryCode"]
+            columns: ["invoiceCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
@@ -49309,6 +49333,7 @@ export type Database = {
           defaultMethodType: Database["public"]["Enums"]["methodType"] | null
           description: string | null
           id: string | null
+          itemPostingGroupId: string | null
           itemTrackingType:
             | Database["public"]["Enums"]["itemTrackingType"]
             | null
@@ -49472,6 +49497,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
+          },
+          {
+            foreignKeyName: "itemCost_itemPostingGroupId_fkey"
+            columns: ["itemPostingGroupId"]
+            isOneToOne: false
+            referencedRelation: "itemPostingGroup"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -49943,6 +49975,7 @@ export type Database = {
           defaultMethodType: Database["public"]["Enums"]["methodType"]
           description: string
           id: string
+          itemPostingGroupId: string
           itemTrackingType: Database["public"]["Enums"]["itemTrackingType"]
           modelName: string
           modelPath: string
@@ -50340,6 +50373,7 @@ export type Database = {
           grade: string
           gradeId: string
           id: string
+          itemPostingGroupId: string
           itemTrackingType: Database["public"]["Enums"]["itemTrackingType"]
           materialForm: string
           materialFormId: string
@@ -50454,6 +50488,7 @@ export type Database = {
           defaultMethodType: Database["public"]["Enums"]["methodType"]
           description: string
           id: string
+          itemPostingGroupId: string
           itemTrackingType: Database["public"]["Enums"]["itemTrackingType"]
           modelId: string
           modelName: string
@@ -50910,6 +50945,7 @@ export type Database = {
           defaultMethodType: Database["public"]["Enums"]["methodType"]
           description: string
           id: string
+          itemPostingGroupId: string
           itemTrackingType: Database["public"]["Enums"]["itemTrackingType"]
           modelId: string
           modelName: string

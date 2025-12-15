@@ -6,8 +6,19 @@ import { useFetcher } from "react-router";
 import type { getItemPostingGroupsList } from "~/modules/items";
 import ItemPostingGroupForm from "~/modules/items/ui/ItemPostingGroups/ItemPostingGroupForm";
 import { path } from "~/utils/path";
+import { Enumerable } from "../Enumerable";
 
-type ItemPostingGroupSelectProps = Omit<ComboboxProps, "options">;
+type ItemPostingGroupSelectProps = Omit<ComboboxProps, "options" | "inline"> & {
+  inline?: boolean;
+};
+
+const ItemPostingGroupPreview = (
+  value: string,
+  options: { value: string; label: string }[]
+) => {
+  const itemGroup = options.find((o) => o.value === value);
+  return <Enumerable value={itemGroup?.label ?? null} />;
+};
 
 const ItemPostingGroup = (props: ItemPostingGroupSelectProps) => {
   const newItemPostingGroupModal = useDisclosure();
@@ -22,6 +33,7 @@ const ItemPostingGroup = (props: ItemPostingGroupSelectProps) => {
         ref={triggerRef}
         options={options}
         {...props}
+        inline={props.inline ? ItemPostingGroupPreview : undefined}
         label={props?.label ?? "Posting Group"}
         onCreateOption={(option) => {
           newItemPostingGroupModal.onOpen();
