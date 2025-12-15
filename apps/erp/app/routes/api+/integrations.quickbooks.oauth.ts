@@ -6,7 +6,7 @@ import {
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { QuickBooks } from "@carbon/ee";
 import { QuickBooksProvider } from "@carbon/ee/quickbooks";
-import { json, type LoaderFunctionArgs, redirect } from "react-router";
+import { data, type LoaderFunctionArgs, redirect } from "react-router";
 import z from "zod";
 import { upsertCompanyIntegration } from "~/modules/settings/settings.server";
 import { oAuthCallbackSchema } from "~/modules/shared";
@@ -31,18 +31,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
     .safeParse(searchParams);
 
   if (!quickbooksAuthResponse.success) {
-    return json({ error: "Invalid QuickBooks auth response" }, { status: 400 });
+    return data({ error: "Invalid QuickBooks auth response" }, { status: 400 });
   }
 
-  const { data } = quickbooksAuthResponse;
+  const { data: d } = quickbooksAuthResponse;
 
   // TODO: Verify state parameter
-  if (!data.state) {
-    return json({ error: "Invalid state parameter" }, { status: 400 });
+  if (!d.state) {
+    return data({ error: "Invalid state parameter" }, { status: 400 });
   }
 
   if (!QUICKBOOKS_CLIENT_ID || !QUICKBOOKS_CLIENT_SECRET) {
-    return json({ error: "QuickBooks OAuth not configured" }, { status: 500 });
+    return data({ error: "QuickBooks OAuth not configured" }, { status: 500 });
   }
 
   try {
@@ -56,9 +56,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
     });
 
     // Exchange the authorization code for tokens
-    const auth = await provider.exchangeCodeForToken(data.code);
+    const auth = await provider.exchangeCodeForToken(d.code);
     if (!auth) {
-      return json(
+      return data(
         { error: "Failed to exchange code for token" },
         { status: 500 }
       );
@@ -72,7 +72,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
         // @ts-ignore
         metadata: {
           ...auth,
-          tenantId: data.realmId
+          tenantId: d.realmId
         },
         updatedBy: userId,
         companyId: companyId
@@ -90,13 +90,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
       return redirect(redirectUrl);
     } else {
-      return json(
+      return data(
         { error: "Failed to save QuickBooks integration" },
         { status: 500 }
       );
     }
   } catch (err) {
-    return json(
+    return data(
       { error: "Failed to exchange code for token" },
       { status: 500 }
     );
