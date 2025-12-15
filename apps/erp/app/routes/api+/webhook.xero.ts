@@ -27,9 +27,8 @@ import {
 } from "@carbon/auth";
 import { XeroProvider } from "@carbon/ee/xero";
 import { tasks } from "@trigger.dev/sdk/v3";
-import type { ActionFunctionArgs } from "@vercel/remix";
-import { json } from "@vercel/remix";
 import crypto from "crypto";
+import { type ActionFunctionArgs, data } from "react-router";
 import { z } from "zod";
 
 export const config = {
@@ -280,7 +279,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   if (!signatureHeader) {
     console.warn("Xero webhook received without signature");
-    return json(
+    return data(
       {
         success: false,
         error: "Missing signature"
@@ -293,7 +292,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   if (!requestIsValid) {
     console.error("Xero webhook signature verification failed");
-    return json(
+    return data(
       {
         success: false,
         error: "Invalid signature"
@@ -314,7 +313,7 @@ export async function action({ request }: ActionFunctionArgs) {
     payload = JSON.parse(payloadText);
   } catch (error) {
     console.error("Failed to parse webhook payload:", error);
-    return json(
+    return data(
       {
         success: false,
         error: "Invalid JSON payload"
@@ -327,7 +326,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   if (!parsedPayload.success) {
     console.error("Invalid Xero webhook payload:", parsedPayload.error);
-    return json(
+    return data(
       {
         success: false,
         error: "Invalid payload format"
@@ -564,11 +563,11 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   // Return detailed response
-  return json({
+  return {
     success: errors.length === 0,
     jobsTriggered: syncJobs.length,
     jobs: syncJobs,
     errors: errors.length > 0 ? errors : undefined,
     timestamp: new Date().toISOString()
-  });
+  };
 }

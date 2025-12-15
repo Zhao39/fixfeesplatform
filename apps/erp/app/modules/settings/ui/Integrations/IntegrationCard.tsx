@@ -9,7 +9,7 @@ import {
   CardTitle
 } from "@carbon/react";
 import { useRouteData } from "@carbon/remix";
-import { Link, useFetcher, useNavigate } from "@remix-run/react";
+import { Link, useFetcher, useNavigate } from "react-router";
 import { path } from "~/utils/path";
 
 export function IntegrationCard({

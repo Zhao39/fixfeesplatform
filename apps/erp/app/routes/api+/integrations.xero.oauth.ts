@@ -2,7 +2,7 @@ import { VERCEL_URL, XERO_CLIENT_ID, XERO_CLIENT_SECRET } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { Xero } from "@carbon/ee";
 import { XeroProvider } from "@carbon/ee/xero";
-import { json, type LoaderFunctionArgs, redirect } from "@vercel/remix";
+import { data, type LoaderFunctionArgs, redirect } from "react-router";
 import { upsertCompanyIntegration } from "~/modules/settings/settings.server";
 import { oAuthCallbackSchema } from "~/modules/shared";
 import { path } from "~/utils/path";
@@ -22,18 +22,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const xeroAuthResponse = oAuthCallbackSchema.safeParse(searchParams);
 
   if (!xeroAuthResponse.success) {
-    return json({ error: "Invalid Xero auth response" }, { status: 400 });
+    return data({ error: "Invalid Xero auth response" }, { status: 400 });
   }
 
-  const { data } = xeroAuthResponse;
+  const { data: d } = xeroAuthResponse;
 
   // TODO: Verify state parameter
-  if (!data.state) {
-    return json({ error: "Invalid state parameter" }, { status: 400 });
+  if (!d.state) {
+    return data({ error: "Invalid state parameter" }, { status: 400 });
   }
 
   if (!XERO_CLIENT_ID || !XERO_CLIENT_SECRET) {
-    return json({ error: "Xero OAuth not configured" }, { status: 500 });
+    return data({ error: "Xero OAuth not configured" }, { status: 500 });
   }
 
   try {
@@ -45,9 +45,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
     });
 
     // Exchange the authorization code for tokens
-    const auth = await provider.exchangeCodeForToken(data.code);
+    const auth = await provider.exchangeCodeForToken(d.code);
     if (!auth) {
-      return json(
+      return data(
         { error: "Failed to exchange code for token" },
         { status: 500 }
       );
@@ -66,7 +66,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
 
     if (!connectionsResponse.ok) {
-      return json(
+      return data(
         { error: "Failed to fetch Xero connections" },
         { status: 500 }
       );
@@ -75,14 +75,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
     const connections = await connectionsResponse.json();
 
     if (!Array.isArray(connections) || connections.length === 0) {
-      return json({ error: "No Xero connections found" }, { status: 500 });
+      return data({ error: "No Xero connections found" }, { status: 500 });
     }
 
     // Get the first connection's tenant ID
     const tenantId = connections[0].tenantId;
 
     if (!tenantId) {
-      return json(
+      return data(
         { error: "No tenant ID found in Xero connections" },
         { status: 500 }
       );
@@ -111,13 +111,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
       return redirect(redirectUrl);
     } else {
-      return json(
+      return data(
         { error: "Failed to save Xero integration" },
         { status: 500 }
       );
     }
   } catch (err) {
-    return json(
+    return data(
       { error: "Failed to exchange code for token" },
       { status: 500 }
     );

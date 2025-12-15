@@ -6,7 +6,7 @@ import {
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { QuickBooks } from "@carbon/ee";
 import { QuickBooksProvider } from "@carbon/ee/quickbooks";
-import { json, type LoaderFunctionArgs, redirect } from "@vercel/remix";
+import { json, type LoaderFunctionArgs, redirect } from "react-router";
 import z from "zod";
 import { upsertCompanyIntegration } from "~/modules/settings/settings.server";
 import { oAuthCallbackSchema } from "~/modules/shared";
