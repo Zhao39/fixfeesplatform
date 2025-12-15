@@ -1995,6 +1995,7 @@ export type Database = {
           postalCode: string | null
           slackChannel: string | null
           stateProvince: string | null
+          suggestionNotificationGroup: string[]
           taxId: string | null
           updatedBy: string | null
           website: string | null
@@ -2020,6 +2021,7 @@ export type Database = {
           postalCode?: string | null
           slackChannel?: string | null
           stateProvince?: string | null
+          suggestionNotificationGroup?: string[]
           taxId?: string | null
           updatedBy?: string | null
           website?: string | null
@@ -2045,6 +2047,7 @@ export type Database = {
           postalCode?: string | null
           slackChannel?: string | null
           stateProvince?: string | null
+          suggestionNotificationGroup?: string[]
           taxId?: string | null
           updatedBy?: string | null
           website?: string | null
@@ -14944,14 +14947,7 @@ export type Database = {
           createdAt: string
           createdBy: string
           dueDate: string | null
-<<<<<<< HEAD
-<<<<<<< HEAD
           externalId: Json | null
-=======
->>>>>>> 01b6a4d5a (refactor: generate types)
-=======
-          externalId: Json | null
->>>>>>> a6311d130 (refactor: rebase on main)
           id: string
           nonConformanceId: string
           notes: Json
@@ -14970,14 +14966,7 @@ export type Database = {
           createdAt?: string
           createdBy: string
           dueDate?: string | null
-<<<<<<< HEAD
-<<<<<<< HEAD
           externalId?: Json | null
-=======
->>>>>>> 01b6a4d5a (refactor: generate types)
-=======
-          externalId?: Json | null
->>>>>>> a6311d130 (refactor: rebase on main)
           id?: string
           nonConformanceId: string
           notes?: Json
@@ -14996,14 +14985,7 @@ export type Database = {
           createdAt?: string
           createdBy?: string
           dueDate?: string | null
-<<<<<<< HEAD
-<<<<<<< HEAD
           externalId?: Json | null
-=======
->>>>>>> 01b6a4d5a (refactor: generate types)
-=======
-          externalId?: Json | null
->>>>>>> a6311d130 (refactor: rebase on main)
           id?: string
           nonConformanceId?: string
           notes?: Json
@@ -16465,14 +16447,7 @@ export type Database = {
         Row: {
           assignee: string | null
           companyId: string
-<<<<<<< HEAD
-<<<<<<< HEAD
           completedDate: string | null
-=======
->>>>>>> 01b6a4d5a (refactor: generate types)
-=======
-          completedDate: string | null
->>>>>>> a6311d130 (refactor: rebase on main)
           createdAt: string
           createdBy: string
           id: string
@@ -16486,14 +16461,7 @@ export type Database = {
         Insert: {
           assignee?: string | null
           companyId: string
-<<<<<<< HEAD
-<<<<<<< HEAD
           completedDate?: string | null
-=======
->>>>>>> 01b6a4d5a (refactor: generate types)
-=======
-          completedDate?: string | null
->>>>>>> a6311d130 (refactor: rebase on main)
           createdAt?: string
           createdBy: string
           id?: string
@@ -16507,14 +16475,7 @@ export type Database = {
         Update: {
           assignee?: string | null
           companyId?: string
-<<<<<<< HEAD
-<<<<<<< HEAD
           completedDate?: string | null
-=======
->>>>>>> 01b6a4d5a (refactor: generate types)
-=======
-          completedDate?: string | null
->>>>>>> a6311d130 (refactor: rebase on main)
           createdAt?: string
           createdBy?: string
           id?: string
@@ -23179,14 +23140,7 @@ export type Database = {
           id: string
           name: string
           status: Database["public"]["Enums"]["qualityDocumentStatus"]
-<<<<<<< HEAD
-<<<<<<< HEAD
           tags: string[] | null
-=======
->>>>>>> 01b6a4d5a (refactor: generate types)
-=======
-          tags: string[] | null
->>>>>>> a6311d130 (refactor: rebase on main)
           updatedAt: string | null
           updatedBy: string | null
           version: number
@@ -23201,14 +23155,7 @@ export type Database = {
           id?: string
           name: string
           status?: Database["public"]["Enums"]["qualityDocumentStatus"]
-<<<<<<< HEAD
-<<<<<<< HEAD
           tags?: string[] | null
-=======
->>>>>>> 01b6a4d5a (refactor: generate types)
-=======
-          tags?: string[] | null
->>>>>>> a6311d130 (refactor: rebase on main)
           updatedAt?: string | null
           updatedBy?: string | null
           version?: number
@@ -23223,14 +23170,7 @@ export type Database = {
           id?: string
           name?: string
           status?: Database["public"]["Enums"]["qualityDocumentStatus"]
-<<<<<<< HEAD
-<<<<<<< HEAD
           tags?: string[] | null
-=======
->>>>>>> 01b6a4d5a (refactor: generate types)
-=======
-          tags?: string[] | null
->>>>>>> a6311d130 (refactor: rebase on main)
           updatedAt?: string | null
           updatedBy?: string | null
           version?: number
@@ -31539,7 +31479,6 @@ export type Database = {
           },
         ]
       }
-<<<<<<< HEAD
       suggestion: {
         Row: {
           attachmentPath: string | null
@@ -31640,8 +31579,6 @@ export type Database = {
           },
         ]
       }
-=======
->>>>>>> 01b6a4d5a (refactor: generate types)
       supplier: {
         Row: {
           accountManagerId: string | null
@@ -33030,14 +32967,7 @@ export type Database = {
           exchangeRate: number | null
           exchangeRateUpdatedAt: string | null
           expirationDate: string | null
-<<<<<<< HEAD
-<<<<<<< HEAD
           externalLinkId: string | null
-=======
->>>>>>> 01b6a4d5a (refactor: generate types)
-=======
-          externalLinkId: string | null
->>>>>>> a6311d130 (refactor: rebase on main)
           externalNotes: Json | null
           id: string
           internalNotes: Json | null
@@ -33065,14 +32995,7 @@ export type Database = {
           exchangeRate?: number | null
           exchangeRateUpdatedAt?: string | null
           expirationDate?: string | null
-<<<<<<< HEAD
-<<<<<<< HEAD
           externalLinkId?: string | null
-=======
->>>>>>> 01b6a4d5a (refactor: generate types)
-=======
-          externalLinkId?: string | null
->>>>>>> a6311d130 (refactor: rebase on main)
           externalNotes?: Json | null
           id?: string
           internalNotes?: Json | null
@@ -33100,14 +33023,7 @@ export type Database = {
           exchangeRate?: number | null
           exchangeRateUpdatedAt?: string | null
           expirationDate?: string | null
-<<<<<<< HEAD
-<<<<<<< HEAD
           externalLinkId?: string | null
-=======
->>>>>>> 01b6a4d5a (refactor: generate types)
-=======
-          externalLinkId?: string | null
->>>>>>> a6311d130 (refactor: rebase on main)
           externalNotes?: Json | null
           id?: string
           internalNotes?: Json | null
@@ -33232,10 +33148,6 @@ export type Database = {
             referencedColumns: ["code"]
           },
           {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> a6311d130 (refactor: rebase on main)
             foreignKeyName: "supplierQuote_externalLinkId_fkey"
             columns: ["externalLinkId"]
             isOneToOne: false
@@ -33243,15 +33155,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-<<<<<<< HEAD
-            foreignKeyName: "supplierQuote_supplierContactId_fkey"
-            columns: ["supplierContactId"]
-            isOneToOne: false
-            referencedRelation: "supplierContact"
-            referencedColumns: ["id"]
-=======
-=======
->>>>>>> a6311d130 (refactor: rebase on main)
             foreignKeyName: "supplierQuote_supplierContactId_fkey"
             columns: ["supplierContactId"]
             isOneToOne: false
@@ -33264,47 +33167,25 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "contractors"
             referencedColumns: ["supplierId"]
->>>>>>> 01b6a4d5a (refactor: generate types)
           },
           {
             foreignKeyName: "supplierQuote_supplierId_fkey"
             columns: ["supplierId"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "contractors"
-=======
-            referencedRelation: "partners"
->>>>>>> 01b6a4d5a (refactor: generate types)
-            referencedColumns: ["supplierId"]
-          },
-          {
-            foreignKeyName: "supplierQuote_supplierId_fkey"
-            columns: ["supplierId"]
-            isOneToOne: false
-<<<<<<< HEAD
             referencedRelation: "partners"
             referencedColumns: ["supplierId"]
-=======
-            referencedRelation: "purchaseOrderSuppliers"
-            referencedColumns: ["id"]
->>>>>>> 01b6a4d5a (refactor: generate types)
           },
           {
             foreignKeyName: "supplierQuote_supplierId_fkey"
             columns: ["supplierId"]
             isOneToOne: false
-<<<<<<< HEAD
             referencedRelation: "purchaseOrderSuppliers"
-=======
-            referencedRelation: "supplier"
->>>>>>> 01b6a4d5a (refactor: generate types)
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "supplierQuote_supplierId_fkey"
             columns: ["supplierId"]
             isOneToOne: false
-<<<<<<< HEAD
             referencedRelation: "supplier"
             referencedColumns: ["id"]
           },
@@ -33327,22 +33208,6 @@ export type Database = {
             columns: ["supplierLocationId"]
             isOneToOne: false
             referencedRelation: "supplierLocation"
-=======
-            referencedRelation: "suppliers"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "supplierQuote_supplierInteractionId_fkey"
-            columns: ["supplierInteractionId"]
-            isOneToOne: false
-            referencedRelation: "supplierInteraction"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "supplierQuote_supplierLocationId_fkey"
-            columns: ["supplierLocationId"]
-            isOneToOne: false
-            referencedRelation: "supplierLocation"
             referencedColumns: ["id"]
           },
           {
@@ -33350,47 +33215,26 @@ export type Database = {
             columns: ["updatedBy"]
             isOneToOne: false
             referencedRelation: "employees"
->>>>>>> 01b6a4d5a (refactor: generate types)
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "supplierQuote_updatedBy_fkey"
             columns: ["updatedBy"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "employees"
-=======
             referencedRelation: "employeesAcrossCompanies"
->>>>>>> 01b6a4d5a (refactor: generate types)
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "supplierQuote_updatedBy_fkey"
             columns: ["updatedBy"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "employeesAcrossCompanies"
-=======
             referencedRelation: "employeeSummary"
->>>>>>> 01b6a4d5a (refactor: generate types)
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "supplierQuote_updatedBy_fkey"
             columns: ["updatedBy"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "employeeSummary"
-=======
-            referencedRelation: "user"
->>>>>>> 01b6a4d5a (refactor: generate types)
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "supplierQuote_updatedBy_fkey"
-            columns: ["updatedBy"]
-            isOneToOne: false
-<<<<<<< HEAD
             referencedRelation: "user"
             referencedColumns: ["id"]
           },
@@ -33398,8 +33242,6 @@ export type Database = {
             foreignKeyName: "supplierQuote_updatedBy_fkey"
             columns: ["updatedBy"]
             isOneToOne: false
-=======
->>>>>>> 01b6a4d5a (refactor: generate types)
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
           },
@@ -35641,10 +35483,6 @@ export type Database = {
           },
         ]
       }
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> a6311d130 (refactor: rebase on main)
       training: {
         Row: {
           assignee: string | null
@@ -36355,11 +36193,6 @@ export type Database = {
           },
         ]
       }
-<<<<<<< HEAD
-=======
->>>>>>> 01b6a4d5a (refactor: generate types)
-=======
->>>>>>> a6311d130 (refactor: rebase on main)
       unitOfMeasure: {
         Row: {
           active: boolean
@@ -36691,14 +36524,7 @@ export type Database = {
           companyId: string | null
           createdAt: string
           createdBy: string
-<<<<<<< HEAD
-<<<<<<< HEAD
           emoji: string | null
-=======
->>>>>>> 01b6a4d5a (refactor: generate types)
-=======
-          emoji: string | null
->>>>>>> a6311d130 (refactor: rebase on main)
           id: string
           name: string
           protected: boolean | null
@@ -36711,14 +36537,7 @@ export type Database = {
           companyId?: string | null
           createdAt?: string
           createdBy: string
-<<<<<<< HEAD
-<<<<<<< HEAD
           emoji?: string | null
-=======
->>>>>>> 01b6a4d5a (refactor: generate types)
-=======
-          emoji?: string | null
->>>>>>> a6311d130 (refactor: rebase on main)
           id?: string
           name: string
           protected?: boolean | null
@@ -36731,14 +36550,7 @@ export type Database = {
           companyId?: string | null
           createdAt?: string
           createdBy?: string
-<<<<<<< HEAD
-<<<<<<< HEAD
           emoji?: string | null
-=======
->>>>>>> 01b6a4d5a (refactor: generate types)
-=======
-          emoji?: string | null
->>>>>>> a6311d130 (refactor: rebase on main)
           id?: string
           name?: string
           protected?: boolean | null
@@ -36858,14 +36670,7 @@ export type Database = {
           userId: string
           valueBoolean: boolean | null
           valueDate: string | null
-<<<<<<< HEAD
-<<<<<<< HEAD
           valueFile: string | null
-=======
->>>>>>> 01b6a4d5a (refactor: generate types)
-=======
-          valueFile: string | null
->>>>>>> a56d9a3b6 (refactor: rebase and regenerate types)
           valueNumeric: number | null
           valueText: string | null
           valueUser: string | null
@@ -36880,14 +36685,7 @@ export type Database = {
           userId: string
           valueBoolean?: boolean | null
           valueDate?: string | null
-<<<<<<< HEAD
-<<<<<<< HEAD
           valueFile?: string | null
-=======
->>>>>>> 01b6a4d5a (refactor: generate types)
-=======
-          valueFile?: string | null
->>>>>>> a56d9a3b6 (refactor: rebase and regenerate types)
           valueNumeric?: number | null
           valueText?: string | null
           valueUser?: string | null
@@ -36902,14 +36700,7 @@ export type Database = {
           userId?: string
           valueBoolean?: boolean | null
           valueDate?: string | null
-<<<<<<< HEAD
-<<<<<<< HEAD
           valueFile?: string | null
-=======
->>>>>>> 01b6a4d5a (refactor: generate types)
-=======
-          valueFile?: string | null
->>>>>>> a56d9a3b6 (refactor: rebase and regenerate types)
           valueNumeric?: number | null
           valueText?: string | null
           valueUser?: string | null
@@ -41388,29 +41179,27 @@ export type Database = {
             foreignKeyName: "job_assignee_fkey"
             columns: ["assignee"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "employeeSummary"
-=======
             referencedRelation: "employeesAcrossCompanies"
->>>>>>> 01b6a4d5a (refactor: generate types)
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "job_assignee_fkey"
             columns: ["assignee"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "user"
-=======
             referencedRelation: "employeeSummary"
->>>>>>> 01b6a4d5a (refactor: generate types)
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "job_assignee_fkey"
             columns: ["assignee"]
             isOneToOne: false
-<<<<<<< HEAD
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "job_assignee_fkey"
+            columns: ["assignee"]
+            isOneToOne: false
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
           },
@@ -41420,56 +41209,18 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
-=======
-            referencedRelation: "user"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "job_assignee_fkey"
-            columns: ["assignee"]
-            isOneToOne: false
-            referencedRelation: "userDefaults"
-            referencedColumns: ["userId"]
->>>>>>> 01b6a4d5a (refactor: generate types)
           },
           {
             foreignKeyName: "job_companyId_fkey"
             columns: ["companyId"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "company"
-=======
-            referencedRelation: "companies"
->>>>>>> 01b6a4d5a (refactor: generate types)
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "job_companyId_fkey"
-            columns: ["companyId"]
-            isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "customFieldTables"
-            referencedColumns: ["companyId"]
-=======
             referencedRelation: "company"
             referencedColumns: ["id"]
->>>>>>> 01b6a4d5a (refactor: generate types)
           },
           {
             foreignKeyName: "job_companyId_fkey"
             columns: ["companyId"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "integrations"
-            referencedColumns: ["companyId"]
-          },
-          {
-            foreignKeyName: "job_createdBy_fkey"
-            columns: ["createdBy"]
-            isOneToOne: false
-            referencedRelation: "employees"
-            referencedColumns: ["id"]
-=======
             referencedRelation: "customFieldTables"
             referencedColumns: ["companyId"]
           },
@@ -41479,56 +41230,32 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "integrations"
             referencedColumns: ["companyId"]
->>>>>>> 01b6a4d5a (refactor: generate types)
           },
           {
             foreignKeyName: "job_createdBy_fkey"
             columns: ["createdBy"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "employeesAcrossCompanies"
-=======
             referencedRelation: "employees"
->>>>>>> 01b6a4d5a (refactor: generate types)
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "job_createdBy_fkey"
             columns: ["createdBy"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "employeeSummary"
-=======
             referencedRelation: "employeesAcrossCompanies"
->>>>>>> 01b6a4d5a (refactor: generate types)
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "job_createdBy_fkey"
             columns: ["createdBy"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "user"
-=======
             referencedRelation: "employeeSummary"
->>>>>>> 01b6a4d5a (refactor: generate types)
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "job_createdBy_fkey"
             columns: ["createdBy"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "userDefaults"
-            referencedColumns: ["userId"]
-          },
-          {
-            foreignKeyName: "job_customerId_fkey"
-            columns: ["customerId"]
-            isOneToOne: false
-            referencedRelation: "customer"
-            referencedColumns: ["id"]
-=======
             referencedRelation: "user"
             referencedColumns: ["id"]
           },
@@ -41538,33 +41265,18 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
->>>>>>> 01b6a4d5a (refactor: generate types)
           },
           {
             foreignKeyName: "job_customerId_fkey"
             columns: ["customerId"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "customers"
-=======
             referencedRelation: "customer"
->>>>>>> 01b6a4d5a (refactor: generate types)
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "job_customerId_fkey"
             columns: ["customerId"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "salesOrderCustomers"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "job_itemId_fkey"
-            columns: ["itemId"]
-            isOneToOne: false
-            referencedRelation: "consumables"
-=======
             referencedRelation: "customers"
             referencedColumns: ["id"]
           },
@@ -41573,63 +41285,33 @@ export type Database = {
             columns: ["customerId"]
             isOneToOne: false
             referencedRelation: "salesOrderCustomers"
->>>>>>> 01b6a4d5a (refactor: generate types)
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "job_itemId_fkey"
             columns: ["itemId"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "item"
-=======
             referencedRelation: "consumables"
->>>>>>> 01b6a4d5a (refactor: generate types)
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "job_itemId_fkey"
             columns: ["itemId"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "materials"
-=======
             referencedRelation: "item"
->>>>>>> 01b6a4d5a (refactor: generate types)
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "job_itemId_fkey"
             columns: ["itemId"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "parts"
-=======
             referencedRelation: "materials"
->>>>>>> 01b6a4d5a (refactor: generate types)
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "job_itemId_fkey"
             columns: ["itemId"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "tools"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "job_locationId_fkey"
-            columns: ["locationId"]
-            isOneToOne: false
-            referencedRelation: "location"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "job_quoteId_fkey"
-            columns: ["quoteId"]
-            isOneToOne: false
-            referencedRelation: "quote"
-=======
             referencedRelation: "parts"
             referencedColumns: ["id"]
           },
@@ -41645,35 +41327,19 @@ export type Database = {
             columns: ["locationId"]
             isOneToOne: false
             referencedRelation: "location"
->>>>>>> 01b6a4d5a (refactor: generate types)
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "job_quoteId_fkey"
             columns: ["quoteId"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "quoteCustomerDetails"
-            referencedColumns: ["quoteId"]
-=======
             referencedRelation: "quote"
             referencedColumns: ["id"]
->>>>>>> 01b6a4d5a (refactor: generate types)
           },
           {
             foreignKeyName: "job_quoteId_fkey"
             columns: ["quoteId"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "quotes"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "job_salesOrderId_fkey"
-            columns: ["salesOrderId"]
-            isOneToOne: false
-            referencedRelation: "salesOrder"
-=======
             referencedRelation: "quoteCustomerDetails"
             referencedColumns: ["quoteId"]
           },
@@ -41682,34 +41348,19 @@ export type Database = {
             columns: ["quoteId"]
             isOneToOne: false
             referencedRelation: "quotes"
->>>>>>> 01b6a4d5a (refactor: generate types)
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "job_salesOrderId_fkey"
             columns: ["salesOrderId"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "salesOrderLocations"
-=======
             referencedRelation: "salesOrder"
->>>>>>> 01b6a4d5a (refactor: generate types)
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "job_salesOrderId_fkey"
             columns: ["salesOrderId"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "salesOrders"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "job_salesOrderLineId_fkey"
-            columns: ["salesOrderLineId"]
-            isOneToOne: false
-            referencedRelation: "openSalesOrderLines"
-=======
             referencedRelation: "salesOrderLocations"
             referencedColumns: ["id"]
           },
@@ -41718,49 +41369,19 @@ export type Database = {
             columns: ["salesOrderId"]
             isOneToOne: false
             referencedRelation: "salesOrders"
->>>>>>> 01b6a4d5a (refactor: generate types)
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "job_salesOrderLineId_fkey"
             columns: ["salesOrderLineId"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "salesOrderLine"
-=======
             referencedRelation: "openSalesOrderLines"
->>>>>>> 01b6a4d5a (refactor: generate types)
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "job_salesOrderLineId_fkey"
             columns: ["salesOrderLineId"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "salesOrderLines"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "job_shelfId_fkey"
-            columns: ["shelfId"]
-            isOneToOne: false
-            referencedRelation: "shelf"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "job_unitOfMeasureCode_fkey"
-            columns: ["unitOfMeasureCode", "companyId"]
-            isOneToOne: false
-            referencedRelation: "unitOfMeasure"
-            referencedColumns: ["code", "companyId"]
-          },
-          {
-            foreignKeyName: "job_updatedBy_fkey"
-            columns: ["updatedBy"]
-            isOneToOne: false
-            referencedRelation: "employees"
-            referencedColumns: ["id"]
-=======
             referencedRelation: "salesOrderLine"
             referencedColumns: ["id"]
           },
@@ -41784,50 +41405,32 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "unitOfMeasure"
             referencedColumns: ["code", "companyId"]
->>>>>>> 01b6a4d5a (refactor: generate types)
           },
           {
             foreignKeyName: "job_updatedBy_fkey"
             columns: ["updatedBy"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "employeesAcrossCompanies"
-=======
             referencedRelation: "employees"
->>>>>>> 01b6a4d5a (refactor: generate types)
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "job_updatedBy_fkey"
             columns: ["updatedBy"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "employeeSummary"
-=======
             referencedRelation: "employeesAcrossCompanies"
->>>>>>> 01b6a4d5a (refactor: generate types)
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "job_updatedBy_fkey"
             columns: ["updatedBy"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "user"
-=======
             referencedRelation: "employeeSummary"
->>>>>>> 01b6a4d5a (refactor: generate types)
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "job_updatedBy_fkey"
             columns: ["updatedBy"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "userDefaults"
-            referencedColumns: ["userId"]
-          },
-=======
             referencedRelation: "user"
             referencedColumns: ["id"]
           },
@@ -41838,7 +41441,6 @@ export type Database = {
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
           },
->>>>>>> 01b6a4d5a (refactor: generate types)
         ]
       }
       kanbans: {
@@ -42443,8 +42045,6 @@ export type Database = {
             referencedRelation: "materialForm"
             referencedColumns: ["id"]
           },
-<<<<<<< HEAD
-=======
           {
             foreignKeyName: "material_materialSubstanceId_fkey"
             columns: ["materialSubstanceId"]
@@ -42452,7 +42052,6 @@ export type Database = {
             referencedRelation: "materialSubstance"
             referencedColumns: ["id"]
           },
->>>>>>> 01b6a4d5a (refactor: generate types)
         ]
       }
       materialTypes: {
@@ -43079,22 +42678,14 @@ export type Database = {
           },
           {
             foreignKeyName: "partner_id_fkey"
-<<<<<<< HEAD
             columns: ["id"]
-=======
-            columns: ["supplierLocationId"]
->>>>>>> 01b6a4d5a (refactor: generate types)
             isOneToOne: false
             referencedRelation: "supplierLocation"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "partner_id_fkey"
-<<<<<<< HEAD
             columns: ["supplierLocationId"]
-=======
-            columns: ["id"]
->>>>>>> 01b6a4d5a (refactor: generate types)
             isOneToOne: false
             referencedRelation: "supplierLocation"
             referencedColumns: ["id"]
@@ -45039,14 +44630,7 @@ export type Database = {
           id: string | null
           name: string | null
           status: Database["public"]["Enums"]["qualityDocumentStatus"] | null
-<<<<<<< HEAD
-<<<<<<< HEAD
           tags: string[] | null
-=======
->>>>>>> 01b6a4d5a (refactor: generate types)
-=======
-          tags: string[] | null
->>>>>>> a6311d130 (refactor: rebase on main)
           version: number | null
           versions: Json | null
         }
@@ -47537,30 +47121,14 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "address_countryCode_fkey"
-<<<<<<< HEAD
-<<<<<<< HEAD
             columns: ["paymentCountryCode"]
-=======
-            columns: ["customerCountryCode"]
->>>>>>> 01b6a4d5a (refactor: generate types)
-=======
-            columns: ["paymentCountryCode"]
->>>>>>> a6311d130 (refactor: rebase on main)
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
           },
           {
             foreignKeyName: "address_countryCode_fkey"
-<<<<<<< HEAD
-<<<<<<< HEAD
             columns: ["customerCountryCode"]
-=======
-            columns: ["paymentCountryCode"]
->>>>>>> 01b6a4d5a (refactor: generate types)
-=======
-            columns: ["customerCountryCode"]
->>>>>>> a6311d130 (refactor: rebase on main)
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
@@ -48860,7 +48428,6 @@ export type Database = {
           },
         ]
       }
-<<<<<<< HEAD
       suggestions: {
         Row: {
           attachmentPath: string | null
@@ -48941,8 +48508,6 @@ export type Database = {
           },
         ]
       }
-=======
->>>>>>> 01b6a4d5a (refactor: generate types)
       supplierProcesses: {
         Row: {
           companyId: string | null
@@ -49309,14 +48874,7 @@ export type Database = {
           exchangeRate: number | null
           exchangeRateUpdatedAt: string | null
           expirationDate: string | null
-<<<<<<< HEAD
-<<<<<<< HEAD
           externalLinkId: string | null
-=======
->>>>>>> 01b6a4d5a (refactor: generate types)
-=======
-          externalLinkId: string | null
->>>>>>> a6311d130 (refactor: rebase on main)
           externalNotes: Json | null
           id: string | null
           internalNotes: Json | null
@@ -49445,10 +49003,6 @@ export type Database = {
             referencedColumns: ["code"]
           },
           {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> a6311d130 (refactor: rebase on main)
             foreignKeyName: "supplierQuote_externalLinkId_fkey"
             columns: ["externalLinkId"]
             isOneToOne: false
@@ -49456,15 +49010,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-<<<<<<< HEAD
-            foreignKeyName: "supplierQuote_supplierContactId_fkey"
-            columns: ["supplierContactId"]
-            isOneToOne: false
-            referencedRelation: "supplierContact"
-            referencedColumns: ["id"]
-=======
-=======
->>>>>>> a6311d130 (refactor: rebase on main)
             foreignKeyName: "supplierQuote_supplierContactId_fkey"
             columns: ["supplierContactId"]
             isOneToOne: false
@@ -49477,47 +49022,25 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "contractors"
             referencedColumns: ["supplierId"]
->>>>>>> 01b6a4d5a (refactor: generate types)
           },
           {
             foreignKeyName: "supplierQuote_supplierId_fkey"
             columns: ["supplierId"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "contractors"
-=======
-            referencedRelation: "partners"
->>>>>>> 01b6a4d5a (refactor: generate types)
-            referencedColumns: ["supplierId"]
-          },
-          {
-            foreignKeyName: "supplierQuote_supplierId_fkey"
-            columns: ["supplierId"]
-            isOneToOne: false
-<<<<<<< HEAD
             referencedRelation: "partners"
             referencedColumns: ["supplierId"]
-=======
-            referencedRelation: "purchaseOrderSuppliers"
-            referencedColumns: ["id"]
->>>>>>> 01b6a4d5a (refactor: generate types)
           },
           {
             foreignKeyName: "supplierQuote_supplierId_fkey"
             columns: ["supplierId"]
             isOneToOne: false
-<<<<<<< HEAD
             referencedRelation: "purchaseOrderSuppliers"
-=======
-            referencedRelation: "supplier"
->>>>>>> 01b6a4d5a (refactor: generate types)
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "supplierQuote_supplierId_fkey"
             columns: ["supplierId"]
             isOneToOne: false
-<<<<<<< HEAD
             referencedRelation: "supplier"
             referencedColumns: ["id"]
           },
@@ -49540,22 +49063,6 @@ export type Database = {
             columns: ["supplierLocationId"]
             isOneToOne: false
             referencedRelation: "supplierLocation"
-=======
-            referencedRelation: "suppliers"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "supplierQuote_supplierInteractionId_fkey"
-            columns: ["supplierInteractionId"]
-            isOneToOne: false
-            referencedRelation: "supplierInteraction"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "supplierQuote_supplierLocationId_fkey"
-            columns: ["supplierLocationId"]
-            isOneToOne: false
-            referencedRelation: "supplierLocation"
             referencedColumns: ["id"]
           },
           {
@@ -49563,47 +49070,26 @@ export type Database = {
             columns: ["updatedBy"]
             isOneToOne: false
             referencedRelation: "employees"
->>>>>>> 01b6a4d5a (refactor: generate types)
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "supplierQuote_updatedBy_fkey"
             columns: ["updatedBy"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "employees"
-=======
             referencedRelation: "employeesAcrossCompanies"
->>>>>>> 01b6a4d5a (refactor: generate types)
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "supplierQuote_updatedBy_fkey"
             columns: ["updatedBy"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "employeesAcrossCompanies"
-=======
             referencedRelation: "employeeSummary"
->>>>>>> 01b6a4d5a (refactor: generate types)
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "supplierQuote_updatedBy_fkey"
             columns: ["updatedBy"]
             isOneToOne: false
-<<<<<<< HEAD
-            referencedRelation: "employeeSummary"
-=======
-            referencedRelation: "user"
->>>>>>> 01b6a4d5a (refactor: generate types)
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "supplierQuote_updatedBy_fkey"
-            columns: ["updatedBy"]
-            isOneToOne: false
-<<<<<<< HEAD
             referencedRelation: "user"
             referencedColumns: ["id"]
           },
@@ -49611,8 +49097,6 @@ export type Database = {
             foreignKeyName: "supplierQuote_updatedBy_fkey"
             columns: ["updatedBy"]
             isOneToOne: false
-=======
->>>>>>> 01b6a4d5a (refactor: generate types)
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
           },
@@ -50344,14 +49828,7 @@ export type Database = {
           actionTypeName: string
           assignee: string
           id: string
-<<<<<<< HEAD
-<<<<<<< HEAD
           nonConformanceId: string
-=======
->>>>>>> 01b6a4d5a (refactor: generate types)
-=======
-          nonConformanceId: string
->>>>>>> a6311d130 (refactor: rebase on main)
           notes: Json
         }[]
       }
@@ -50864,14 +50341,7 @@ export type Database = {
           itemId: string
           itemReadableId: string
           jobId: string
-<<<<<<< HEAD
-<<<<<<< HEAD
           jobMakeMethodId: string
-=======
->>>>>>> 01b6a4d5a (refactor: generate types)
-=======
-          jobMakeMethodId: string
->>>>>>> a56d9a3b6 (refactor: rebase and regenerate types)
           operationCount: number
           priority: number
           quantity: number
@@ -51039,16 +50509,8 @@ export type Database = {
           updatedBy: string
         }[]
       }
-<<<<<<< HEAD
-<<<<<<< HEAD
       get_period_end_date: { Args: { period: string }; Returns: string }
       get_period_start_date: { Args: { period: string }; Returns: string }
-=======
->>>>>>> 01b6a4d5a (refactor: generate types)
-=======
-      get_period_end_date: { Args: { period: string }; Returns: string }
-      get_period_start_date: { Args: { period: string }; Returns: string }
->>>>>>> a6311d130 (refactor: rebase on main)
       get_permission_companies: { Args: { claim: string }; Returns: string[] }
       get_production_planning: {
         Args: { company_id: string; location_id: string; periods: string[] }
@@ -51504,10 +50966,6 @@ export type Database = {
           updatedBy: string
         }[]
       }
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> a6311d130 (refactor: rebase on main)
       get_training_assignment_status: {
         Args: { p_company_id: string }
         Returns: {
@@ -51565,11 +51023,6 @@ export type Database = {
       get_unscheduled_jobs: {
         Args: { location_id: string }
         Returns: {
-=======
-      get_unscheduled_jobs: {
-        Args: { location_id: string }
-        Returns: {
->>>>>>> 01b6a4d5a (refactor: generate types)
           assignee: string
           completedDate: string
           completedOperationCount: number
@@ -51583,14 +51036,7 @@ export type Database = {
           itemId: string
           itemReadableId: string
           jobId: string
-<<<<<<< HEAD
-<<<<<<< HEAD
           jobMakeMethodId: string
-=======
->>>>>>> 01b6a4d5a (refactor: generate types)
-=======
-          jobMakeMethodId: string
->>>>>>> a56d9a3b6 (refactor: rebase and regenerate types)
           operationCount: number
           priority: number
           quantity: number
@@ -52157,30 +51603,16 @@ export type Database = {
         | "Finance Charge Memo"
         | "Reminder"
         | "Refund"
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> a6311d130 (refactor: rebase on main)
       supplierQuoteStatus:
         | "Active"
         | "Expired"
         | "Draft"
         | "Declined"
         | "Cancelled"
-<<<<<<< HEAD
-=======
-      supplierQuoteStatus: "Active" | "Expired"
->>>>>>> 01b6a4d5a (refactor: generate types)
-=======
->>>>>>> a6311d130 (refactor: rebase on main)
       supplySourceType: "Purchase Order" | "Production Order"
       tableViewType: "Public" | "Private"
       trackedEntityStatus: "Available" | "Reserved" | "On Hold" | "Consumed"
       trackingSource: "Purchased" | "Manufactured"
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> a6311d130 (refactor: rebase on main)
       trainingFrequency: "Once" | "Quarterly" | "Annual"
       trainingQuestionType:
         | "MultipleChoice"
@@ -52190,11 +51622,6 @@ export type Database = {
         | "Numerical"
       trainingStatus: "Draft" | "Active" | "Archived"
       trainingType: "Mandatory" | "Optional"
-<<<<<<< HEAD
-=======
->>>>>>> 01b6a4d5a (refactor: generate types)
-=======
->>>>>>> a6311d130 (refactor: rebase on main)
       warehouseTransferStatus:
         | "Draft"
         | "To Ship and Receive"
@@ -52253,79 +51680,6 @@ export type Database = {
       }
       buckets_analytics: {
         Row: {
-<<<<<<< HEAD
-          executed_at: string | null
-          hash: string
-          id: number
-          name: string
-        }
-        Insert: {
-          executed_at?: string | null
-          hash: string
-          id: number
-          name: string
-        }
-        Update: {
-          executed_at?: string | null
-          hash?: string
-          id?: number
-          name?: string
-        }
-        Relationships: []
-      }
-      objects: {
-        Row: {
-          bucket_id: string | null
-          created_at: string | null
-          id: string
-          last_accessed_at: string | null
-          level: number | null
-          metadata: Json | null
-          name: string | null
-          owner: string | null
-          owner_id: string | null
-          path_tokens: string[] | null
-          updated_at: string | null
-          user_metadata: Json | null
-          version: string | null
-        }
-        Insert: {
-          bucket_id?: string | null
-          created_at?: string | null
-          id?: string
-          last_accessed_at?: string | null
-          level?: number | null
-          metadata?: Json | null
-          name?: string | null
-          owner?: string | null
-          owner_id?: string | null
-          path_tokens?: string[] | null
-          updated_at?: string | null
-          user_metadata?: Json | null
-          version?: string | null
-        }
-        Update: {
-          bucket_id?: string | null
-          created_at?: string | null
-          id?: string
-          last_accessed_at?: string | null
-          level?: number | null
-          metadata?: Json | null
-          name?: string | null
-          owner?: string | null
-          owner_id?: string | null
-          path_tokens?: string[] | null
-          updated_at?: string | null
-          user_metadata?: Json | null
-          version?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "objects_bucketId_fkey"
-            columns: ["bucket_id"]
-            isOneToOne: false
-            referencedRelation: "buckets"
-=======
           created_at: string
           format: string
           id: string
@@ -52376,135 +51730,10 @@ export type Database = {
             columns: ["bucket_id"]
             isOneToOne: false
             referencedRelation: "buckets_analytics"
->>>>>>> 01b6a4d5a (refactor: generate types)
             referencedColumns: ["id"]
           },
         ]
       }
-<<<<<<< HEAD
-      prefixes: {
-        Row: {
-          bucket_id: string
-          created_at: string | null
-          level: number
-          name: string
-          updated_at: string | null
-        }
-        Insert: {
-          bucket_id: string
-          created_at?: string | null
-          level?: number
-          name: string
-          updated_at?: string | null
-        }
-        Update: {
-          bucket_id?: string
-          created_at?: string | null
-          level?: number
-          name?: string
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "prefixes_bucketId_fkey"
-            columns: ["bucket_id"]
-            isOneToOne: false
-            referencedRelation: "buckets"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      s3_multipart_uploads: {
-        Row: {
-          bucket_id: string
-          created_at: string
-          id: string
-          in_progress_size: number
-          key: string
-          owner_id: string | null
-          upload_signature: string
-          user_metadata: Json | null
-          version: string
-        }
-        Insert: {
-          bucket_id: string
-          created_at?: string
-          id: string
-          in_progress_size?: number
-          key: string
-          owner_id?: string | null
-          upload_signature: string
-          user_metadata?: Json | null
-          version: string
-        }
-        Update: {
-          bucket_id?: string
-          created_at?: string
-          id?: string
-          in_progress_size?: number
-          key?: string
-          owner_id?: string | null
-          upload_signature?: string
-          user_metadata?: Json | null
-          version?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "s3_multipart_uploads_bucket_id_fkey"
-            columns: ["bucket_id"]
-            isOneToOne: false
-            referencedRelation: "buckets"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      s3_multipart_uploads_parts: {
-        Row: {
-          bucket_id: string
-          created_at: string
-          etag: string
-          id: string
-          key: string
-          owner_id: string | null
-          part_number: number
-          size: number
-          upload_id: string
-          version: string
-        }
-        Insert: {
-          bucket_id: string
-          created_at?: string
-          etag: string
-          id?: string
-          key: string
-          owner_id?: string | null
-          part_number: number
-          size?: number
-          upload_id: string
-          version: string
-        }
-        Update: {
-          bucket_id?: string
-          created_at?: string
-          etag?: string
-          id?: string
-          key?: string
-          owner_id?: string | null
-          part_number?: number
-          size?: number
-          upload_id?: string
-          version?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "s3_multipart_uploads_parts_bucket_id_fkey"
-            columns: ["bucket_id"]
-            isOneToOne: false
-            referencedRelation: "buckets"
-            referencedColumns: ["id"]
-          },
-          {
-=======
       iceberg_tables: {
         Row: {
           bucket_id: string
@@ -52749,7 +51978,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
->>>>>>> 01b6a4d5a (refactor: generate types)
             foreignKeyName: "s3_multipart_uploads_parts_upload_id_fkey"
             columns: ["upload_id"]
             isOneToOne: false
