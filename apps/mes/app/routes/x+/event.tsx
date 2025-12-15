@@ -3,7 +3,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import { getLocalTimeZone, now } from "@internationalized/date";
-import type { ActionFunctionArgs } from "react-router";
+import { type ActionFunctionArgs, data } from "react-router";
 import { productionEventValidator } from "~/services/models";
 import {
   endProductionEvent,
@@ -28,14 +28,14 @@ export async function action({ request }: ActionFunctionArgs) {
     action: productionAction,
     timezone,
     trackedEntityId,
-    ...data
+    ...d
   } = validation.data;
 
   if (productionAction === "Start") {
     const startEvent = await startProductionEvent(
       client,
       {
-        ...data,
+        ...d,
         startTime: now(timezone ?? getLocalTimeZone()).toAbsoluteString(),
         employeeId: userId,
         companyId,
@@ -53,10 +53,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
     return data(
       startEvent.data,
-      await flash(
-        request,
-        success(`Started ${data.type.toLowerCase()} operation`)
-      )
+      await flash(request, success(`Started ${d.type.toLowerCase()} operation`))
     );
   } else {
     if (!id) {
@@ -75,10 +72,7 @@ export async function action({ request }: ActionFunctionArgs) {
     }
     return data(
       endEvent.data,
-      await flash(
-        request,
-        success(`Ended ${data.type.toLowerCase()} operation`)
-      )
+      await flash(request, success(`Ended ${d.type.toLowerCase()} operation`))
     );
   }
 }

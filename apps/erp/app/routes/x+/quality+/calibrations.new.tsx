@@ -58,17 +58,15 @@ export async function action({ request }: ActionFunctionArgs) {
     return validationError(validation.error);
   }
 
-  const data = validation.data;
+  const d = validation.data;
 
   const inspectionStatus =
-    data.requiresAction || data.requiresAdjustment || data.requiresRepair
+    d.requiresAction || d.requiresAdjustment || d.requiresRepair
       ? "Fail"
       : "Pass";
 
-  console.log({ data });
-
   const createGauge = await upsertGaugeCalibrationRecord(client, {
-    ...data,
+    ...d,
     inspectionStatus,
     companyId,
     createdBy: userId,
