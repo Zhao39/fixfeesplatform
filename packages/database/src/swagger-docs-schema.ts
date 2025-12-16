@@ -57013,6 +57013,9 @@ export default {
             $ref: "#/parameters/rowFilter.companySettings.purchasePriceUpdateTiming",
           },
           {
+            $ref: "#/parameters/rowFilter.companySettings.supplierQuoteNotificationGroup",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -57114,6 +57117,9 @@ export default {
             $ref: "#/parameters/rowFilter.companySettings.purchasePriceUpdateTiming",
           },
           {
+            $ref: "#/parameters/rowFilter.companySettings.supplierQuoteNotificationGroup",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -57167,6 +57173,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.companySettings.purchasePriceUpdateTiming",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companySettings.supplierQuoteNotificationGroup",
           },
           {
             $ref: "#/parameters/body.companySettings",
@@ -89008,6 +89017,7 @@ export default {
         "kanbanOutput",
         "gaugeCalibrationExpiredNotificationGroup",
         "purchasePriceUpdateTiming",
+        "supplierQuoteNotificationGroup",
       ],
       properties: {
         id: {
@@ -89092,6 +89102,13 @@ export default {
           enum: ["Purchase Invoice Post", "Purchase Order Finalize"],
           format: 'public."purchasePriceUpdateTiming"',
           type: "string",
+        },
+        supplierQuoteNotificationGroup: {
+          format: "text[]",
+          items: {
+            type: "string",
+          },
+          type: "array",
         },
       },
       type: "object",
@@ -119959,6 +119976,12 @@ export default {
     },
     "rowFilter.companySettings.purchasePriceUpdateTiming": {
       name: "purchasePriceUpdateTiming",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.companySettings.supplierQuoteNotificationGroup": {
+      name: "supplierQuoteNotificationGroup",
       required: false,
       in: "query",
       type: "string",
