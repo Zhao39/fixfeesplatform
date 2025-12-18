@@ -25,10 +25,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return data({ error: "Invalid Xero auth response" }, { status: 400 });
   }
 
-  const { data: d } = xeroAuthResponse;
+  const { data: params } = xeroAuthResponse;
 
   // TODO: Verify state parameter
-  if (!d.state) {
+  if (!params.state) {
     return data({ error: "Invalid state parameter" }, { status: 400 });
   }
 
@@ -37,15 +37,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
   }
 
   try {
-    // Use the XeroProvider to handle the OAuth flow
     const provider = new XeroProvider({
       clientId: XERO_CLIENT_ID,
       clientSecret: XERO_CLIENT_SECRET,
-      redirectUri: `${url.origin}/api/integrations/xero/oauth`
+      companyId
     });
 
     // Exchange the authorization code for tokens
-    const auth = await provider.exchangeCodeForToken(d.code);
+    const auth = await provider.authenticate(
+      params.code,
+      `${url.origin}/api/integrations/xero/oauth`
+    );
+
     if (!auth) {
       return data(
         { error: "Failed to exchange code for token" },

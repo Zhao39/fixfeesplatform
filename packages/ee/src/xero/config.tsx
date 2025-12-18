@@ -18,7 +18,7 @@ export const Xero: IntegrationConfig = {
   schema: z.object({}),
   oauth: {
     authUrl: "https://login.xero.com/identity/connect/authorize",
-    clientId: XERO_CLIENT_ID,
+    clientId: XERO_CLIENT_ID!,
     redirectUri: "/api/integrations/xero/oauth",
     scopes: [
       "offline_access",

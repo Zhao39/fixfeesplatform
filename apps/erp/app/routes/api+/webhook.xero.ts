@@ -25,6 +25,7 @@ import {
   XERO_CLIENT_SECRET,
   XERO_WEBHOOK_SECRET
 } from "@carbon/auth";
+import { AccountingEntity } from "@carbon/ee/accounting";
 import { XeroProvider } from "@carbon/ee/xero";
 import { tasks } from "@trigger.dev/sdk/v3";
 import crypto from "crypto";
@@ -35,7 +36,7 @@ export const config = {
   runtime: "nodejs"
 };
 
-const xeroEventValidator = z.object({
+const XeroEventSchema = z.object({
   events: z.array(
     z.object({
       tenantId: z.string(),
@@ -60,6 +61,7 @@ function verifyXeroSignature(payload: string, signature: string): boolean {
     .update(payload)
     .digest("base64");
 
+  console.log({ expectedSignature, signature });
   return crypto.timingSafeEqual(
     Buffer.from(signature),
     Buffer.from(expectedSignature)
@@ -98,16 +100,15 @@ async function fetchInvoiceAndDetermineContactType(
       throw new Error("No access token available for Xero integration");
     }
 
-    const xeroProvider = new XeroProvider({
+    const provider = new XeroProvider({
       clientId: XERO_CLIENT_ID!,
       clientSecret: XERO_CLIENT_SECRET!,
-      accessToken,
-      refreshToken,
-      tenantId
+      tenantId,
+      companyId
     });
 
     // Fetch the invoice to get the contact ID and type
-    const invoiceData = await xeroProvider.getInvoice(invoiceId);
+    const invoiceData = await provider.invoices.get(invoiceId);
     const xeroInvoice = invoiceData.Invoices?.[0];
 
     if (!xeroInvoice) {
@@ -122,8 +123,7 @@ async function fetchInvoiceAndDetermineContactType(
     }
 
     // Now fetch the contact details
-    const contactData = await xeroProvider.getContact(contactId);
-    const xeroContact = contactData.Contacts?.[0];
+    const xeroContact = await provider.contacts.get(contactId);
 
     if (!xeroContact) {
       throw new Error(`Contact ${contactId} not found`);
@@ -181,36 +181,27 @@ async function fetchContactAndDetermineType(
       throw new Error("Xero integration not found");
     }
 
-    const { accessToken, refreshToken, tenantId } =
-      integration.data.metadata || {};
+    const metadata = integration.data.metadata || {};
+
+    const { accessToken, refreshToken } = metadata;
 
     if (!accessToken) {
       throw new Error("No access token available for Xero integration");
     }
 
-    const xeroProvider = new XeroProvider({
+    const provider = new XeroProvider({
       clientId: XERO_CLIENT_ID!,
       clientSecret: XERO_CLIENT_SECRET!,
       accessToken,
       refreshToken,
-      tenantId
+      tenantId: metadata.tenantId ?? tenantId,
+      companyId
     });
 
-    const data = await xeroProvider.getContact(contactId);
-    const xeroContact = data.Contacts?.[0];
-    console.log({ xeroContact });
+    const contact = await provider.contacts.get(contactId);
 
-    if (!xeroContact) {
-      throw new Error(`Contact ${contactId} not found`);
-    }
-
-    // Check IsCustomer and IsSupplier fields from Xero
-    const isCustomer = xeroContact.IsCustomer === true;
-    const isSupplier = xeroContact.IsSupplier === true;
-
-    console.log(
-      `Contact ${contactId} (${xeroContact.Name}) - IsCustomer: ${isCustomer}, IsSupplier: ${isSupplier}`
-    );
+    const isCustomer = contact.IsCustomer;
+    const isSupplier = contact.IsSupplier;
 
     // Determine entity type based on flags
     let entityType: "customer" | "vendor" | "both";
@@ -322,7 +313,7 @@ export async function action({ request }: ActionFunctionArgs) {
     );
   }
 
-  const parsedPayload = xeroEventValidator.safeParse(payload);
+  const parsedPayload = XeroEventSchema.safeParse(payload);
 
   if (!parsedPayload.success) {
     console.error("Invalid Xero webhook payload:", parsedPayload.error);
@@ -362,16 +353,12 @@ export async function action({ request }: ActionFunctionArgs) {
   for (const [tenantId, tenantEvents] of Object.entries(eventsByTenant)) {
     try {
       // Find the company integration for this Xero tenant by checking metadata
-      const integrationQuery = await serviceRole
+      const { data: integrations } = await serviceRole
         .from("companyIntegration")
         .select("*")
         .eq("id", "xero" as any);
 
-      if (
-        integrationQuery.error ||
-        !integrationQuery.data ||
-        integrationQuery.data.length === 0
-      ) {
+      if (!integrations || integrations.length === 0) {
         console.error(`No Xero integration found for tenant ${tenantId}`);
         errors.push({
           tenantId,
@@ -381,7 +368,7 @@ export async function action({ request }: ActionFunctionArgs) {
       }
 
       // Find the integration that matches this tenant ID
-      const companyIntegration = integrationQuery.data.find(
+      const companyIntegration = integrations.find(
         (integration: any) => integration.metadata?.tenantId === tenantId
       );
 
@@ -394,14 +381,10 @@ export async function action({ request }: ActionFunctionArgs) {
         continue;
       }
 
-      const companyId = (companyIntegration as any).companyId;
+      const companyId = companyIntegration.companyId;
 
       // Group entities by type for efficient batch processing
-      const entitiesToSync: Array<{
-        entityType: "customer" | "vendor" | "invoice";
-        entityId: string;
-        operation: "create" | "update" | "delete";
-      }> = [];
+      const entitiesToSync: Array<AccountingEntity> = [];
 
       for (const event of tenantEvents) {
         const { resourceId, eventCategory, eventType } = event;
@@ -411,52 +394,58 @@ export async function action({ request }: ActionFunctionArgs) {
           `Xero ${eventType}: ${eventCategory} ${resourceId} (tenant: ${tenantId})`
         );
 
-        // Map Xero entity types to our internal types
-        if (eventCategory === "CONTACT") {
-          // Fetch the contact from Xero to determine if it's a customer or vendor
-          const contactInfo = await fetchContactAndDetermineType(
-            companyId,
-            tenantId,
-            resourceId,
-            serviceRole
-          );
-
-          // If the contact is both customer and supplier, sync to both tables
-          if (contactInfo.entityType === "both") {
-            console.log(
-              `Contact ${resourceId} is both customer and supplier, syncing to both`
+        switch (eventCategory) {
+          case "CONTACT": {
+            // Fetch the contact from Xero to determine if it's a customer or vendor
+            const contactInfo = await fetchContactAndDetermineType(
+              companyId,
+              tenantId,
+              resourceId,
+              serviceRole
             );
 
-            // Add as customer
-            entitiesToSync.push({
-              entityType: "customer",
-              entityId: resourceId,
-              operation: eventType.toLowerCase() as
-                | "create"
-                | "update"
-                | "delete"
-            });
+            // If the contact is both customer and supplier, sync to both tables
+            if (contactInfo.entityType === "both") {
+              console.log(
+                `Contact ${resourceId} is both customer and supplier, syncing to both`
+              );
 
-            // Add as vendor
-            entitiesToSync.push({
-              entityType: "vendor",
-              entityId: resourceId,
-              operation: eventType.toLowerCase() as
-                | "create"
-                | "update"
-                | "delete"
-            });
-          } else {
-            // Add as either customer or vendor based on the determination
-            entitiesToSync.push({
-              entityType: contactInfo.entityType as "customer" | "vendor",
-              entityId: resourceId,
-              operation: eventType.toLowerCase() as
-                | "create"
-                | "update"
-                | "delete"
-            });
+              // Add as customer
+              entitiesToSync.push({
+                entityType: "customer",
+                entityId: resourceId,
+                provider: "xero",
+                operation: eventType.toLowerCase() as
+                  | "create"
+                  | "update"
+                  | "delete"
+              });
+
+              // Add as vendor
+              entitiesToSync.push({
+                entityType: "vendor",
+                entityId: resourceId,
+                operation: eventType.toLowerCase() as
+                  | "create"
+                  | "update"
+                  | "delete"
+              });
+            } else {
+              // Add as either customer or vendor based on the determination
+              entitiesToSync.push({
+                entityType: contactInfo.entityType as "customer" | "vendor",
+                entityId: resourceId,
+                operation: eventType.toLowerCase() as
+                  | "create"
+                  | "update"
+                  | "delete"
+              });
+            }
           }
+        }
+
+        // Map Xero entity types to our internal types
+        if (eventCategory === "CONTACT") {
         } else if (eventCategory === "INVOICE") {
           // Fetch the invoice to determine the associated customer/vendor
           try {
