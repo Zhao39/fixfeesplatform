@@ -1,11 +1,11 @@
-import { AccountingEntity } from "../entities";
+import { AccountingEntityType, EntityMap } from "../entities";
 import { AccountingProvider } from "./models";
 
 export interface AccountingSyncPayload {
   companyId: string;
   provider: AccountingProvider;
   syncType: "webhook" | "scheduled" | "trigger";
-  syncDirection: "fromAccounting" | "toAccounting" | "bidirectional";
+  syncDirection: "from-accounting" | "to-accounting" | "bi-directional";
   entities: AccountingEntity[];
   metadata?: {
     tenantId?: string;
@@ -13,4 +13,14 @@ export interface AccountingSyncPayload {
     userId?: string;
     [key: string]: any;
   };
+}
+
+export interface AccountingEntity<
+  T extends AccountingEntityType = AccountingEntityType
+> {
+  entityType: T;
+  entityId: string;
+  operation: "create" | "update" | "delete" | "sync";
+  lastSyncedAt?: string;
+  data?: Partial<EntityMap[T]>;
 }

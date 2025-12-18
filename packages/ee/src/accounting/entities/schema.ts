@@ -12,7 +12,7 @@ function withNullable<T extends z.ZodTypeAny>(schema: T) {
 //   lastSyncedAt: z.string().datetime().optional(),
 // });
 
-export const CustomerSchema = z.object({
+export const ContactSchema = z.object({
   name: z.string(),
   companyId: z.string(),
   phone: withNullable(z.string()),
@@ -22,5 +22,7 @@ export const CustomerSchema = z.object({
   balance: z.number().nullish(),
   creditLimit: z.number().nullish(),
   paymentTerms: z.string().nullish(),
-  updatedAt: z.string().datetime()
+  updatedAt: z.string().datetime(),
+  isVendor: z.boolean(),
+  isCustomer: z.boolean()
 });

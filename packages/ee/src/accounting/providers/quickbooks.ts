@@ -25,6 +25,8 @@ export class QuickBooksProvider implements IQuickBooksProvider {
   http: HTTPClient;
   auth: AuthProvider;
 
+  static id = AccountingProvider.QUICKBOOKS;
+
   constructor(public config: Omit<QuickBooksProviderConfig, "id">) {
     const baseURL =
       config.environment === "production"

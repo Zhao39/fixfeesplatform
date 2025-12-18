@@ -1,8 +1,7 @@
 import z from "zod";
-import { AccountingProvider } from "../core";
-import { CustomerSchema } from "./schema";
+import { ContactSchema } from "./schema";
 
-type AccountingEntityType = "customer";
+export type AccountingEntityType = "customer" | "vendor";
 // Uncomment and expand as needed
 // | "bill" // Purchase Invoice
 // | "employee"
@@ -12,21 +11,11 @@ type AccountingEntityType = "customer";
 // | "sales_order"
 // | "inventory_adjustment";
 
-interface EntityMap {
-  customer: Accounting.Customer;
-}
-
-export interface AccountingEntity<
-  T extends AccountingEntityType = AccountingEntityType
-> {
-  provider: AccountingProvider;
-  entityType: T;
-  entityId: string;
-  operation: "create" | "update" | "delete" | "sync";
-  lastSyncedAt?: string;
-  data?: EntityMap[T];
+export interface EntityMap {
+  customer: Accounting.Contact;
+  vendor: Accounting.Contact;
 }
 
 export namespace Accounting {
-  export type Customer = z.infer<typeof CustomerSchema>;
+  export type Contact = z.infer<typeof ContactSchema>;
 }

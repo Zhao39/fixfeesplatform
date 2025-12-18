@@ -25,7 +25,11 @@ import {
   XERO_CLIENT_SECRET,
   XERO_WEBHOOK_SECRET
 } from "@carbon/auth";
-import { AccountingEntity } from "@carbon/ee/accounting";
+import {
+  AccountingEntity,
+  AccountingProvider,
+  AccountingSyncPayload
+} from "@carbon/ee/accounting";
 import { XeroProvider } from "@carbon/ee/xero";
 import { tasks } from "@trigger.dev/sdk/v3";
 import crypto from "crypto";
@@ -36,7 +40,8 @@ export const config = {
   runtime: "nodejs"
 };
 
-const XeroEventSchema = z.object({
+const WebhookSchema = z.object({
+  entropy: z.string().optional(),
   events: z.array(
     z.object({
       tenantId: z.string(),
@@ -50,7 +55,7 @@ const XeroEventSchema = z.object({
   lastEventSequence: z.number()
 });
 
-function verifyXeroSignature(payload: string, signature: string): boolean {
+function verifySignature(payload: string, signature: string): boolean {
   if (!XERO_WEBHOOK_SECRET) {
     console.warn("XERO_WEBHOOK_SECRET is not set");
     return true;
@@ -174,7 +179,7 @@ async function fetchContactAndDetermineType(
       .from("companyIntegration")
       .select("*")
       .eq("companyId", companyId)
-      .eq("id", "xero")
+      .eq("id", XeroProvider.id)
       .single();
 
     if (integration.error || !integration.data) {
@@ -200,8 +205,8 @@ async function fetchContactAndDetermineType(
 
     const contact = await provider.contacts.get(contactId);
 
-    const isCustomer = contact.IsCustomer;
-    const isSupplier = contact.IsSupplier;
+    const isCustomer = contact.isCustomer;
+    const isSupplier = contact.isVendor;
 
     // Determine entity type based on flags
     let entityType: "customer" | "vendor" | "both";
@@ -223,44 +228,6 @@ async function fetchContactAndDetermineType(
   }
 }
 
-async function triggerAccountingSync(
-  companyId: string,
-  tenantId: string,
-  entities: Array<{
-    entityType: "customer" | "vendor" | "invoice";
-    entityId: string;
-    operation: "create" | "update" | "delete";
-  }>
-) {
-  // Prepare the payload for the accounting sync job
-  const payload = {
-    companyId,
-    provider: "xero" as const,
-    syncType: "webhook" as const,
-    syncDirection: "fromAccounting" as const,
-    entities: entities.map((entity) => ({
-      entityType: entity.entityType,
-      entityId: entity.entityId,
-      operation: entity.operation,
-      externalId: entity.entityId // In Xero, the resource ID is the external ID
-    })),
-    metadata: {
-      tenantId: tenantId,
-      webhookId: crypto.randomUUID(),
-      timestamp: new Date().toISOString()
-    }
-  };
-
-  // Trigger the background job using Trigger.dev
-  const handle = await tasks.trigger("accounting-sync", payload);
-
-  console.log(
-    `Triggered accounting sync job ${handle.id} for ${entities.length} entities`
-  );
-
-  return handle;
-}
-
 export async function action({ request }: ActionFunctionArgs) {
   // Get the raw payload for signature verification
   const payloadText = await request.text();
@@ -279,7 +246,7 @@ export async function action({ request }: ActionFunctionArgs) {
     );
   }
 
-  const requestIsValid = verifyXeroSignature(payloadText, signatureHeader);
+  const requestIsValid = verifySignature(payloadText, signatureHeader);
 
   if (!requestIsValid) {
     console.error("Xero webhook signature verification failed");
@@ -313,10 +280,10 @@ export async function action({ request }: ActionFunctionArgs) {
     );
   }
 
-  const parsedPayload = XeroEventSchema.safeParse(payload);
+  const parsed = WebhookSchema.safeParse(payload);
 
-  if (!parsedPayload.success) {
-    console.error("Invalid Xero webhook payload:", parsedPayload.error);
+  if (!parsed.success) {
+    console.error("Invalid Xero webhook payload:", parsed.error);
     return data(
       {
         success: false,
@@ -328,12 +295,12 @@ export async function action({ request }: ActionFunctionArgs) {
 
   console.log(
     "Processing Xero webhook with",
-    parsedPayload.data.events.length,
+    parsed.data.events.length,
     "events"
   );
 
   const serviceRole = await getCarbonServiceRole();
-  const events = parsedPayload.data.events;
+  const events = parsed.data.events;
   const syncJobs = [];
   const errors = [];
 
@@ -384,14 +351,18 @@ export async function action({ request }: ActionFunctionArgs) {
       const companyId = companyIntegration.companyId;
 
       // Group entities by type for efficient batch processing
-      const entitiesToSync: Array<AccountingEntity> = [];
+      const entities: Array<AccountingEntity> = [];
 
       for (const event of tenantEvents) {
-        const { resourceId, eventCategory, eventType } = event;
+        const { resourceId, eventCategory } = event;
+
+        const operation = event.eventType.toLowerCase() as Lowercase<
+          AccountingEntity["operation"]
+        >;
 
         // Log each entity change for debugging
         console.log(
-          `Xero ${eventType}: ${eventCategory} ${resourceId} (tenant: ${tenantId})`
+          `Xero ${operation}: ${eventCategory} ${resourceId} (tenant: ${tenantId})`
         );
 
         switch (eventCategory) {
@@ -411,127 +382,61 @@ export async function action({ request }: ActionFunctionArgs) {
               );
 
               // Add as customer
-              entitiesToSync.push({
+              entities.push({
+                operation,
                 entityType: "customer",
-                entityId: resourceId,
-                provider: "xero",
-                operation: eventType.toLowerCase() as
-                  | "create"
-                  | "update"
-                  | "delete"
+                entityId: resourceId
               });
 
               // Add as vendor
-              entitiesToSync.push({
+              entities.push({
+                operation,
                 entityType: "vendor",
-                entityId: resourceId,
-                operation: eventType.toLowerCase() as
-                  | "create"
-                  | "update"
-                  | "delete"
+                entityId: resourceId
               });
             } else {
               // Add as either customer or vendor based on the determination
-              entitiesToSync.push({
+              entities.push({
+                operation,
                 entityType: contactInfo.entityType as "customer" | "vendor",
-                entityId: resourceId,
-                operation: eventType.toLowerCase() as
-                  | "create"
-                  | "update"
-                  | "delete"
+                entityId: resourceId
               });
             }
           }
-        }
-
-        // Map Xero entity types to our internal types
-        if (eventCategory === "CONTACT") {
-        } else if (eventCategory === "INVOICE") {
-          // Fetch the invoice to determine the associated customer/vendor
-          try {
-            const invoiceInfo = await fetchInvoiceAndDetermineContactType(
-              companyId,
-              tenantId,
-              resourceId,
-              serviceRole
-            );
-
-            console.log(
-              `Invoice ${resourceId} is for contact ${invoiceInfo.contactId} (${invoiceInfo.entityType})`
-            );
-
-            // Add the invoice for sync
-            entitiesToSync.push({
-              entityType: "invoice",
-              entityId: resourceId,
-              operation: eventType.toLowerCase() as
-                | "create"
-                | "update"
-                | "delete"
-            });
-
-            // Also sync the associated contact
-            if (invoiceInfo.entityType === "both") {
-              // Sync both customer and vendor if contact serves both roles
-              entitiesToSync.push(
-                {
-                  entityType: "customer",
-                  entityId: invoiceInfo.contactId,
-                  operation: eventType.toLowerCase() as
-                    | "create"
-                    | "update"
-                    | "delete"
-                },
-                {
-                  entityType: "vendor",
-                  entityId: invoiceInfo.contactId,
-                  operation: eventType.toLowerCase() as
-                    | "create"
-                    | "update"
-                    | "delete"
-                }
-              );
-            } else {
-              // Sync the specific entity type (customer or vendor)
-              entitiesToSync.push({
-                entityType: invoiceInfo.entityType as "customer" | "vendor",
-                entityId: invoiceInfo.contactId,
-                operation: eventType.toLowerCase() as
-                  | "create"
-                  | "update"
-                  | "delete"
-              });
-            }
-          } catch (error) {
-            console.error(`Failed to process invoice ${resourceId}:`, error);
-            // Still add the invoice for sync even if we can't determine the contact
-            entitiesToSync.push({
-              entityType: "invoice",
-              entityId: resourceId,
-              operation: eventType.toLowerCase() as
-                | "create"
-                | "update"
-                | "delete"
-            });
-          }
-        } else {
-          console.log(`Skipping unsupported entity type: ${eventCategory}`);
         }
       }
 
       // Trigger background sync job if there are entities to process
-      if (entitiesToSync.length > 0) {
+      if (entities.length > 0) {
         try {
-          const jobHandle = await triggerAccountingSync(
+          // Prepare the payload for the accounting sync job
+          const payload: AccountingSyncPayload = {
             companyId,
-            tenantId,
-            entitiesToSync
+            provider: AccountingProvider.XERO,
+            syncType: "webhook",
+            syncDirection: "to-accounting",
+            entities,
+            metadata: {
+              tenantId: tenantId,
+              webhookId: parsed.data.entropy ?? crypto.randomUUID(),
+              timestamp: new Date().toISOString()
+            }
+          };
+
+          console.dir(payload, { depth: null });
+
+          // Trigger the background job using Trigger.dev
+          const handle = await tasks.trigger("accounting-sync", payload);
+
+          console.log(
+            `Triggered accounting sync job ${handle.id} for ${entities.length} entities`
           );
+
           syncJobs.push({
-            id: jobHandle.id,
+            id: handle.id,
             companyId,
             tenantId,
-            entityCount: entitiesToSync.length
+            entityCount: entities.length
           });
         } catch (error) {
           console.error("Failed to trigger sync job:", error);

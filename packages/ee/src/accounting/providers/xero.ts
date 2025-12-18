@@ -13,7 +13,7 @@ import { Xero } from "../entities/xero";
 
 export interface IXeroProvider extends BaseProvider {
   contacts: Pick<
-    Resource<Accounting.Customer, unknown, unknown>,
+    Resource<Accounting.Contact, unknown, unknown>,
     "get" | "list"
   >;
 }
@@ -40,6 +40,8 @@ const fromDotnetDate = (date: Date | string) => {
 export class XeroProvider implements IXeroProvider {
   http: HTTPClient;
   auth: AuthProvider;
+
+  static id = AccountingProvider.XERO;
 
   constructor(public config: Omit<XeroProviderConfig, "id">) {
     this.http = new HTTPClient("https://api.xero.com/api.xro/2.0", 3);
@@ -81,6 +83,8 @@ export class XeroProvider implements IXeroProvider {
         taxId: contact.TaxNumber,
         phone: contact.Phones?.[0]?.PhoneNumber,
         email: contact.EmailAddress?.[0],
+        isCustomer: contact.IsCustomer,
+        isVendor: contact.IsSupplier,
         updatedAt: fromDotnetDate(contact.UpdatedDateUTC).toISOString()
       }));
     },
@@ -103,6 +107,8 @@ export class XeroProvider implements IXeroProvider {
         taxId: contact.TaxNumber,
         phone: contact.Phones?.[0]?.PhoneNumber,
         email: contact.EmailAddress?.[0],
+        isCustomer: contact.IsCustomer,
+        isVendor: contact.IsSupplier,
         updatedAt: fromDotnetDate(contact.UpdatedDateUTC).toISOString()
       };
     }
