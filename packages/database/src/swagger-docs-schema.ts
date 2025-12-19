@@ -74733,7 +74733,7 @@ export default {
           type: "string",
         },
         severity: {
-          enum: ["Preventive", "OPM", "Maintenance Required", "OEM Required"],
+          enum: ["Preventive", "Operator Perfomed", "Maintenance Required", "OEM Required"],
           format: 'public."maintenanceSeverity"',
           type: "string",
         },

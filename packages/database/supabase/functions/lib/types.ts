@@ -53087,7 +53087,7 @@ export type Database = {
         | "Annual"
       maintenanceSeverity:
         | "Preventive"
-        | "OPM"
+        | "Operator Perfomed"
         | "Maintenance Required"
         | "OEM Required"
       maintenanceSource: "Scheduled" | "Reactive" | "Non-Conformance"
@@ -54229,7 +54229,7 @@ export const Constants = {
       ],
       maintenanceSeverity: [
         "Preventive",
-        "OPM",
+        "Operator Perfomed",
         "Maintenance Required",
         "OEM Required",
       ],
