@@ -23425,6 +23425,9 @@ export default {
             $ref: "#/parameters/rowFilter.maintenanceDispatch.id",
           },
           {
+            $ref: "#/parameters/rowFilter.maintenanceDispatch.maintenanceDispatchId",
+          },
+          {
             $ref: "#/parameters/rowFilter.maintenanceDispatch.content",
           },
           {
@@ -23434,7 +23437,16 @@ export default {
             $ref: "#/parameters/rowFilter.maintenanceDispatch.priority",
           },
           {
+            $ref: "#/parameters/rowFilter.maintenanceDispatch.source",
+          },
+          {
             $ref: "#/parameters/rowFilter.maintenanceDispatch.severity",
+          },
+          {
+            $ref: "#/parameters/rowFilter.maintenanceDispatch.workCenterId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.maintenanceDispatch.maintenanceScheduleId",
           },
           {
             $ref: "#/parameters/rowFilter.maintenanceDispatch.suspectedFailureModeId",
@@ -23455,10 +23467,16 @@ export default {
             $ref: "#/parameters/rowFilter.maintenanceDispatch.actualEndTime",
           },
           {
+            $ref: "#/parameters/rowFilter.maintenanceDispatch.isFailure",
+          },
+          {
             $ref: "#/parameters/rowFilter.maintenanceDispatch.duration",
           },
           {
             $ref: "#/parameters/rowFilter.maintenanceDispatch.nonConformanceId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.maintenanceDispatch.completedAt",
           },
           {
             $ref: "#/parameters/rowFilter.maintenanceDispatch.assignee",
@@ -23477,18 +23495,6 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.maintenanceDispatch.updatedAt",
-          },
-          {
-            $ref: "#/parameters/rowFilter.maintenanceDispatch.source",
-          },
-          {
-            $ref: "#/parameters/rowFilter.maintenanceDispatch.maintenanceScheduleId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.maintenanceDispatch.isFailure",
-          },
-          {
-            $ref: "#/parameters/rowFilter.maintenanceDispatch.previousDispatchId",
           },
           {
             $ref: "#/parameters/select",
@@ -23553,6 +23559,9 @@ export default {
             $ref: "#/parameters/rowFilter.maintenanceDispatch.id",
           },
           {
+            $ref: "#/parameters/rowFilter.maintenanceDispatch.maintenanceDispatchId",
+          },
+          {
             $ref: "#/parameters/rowFilter.maintenanceDispatch.content",
           },
           {
@@ -23562,7 +23571,16 @@ export default {
             $ref: "#/parameters/rowFilter.maintenanceDispatch.priority",
           },
           {
+            $ref: "#/parameters/rowFilter.maintenanceDispatch.source",
+          },
+          {
             $ref: "#/parameters/rowFilter.maintenanceDispatch.severity",
+          },
+          {
+            $ref: "#/parameters/rowFilter.maintenanceDispatch.workCenterId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.maintenanceDispatch.maintenanceScheduleId",
           },
           {
             $ref: "#/parameters/rowFilter.maintenanceDispatch.suspectedFailureModeId",
@@ -23583,10 +23601,16 @@ export default {
             $ref: "#/parameters/rowFilter.maintenanceDispatch.actualEndTime",
           },
           {
+            $ref: "#/parameters/rowFilter.maintenanceDispatch.isFailure",
+          },
+          {
             $ref: "#/parameters/rowFilter.maintenanceDispatch.duration",
           },
           {
             $ref: "#/parameters/rowFilter.maintenanceDispatch.nonConformanceId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.maintenanceDispatch.completedAt",
           },
           {
             $ref: "#/parameters/rowFilter.maintenanceDispatch.assignee",
@@ -23605,18 +23629,6 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.maintenanceDispatch.updatedAt",
-          },
-          {
-            $ref: "#/parameters/rowFilter.maintenanceDispatch.source",
-          },
-          {
-            $ref: "#/parameters/rowFilter.maintenanceDispatch.maintenanceScheduleId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.maintenanceDispatch.isFailure",
-          },
-          {
-            $ref: "#/parameters/rowFilter.maintenanceDispatch.previousDispatchId",
           },
           {
             $ref: "#/parameters/preferReturn",
@@ -23635,6 +23647,9 @@ export default {
             $ref: "#/parameters/rowFilter.maintenanceDispatch.id",
           },
           {
+            $ref: "#/parameters/rowFilter.maintenanceDispatch.maintenanceDispatchId",
+          },
+          {
             $ref: "#/parameters/rowFilter.maintenanceDispatch.content",
           },
           {
@@ -23644,7 +23659,16 @@ export default {
             $ref: "#/parameters/rowFilter.maintenanceDispatch.priority",
           },
           {
+            $ref: "#/parameters/rowFilter.maintenanceDispatch.source",
+          },
+          {
             $ref: "#/parameters/rowFilter.maintenanceDispatch.severity",
+          },
+          {
+            $ref: "#/parameters/rowFilter.maintenanceDispatch.workCenterId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.maintenanceDispatch.maintenanceScheduleId",
           },
           {
             $ref: "#/parameters/rowFilter.maintenanceDispatch.suspectedFailureModeId",
@@ -23665,10 +23689,16 @@ export default {
             $ref: "#/parameters/rowFilter.maintenanceDispatch.actualEndTime",
           },
           {
+            $ref: "#/parameters/rowFilter.maintenanceDispatch.isFailure",
+          },
+          {
             $ref: "#/parameters/rowFilter.maintenanceDispatch.duration",
           },
           {
             $ref: "#/parameters/rowFilter.maintenanceDispatch.nonConformanceId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.maintenanceDispatch.completedAt",
           },
           {
             $ref: "#/parameters/rowFilter.maintenanceDispatch.assignee",
@@ -23687,18 +23717,6 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.maintenanceDispatch.updatedAt",
-          },
-          {
-            $ref: "#/parameters/rowFilter.maintenanceDispatch.source",
-          },
-          {
-            $ref: "#/parameters/rowFilter.maintenanceDispatch.maintenanceScheduleId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.maintenanceDispatch.isFailure",
-          },
-          {
-            $ref: "#/parameters/rowFilter.maintenanceDispatch.previousDispatchId",
           },
           {
             $ref: "#/parameters/body.maintenanceDispatch",
@@ -26698,6 +26716,12 @@ export default {
             $ref: "#/parameters/rowFilter.maintenanceDispatchItem.unitOfMeasureCode",
           },
           {
+            $ref: "#/parameters/rowFilter.maintenanceDispatchItem.unitCost",
+          },
+          {
+            $ref: "#/parameters/rowFilter.maintenanceDispatchItem.totalCost",
+          },
+          {
             $ref: "#/parameters/rowFilter.maintenanceDispatchItem.companyId",
           },
           {
@@ -26711,12 +26735,6 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.maintenanceDispatchItem.updatedAt",
-          },
-          {
-            $ref: "#/parameters/rowFilter.maintenanceDispatchItem.unitCost",
-          },
-          {
-            $ref: "#/parameters/rowFilter.maintenanceDispatchItem.totalCost",
           },
           {
             $ref: "#/parameters/select",
@@ -26793,6 +26811,12 @@ export default {
             $ref: "#/parameters/rowFilter.maintenanceDispatchItem.unitOfMeasureCode",
           },
           {
+            $ref: "#/parameters/rowFilter.maintenanceDispatchItem.unitCost",
+          },
+          {
+            $ref: "#/parameters/rowFilter.maintenanceDispatchItem.totalCost",
+          },
+          {
             $ref: "#/parameters/rowFilter.maintenanceDispatchItem.companyId",
           },
           {
@@ -26806,12 +26830,6 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.maintenanceDispatchItem.updatedAt",
-          },
-          {
-            $ref: "#/parameters/rowFilter.maintenanceDispatchItem.unitCost",
-          },
-          {
-            $ref: "#/parameters/rowFilter.maintenanceDispatchItem.totalCost",
           },
           {
             $ref: "#/parameters/preferReturn",
@@ -26842,6 +26860,12 @@ export default {
             $ref: "#/parameters/rowFilter.maintenanceDispatchItem.unitOfMeasureCode",
           },
           {
+            $ref: "#/parameters/rowFilter.maintenanceDispatchItem.unitCost",
+          },
+          {
+            $ref: "#/parameters/rowFilter.maintenanceDispatchItem.totalCost",
+          },
+          {
             $ref: "#/parameters/rowFilter.maintenanceDispatchItem.companyId",
           },
           {
@@ -26855,12 +26879,6 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.maintenanceDispatchItem.updatedAt",
-          },
-          {
-            $ref: "#/parameters/rowFilter.maintenanceDispatchItem.unitCost",
-          },
-          {
-            $ref: "#/parameters/rowFilter.maintenanceDispatchItem.totalCost",
           },
           {
             $ref: "#/parameters/body.maintenanceDispatchItem",
@@ -74672,18 +74690,24 @@ export default {
     maintenanceDispatch: {
       required: [
         "id",
+        "maintenanceDispatchId",
         "content",
         "status",
         "priority",
+        "source",
+        "isFailure",
         "companyId",
         "createdBy",
         "createdAt",
-        "isFailure",
       ],
       properties: {
         id: {
-          default: "public.id('dispatch'::text)",
+          default: "public.id('main'::text)",
           description: "Note:\nThis is a Primary Key.<pk/>",
+          format: "text",
+          type: "string",
+        },
+        maintenanceDispatchId: {
           format: "text",
           type: "string",
         },
@@ -74702,9 +74726,27 @@ export default {
           format: 'public."maintenanceDispatchPriority"',
           type: "string",
         },
+        source: {
+          default: "Reactive",
+          enum: ["Scheduled", "Reactive", "Non-Conformance"],
+          format: 'public."maintenanceSource"',
+          type: "string",
+        },
         severity: {
           enum: ["Preventive", "OPM", "Maintenance Required", "OEM Required"],
           format: 'public."maintenanceSeverity"',
+          type: "string",
+        },
+        workCenterId: {
+          description:
+            "Note:\nThis is a Foreign Key to `workCenter.id`.<fk table='workCenter' column='id'/>",
+          format: "text",
+          type: "string",
+        },
+        maintenanceScheduleId: {
+          description:
+            "Note:\nThis is a Foreign Key to `maintenanceSchedule.id`.<fk table='maintenanceSchedule' column='id'/>",
+          format: "text",
           type: "string",
         },
         suspectedFailureModeId: {
@@ -74735,6 +74777,11 @@ export default {
           format: "timestamp with time zone",
           type: "string",
         },
+        isFailure: {
+          default: false,
+          format: "boolean",
+          type: "boolean",
+        },
         duration: {
           format: "integer",
           type: "integer",
@@ -74743,6 +74790,10 @@ export default {
           description:
             "Note:\nThis is a Foreign Key to `nonConformance.id`.<fk table='nonConformance' column='id'/>",
           format: "text",
+          type: "string",
+        },
+        completedAt: {
+          format: "timestamp with time zone",
           type: "string",
         },
         assignee: {
@@ -74776,27 +74827,6 @@ export default {
         },
         updatedAt: {
           format: "timestamp with time zone",
-          type: "string",
-        },
-        source: {
-          format: "text",
-          type: "string",
-        },
-        maintenanceScheduleId: {
-          description:
-            "Note:\nThis is a Foreign Key to `maintenanceSchedule.id`.<fk table='maintenanceSchedule' column='id'/>",
-          format: "text",
-          type: "string",
-        },
-        isFailure: {
-          default: false,
-          format: "boolean",
-          type: "boolean",
-        },
-        previousDispatchId: {
-          description:
-            "Note:\nThis is a Foreign Key to `maintenanceDispatch.id`.<fk table='maintenanceDispatch' column='id'/>",
-          format: "text",
           type: "string",
         },
       },
@@ -76323,6 +76353,14 @@ export default {
           format: "text",
           type: "string",
         },
+        unitCost: {
+          format: "numeric",
+          type: "number",
+        },
+        totalCost: {
+          format: "numeric",
+          type: "number",
+        },
         companyId: {
           description:
             "Note:\nThis is a Foreign Key to `company.id`.<fk table='company' column='id'/>",
@@ -76349,14 +76387,6 @@ export default {
         updatedAt: {
           format: "timestamp with time zone",
           type: "string",
-        },
-        unitCost: {
-          format: "numeric",
-          type: "number",
-        },
-        totalCost: {
-          format: "numeric",
-          type: "number",
         },
       },
       type: "object",
@@ -104314,6 +104344,12 @@ export default {
       in: "query",
       type: "string",
     },
+    "rowFilter.maintenanceDispatch.maintenanceDispatchId": {
+      name: "maintenanceDispatchId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
     "rowFilter.maintenanceDispatch.content": {
       name: "content",
       required: false,
@@ -104332,8 +104368,26 @@ export default {
       in: "query",
       type: "string",
     },
+    "rowFilter.maintenanceDispatch.source": {
+      name: "source",
+      required: false,
+      in: "query",
+      type: "string",
+    },
     "rowFilter.maintenanceDispatch.severity": {
       name: "severity",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.maintenanceDispatch.workCenterId": {
+      name: "workCenterId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.maintenanceDispatch.maintenanceScheduleId": {
+      name: "maintenanceScheduleId",
       required: false,
       in: "query",
       type: "string",
@@ -104374,6 +104428,12 @@ export default {
       in: "query",
       type: "string",
     },
+    "rowFilter.maintenanceDispatch.isFailure": {
+      name: "isFailure",
+      required: false,
+      in: "query",
+      type: "string",
+    },
     "rowFilter.maintenanceDispatch.duration": {
       name: "duration",
       required: false,
@@ -104382,6 +104442,12 @@ export default {
     },
     "rowFilter.maintenanceDispatch.nonConformanceId": {
       name: "nonConformanceId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.maintenanceDispatch.completedAt": {
+      name: "completedAt",
       required: false,
       in: "query",
       type: "string",
@@ -104418,30 +104484,6 @@ export default {
     },
     "rowFilter.maintenanceDispatch.updatedAt": {
       name: "updatedAt",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.maintenanceDispatch.source": {
-      name: "source",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.maintenanceDispatch.maintenanceScheduleId": {
-      name: "maintenanceScheduleId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.maintenanceDispatch.isFailure": {
-      name: "isFailure",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.maintenanceDispatch.previousDispatchId": {
-      name: "previousDispatchId",
       required: false,
       in: "query",
       type: "string",
@@ -106177,6 +106219,18 @@ export default {
       in: "query",
       type: "string",
     },
+    "rowFilter.maintenanceDispatchItem.unitCost": {
+      name: "unitCost",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.maintenanceDispatchItem.totalCost": {
+      name: "totalCost",
+      required: false,
+      in: "query",
+      type: "string",
+    },
     "rowFilter.maintenanceDispatchItem.companyId": {
       name: "companyId",
       required: false,
@@ -106203,18 +106257,6 @@ export default {
     },
     "rowFilter.maintenanceDispatchItem.updatedAt": {
       name: "updatedAt",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.maintenanceDispatchItem.unitCost": {
-      name: "unitCost",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.maintenanceDispatchItem.totalCost": {
-      name: "totalCost",
       required: false,
       in: "query",
       type: "string",

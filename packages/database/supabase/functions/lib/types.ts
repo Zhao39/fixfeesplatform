@@ -12444,24 +12444,26 @@ export type Database = {
           actualStartTime: string | null
           assignee: string | null
           companyId: string
+          completedAt: string | null
           content: Json
           createdAt: string
           createdBy: string
           duration: number | null
           id: string
           isFailure: boolean
+          maintenanceDispatchId: string
           maintenanceScheduleId: string | null
           nonConformanceId: string | null
           plannedEndTime: string | null
           plannedStartTime: string | null
-          previousDispatchId: string | null
           priority: Database["public"]["Enums"]["maintenanceDispatchPriority"]
           severity: Database["public"]["Enums"]["maintenanceSeverity"] | null
-          source: string | null
+          source: Database["public"]["Enums"]["maintenanceSource"]
           status: Database["public"]["Enums"]["maintenanceDispatchStatus"]
           suspectedFailureModeId: string | null
           updatedAt: string | null
           updatedBy: string | null
+          workCenterId: string | null
         }
         Insert: {
           actualEndTime?: string | null
@@ -12469,24 +12471,26 @@ export type Database = {
           actualStartTime?: string | null
           assignee?: string | null
           companyId: string
+          completedAt?: string | null
           content?: Json
           createdAt?: string
           createdBy: string
           duration?: number | null
           id?: string
           isFailure?: boolean
+          maintenanceDispatchId: string
           maintenanceScheduleId?: string | null
           nonConformanceId?: string | null
           plannedEndTime?: string | null
           plannedStartTime?: string | null
-          previousDispatchId?: string | null
           priority?: Database["public"]["Enums"]["maintenanceDispatchPriority"]
           severity?: Database["public"]["Enums"]["maintenanceSeverity"] | null
-          source?: string | null
+          source?: Database["public"]["Enums"]["maintenanceSource"]
           status?: Database["public"]["Enums"]["maintenanceDispatchStatus"]
           suspectedFailureModeId?: string | null
           updatedAt?: string | null
           updatedBy?: string | null
+          workCenterId?: string | null
         }
         Update: {
           actualEndTime?: string | null
@@ -12494,24 +12498,26 @@ export type Database = {
           actualStartTime?: string | null
           assignee?: string | null
           companyId?: string
+          completedAt?: string | null
           content?: Json
           createdAt?: string
           createdBy?: string
           duration?: number | null
           id?: string
           isFailure?: boolean
+          maintenanceDispatchId?: string
           maintenanceScheduleId?: string | null
           nonConformanceId?: string | null
           plannedEndTime?: string | null
           plannedStartTime?: string | null
-          previousDispatchId?: string | null
           priority?: Database["public"]["Enums"]["maintenanceDispatchPriority"]
           severity?: Database["public"]["Enums"]["maintenanceSeverity"] | null
-          source?: string | null
+          source?: Database["public"]["Enums"]["maintenanceSource"]
           status?: Database["public"]["Enums"]["maintenanceDispatchStatus"]
           suspectedFailureModeId?: string | null
           updatedAt?: string | null
           updatedBy?: string | null
+          workCenterId?: string | null
         }
         Relationships: [
           {
@@ -12641,13 +12647,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "maintenanceDispatch_previousDispatchId_fkey"
-            columns: ["previousDispatchId"]
-            isOneToOne: false
-            referencedRelation: "maintenanceDispatch"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "maintenanceDispatch_suspectedFailureModeId_fkey"
             columns: ["suspectedFailureModeId"]
             isOneToOne: false
@@ -12688,6 +12687,20 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
+          },
+          {
+            foreignKeyName: "maintenanceDispatch_workCenterId_fkey"
+            columns: ["workCenterId"]
+            isOneToOne: false
+            referencedRelation: "workCenter"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "maintenanceDispatch_workCenterId_fkey"
+            columns: ["workCenterId"]
+            isOneToOne: false
+            referencedRelation: "workCenters"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -53077,6 +53090,7 @@ export type Database = {
         | "OPM"
         | "Maintenance Required"
         | "OEM Required"
+      maintenanceSource: "Scheduled" | "Reactive" | "Non-Conformance"
       makeMethodStatus: "Draft" | "Active" | "Archived"
       methodOperationOrder: "After Previous" | "With Previous"
       methodType: "Buy" | "Make" | "Pick"
@@ -54219,6 +54233,7 @@ export const Constants = {
         "Maintenance Required",
         "OEM Required",
       ],
+      maintenanceSource: ["Scheduled", "Reactive", "Non-Conformance"],
       makeMethodStatus: ["Draft", "Active", "Archived"],
       methodOperationOrder: ["After Previous", "With Previous"],
       methodType: ["Buy", "Make", "Pick"],
