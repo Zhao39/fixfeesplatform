@@ -27,8 +27,8 @@ import {
 } from "@carbon/auth";
 import {
   AccountingEntity,
-  AccountingProvider,
-  AccountingSyncPayload
+  AccountingSyncPayload,
+  ProviderID
 } from "@carbon/ee/accounting";
 import { XeroProvider } from "@carbon/ee/xero";
 import { tasks } from "@trigger.dev/sdk/v3";
@@ -55,22 +55,18 @@ const WebhookSchema = z.object({
   lastEventSequence: z.number()
 });
 
-function verifySignature(payload: string, signature: string): boolean {
+async function verifySignature(payload: string, header: string) {
   if (!XERO_WEBHOOK_SECRET) {
-    console.warn("XERO_WEBHOOK_SECRET is not set");
-    return true;
+    console.warn("XERO_WEBHOOK_SECRET is not configured");
+    return payload;
   }
 
-  const expectedSignature = crypto
+  const hmac = crypto
     .createHmac("sha256", XERO_WEBHOOK_SECRET)
-    .update(payload)
+    .update(payload, "utf8")
     .digest("base64");
 
-  console.log({ expectedSignature, signature });
-  return crypto.timingSafeEqual(
-    Buffer.from(signature),
-    Buffer.from(expectedSignature)
-  );
+  return crypto.timingSafeEqual(Buffer.from(hmac), Buffer.from(header));
 }
 
 async function fetchInvoiceAndDetermineContactType(
@@ -233,36 +229,32 @@ export async function action({ request }: ActionFunctionArgs) {
   const payloadText = await request.text();
 
   // Verify webhook signature for security (Xero's intent-to-receive workflow)
-  const signatureHeader = request.headers.get("x-xero-signature");
+  if (XERO_WEBHOOK_SECRET) {
+    // If payload is empty or just contains intent-to-receive data, return 200
+    if (!payloadText || payloadText.trim() === "" || payloadText === "{}") {
+      return new Response("", { status: 200 });
+    }
 
-  if (!signatureHeader) {
-    console.warn("Xero webhook received without signature");
-    return data(
-      {
-        success: false,
-        error: "Missing signature"
-      },
-      { status: 401 }
-    );
-  }
+    const signature = request.headers.get("x-xero-signature");
 
-  const requestIsValid = verifySignature(payloadText, signatureHeader);
+    if (!signature) {
+      return data(
+        { success: false, error: "Missing signature" },
+        { status: 401 }
+      );
+    }
 
-  if (!requestIsValid) {
-    console.error("Xero webhook signature verification failed");
-    return data(
-      {
-        success: false,
-        error: "Invalid signature"
-      },
-      { status: 401 }
-    );
-  }
+    const isValid = verifySignature(payloadText, signature);
 
-  // If payload is empty or just contains intent-to-receive data, return 200
-  if (!payloadText || payloadText.trim() === "" || payloadText === "{}") {
-    console.log("Xero intent-to-receive webhook confirmed");
-    return new Response("", { status: 200 });
+    if (!isValid) {
+      return data(
+        {
+          success: false,
+          error: "Invalid signature"
+        },
+        { status: 401 }
+      );
+    }
   }
 
   // Parse and validate the webhook payload for actual events
@@ -335,11 +327,11 @@ export async function action({ request }: ActionFunctionArgs) {
       }
 
       // Find the integration that matches this tenant ID
-      const companyIntegration = integrations.find(
+      const found = integrations.find(
         (integration: any) => integration.metadata?.tenantId === tenantId
       );
 
-      if (!companyIntegration) {
+      if (!found) {
         console.error(`No Xero integration found for tenant ${tenantId}`);
         errors.push({
           tenantId,
@@ -348,7 +340,7 @@ export async function action({ request }: ActionFunctionArgs) {
         continue;
       }
 
-      const companyId = companyIntegration.companyId;
+      const companyId = found.companyId;
 
       // Group entities by type for efficient batch processing
       const entities: Array<AccountingEntity> = [];
@@ -398,7 +390,7 @@ export async function action({ request }: ActionFunctionArgs) {
               // Add as either customer or vendor based on the determination
               entities.push({
                 operation,
-                entityType: contactInfo.entityType as "customer" | "vendor",
+                entityType: contactInfo.entityType,
                 entityId: resourceId
               });
             }
@@ -412,7 +404,7 @@ export async function action({ request }: ActionFunctionArgs) {
           // Prepare the payload for the accounting sync job
           const payload: AccountingSyncPayload = {
             companyId,
-            provider: AccountingProvider.XERO,
+            provider: ProviderID.XERO,
             syncType: "webhook",
             syncDirection: "to-accounting",
             entities,

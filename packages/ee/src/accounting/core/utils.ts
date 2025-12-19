@@ -120,6 +120,7 @@ interface OAuthClientOptions {
   tokenUrl: string;
   accessToken?: string;
   refreshToken?: string;
+  redirectUri?: string;
   getAuthUrl: (scopes: string[], redirectUri: string) => string;
 }
 
@@ -139,7 +140,7 @@ export function createOAuthClient({
 
   return {
     getAuthUrl: options.getAuthUrl,
-    async exchangeCode(code: string, redirectUri: string) {
+    async exchangeCode(code: string, redirectUri?: string) {
       const response = await http.request<{
         access_token: string;
         refresh_token: string;
@@ -152,7 +153,7 @@ export function createOAuthClient({
         body: new URLSearchParams({
           grant_type: "authorization_code",
           code,
-          redirect_uri: redirectUri
+          redirect_uri: redirectUri ?? options.redirectUri ?? ""
         })
       });
 

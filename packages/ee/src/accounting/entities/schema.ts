@@ -14,8 +14,10 @@ function withNullable<T extends z.ZodTypeAny>(schema: T) {
 
 export const ContactSchema = z.object({
   name: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
   companyId: z.string(),
-  phone: withNullable(z.string()),
+  email: z.string().optional(),
   website: withNullable(z.string().url()),
   taxId: withNullable(z.string()),
   currencyCode: z.string().default("USD"),
@@ -23,6 +25,23 @@ export const ContactSchema = z.object({
   creditLimit: z.number().nullish(),
   paymentTerms: z.string().nullish(),
   updatedAt: z.string().datetime(),
+  phones: z.array(
+    z.object({
+      type: z.string().optional(),
+      phone: z.string().optional()
+    })
+  ),
+  addresses: z.array(
+    z.object({
+      type: z.string().nullish(),
+      line1: z.string().nullish(),
+      line2: z.string().nullish(),
+      city: z.string().nullish(),
+      country: z.string().nullish(),
+      region: z.string().nullish(),
+      postalCode: z.string().nullish()
+    })
+  ),
   isVendor: z.boolean(),
   isCustomer: z.boolean()
 });

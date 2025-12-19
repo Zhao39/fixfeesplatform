@@ -1,4 +1,4 @@
-import { ProviderCredentials } from "./models";
+import { ProviderCredentials, ProviderID } from "./models";
 
 export interface AuthProvider {
   getCredentials(): ProviderCredentials;
@@ -34,6 +34,8 @@ export type Resource<T, Create, Update> = ReadableResource<T> &
   WritableResource<T, Create, Update>;
 
 export abstract class BaseProvider {
+  static id: ProviderID;
+
   protected creds?: ProviderCredentials;
   public auth!: AuthProvider;
 

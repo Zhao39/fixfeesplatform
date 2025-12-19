@@ -1,7 +1,30 @@
+import { SupabaseClient } from "@supabase/supabase-js";
+import z from "zod";
+import { Database } from "../../../../database/src/types";
 import { AccountingEntityType, EntityMap } from "../entities";
-import { AccountingProvider } from "./models";
+import { AccountingProvider } from "../providers";
+import { ProviderCredentialsSchema, ProviderID } from "./models";
 
-export interface AccountingSyncPayload {
+export const AccountingSyncSchema = z.object({
+  companyId: z.string(),
+  provider: z.nativeEnum(ProviderID),
+  syncType: z.enum(["webhook", "scheduled", "trigger"]),
+  syncDirection: z.enum(["from-accounting", "to-accounting", "bi-directional"]),
+  entities: z.array(z.custom<AccountingEntity>()),
+  metadata: ProviderCredentialsSchema
+});
+
+export type AccountingSyncPayload = z.infer<typeof AccountingSyncSchema>;
+
+export type SyncFn = <T = unknown>(input: {
+  client: SupabaseClient<Database>;
+  entity: AccountingEntity;
+  provider: AccountingProvider;
+  payload: AccountingSyncPayload;
+}) => T | Promise<T>;
+
+/**
+ *  {
   companyId: string;
   provider: AccountingProvider;
   syncType: "webhook" | "scheduled" | "trigger";
@@ -13,7 +36,8 @@ export interface AccountingSyncPayload {
     userId?: string;
     [key: string]: any;
   };
-}
+
+ */
 
 export interface AccountingEntity<
   T extends AccountingEntityType = AccountingEntityType

@@ -1,15 +1,15 @@
 import {
-  AccountingProvider,
   AuthProvider,
   BaseProvider,
   createOAuthClient,
   HTTPClient,
   ProviderConfig,
   ProviderCredentials,
+  ProviderID,
   Resource
 } from "../core";
+import { Xero } from "../entities";
 import { Accounting } from "../entities/types";
-import { Xero } from "../entities/xero";
 
 export interface IXeroProvider extends BaseProvider {
   contacts: Pick<
@@ -21,9 +21,10 @@ export interface IXeroProvider extends BaseProvider {
 type XeroProviderConfig = ProviderConfig<{
   clientId: string;
   clientSecret: string;
+  redirectUri?: string;
   tenantId?: string;
 }> & {
-  id: AccountingProvider.XERO;
+  id: ProviderID.XERO;
   accessToken?: string;
   refreshToken?: string;
 };
@@ -38,10 +39,10 @@ const fromDotnetDate = (date: Date | string) => {
 };
 
 export class XeroProvider implements IXeroProvider {
+  static id = ProviderID.XERO;
+
   http: HTTPClient;
   auth: AuthProvider;
-
-  static id = AccountingProvider.XERO;
 
   constructor(public config: Omit<XeroProviderConfig, "id">) {
     this.http = new HTTPClient("https://api.xero.com/api.xro/2.0", 3);
@@ -50,6 +51,7 @@ export class XeroProvider implements IXeroProvider {
       clientSecret: config.clientSecret,
       accessToken: config.accessToken,
       refreshToken: config.refreshToken,
+      redirectUri: config.redirectUri,
       tokenUrl: "https://identity.xero.com/connect/token",
       getAuthUrl(scopes: string[], redirectURL): string {
         const params = new URLSearchParams({
@@ -65,6 +67,11 @@ export class XeroProvider implements IXeroProvider {
     });
   }
 
+  get id(): ProviderID.XERO {
+    // @ts-expect-error
+    return this.constructor.id;
+  }
+
   contacts: IXeroProvider["contacts"] = {
     list: async () => {
       const res = await this.http.requestWithRetry<{
@@ -75,18 +82,9 @@ export class XeroProvider implements IXeroProvider {
         throw new Error(`Failed to fetch contacts: ${res.message}`);
       }
 
-      return (res.data?.Contacts || []).map((contact) => ({
-        name: `${contact.FirstName || ""} ${contact.LastName || ""}`.trim(),
-        companyId: this.config.companyId,
-        website: contact.Website,
-        currencyCode: contact.DefaultCurrency ?? "USD",
-        taxId: contact.TaxNumber,
-        phone: contact.Phones?.[0]?.PhoneNumber,
-        email: contact.EmailAddress?.[0],
-        isCustomer: contact.IsCustomer,
-        isVendor: contact.IsSupplier,
-        updatedAt: fromDotnetDate(contact.UpdatedDateUTC).toISOString()
-      }));
+      return (res.data?.Contacts || []).map((c) =>
+        transformContact(c, this.config.companyId)
+      );
     },
     get: async (id) => {
       const res = await this.http.requestWithRetry<{
@@ -99,18 +97,7 @@ export class XeroProvider implements IXeroProvider {
 
       const contact = res.data.Contacts[0]!;
 
-      return {
-        name: `${contact.FirstName || ""} ${contact.LastName || ""}`.trim(),
-        companyId: this.config.companyId,
-        website: contact.Website,
-        currencyCode: contact.DefaultCurrency ?? "USD",
-        taxId: contact.TaxNumber,
-        phone: contact.Phones?.[0]?.PhoneNumber,
-        email: contact.EmailAddress?.[0],
-        isCustomer: contact.IsCustomer,
-        isVendor: contact.IsSupplier,
-        updatedAt: fromDotnetDate(contact.UpdatedDateUTC).toISOString()
-      };
+      return transformContact(contact, this.config.companyId);
     }
   };
 
@@ -175,3 +162,41 @@ export class XeroProvider implements IXeroProvider {
     }
   }
 }
+
+/** Helpers */
+const transformContact = (
+  contact: Xero.Contact,
+  companyId: string
+): Accounting.Contact => {
+  const firstName = contact.FirstName || "";
+  const lastName = contact.LastName || "";
+
+  const phones = contact.Phones ?? [];
+  const addresses = contact.Addresses ?? [];
+
+  return {
+    name: `${firstName} ${lastName}`.trim(),
+    firstName,
+    lastName,
+    companyId,
+    website: contact.Website,
+    currencyCode: contact.DefaultCurrency ?? "USD",
+    taxId: contact.TaxNumber,
+    email: contact.EmailAddress,
+    isCustomer: contact.IsCustomer,
+    isVendor: contact.IsSupplier,
+    addresses: addresses.map((a) => ({
+      line1: a.AddressLine1,
+      line2: a.AddressLine2,
+      city: a.City,
+      region: a.Region,
+      country: a.Country,
+      postalCode: a.PostalCode
+    })),
+    phones: phones.map((p) => ({
+      type: p.PhoneType,
+      phone: p.PhoneNumber
+    })),
+    updatedAt: fromDotnetDate(contact.UpdatedDateUTC).toISOString()
+  };
+};

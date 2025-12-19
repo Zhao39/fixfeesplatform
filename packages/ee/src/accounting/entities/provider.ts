@@ -55,7 +55,7 @@ export namespace Xero {
     FirstName: z.string().optional(),
     LastName: z.string().optional(),
 
-    EmailAddress: z.string().email().optional().or(z.literal("")),
+    EmailAddress: z.string().email().optional(),
     ContactNumber: z.string().optional(),
 
     BankAccountDetails: z.string().optional(),
@@ -88,4 +88,55 @@ export namespace Xero {
   });
 
   export type Contact = z.infer<typeof ContactSchema>;
+}
+
+export namespace QuickBooks {
+  export const BillAddrSchema = z.object({
+    City: z.string(),
+    Line1: z.string(),
+    PostalCode: z.string(),
+    Lat: z.string(),
+    Long: z.string(),
+    CountrySubDivisionCode: z.string(),
+    Id: z.string()
+  });
+
+  export const MetaDataSchema = z.object({
+    CreateTime: z.coerce.date(),
+    LastUpdatedTime: z.coerce.date()
+  });
+
+  export const PrimaryEmailAddrSchema = z.object({
+    Address: z.string()
+  });
+
+  export const PrimaryPhoneSchema = z.object({
+    FreeFormNumber: z.string()
+  });
+
+  export const CustomerSchema = z.object({
+    PrimaryEmailAddr: PrimaryEmailAddrSchema,
+    SyncToken: z.string(),
+    domain: z.string(),
+    GivenName: z.string(),
+    DisplayName: z.string(),
+    BillWithParent: z.boolean(),
+    FullyQualifiedName: z.string(),
+    CompanyName: z.string(),
+    FamilyName: z.string(),
+    sparse: z.boolean(),
+    PrimaryPhone: PrimaryPhoneSchema,
+    Active: z.boolean(),
+    Job: z.boolean(),
+    BalanceWithJobs: z.number(),
+    BillAddr: BillAddrSchema,
+    PreferredDeliveryMethod: z.string(),
+    Taxable: z.boolean(),
+    PrintOnCheckName: z.string(),
+    Balance: z.number(),
+    Id: z.string(),
+    MetaData: MetaDataSchema
+  });
+
+  export type Customer = z.infer<typeof CustomerSchema>;
 }

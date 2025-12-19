@@ -1,6 +1,14 @@
 import { getCarbonServiceRole } from "@carbon/auth";
 import type { Database } from "@carbon/database";
-import type { CoreProvider, ProviderConfig } from "@carbon/ee/accounting";
+import {
+  AccountingEntity,
+  AccountingProvider,
+  ProviderCredentialsSchema,
+  ProviderID,
+  AccountingSyncSchema,
+  ProviderCredentials,
+  type ProviderConfig,
+} from "@carbon/ee/accounting";
 import { QuickBooksProvider } from "@carbon/ee/quickbooks";
 import { XeroProvider } from "@carbon/ee/xero";
 
@@ -8,39 +16,11 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { task } from "@trigger.dev/sdk/v3";
 import z from "zod";
 
-export interface AccountingSyncPayload {
-  companyId: string;
-  provider: "quickbooks" | "xero" | "sage";
-  syncType: "webhook" | "scheduled" | "trigger";
-  syncDirection: "fromAccounting" | "toAccounting" | "bidirectional";
-  entities: AccountingEntity[];
-  metadata?: {
-    tenantId?: string;
-    webhookId?: string;
-    userId?: string;
-    [key: string]: any;
-  };
-}
-
-export interface AccountingEntity {
-  entityType: "customer" | "vendor" | "invoice" | "bill" | "payment" | "item";
-  entityId: string;
-  operation: "create" | "update" | "delete" | "sync";
-  externalId?: string;
-  syncToken?: string;
-  data?: any;
-}
-
-const metadataSchema = z.object({
-  refreshToken: z.string().optional(),
-  accessToken: z.string(),
-  expiresAt: z.string().datetime(),
-  tenantId: z.string().optional(),
-});
-
 export const accountingSyncTask = task({
   id: "accounting-sync",
-  run: async (payload: AccountingSyncPayload) => {
+  run: async (input) => {
+    const payload = AccountingSyncSchema.parse(input);
+
     const { companyId, provider, syncDirection, entities, metadata } = payload;
 
     const client = getCarbonServiceRole();
@@ -59,7 +39,7 @@ export const accountingSyncTask = task({
       );
     }
 
-    const providerConfig = metadataSchema.safeParse(
+    const providerConfig = ProviderCredentialsSchema.safeParse(
       companyIntegration.data.metadata
     );
 
@@ -112,13 +92,13 @@ async function initializeProvider(
   companyId: string,
   provider: string,
   config: z.infer<typeof metadataSchema>
-): Promise<CoreProvider> {
+) {
   const { accessToken, refreshToken, tenantId } = config;
 
   // Create a callback function to update the integration metadata when tokens are refreshed
-  const onTokenRefresh = async (auth) => {
+  const onTokenRefresh = async (auth: ProviderCredentials) => {
     try {
-      const newMetadata = {
+      const update = {
         accessToken: auth.accessToken,
         refreshToken: auth.refreshToken,
         expiresAt:
@@ -129,7 +109,7 @@ async function initializeProvider(
 
       await client
         .from("companyIntegration")
-        .update({ metadata: newMetadata })
+        .update({ metadata: update })
         .eq("companyId", companyId)
         .eq("id", provider);
 
@@ -146,40 +126,31 @@ async function initializeProvider(
 
   switch (provider) {
     case "quickbooks": {
-      const config: ProviderConfig = {
+      const environment = process.env.QUICKBOOKS_ENVIRONMENT as
+        | "production"
+        | "sandbox";
+
+      return new QuickBooksProvider({
+        companyId,
+        tenantId,
+        environment: environment || "sandbox",
         clientId: process.env.QUICKBOOKS_CLIENT_ID!,
         clientSecret: process.env.QUICKBOOKS_CLIENT_SECRET!,
         redirectUri: process.env.QUICKBOOKS_REDIRECT_URI,
-        environment:
-          (process.env.QUICKBOOKS_ENVIRONMENT as "production" | "sandbox") ||
-          "sandbox",
+        onTokenRefresh,
+      });
+    }
+    case "xero":
+      return new XeroProvider({
+        companyId,
+        tenantId,
         accessToken,
         refreshToken,
-        tenantId,
-        companyId,
-        integrationId: provider,
-        onTokenRefresh,
-      };
-
-      const qbProvider = new QuickBooksProvider(config);
-      return qbProvider;
-    }
-    case "xero": {
-      const config: ProviderConfig = {
         clientId: process.env.XERO_CLIENT_ID!,
         clientSecret: process.env.XERO_CLIENT_SECRET!,
         redirectUri: process.env.XERO_REDIRECT_URI,
-        accessToken,
-        refreshToken,
-        tenantId,
-        companyId,
-        integrationId: provider,
         onTokenRefresh,
-      };
-
-      const xeroProvider = new XeroProvider(config);
-      return xeroProvider;
-    }
+      });
     // Add other providers as needed
     // case "sage":
     //   return new SageProvider(config);
@@ -190,13 +161,13 @@ async function initializeProvider(
 
 async function processEntity(
   client: SupabaseClient<Database>,
-  provider: CoreProvider,
+  provider: AccountingProvider,
   entity: AccountingEntity,
   syncDirection: "fromAccounting" | "toAccounting" | "bidirectional",
   companyId: string,
   metadata?: any
 ): Promise<any> {
-  const { entityType, entityId, operation, externalId } = entity;
+  const { entityType, entityId, operation, data, lastSyncedAt } = entity;
 
   if (syncDirection === "fromAccounting" || syncDirection === "bidirectional") {
     if (
@@ -221,21 +192,13 @@ async function processEntity(
             companyId,
             operation
           );
-        case "invoice":
-          return await syncInvoiceFromAccounting(
-            client,
-            provider,
-            entityId,
-            companyId,
-            operation
-          );
       }
     } else if (operation === "delete") {
       switch (entityType) {
         case "customer":
-          return await deactivateCustomer(client, companyId, externalId);
+          return await deactivateCustomer(client, companyId);
         case "vendor":
-          return await deactivateSupplier(client, companyId, externalId);
+          return await deactivateSupplier(client, companyId);
       }
     }
   }
@@ -248,16 +211,14 @@ async function processEntity(
             client,
             provider,
             entityId,
-            companyId,
-            externalId
+            companyId
           );
         case "vendor":
           return await syncVendorToAccounting(
             client,
             provider,
             entityId,
-            companyId,
-            externalId
+            companyId
           );
       }
     }
@@ -270,39 +231,39 @@ async function processEntity(
 
 async function syncCustomerFromAccounting(
   client: SupabaseClient<Database>,
-  provider: CoreProvider,
+  provider: AccountingProvider,
   externalId: string,
   companyId: string,
   operation: "create" | "update" | "sync"
 ): Promise<any> {
-  const accountingCustomer = await provider.getCustomer(externalId);
+  const customer = await provider.contacts.get(externalId);
 
-  const existingCustomer = await client
+  const existing = await client
     .from("customer")
     .select("*")
     .eq("companyId", companyId)
     .eq("externalId->>externalId", externalId)
     .single();
 
-  const providerName = provider.getProviderInfo().name.toLowerCase();
+  const externalIdKey = `${provider.id}Id`;
 
   const customerData: Database["public"]["Tables"]["customer"]["Insert"] = {
     companyId,
-    name: accountingCustomer.name ?? accountingCustomer.displayName,
-    phone: accountingCustomer.phone?.number || null,
-    website: accountingCustomer.website || null,
-    taxId: accountingCustomer.taxNumber || null,
-    currencyCode: accountingCustomer.currency || "USD",
+    name: customer.firstName,
+    phone: customer.phones?.[0].phone || null,
+    website: customer.website || null,
+    taxId: customer.taxId || null,
+    currencyCode: customer.currencyCode,
     externalId: {
-      externalId,
-      syncToken: (accountingCustomer as any).syncToken,
-      accountingProvider: provider.getProviderInfo().name,
+      [externalIdKey]: externalId,
+      syncToken: (customer as any).syncToken,
+      accountingProvider: provider.id,
       lastSyncedAt: new Date().toISOString(),
       accountingData: {
-        displayName: accountingCustomer.displayName,
-        balance: accountingCustomer.balance,
-        creditLimit: accountingCustomer.creditLimit,
-        paymentTerms: accountingCustomer.paymentTerms,
+        displayName: customer.name,
+        balance: customer.balance,
+        creditLimit: customer.creditLimit,
+        paymentTerms: customer.paymentTerms,
       },
     },
     updatedAt: new Date().toISOString(),
@@ -310,12 +271,12 @@ async function syncCustomerFromAccounting(
 
   let customerId: string;
 
-  if (existingCustomer.data) {
+  if (existing.data) {
     // Update existing customer
     const result = await client
       .from("customer")
       .update(customerData)
-      .eq("id", existingCustomer.data.id)
+      .eq("id", existing.data.id)
       .select()
       .single();
 
@@ -337,7 +298,7 @@ async function syncCustomerFromAccounting(
   }
 
   // Sync contact information if email is available
-  if (accountingCustomer.email) {
+  if (customerId) {
     try {
       // Check if contact already exists by external ID
       const existingContactQuery = await client
@@ -352,7 +313,7 @@ async function syncCustomerFromAccounting(
         `
         )
         .eq("companyId", companyId)
-        .eq(`externalId->>${providerName}Id`, externalId)
+        .eq(`externalId->>${externalIdKey}`, externalId)
         .single();
 
       let contactId: string;
@@ -363,7 +324,7 @@ async function syncCustomerFromAccounting(
           .from("contact")
           .select("id")
           .eq("companyId", companyId)
-          .eq("email", accountingCustomer.email)
+          .eq("email", customer.email)
           .eq("isCustomer", true)
           .maybeSingle();
 
@@ -375,14 +336,14 @@ async function syncCustomerFromAccounting(
             .from("contact")
             .update({
               externalId: {
-                [`${providerName}Id`]: externalId,
+                [externalIdKey]: externalId,
               },
             })
             .eq("id", contactId);
         } else {
           // Create new contact
-          const firstName = accountingCustomer.firstName;
-          const lastName = accountingCustomer.lastName;
+          const firstName = customer.firstName;
+          const lastName = customer.lastName;
 
           const newContact = await client
             .from("contact")
@@ -390,11 +351,11 @@ async function syncCustomerFromAccounting(
               companyId,
               firstName,
               lastName,
-              email: accountingCustomer.email,
+              email: customer.email,
               isCustomer: true,
-              workPhone: accountingCustomer.phone?.number || null,
+              workPhone: customer.phones.find((p) => p.isPrimary).phone || null,
               externalId: {
-                [`${providerName}Id`]: externalId,
+                [externalIdKey]: externalId,
               },
             })
             .select()
@@ -466,8 +427,8 @@ async function syncCustomerFromAccounting(
   }
 
   // Sync addresses if available
-  if (accountingCustomer.addresses && accountingCustomer.addresses.length > 0) {
-    for (const address of accountingCustomer.addresses) {
+  if (customer.addresses && customer.addresses.length > 0) {
+    for (const address of customer.addresses) {
       // Skip if no valid address data (need at least street and city or state)
       if (!address.street || (!address.city && !address.state)) {
         console.log(
