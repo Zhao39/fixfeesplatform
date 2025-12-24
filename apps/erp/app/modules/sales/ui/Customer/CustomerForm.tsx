@@ -129,8 +129,6 @@ const CustomerForm = ({
                     }}
                   />
 
-                  <PhoneInput name="phone" label="Phone" />
-                  <PhoneInput name="fax" label="Fax" />
                   <Input name="website" label="Website" />
 
                   <CustomFormFields table="customer" />
