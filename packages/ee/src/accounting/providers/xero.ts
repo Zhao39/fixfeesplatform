@@ -12,10 +12,7 @@ import { Xero } from "../entities";
 import { Accounting } from "../entities/types";
 
 export interface IXeroProvider extends BaseProvider {
-  contacts: Pick<
-    Resource<Accounting.Contact, unknown, unknown>,
-    "get" | "list"
-  >;
+  contacts: Resource<Accounting.Contact, Accounting.Contact, unknown>;
 }
 
 type XeroProviderConfig = ProviderConfig<{
@@ -74,7 +71,7 @@ export class XeroProvider implements IXeroProvider {
 
   contacts: IXeroProvider["contacts"] = {
     list: async () => {
-      const res = await this.http.requestWithRetry<{
+      const res = await this.request<{
         Contacts: Xero.Contact[];
       }>("GET", `/Contacts`);
 
@@ -87,12 +84,52 @@ export class XeroProvider implements IXeroProvider {
       );
     },
     get: async (id) => {
-      const res = await this.http.requestWithRetry<{
+      const res = await this.request<{
         Contacts: Xero.Contact[];
       }>("GET", `/Contacts/${id}`);
 
       if (res.error || !res.data?.Contacts?.length) {
         throw new Error(`Failed to fetch contact ${id}: ${res.message}`);
+      }
+
+      const contact = res.data.Contacts[0]!;
+
+      return transformContact(contact, this.config.companyId);
+    },
+    create: async (data) => {
+      const res = await this.request<{
+        Contacts: Xero.Contact[];
+      }>("POST", `/Contacts`, {
+        body: JSON.stringify({
+          Contacts: [
+            {
+              Name: data.name,
+              FirstName: data.firstName,
+              LastName: data.lastName,
+              EmailAddress: data.email,
+              Website: data.website,
+              TaxNumber: data.taxId,
+              IsCustomer: data.isCustomer,
+              IsSupplier: data.isVendor,
+              Phones: data.phones?.map((p) => ({
+                PhoneType: p.type,
+                PhoneNumber: p.phone
+              })),
+              Addresses: data.addresses?.map((a) => ({
+                AddressLine1: a.line1,
+                AddressLine2: a.line2,
+                City: a.city,
+                Region: a.region,
+                Country: a.country,
+                PostalCode: a.postalCode
+              }))
+            }
+          ]
+        })
+      });
+
+      if (res.error || !res.data?.Contacts?.length) {
+        throw new Error(`Failed to create contact: ${res.message}`);
       }
 
       const contact = res.data.Contacts[0]!;
@@ -124,7 +161,7 @@ export class XeroProvider implements IXeroProvider {
       headers["xero-tenant-id"] = tenantId;
     }
 
-    const response = await this.http.requestWithRetry(method, url, {
+    const response = await this.http.requestWithRetry<T>(method, url, {
       ...options,
       headers: headers
     });

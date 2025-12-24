@@ -24,10 +24,10 @@ export const integrations = [
   Slack,
   Sage,
   Xero,
-  Zapier,
+  Zapier
 ];
 
-export { Onshape, Logo as OnshapeLogo } from "./onshape/config";
+export { Logo as OnshapeLogo, Onshape } from "./onshape/config";
 // TODO: export as @carbon/ee/paperless
 export { PaperlessPartsClient } from "./paperless-parts/lib/client";
 export { QuickBooks } from "./quickbooks/config";

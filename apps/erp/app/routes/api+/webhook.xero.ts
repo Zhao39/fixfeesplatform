@@ -409,9 +409,7 @@ export async function action({ request }: ActionFunctionArgs) {
             syncDirection: "to-accounting",
             entities,
             metadata: {
-              tenantId: tenantId,
-              webhookId: parsed.data.entropy ?? crypto.randomUUID(),
-              timestamp: new Date().toISOString()
+              tenantId: tenantId
             }
           };
 

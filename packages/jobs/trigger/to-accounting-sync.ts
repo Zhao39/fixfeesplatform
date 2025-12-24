@@ -2,6 +2,7 @@ import { getCarbonServiceRole } from "@carbon/auth";
 import {
   AccountingEntity,
   AccountingSyncSchema,
+  EntityMap,
   getAccountingIntegration,
   getProviderIntegration,
   SyncFn,
@@ -10,12 +11,37 @@ import { task } from "@trigger.dev/sdk";
 import z from "zod";
 
 const PayloadSchema = AccountingSyncSchema.extend({
-  syncDirection: z.enum(["bi-directional", "to-accounts"]),
+  syncDirection: AccountingSyncSchema.shape.syncDirection.exclude([
+    "from-accounting",
+  ]),
 });
 
 type Payload = z.infer<typeof PayloadSchema>;
 
-const MAPPING: Record<"customer" | "vendor", SyncFn> = {
+const UPSERT_MAP: Record<keyof EntityMap, SyncFn> = {
+  async customer({ client, entity, payload, provider }) {
+    // Fetch customer from Carbon
+    const customer = await client
+      .from("customer")
+      .select("*, customerLocation(*, address(*))")
+      .eq("id", entity.data.companyId)
+      .eq("companyId", payload.companyId)
+      .single();
+
+    if (customer.error) {
+      throw new Error(`Failed to get customer`);
+    }
+
+    if (!customer.data) {
+      // Customer does not exist, create it
+    }
+
+    return {};
+  },
+  async vendor({ client, entity, payload, provider }) {},
+};
+
+const DELETE_MAP: Record<keyof EntityMap, SyncFn> = {
   async customer({ client, entity, payload, provider }) {
     // Fetch customer from Carbon
     const customer = await client
@@ -61,18 +87,21 @@ export const toAccountsSyncTask = task({
 
     for (const entity of payload.entities) {
       try {
-        let result;
-
         const isUpsert =
           entity.operation === "create" ||
           entity.operation === "update" ||
           entity.operation === "sync";
 
-        if (isUpsert) {
-          result = await handleEntityUpsert(client, entity, provider);
-        } else {
-          result = await handleEntityDelete(client, entity, provider);
-        }
+        const handler = isUpsert
+          ? UPSERT_MAP[entity.entityType]
+          : DELETE_MAP[entity.entityType];
+
+        const result = await handler({
+          client,
+          entity,
+          provider,
+          payload: { syncDirection: payload.syncDirection, ...payload },
+        });
 
         results.success.push(result);
       } catch (error) {

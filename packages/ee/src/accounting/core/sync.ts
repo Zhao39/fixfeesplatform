@@ -11,7 +11,9 @@ export const AccountingSyncSchema = z.object({
   syncType: z.enum(["webhook", "scheduled", "trigger"]),
   syncDirection: z.enum(["from-accounting", "to-accounting", "bi-directional"]),
   entities: z.array(z.custom<AccountingEntity>()),
-  metadata: ProviderCredentialsSchema
+  metadata: z
+    .record(z.union([z.string(), z.number(), z.boolean(), z.null()]))
+    .optional()
 });
 
 export type AccountingSyncPayload = z.infer<typeof AccountingSyncSchema>;
