@@ -71,6 +71,8 @@ export default function CustomerEditRoute() {
     phone: routeData?.customer?.phone ?? "",
     fax: routeData?.customer?.fax ?? "",
     website: routeData?.customer?.website ?? "",
+    salesContactId: routeData?.customer?.salesContactId ?? undefined,
+    invoicingContactId: routeData?.customer?.invoicingContactId ?? undefined,
     ...getCustomFields(routeData?.customer?.customFields)
   };
 
