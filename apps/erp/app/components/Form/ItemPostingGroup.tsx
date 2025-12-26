@@ -14,10 +14,10 @@ type ItemPostingGroupSelectProps = Omit<ComboboxProps, "options" | "inline"> & {
 
 const ItemPostingGroupPreview = (
   value: string,
-  options: { value: string; label: string }[]
+  options: { value: string; label: string | JSX.Element }[]
 ) => {
   const itemGroup = options.find((o) => o.value === value);
-  return <Enumerable value={itemGroup?.label ?? null} />;
+  return itemGroup?.label ?? null;
 };
 
 const ItemPostingGroup = (props: ItemPostingGroupSelectProps) => {
@@ -31,7 +31,12 @@ const ItemPostingGroup = (props: ItemPostingGroupSelectProps) => {
     <>
       <CreatableCombobox
         ref={triggerRef}
-        options={options}
+        options={
+          options.map((o) => ({
+            value: o.value,
+            label: <Enumerable value={o.label} />
+          })) ?? []
+        }
         {...props}
         inline={props.inline ? ItemPostingGroupPreview : undefined}
         label={props?.label ?? "Posting Group"}

@@ -36688,6 +36688,9 @@ export default {
             $ref: "#/parameters/rowFilter.trackedEntity.createdBy",
           },
           {
+            $ref: "#/parameters/rowFilter.trackedEntity.readableId",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -36777,6 +36780,9 @@ export default {
             $ref: "#/parameters/rowFilter.trackedEntity.createdBy",
           },
           {
+            $ref: "#/parameters/rowFilter.trackedEntity.readableId",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -36818,6 +36824,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.trackedEntity.createdBy",
+          },
+          {
+            $ref: "#/parameters/rowFilter.trackedEntity.readableId",
           },
           {
             $ref: "#/parameters/body.trackedEntity",
@@ -79196,6 +79205,10 @@ export default {
           format: "text",
           type: "string",
         },
+        readableId: {
+          format: "text",
+          type: "string",
+        },
       },
       type: "object",
     },
@@ -108919,6 +108932,12 @@ export default {
     },
     "rowFilter.trackedEntity.createdBy": {
       name: "createdBy",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.trackedEntity.readableId": {
+      name: "readableId",
       required: false,
       in: "query",
       type: "string",
