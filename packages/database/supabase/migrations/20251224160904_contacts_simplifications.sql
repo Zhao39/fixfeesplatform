@@ -103,29 +103,19 @@ c AS (
   FROM src
   ON CONFLICT DO NOTHING
   RETURNING id
-),
-
-cc AS (
-  INSERT INTO "customerContact" (
-    "id",
-    "customerId",
-    "contactId"
-  )
-  SELECT
-    xid(),
-    src."customerId",
-    c.id
-  FROM c
-  JOIN src
-    ON src.contact_id = c.id
-  ON CONFLICT DO NOTHING
-  RETURNING id, "customerId"
 )
 
--- Update customer table to set salesContactId and invoicingContactId
-UPDATE customer cu
-SET    "salesContactId" = cc.id, "invoicingContactId" = cc.id
-FROM   cc
-WHERE  cu."id" = cc."customerId";
-
+INSERT INTO "customerContact" (
+  "id",
+  "customerId",
+  "contactId"
+)
+SELECT
+  xid(),
+  src."customerId",
+  c.id
+FROM c
+JOIN src
+  ON src.contact_id = c.id
+ON CONFLICT DO NOTHING;
 -- Customer table simplifications and contact email adjustments end
