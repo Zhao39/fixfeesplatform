@@ -59,7 +59,7 @@ CREATE OR REPLACE VIEW "customers" WITH(SECURITY_INVOKER=true) AS
       co."fax"
     FROM "customerContact" cc
     INNER JOIN "contact" co ON co.id = cc."contactId"
-    ORDER BY cc."customerId", cc.id LIMIT 1
+    ORDER BY cc."customerId"
   ) pc ON pc."customerId" = c.id;
 
 -- Create contacts from customer phone/fax data
@@ -127,6 +127,7 @@ UPDATE customer cu
 SET    "salesContactId" = cc.id, "invoicingContactId" = cc.id
 FROM   cc
 WHERE  cu."id" = cc."customerId";
+
 ALTER TABLE customer DROP COLUMN fax;
 ALTER TABLE customer DROP COLUMN phone;
 -- Customer table simplifications and contact email adjustments end
