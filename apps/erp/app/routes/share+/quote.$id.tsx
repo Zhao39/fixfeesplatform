@@ -571,7 +571,7 @@ const LineItems = ({
                   </span>
                   {Object.keys(line.externalNotes ?? {}).length > 0 && (
                     <div
-                      className="prose dark:prose-invert prose mt-2 text-muted-foreground"
+                      className="prose dark:prose-invert mt-2 text-muted-foreground"
                       dangerouslySetInnerHTML={{
                         __html: generateHTML(line.externalNotes as JSONContent)
                       }}

@@ -19,7 +19,10 @@ import type {
   nonConformanceReviewerValidator,
   nonConformanceStatus,
   qualityDocumentStepValidator,
-  qualityDocumentValidator
+  qualityDocumentValidator,
+  riskRegisterValidator,
+  riskSource,
+  riskStatus
 } from "./quality.models";
 export async function activateGauge(
   client: SupabaseClient<Database>,
@@ -175,6 +178,13 @@ export async function deleteQualityDocumentStep(
     .delete()
     .eq("id", qualityDocumentStepId)
     .eq("companyId", companyId);
+}
+
+export async function deleteRisk(
+  client: SupabaseClient<Database>,
+  riskId: string
+) {
+  return client.from("riskRegister").delete().eq("id", riskId);
 }
 
 export async function getIssueFromExternalLink(
@@ -542,7 +552,11 @@ export async function getIssueAssociations(
       .select(
         `
         id,
-        trackedEntityId
+        trackedEntityId,
+        trackedEntity:trackedEntity (
+          id,
+          readableId
+        )
       `
       )
       .eq("nonConformanceId", nonConformanceId)
@@ -641,7 +655,8 @@ export async function getIssueAssociations(
         type: "trackedEntities",
         documentId: item.trackedEntityId ?? "",
         documentLineId: "",
-        documentReadableId: item.trackedEntityId ?? ""
+        documentReadableId:
+          item.trackedEntity?.readableId ?? item.trackedEntityId ?? ""
       })) || [],
     customers:
       customers.data?.map((c) => ({
@@ -954,6 +969,58 @@ export async function getRequiredAction(
     .single();
 }
 
+export async function getRisk(
+  client: SupabaseClient<Database>,
+  riskId: string
+) {
+  return client.from("riskRegister").select("*").eq("id", riskId).single();
+}
+
+export async function getRisks(
+  client: SupabaseClient<Database>,
+  companyId: string,
+  args?: GenericQueryFilters & {
+    search: string | null;
+    status?: typeof riskStatus;
+    source?: typeof riskSource;
+    // might be needed later for filtering by assignee
+    assignee?: string[];
+  }
+) {
+  let query = client
+    .from("riskRegister")
+    .select("*, assignee:assignee(id, firstName, lastName, avatarUrl)", {
+      count: "exact"
+    })
+    .eq("companyId", companyId);
+
+  if (args?.search) {
+    query = query.or(
+      `title.ilike.%${args.search}%,description.ilike.%${args.search}%`
+    );
+  }
+
+  if (args?.status && args.status.length > 0) {
+    query = query.in("status", args.status);
+  }
+
+  if (args?.source && args.source.length > 0) {
+    query = query.in("source", args.source);
+  }
+
+  if (args?.assignee && args.assignee.length > 0) {
+    query = query.in("assignee", args.assignee);
+  }
+
+  if (args) {
+    query = setGenericQueryFilters(query, args, [
+      { column: "createdAt", ascending: false }
+    ]);
+  }
+
+  return query;
+}
+
 export async function insertIssueReviewer(
   client: SupabaseClient<Database>,
   reviewer: z.infer<typeof nonConformanceReviewerValidator> & {
@@ -1092,6 +1159,14 @@ export async function updateQualityDocumentStepOrder(
       .eq("id", id)
   );
   return Promise.all(updatePromises);
+}
+
+export async function updateRiskStatus(
+  client: SupabaseClient<Database>,
+  riskId: string,
+  status: (typeof riskStatus)[number]
+) {
+  return client.from("riskRegister").update({ status }).eq("id", riskId);
 }
 
 export async function upsertGauge(
@@ -1564,4 +1639,50 @@ export async function upsertQualityDocumentStep(
     .insert([qualityDocumentStep])
     .select("id")
     .single();
+}
+
+export async function upsertRisk(
+  client: SupabaseClient<Database>,
+  risk:
+    | (Omit<
+        z.infer<typeof riskRegisterValidator>,
+        "id" | "severity" | "likelihood"
+      > & {
+        severity: number;
+        likelihood: number;
+        companyId: string;
+        createdBy: string;
+      })
+    | (Omit<
+        z.infer<typeof riskRegisterValidator>,
+        "id" | "severity" | "likelihood"
+      > & {
+        severity: number;
+        likelihood: number;
+        id: string;
+        updatedBy: string; // This might be used for history/tracking if added
+      })
+) {
+  if ("id" in risk) {
+    const { updatedBy, ...data } = risk;
+    return client
+      .from("riskRegister")
+      .update({
+        ...sanitize(data),
+        updatedAt: new Date().toISOString()
+      })
+      .eq("id", risk.id)
+      .select("id")
+      .single();
+  } else {
+    return client
+      .from("riskRegister")
+      .insert([
+        {
+          ...sanitize(risk)
+        }
+      ])
+      .select("id")
+      .single();
+  }
 }

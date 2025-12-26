@@ -167,8 +167,6 @@ const MaterialProperties = () => {
         | "materialId",
       value: string | null
     ) => {
-      console.log(settings.materialGeneratedIds);
-      console.log(field);
       if (
         settings.materialGeneratedIds &&
         [
@@ -180,7 +178,6 @@ const MaterialProperties = () => {
           "gradeId"
         ].includes(field)
       ) {
-        console.log("ok");
         setMaterialPropertyUpdate({
           // @ts-ignore
           field,

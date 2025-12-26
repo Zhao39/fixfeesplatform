@@ -136,7 +136,8 @@ const PeopleTable = memo(
           cell: ({ row }) => (
             <Enumerable
               value={
-                employeeTypesById[row.original.employeeTypeId!].name as string
+                employeeTypesById[row.original.employeeTypeId ?? ""]
+                  ?.name as string
               }
             />
           ),
@@ -175,7 +176,7 @@ const PeopleTable = memo(
           category.userAttribute.forEach((attribute) => {
             additionalColumns.push({
               id: attribute.id,
-              header: attribute.name,
+              header: attribute?.name ?? "",
               cell: ({ row }) =>
                 renderGenericAttribute(
                   row?.original?.attributes?.[attribute?.id]?.value,

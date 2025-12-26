@@ -42,6 +42,7 @@ import {
   useLineCosts
 } from "~/modules/sales/ui/Quotes";
 import QuoteLinePricingHistory from "~/modules/sales/ui/Quotes/QuoteLinePricingHistory";
+import QuoteLineRiskRegister from "~/modules/sales/ui/Quotes/QuoteLineRiskRegister";
 import { getCustomFields, setCustomFields } from "~/utils/form";
 import { path } from "~/utils/path";
 
@@ -267,6 +268,8 @@ export default function QuoteLine() {
         uploadClassName="aspect-square min-h-[420px] max-h-[70vh]"
         viewerClassName="aspect-square min-h-[420px] max-h-[70vh]"
       />
+
+      <QuoteLineRiskRegister quoteLineId={lineId} itemId={line.itemId ?? ""} />
 
       <Outlet />
     </Fragment>

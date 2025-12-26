@@ -31323,6 +31323,240 @@ export default {
         tags: ["quotes"],
       },
     },
+    "/riskRegister": {
+      get: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.companyId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.title",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.description",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.source",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.sourceId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.severity",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.likelihood",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.itemId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.status",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.assignee",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.createdBy",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.createdAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.updatedAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.notes",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.type",
+          },
+          {
+            $ref: "#/parameters/select",
+          },
+          {
+            $ref: "#/parameters/order",
+          },
+          {
+            $ref: "#/parameters/range",
+          },
+          {
+            $ref: "#/parameters/rangeUnit",
+          },
+          {
+            $ref: "#/parameters/offset",
+          },
+          {
+            $ref: "#/parameters/limit",
+          },
+          {
+            $ref: "#/parameters/preferCount",
+          },
+        ],
+        responses: {
+          "200": {
+            description: "OK",
+            schema: {
+              items: {
+                $ref: "#/definitions/riskRegister",
+              },
+              type: "array",
+            },
+          },
+          "206": {
+            description: "Partial Content",
+          },
+        },
+        tags: ["riskRegister"],
+      },
+      post: {
+        parameters: [
+          {
+            $ref: "#/parameters/body.riskRegister",
+          },
+          {
+            $ref: "#/parameters/select",
+          },
+          {
+            $ref: "#/parameters/preferPost",
+          },
+        ],
+        responses: {
+          "201": {
+            description: "Created",
+          },
+        },
+        tags: ["riskRegister"],
+      },
+      delete: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.companyId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.title",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.description",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.source",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.sourceId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.severity",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.likelihood",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.itemId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.status",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.assignee",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.createdBy",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.createdAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.updatedAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.notes",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.type",
+          },
+          {
+            $ref: "#/parameters/preferReturn",
+          },
+        ],
+        responses: {
+          "204": {
+            description: "No Content",
+          },
+        },
+        tags: ["riskRegister"],
+      },
+      patch: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.companyId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.title",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.description",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.source",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.sourceId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.severity",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.likelihood",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.itemId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.status",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.assignee",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.createdBy",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.createdAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.updatedAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.notes",
+          },
+          {
+            $ref: "#/parameters/rowFilter.riskRegister.type",
+          },
+          {
+            $ref: "#/parameters/body.riskRegister",
+          },
+          {
+            $ref: "#/parameters/preferReturn",
+          },
+        ],
+        responses: {
+          "204": {
+            description: "No Content",
+          },
+        },
+        tags: ["riskRegister"],
+      },
+    },
     "/shipment": {
       get: {
         parameters: [
@@ -56818,6 +57052,9 @@ export default {
             $ref: "#/parameters/rowFilter.companySettings.purchasePriceUpdateTiming",
           },
           {
+            $ref: "#/parameters/rowFilter.companySettings.supplierQuoteNotificationGroup",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -56919,6 +57156,9 @@ export default {
             $ref: "#/parameters/rowFilter.companySettings.purchasePriceUpdateTiming",
           },
           {
+            $ref: "#/parameters/rowFilter.companySettings.supplierQuoteNotificationGroup",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -56972,6 +57212,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.companySettings.purchasePriceUpdateTiming",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companySettings.supplierQuoteNotificationGroup",
           },
           {
             $ref: "#/parameters/body.companySettings",
@@ -76671,6 +76914,107 @@ export default {
       },
       type: "object",
     },
+    riskRegister: {
+      required: [
+        "id",
+        "companyId",
+        "title",
+        "source",
+        "status",
+        "createdAt",
+        "type",
+      ],
+      properties: {
+        id: {
+          default: "gen_random_uuid()",
+          description: "Note:\nThis is a Primary Key.<pk/>",
+          format: "uuid",
+          type: "string",
+        },
+        companyId: {
+          description:
+            "Note:\nThis is a Foreign Key to `company.id`.<fk table='company' column='id'/>",
+          format: "text",
+          type: "string",
+        },
+        title: {
+          format: "text",
+          type: "string",
+        },
+        description: {
+          format: "text",
+          type: "string",
+        },
+        source: {
+          enum: [
+            "Customer",
+            "General",
+            "Item",
+            "Job",
+            "Quote Line",
+            "Supplier",
+            "Work Center",
+          ],
+          format: 'public."riskSource"',
+          type: "string",
+        },
+        sourceId: {
+          format: "text",
+          type: "string",
+        },
+        severity: {
+          format: "integer",
+          type: "integer",
+        },
+        likelihood: {
+          format: "integer",
+          type: "integer",
+        },
+        itemId: {
+          description:
+            "Note:\nThis is a Foreign Key to `item.id`.<fk table='item' column='id'/>",
+          format: "text",
+          type: "string",
+        },
+        status: {
+          default: "Open",
+          enum: ["Open", "In Review", "Mitigating", "Closed", "Accepted"],
+          format: 'public."riskStatus"',
+          type: "string",
+        },
+        assignee: {
+          description:
+            "Note:\nThis is a Foreign Key to `user.id`.<fk table='user' column='id'/>",
+          format: "text",
+          type: "string",
+        },
+        createdBy: {
+          description:
+            "Note:\nThis is a Foreign Key to `user.id`.<fk table='user' column='id'/>",
+          format: "text",
+          type: "string",
+        },
+        createdAt: {
+          default: "now()",
+          format: "timestamp with time zone",
+          type: "string",
+        },
+        updatedAt: {
+          format: "timestamp with time zone",
+          type: "string",
+        },
+        notes: {
+          format: "json",
+        },
+        type: {
+          default: "Risk",
+          enum: ["Risk", "Opportunity"],
+          format: 'public."riskRegisterType"',
+          type: "string",
+        },
+      },
+      type: "object",
+    },
     shipment: {
       required: [
         "id",
@@ -88779,6 +89123,7 @@ export default {
         "kanbanOutput",
         "gaugeCalibrationExpiredNotificationGroup",
         "purchasePriceUpdateTiming",
+        "supplierQuoteNotificationGroup",
       ],
       properties: {
         id: {
@@ -88863,6 +89208,13 @@ export default {
           enum: ["Purchase Invoice Post", "Purchase Order Finalize"],
           format: 'public."purchasePriceUpdateTiming"',
           type: "string",
+        },
+        supplierQuoteNotificationGroup: {
+          format: "text[]",
+          items: {
+            type: "string",
+          },
+          type: "array",
         },
       },
       type: "object",
@@ -106048,6 +106400,111 @@ export default {
       in: "query",
       type: "string",
     },
+    "body.riskRegister": {
+      name: "riskRegister",
+      description: "riskRegister",
+      required: false,
+      in: "body",
+      schema: {
+        $ref: "#/definitions/riskRegister",
+      },
+    },
+    "rowFilter.riskRegister.id": {
+      name: "id",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.riskRegister.companyId": {
+      name: "companyId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.riskRegister.title": {
+      name: "title",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.riskRegister.description": {
+      name: "description",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.riskRegister.source": {
+      name: "source",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.riskRegister.sourceId": {
+      name: "sourceId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.riskRegister.severity": {
+      name: "severity",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.riskRegister.likelihood": {
+      name: "likelihood",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.riskRegister.itemId": {
+      name: "itemId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.riskRegister.status": {
+      name: "status",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.riskRegister.assignee": {
+      name: "assignee",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.riskRegister.createdBy": {
+      name: "createdBy",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.riskRegister.createdAt": {
+      name: "createdAt",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.riskRegister.updatedAt": {
+      name: "updatedAt",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.riskRegister.notes": {
+      name: "notes",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.riskRegister.type": {
+      name: "type",
+      required: false,
+      in: "query",
+      type: "string",
+    },
     "body.shipment": {
       name: "shipment",
       description: "shipment",
@@ -119679,6 +120136,12 @@ export default {
     },
     "rowFilter.companySettings.purchasePriceUpdateTiming": {
       name: "purchasePriceUpdateTiming",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.companySettings.supplierQuoteNotificationGroup": {
+      name: "supplierQuoteNotificationGroup",
       required: false,
       in: "query",
       type: "string",

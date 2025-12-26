@@ -1,5 +1,6 @@
 import { getCarbonServiceRole } from "@carbon/auth";
 import { Input, TextArea, ValidatedForm } from "@carbon/form";
+import type { JSONContent } from "@carbon/react";
 import {
   Badge,
   Button,
@@ -8,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
   Checkbox,
+  generateHTML,
   Heading,
   HStack,
   Modal,
@@ -163,7 +165,10 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       quote: quote.data,
       company: company.data,
       companySettings: companySettings.data,
-      quoteLines: quoteLines.data ?? [],
+      quoteLines:
+        quoteLines.data?.map(({ internalNotes, ...line }) => ({
+          ...line
+        })) ?? [],
       thumbnails: thumbnails,
       quoteLinePrices: quoteLinePrices.data ?? []
     }
@@ -283,6 +288,18 @@ const LineItems = ({
                   <span className="text-muted-foreground text-base truncate">
                     {line.description}
                   </span>
+
+                  {line.externalNotes &&
+                    Object.keys(line.externalNotes).length > 0 && (
+                      <div
+                        className="prose dark:prose-invert mt-2 text-muted-foreground"
+                        dangerouslySetInnerHTML={{
+                          __html: generateHTML(
+                            line.externalNotes as JSONContent
+                          )
+                        }}
+                      />
+                    )}
                 </div>
               </VStack>
             </HStack>
@@ -323,7 +340,7 @@ const LinePricing = ({
   quoteStatus,
   quoteLinePrices
 }: {
-  line: SupplierQuoteLine;
+  line: Omit<SupplierQuoteLine, "internalNotes">;
   currencyCode: string;
   locale: string;
   selectedLines: Record<number, SelectedLine>;

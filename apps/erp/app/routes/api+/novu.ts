@@ -6,7 +6,8 @@ import {
   gaugeCalibrationExpiredWorkflow,
   jobCompletedWorkflow,
   messageWorkflow,
-  suggestionResponseWorkflow
+  suggestionResponseWorkflow,
+  supplierQuoteResponseWorkflow
 } from "~/novu/workflows";
 
 const handler = serve({
@@ -17,7 +18,8 @@ const handler = serve({
     gaugeCalibrationExpiredWorkflow,
     jobCompletedWorkflow,
     messageWorkflow,
-    suggestionResponseWorkflow
+    suggestionResponseWorkflow,
+    supplierQuoteResponseWorkflow
   ]
 });
 

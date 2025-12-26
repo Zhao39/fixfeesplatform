@@ -30,6 +30,7 @@ import {
   LuListChecks,
   LuMailCheck,
   LuMessageSquare,
+  LuShieldAlert,
   LuShieldX,
   LuShoppingCart
 } from "react-icons/lu";
@@ -272,6 +273,14 @@ function GenericNotification({
           {...props}
         />
       );
+    case NotificationEvent.RiskAssignment:
+      return (
+        <Notification
+          icon={<LuShieldAlert />}
+          to={path.to.risk(id)}
+          {...props}
+        />
+      );
     case NotificationEvent.SalesRfqReady:
     case NotificationEvent.SalesRfqAssignment:
       return (
@@ -309,6 +318,14 @@ function GenericNotification({
       return (
         <Notification
           icon={<LuDollarSign />}
+          to={path.to.supplierQuoteDetails(id)}
+          {...props}
+        />
+      );
+    case NotificationEvent.SupplierQuoteResponse:
+      return (
+        <Notification
+          icon={<LuMailCheck />}
           to={path.to.supplierQuoteDetails(id)}
           {...props}
         />

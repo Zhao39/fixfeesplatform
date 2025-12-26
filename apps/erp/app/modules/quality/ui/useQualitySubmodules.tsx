@@ -5,6 +5,7 @@ import {
   LuListChecks,
   LuOctagonX,
   LuShapes,
+  LuShieldAlert,
   LuShieldX,
   LuSquareCheck,
   LuWorkflow
@@ -30,6 +31,12 @@ const qualityRoutes: AuthenticatedRouteGroup[] = [
         to: path.to.issues,
         icon: <LuShieldX />,
         table: "nonConformance"
+      },
+      {
+        name: "Risks",
+        to: path.to.risks,
+        icon: <LuShieldAlert />,
+        table: "riskRegister"
       }
       // {
       //   name: "Inspections",

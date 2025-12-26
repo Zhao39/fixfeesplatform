@@ -4,12 +4,10 @@ import type {
   getGaugeCalibrationRecords,
   getGauges,
   getGaugeTypes,
-  getInvestigationTypes,
   getIssueActionTasks,
   getIssueApprovalTasks,
   getIssueAssociations,
   getIssueFromExternalLink,
-  getIssueInvestigationTasks,
   getIssueItems,
   getIssueReviewers,
   getIssues,
@@ -19,7 +17,8 @@ import type {
   getQualityDocument,
   getQualityDocumentSteps,
   getQualityDocuments,
-  getRequiredActions
+  getRequiredActions,
+  getRisk
 } from "./quality.service";
 
 export type Gauge = NonNullable<
@@ -70,10 +69,6 @@ export type AssociationItems = NonNullable<
   Awaited<ReturnType<typeof getIssueAssociations>>
 >["items"];
 
-export type InvestigationType = NonNullable<
-  Awaited<ReturnType<typeof getInvestigationTypes>>["data"]
->[number];
-
 export type RequiredAction = NonNullable<
   Awaited<ReturnType<typeof getRequiredActions>>["data"]
 >[number];
@@ -85,10 +80,6 @@ export type IssueType = NonNullable<
 export type IssueWorkflow = NonNullable<
   Awaited<ReturnType<typeof getIssueWorkflow>>["data"]
 >;
-
-export type IssueInvestigationTask = NonNullable<
-  Awaited<ReturnType<typeof getIssueInvestigationTasks>>["data"]
->[number];
 
 export type IssueActionTask = NonNullable<
   Awaited<ReturnType<typeof getIssueActionTasks>>["data"]
@@ -121,3 +112,5 @@ export type QualityDocument = NonNullable<
 export type QualityDocumentStep = NonNullable<
   Awaited<ReturnType<typeof getQualityDocumentSteps>>["data"]
 >[number];
+
+export type Risk = NonNullable<Awaited<ReturnType<typeof getRisk>>["data"]>;
