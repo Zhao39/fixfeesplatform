@@ -107,27 +107,19 @@ c AS (
   FROM src
   ON CONFLICT DO NOTHING
   RETURNING id
-),
-sc AS (
-  INSERT INTO "supplierContact" (
-    "id",
-    "supplierId",
-    "contactId"
-  )
-  SELECT
-    xid(),
-    src."supplierId",
-    c.id
-  FROM c
-  JOIN src
-    ON src.contact_id = c.id
-  ON CONFLICT DO NOTHING
-  RETURNING id, "supplierId"
 )
 
-UPDATE supplier su
-SET    "purchasingContactId" = sc.id, "invoicingContactId" = sc.id
-FROM   sc
-WHERE  su."id" = sc."supplierId";
-
+INSERT INTO "supplierContact" (
+  "id",
+  "supplierId",
+  "contactId"
+)
+SELECT
+  xid(),
+  src."supplierId",
+  c.id
+FROM c
+JOIN src
+  ON src.contact_id = c.id
+ON CONFLICT DO NOTHING;
 -- Supplier table simplifications and contact email adjustments end
