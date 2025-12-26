@@ -130,6 +130,4 @@ SET    "purchasingContactId" = sc.id, "invoicingContactId" = sc.id
 FROM   sc
 WHERE  su."id" = sc."supplierId";
 
-ALTER TABLE supplier DROP COLUMN fax;
-ALTER TABLE supplier DROP COLUMN phone;
 -- Supplier table simplifications and contact email adjustments end

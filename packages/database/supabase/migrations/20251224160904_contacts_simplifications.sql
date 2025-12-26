@@ -128,6 +128,4 @@ SET    "salesContactId" = cc.id, "invoicingContactId" = cc.id
 FROM   cc
 WHERE  cu."id" = cc."customerId";
 
-ALTER TABLE customer DROP COLUMN fax;
-ALTER TABLE customer DROP COLUMN phone;
 -- Customer table simplifications and contact email adjustments end

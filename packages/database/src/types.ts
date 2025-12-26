@@ -3585,10 +3585,12 @@ export type Database = {
           customFields: Json | null
           embedding: unknown
           externalId: Json | null
+          fax: string | null
           id: string
           invoicingContactId: string | null
           logo: string | null
           name: string
+          phone: string | null
           salesContactId: string | null
           tags: string[] | null
           taxId: string | null
@@ -3609,10 +3611,12 @@ export type Database = {
           customFields?: Json | null
           embedding?: unknown
           externalId?: Json | null
+          fax?: string | null
           id?: string
           invoicingContactId?: string | null
           logo?: string | null
           name: string
+          phone?: string | null
           salesContactId?: string | null
           tags?: string[] | null
           taxId?: string | null
@@ -3633,10 +3637,12 @@ export type Database = {
           customFields?: Json | null
           embedding?: unknown
           externalId?: Json | null
+          fax?: string | null
           id?: string
           invoicingContactId?: string | null
           logo?: string | null
           name?: string
+          phone?: string | null
           salesContactId?: string | null
           tags?: string[] | null
           taxId?: string | null
@@ -31798,10 +31804,12 @@ export type Database = {
           customFields: Json | null
           embedding: unknown
           externalId: Json | null
+          fax: string | null
           id: string
           invoicingContactId: string | null
           logo: string | null
           name: string
+          phone: string | null
           purchasingContactId: string | null
           supplierStatusId: string | null
           supplierTypeId: string | null
@@ -31822,10 +31830,12 @@ export type Database = {
           customFields?: Json | null
           embedding?: unknown
           externalId?: Json | null
+          fax?: string | null
           id?: string
           invoicingContactId?: string | null
           logo?: string | null
           name: string
+          phone?: string | null
           purchasingContactId?: string | null
           supplierStatusId?: string | null
           supplierTypeId?: string | null
@@ -31846,10 +31856,12 @@ export type Database = {
           customFields?: Json | null
           embedding?: unknown
           externalId?: Json | null
+          fax?: string | null
           id?: string
           invoicingContactId?: string | null
           logo?: string | null
           name?: string
+          phone?: string | null
           purchasingContactId?: string | null
           supplierStatusId?: string | null
           supplierTypeId?: string | null
