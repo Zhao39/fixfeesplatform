@@ -31604,11 +31604,11 @@ export type Database = {
           customFields: Json | null
           embedding: unknown
           externalId: Json | null
-          fax: string | null
           id: string
+          invoicingContactId: string | null
           logo: string | null
           name: string
-          phone: string | null
+          purchasingContactId: string | null
           supplierStatusId: string | null
           supplierTypeId: string | null
           tags: string[] | null
@@ -31628,11 +31628,11 @@ export type Database = {
           customFields?: Json | null
           embedding?: unknown
           externalId?: Json | null
-          fax?: string | null
           id?: string
+          invoicingContactId?: string | null
           logo?: string | null
           name: string
-          phone?: string | null
+          purchasingContactId?: string | null
           supplierStatusId?: string | null
           supplierTypeId?: string | null
           tags?: string[] | null
@@ -31652,11 +31652,11 @@ export type Database = {
           customFields?: Json | null
           embedding?: unknown
           externalId?: Json | null
-          fax?: string | null
           id?: string
+          invoicingContactId?: string | null
           logo?: string | null
           name?: string
-          phone?: string | null
+          purchasingContactId?: string | null
           supplierStatusId?: string | null
           supplierTypeId?: string | null
           tags?: string[] | null
@@ -31806,6 +31806,20 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "currencyCode"
             referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "supplier_invoicingContactId_fkey"
+            columns: ["invoicingContactId"]
+            isOneToOne: false
+            referencedRelation: "supplierContact"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "supplier_purchasingContactId_fkey"
+            columns: ["purchasingContactId"]
+            isOneToOne: false
+            referencedRelation: "supplierContact"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "supplier_supplierStatusId_fkey"
@@ -42706,14 +42720,14 @@ export type Database = {
           },
           {
             foreignKeyName: "partner_id_fkey"
-            columns: ["supplierLocationId"]
+            columns: ["id"]
             isOneToOne: false
             referencedRelation: "supplierLocation"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "partner_id_fkey"
-            columns: ["id"]
+            columns: ["supplierLocationId"]
             isOneToOne: false
             referencedRelation: "supplierLocation"
             referencedColumns: ["id"]
@@ -46606,14 +46620,14 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["customerCountryCode"]
+            columns: ["invoiceCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
           },
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["invoiceCountryCode"]
+            columns: ["customerCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
@@ -49139,14 +49153,17 @@ export type Database = {
           createdBy: string | null
           currencyCode: string | null
           customFields: Json | null
+          embedding: unknown
           externalId: Json | null
           fax: string | null
           id: string | null
+          invoicingContactId: string | null
           logo: string | null
           name: string | null
           orderCount: number | null
           partCount: number | null
           phone: string | null
+          purchasingContactId: string | null
           status: string | null
           supplierStatusId: string | null
           supplierTypeId: string | null
@@ -49298,6 +49315,20 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "currencyCode"
             referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "supplier_invoicingContactId_fkey"
+            columns: ["invoicingContactId"]
+            isOneToOne: false
+            referencedRelation: "supplierContact"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "supplier_purchasingContactId_fkey"
+            columns: ["purchasingContactId"]
+            isOneToOne: false
+            referencedRelation: "supplierContact"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "supplier_supplierStatusId_fkey"

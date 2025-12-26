@@ -28105,12 +28105,6 @@ export default {
             $ref: "#/parameters/rowFilter.suppliers.currencyCode",
           },
           {
-            $ref: "#/parameters/rowFilter.suppliers.phone",
-          },
-          {
-            $ref: "#/parameters/rowFilter.suppliers.fax",
-          },
-          {
             $ref: "#/parameters/rowFilter.suppliers.website",
           },
           {
@@ -28123,6 +28117,15 @@ export default {
             $ref: "#/parameters/rowFilter.suppliers.taxPercent",
           },
           {
+            $ref: "#/parameters/rowFilter.suppliers.purchasingContactId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.suppliers.invoicingContactId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.suppliers.embedding",
+          },
+          {
             $ref: "#/parameters/rowFilter.suppliers.type",
           },
           {
@@ -28133,6 +28136,12 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.suppliers.partCount",
+          },
+          {
+            $ref: "#/parameters/rowFilter.suppliers.phone",
+          },
+          {
+            $ref: "#/parameters/rowFilter.suppliers.fax",
           },
           {
             $ref: "#/parameters/select",
@@ -50656,12 +50665,6 @@ export default {
             $ref: "#/parameters/rowFilter.supplier.currencyCode",
           },
           {
-            $ref: "#/parameters/rowFilter.supplier.phone",
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplier.fax",
-          },
-          {
             $ref: "#/parameters/rowFilter.supplier.website",
           },
           {
@@ -50675,6 +50678,12 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.supplier.embedding",
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplier.purchasingContactId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplier.invoicingContactId",
           },
           {
             $ref: "#/parameters/select",
@@ -50781,12 +50790,6 @@ export default {
             $ref: "#/parameters/rowFilter.supplier.currencyCode",
           },
           {
-            $ref: "#/parameters/rowFilter.supplier.phone",
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplier.fax",
-          },
-          {
             $ref: "#/parameters/rowFilter.supplier.website",
           },
           {
@@ -50800,6 +50803,12 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.supplier.embedding",
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplier.purchasingContactId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplier.invoicingContactId",
           },
           {
             $ref: "#/parameters/preferReturn",
@@ -50860,12 +50869,6 @@ export default {
             $ref: "#/parameters/rowFilter.supplier.currencyCode",
           },
           {
-            $ref: "#/parameters/rowFilter.supplier.phone",
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplier.fax",
-          },
-          {
             $ref: "#/parameters/rowFilter.supplier.website",
           },
           {
@@ -50879,6 +50882,12 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.supplier.embedding",
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplier.purchasingContactId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplier.invoicingContactId",
           },
           {
             $ref: "#/parameters/body.supplier",
@@ -74960,14 +74969,6 @@ export default {
           format: "text",
           type: "string",
         },
-        phone: {
-          format: "text",
-          type: "string",
-        },
-        fax: {
-          format: "text",
-          type: "string",
-        },
         website: {
           format: "text",
           type: "string",
@@ -74986,6 +74987,22 @@ export default {
           format: "numeric",
           type: "number",
         },
+        purchasingContactId: {
+          description:
+            "Note:\nThis is a Foreign Key to `supplierContact.id`.<fk table='supplierContact' column='id'/>",
+          format: "text",
+          type: "string",
+        },
+        invoicingContactId: {
+          description:
+            "Note:\nThis is a Foreign Key to `supplierContact.id`.<fk table='supplierContact' column='id'/>",
+          format: "text",
+          type: "string",
+        },
+        embedding: {
+          format: "extensions.halfvec(384)",
+          type: "string",
+        },
         type: {
           format: "text",
           type: "string",
@@ -75001,6 +75018,14 @@ export default {
         partCount: {
           format: "bigint",
           type: "integer",
+        },
+        phone: {
+          format: "text",
+          type: "string",
+        },
+        fax: {
+          format: "text",
+          type: "string",
         },
       },
       type: "object",
@@ -85853,14 +85878,6 @@ export default {
           format: "text",
           type: "string",
         },
-        phone: {
-          format: "text",
-          type: "string",
-        },
-        fax: {
-          format: "text",
-          type: "string",
-        },
         website: {
           format: "text",
           type: "string",
@@ -85882,6 +85899,18 @@ export default {
         },
         embedding: {
           format: "extensions.halfvec(384)",
+          type: "string",
+        },
+        purchasingContactId: {
+          description:
+            "Note:\nThis is a Foreign Key to `supplierContact.id`.<fk table='supplierContact' column='id'/>",
+          format: "text",
+          type: "string",
+        },
+        invoicingContactId: {
+          description:
+            "Note:\nThis is a Foreign Key to `supplierContact.id`.<fk table='supplierContact' column='id'/>",
+          format: "text",
           type: "string",
         },
       },
@@ -103988,18 +104017,6 @@ export default {
       in: "query",
       type: "string",
     },
-    "rowFilter.suppliers.phone": {
-      name: "phone",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.suppliers.fax": {
-      name: "fax",
-      required: false,
-      in: "query",
-      type: "string",
-    },
     "rowFilter.suppliers.website": {
       name: "website",
       required: false,
@@ -104024,6 +104041,24 @@ export default {
       in: "query",
       type: "string",
     },
+    "rowFilter.suppliers.purchasingContactId": {
+      name: "purchasingContactId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.suppliers.invoicingContactId": {
+      name: "invoicingContactId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.suppliers.embedding": {
+      name: "embedding",
+      required: false,
+      in: "query",
+      type: "string",
+    },
     "rowFilter.suppliers.type": {
       name: "type",
       required: false,
@@ -104044,6 +104079,18 @@ export default {
     },
     "rowFilter.suppliers.partCount": {
       name: "partCount",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.suppliers.phone": {
+      name: "phone",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.suppliers.fax": {
+      name: "fax",
       required: false,
       in: "query",
       type: "string",
@@ -116384,18 +116431,6 @@ export default {
       in: "query",
       type: "string",
     },
-    "rowFilter.supplier.phone": {
-      name: "phone",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.supplier.fax": {
-      name: "fax",
-      required: false,
-      in: "query",
-      type: "string",
-    },
     "rowFilter.supplier.website": {
       name: "website",
       required: false,
@@ -116422,6 +116457,18 @@ export default {
     },
     "rowFilter.supplier.embedding": {
       name: "embedding",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.supplier.purchasingContactId": {
+      name: "purchasingContactId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.supplier.invoicingContactId": {
+      name: "invoicingContactId",
       required: false,
       in: "query",
       type: "string",
