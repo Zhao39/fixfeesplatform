@@ -6,7 +6,7 @@ import type { IntegrationConfig } from "../types";
 export const QuickBooks: IntegrationConfig = {
   name: "QuickBooks",
   id: "quickbooks",
-  active: true,
+  active: false,
   category: "Accounting",
   logo: Logo,
   description:
@@ -18,7 +18,7 @@ export const QuickBooks: IntegrationConfig = {
   schema: z.object({}),
   oauth: {
     authUrl: "https://appcenter.intuit.com/connect/oauth2",
-    clientId: QUICKBOOKS_CLIENT_ID,
+    clientId: QUICKBOOKS_CLIENT_ID!,
     redirectUri: "/api/integrations/quickbooks/oauth",
     scopes: [
       "com.intuit.quickbooks.accounting",
