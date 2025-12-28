@@ -1,4 +1,3 @@
-import { getCarbonServiceRole } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import {
   Badge,
@@ -37,7 +36,6 @@ import {
 } from "~/services/maintenance.service";
 import { maintenanceDispatchPriority } from "~/services/models";
 import { getWorkCentersByLocation } from "~/services/operations.service";
-import { UserContext } from "~/types";
 import { path } from "~/utils/path";
 
 export async function loader({ context, request }: LoaderFunctionArgs) {
