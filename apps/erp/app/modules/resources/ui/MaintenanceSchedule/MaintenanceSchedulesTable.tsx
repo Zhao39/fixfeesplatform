@@ -1,4 +1,4 @@
-import { HStack, MenuIcon, MenuItem, Status } from "@carbon/react";
+import { Combobox, HStack, MenuIcon, MenuItem, Status } from "@carbon/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
 import {
@@ -28,14 +28,29 @@ import { MaintenancePriority } from "../Maintenance";
 type MaintenanceSchedulesTableProps = {
   data: MaintenanceSchedule[];
   count: number;
+  locations: { id: string; name: string }[];
+  locationId: string | null;
 };
 
 const MaintenanceSchedulesTable = memo(
-  ({ data, count }: MaintenanceSchedulesTableProps) => {
+  ({ data, count, locations, locationId }: MaintenanceSchedulesTableProps) => {
     const [params] = useUrlParams();
     const navigate = useNavigate();
     const permissions = usePermissions();
-    const locations = useLocations();
+    const allLocations = useLocations();
+
+    const locationOptions = useMemo(
+      () =>
+        locations.map((location) => ({
+          value: location.id,
+          label: location.name
+        })),
+      [locations]
+    );
+
+    const getLocationPath = (locId: string) => {
+      return `${path.to.maintenanceSchedules}?location=${locId}`;
+    };
 
     const columns = useMemo<ColumnDef<MaintenanceSchedule>[]>(() => {
       return [
@@ -64,7 +79,7 @@ const MaintenanceSchedulesTable = memo(
             icon: <LuMapPin />,
             filter: {
               type: "static",
-              options: locations.map((location) => ({
+              options: allLocations.map((location) => ({
                 value: location.value,
                 label: <Enumerable value={location.label!} />
               }))
@@ -187,12 +202,26 @@ const MaintenanceSchedulesTable = memo(
         columns={columns}
         count={count}
         primaryAction={
-          permissions.can("create", "production") && (
-            <New
-              label="Scheduled Maintenance"
-              to={`${path.to.newMaintenanceSchedule}?${params.toString()}`}
-            />
-          )
+          <div className="flex items-center gap-2">
+            {locationId && (
+              <Combobox
+                asButton
+                size="sm"
+                value={locationId}
+                options={locationOptions}
+                onChange={(selected) => {
+                  // hard refresh because initialValues update has no effect otherwise
+                  window.location.href = getLocationPath(selected);
+                }}
+              />
+            )}
+            {permissions.can("create", "production") && (
+              <New
+                label="Scheduled Maintenance"
+                to={`${path.to.newMaintenanceSchedule}?${params.toString()}`}
+              />
+            )}
+          </div>
         }
         renderContextMenu={renderContextMenu}
         title="Scheduled Maintenances"

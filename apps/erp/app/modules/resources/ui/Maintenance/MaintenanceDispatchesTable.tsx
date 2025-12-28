@@ -1,4 +1,4 @@
-import { HStack, MenuIcon, MenuItem } from "@carbon/react";
+import { Combobox, HStack, MenuIcon, MenuItem } from "@carbon/react";
 import { formatDate } from "@carbon/utils";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
@@ -38,15 +38,36 @@ type MaintenanceDispatchesTableProps = {
   data: MaintenanceDispatch[];
   count: number;
   failureModes: ListItem[];
+  locations: { id: string; name: string }[];
+  locationId: string | null;
 };
 
 const MaintenanceDispatchesTable = memo(
-  ({ data, count, failureModes }: MaintenanceDispatchesTableProps) => {
+  ({
+    data,
+    count,
+    failureModes,
+    locations,
+    locationId
+  }: MaintenanceDispatchesTableProps) => {
     const [params] = useUrlParams();
     const navigate = useNavigate();
     const permissions = usePermissions();
     const workCenters = useWorkCenters();
     const [people] = usePeople();
+
+    const locationOptions = useMemo(
+      () =>
+        locations.map((location) => ({
+          value: location.id,
+          label: location.name
+        })),
+      [locations]
+    );
+
+    const getLocationPath = (locId: string) => {
+      return `${path.to.maintenanceDispatches}?location=${locId}`;
+    };
 
     const columns = useMemo<ColumnDef<MaintenanceDispatch>[]>(() => {
       return [
@@ -353,12 +374,26 @@ const MaintenanceDispatchesTable = memo(
         }}
         count={count}
         primaryAction={
-          permissions.can("create", "resources") && (
-            <New
-              label="Dispatch"
-              to={`${path.to.newMaintenanceDispatch}?${params.toString()}`}
-            />
-          )
+          <div className="flex items-center gap-2">
+            {locationId && (
+              <Combobox
+                asButton
+                size="sm"
+                value={locationId}
+                options={locationOptions}
+                onChange={(selected) => {
+                  // hard refresh because initialValues update has no effect otherwise
+                  window.location.href = getLocationPath(selected);
+                }}
+              />
+            )}
+            {permissions.can("create", "resources") && (
+              <New
+                label="Dispatch"
+                to={`${path.to.newMaintenanceDispatch}?${params.toString()}`}
+              />
+            )}
+          </div>
         }
         renderContextMenu={renderContextMenu}
         title="Maintenance Dispatches"

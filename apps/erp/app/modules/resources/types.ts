@@ -14,11 +14,13 @@ import type {
   getMaintenanceDispatchComments,
   getMaintenanceDispatchEvents,
   getMaintenanceDispatches,
+  getMaintenanceDispatchesByLocation,
   getMaintenanceDispatchItems,
   getMaintenanceDispatchWorkCenters,
   getMaintenanceSchedule,
   getMaintenanceScheduleItems,
   getMaintenanceSchedules,
+  getMaintenanceSchedulesByLocation,
   getPartners,
   getProcesses,
   getSuggestion,
@@ -189,4 +191,12 @@ export type MaintenanceScheduleDetail = NonNullable<
 
 export type MaintenanceScheduleItem = NonNullable<
   Awaited<ReturnType<typeof getMaintenanceScheduleItems>>["data"]
+>[number];
+
+export type MaintenanceDispatchByLocation = NonNullable<
+  Awaited<ReturnType<typeof getMaintenanceDispatchesByLocation>>["data"]
+>[number];
+
+export type MaintenanceScheduleByLocation = NonNullable<
+  Awaited<ReturnType<typeof getMaintenanceSchedulesByLocation>>["data"]
 >[number];

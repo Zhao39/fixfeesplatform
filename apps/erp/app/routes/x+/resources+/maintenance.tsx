@@ -4,7 +4,8 @@ import type { LoaderFunctionArgs } from "react-router";
 import { Outlet, useLoaderData } from "react-router";
 import {
   getFailureModesList,
-  getMaintenanceDispatches
+  getLocationsList,
+  getMaintenanceDispatchesByLocation
 } from "~/modules/resources";
 import MaintenanceDispatchesTable from "~/modules/resources/ui/Maintenance/MaintenanceDispatchesTable";
 import type { Handle } from "~/utils/handle";
@@ -26,11 +27,28 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const searchParams = new URLSearchParams(url.search);
   const search = searchParams.get("search");
   const status = searchParams.get("status") ?? undefined;
+  const locationId = searchParams.get("location");
   const { limit, offset, sorts, filters } =
     getGenericQueryFilters(searchParams);
 
+  const locations = await getLocationsList(client, companyId);
+  const locationsList = locations.data ?? [];
+
+  // Default to first location if none specified
+  const selectedLocationId = locationId ?? locationsList[0]?.id;
+
+  if (!selectedLocationId) {
+    return {
+      dispatches: [],
+      count: 0,
+      failureModes: [],
+      locations: locationsList,
+      locationId: null
+    };
+  }
+
   const [dispatches, failureModes] = await Promise.all([
-    getMaintenanceDispatches(client, companyId, {
+    getMaintenanceDispatchesByLocation(client, companyId, selectedLocationId, {
       search,
       status,
       limit,
@@ -44,12 +62,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return {
     dispatches: dispatches.data ?? [],
     count: dispatches.count ?? 0,
-    failureModes: failureModes.data ?? []
+    failureModes: failureModes.data ?? [],
+    locations: locationsList,
+    locationId: selectedLocationId
   };
 }
 
 export default function MaintenanceRoute() {
-  const { dispatches, count, failureModes } = useLoaderData<typeof loader>();
+  const { dispatches, count, failureModes, locations, locationId } =
+    useLoaderData<typeof loader>();
 
   return (
     <VStack spacing={0} className="h-full">
@@ -57,6 +78,8 @@ export default function MaintenanceRoute() {
         data={dispatches ?? []}
         count={count ?? 0}
         failureModes={failureModes ?? []}
+        locations={locations}
+        locationId={locationId}
       />
       <Outlet />
     </VStack>

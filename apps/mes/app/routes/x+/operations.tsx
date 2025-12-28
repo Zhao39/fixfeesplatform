@@ -34,8 +34,8 @@ import { ActiveFilters, Filter, useFilters } from "~/components/Filter";
 import type { Column, DisplaySettings, Item } from "~/components/Kanban";
 import { Kanban } from "~/components/Kanban";
 import SearchFilter from "~/components/SearchFilter";
+import { userContext } from "~/context";
 import { useUrlParams, useUser } from "~/hooks";
-import { getLocation } from "~/services/location.server";
 import { getFilters, setFilters } from "~/services/operation.server";
 import {
   getActiveJobOperationsByLocation,
@@ -46,9 +46,9 @@ import {
 import { usePeople } from "~/stores";
 import { makeDurations } from "~/utils/durations";
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  const { companyId, userId } = await requirePermissions(request, {});
-  const serviceRole = await getCarbonServiceRole();
+export async function loader({ context, request }: LoaderFunctionArgs) {
+  const { companyId } = await requirePermissions(request, {});
+  const serviceRole = getCarbonServiceRole();
 
   const url = new URL(request.url);
   const searchParams = new URLSearchParams(url.search);
@@ -131,17 +131,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
     }
   }
 
-  const { location } = await getLocation(request, serviceRole, {
-    companyId,
-    userId
-  });
+  const locationId = context.get(userContext)?.locationId;
 
   const [workCenters, processes, operations] = await Promise.all([
-    getWorkCentersByLocation(serviceRole, location),
+    getWorkCentersByLocation(serviceRole, locationId),
     getProcessesList(serviceRole, companyId),
     getActiveJobOperationsByLocation(
       serviceRole,
-      location,
+      locationId,
       selectedWorkCenterIds
     )
   ]);

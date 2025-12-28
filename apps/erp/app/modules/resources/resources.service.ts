@@ -452,6 +452,34 @@ export async function getMaintenanceDispatches(
   return query;
 }
 
+export async function getMaintenanceDispatchesByLocation(
+  client: SupabaseClient<Database>,
+  companyId: string,
+  locationId: string,
+  args?: GenericQueryFilters & { search: string | null; status?: string }
+) {
+  let query = client.rpc(
+    "get_maintenance_dispatches_by_location",
+    {
+      p_company_id: companyId,
+      p_location_id: locationId
+    },
+    { count: "exact" }
+  );
+
+  if (args?.search) {
+    query = query.ilike("maintenanceDispatchId", `%${args.search}%`);
+  }
+
+  if (args) {
+    query = setGenericQueryFilters(query, args, [
+      { column: "createdAt", ascending: false }
+    ]);
+  }
+
+  return query;
+}
+
 export async function getMaintenanceDispatchWorkCenters(
   client: SupabaseClient<Database>,
   dispatchId: string
@@ -501,6 +529,38 @@ export async function getMaintenanceSchedules(
     .from("maintenanceSchedules")
     .select(`*`, { count: "exact" })
     .eq("companyId", companyId);
+
+  if (args?.search) {
+    query = query.ilike("name", `%${args.search}%`);
+  }
+
+  if (args?.active !== undefined) {
+    query = query.eq("active", args.active);
+  }
+
+  if (args) {
+    query = setGenericQueryFilters(query, args, [
+      { column: "name", ascending: true }
+    ]);
+  }
+
+  return query;
+}
+
+export async function getMaintenanceSchedulesByLocation(
+  client: SupabaseClient<Database>,
+  companyId: string,
+  locationId: string,
+  args?: GenericQueryFilters & { search: string | null; active?: boolean }
+) {
+  let query = client.rpc(
+    "get_maintenance_schedules_by_location",
+    {
+      p_company_id: companyId,
+      p_location_id: locationId
+    },
+    { count: "exact" }
+  );
 
   if (args?.search) {
     query = query.ilike("name", `%${args.search}%`);

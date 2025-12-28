@@ -45101,14 +45101,14 @@ export type Database = {
           },
           {
             foreignKeyName: "partner_id_fkey"
-            columns: ["id"]
+            columns: ["supplierLocationId"]
             isOneToOne: false
             referencedRelation: "supplierLocation"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "partner_id_fkey"
-            columns: ["supplierLocationId"]
+            columns: ["id"]
             isOneToOne: false
             referencedRelation: "supplierLocation"
             referencedColumns: ["id"]
@@ -46481,14 +46481,14 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["customerCountryCode"]
+            columns: ["supplierCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
           },
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["supplierCountryCode"]
+            columns: ["customerCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
@@ -49008,14 +49008,14 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["customerCountryCode"]
+            columns: ["invoiceCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
           },
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["invoiceCountryCode"]
+            columns: ["customerCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
@@ -52939,6 +52939,63 @@ export type Database = {
           status: Database["public"]["Enums"]["jobStatus"]
           tags: string[]
           thumbnailPath: string
+        }[]
+      }
+      get_maintenance_dispatches_by_location: {
+        Args: { p_company_id: string; p_location_id: string }
+        Returns: {
+          actualEndTime: string
+          actualFailureModeId: string
+          actualStartTime: string
+          assignee: string
+          companyId: string
+          completedAt: string
+          content: Json
+          createdAt: string
+          createdBy: string
+          duration: number
+          id: string
+          locationId: string
+          locationName: string
+          maintenanceDispatchId: string
+          maintenanceScheduleId: string
+          nonConformanceId: string
+          oeeImpact: Database["public"]["Enums"]["oeeImpact"]
+          plannedEndTime: string
+          plannedStartTime: string
+          priority: Database["public"]["Enums"]["maintenanceDispatchPriority"]
+          severity: Database["public"]["Enums"]["maintenanceSeverity"]
+          source: Database["public"]["Enums"]["maintenanceSource"]
+          status: Database["public"]["Enums"]["maintenanceDispatchStatus"]
+          suspectedFailureModeId: string
+          updatedAt: string
+          updatedBy: string
+          workCenterId: string
+          workCenterName: string
+        }[]
+      }
+      get_maintenance_schedules_by_location: {
+        Args: { p_company_id: string; p_location_id: string }
+        Returns: {
+          active: boolean
+          companyId: string
+          createdAt: string
+          createdBy: string
+          daysOfWeek: number[]
+          description: string
+          estimatedDuration: number
+          frequency: Database["public"]["Enums"]["maintenanceFrequency"]
+          id: string
+          lastGeneratedAt: string
+          locationId: string
+          locationName: string
+          name: string
+          nextDueAt: string
+          priority: Database["public"]["Enums"]["maintenanceDispatchPriority"]
+          updatedAt: string
+          updatedBy: string
+          workCenterId: string
+          workCenterName: string
         }[]
       }
       get_material_details: {

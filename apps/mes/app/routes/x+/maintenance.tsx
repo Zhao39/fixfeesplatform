@@ -29,23 +29,20 @@ import EmployeeAvatar from "~/components/EmployeeAvatar";
 import type { ColumnFilter } from "~/components/Filter";
 import { ActiveFilters, Filter, useFilters } from "~/components/Filter";
 import SearchFilter from "~/components/SearchFilter";
+import { userContext } from "~/context";
 import { useUrlParams } from "~/hooks";
-import { getLocation } from "~/services/location.server";
 import {
   getActiveMaintenanceDispatchesByLocation,
   getMaintenanceDispatchesAssignedTo
 } from "~/services/maintenance.service";
 import { maintenanceDispatchPriority } from "~/services/models";
 import { getWorkCentersByLocation } from "~/services/operations.service";
+import { UserContext } from "~/types";
 import { path } from "~/utils/path";
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  const { client, companyId, userId } = await requirePermissions(request, {});
-  const serviceRole = await getCarbonServiceRole();
-  const { location } = await getLocation(request, serviceRole, {
-    companyId,
-    userId
-  });
+export async function loader({ context, request }: LoaderFunctionArgs) {
+  const { client, userId } = await requirePermissions(request, {});
+  const locationId = context.get(userContext)?.locationId;
 
   const url = new URL(request.url);
   const searchParams = new URLSearchParams(url.search);
@@ -90,9 +87,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const [allDispatches, assignedDispatches, workCentersResult] =
     await Promise.all([
-      getActiveMaintenanceDispatchesByLocation(client, location),
+      getActiveMaintenanceDispatchesByLocation(client, locationId),
       getMaintenanceDispatchesAssignedTo(client, userId),
-      getWorkCentersByLocation(client, location)
+      getWorkCentersByLocation(client, locationId)
     ]);
 
   let filteredDispatches = allDispatches?.data ?? [];
@@ -174,7 +171,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return {
     dispatches: filteredDispatches,
     assignedDispatches: filteredAssignedDispatches,
-    locationId: location,
+    locationId,
     workCenters: (workCentersResult?.data ?? []).map((wc) => ({
       value: wc.id,
       label: wc.name
@@ -330,10 +327,12 @@ export default function MaintenanceRoute() {
         header: "Work Center",
         filter: {
           type: "static",
-          options: workCenters.map((wc) => ({
-            label: wc.label,
-            value: wc.value
-          }))
+          options: workCenters
+            .filter((wc) => wc.label !== null && wc.value !== null)
+            .map((wc) => ({
+              label: wc.label!,
+              value: wc.value!
+            }))
         }
       },
       {
