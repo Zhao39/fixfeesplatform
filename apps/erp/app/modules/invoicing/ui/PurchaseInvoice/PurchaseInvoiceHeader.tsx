@@ -285,7 +285,19 @@ const PurchaseInvoiceHeader = () => {
                 >
                   {(["Paid", "Partially Paid", "Voided"] as const).map(
                     (status) => (
-                      <DropdownMenuRadioItem key={status} value={status}>
+                      <DropdownMenuRadioItem
+                        disabled={
+                          !permissions.can("update", "invoicing") ||
+                          ![
+                            "Submitted",
+                            "Paid",
+                            "Partially Paid",
+                            "Voided"
+                          ].includes(purchaseInvoice.status ?? "")
+                        }
+                        key={status}
+                        value={status}
+                      >
                         <PurchaseInvoicingStatus status={status} />
                       </DropdownMenuRadioItem>
                     )
