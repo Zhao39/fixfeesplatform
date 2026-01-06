@@ -17,7 +17,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./client": "./src/client.ts",
-    "./swagger-docs-schema": "./src/swagger-docs-schema.ts"
+    "./swagger-docs-schema": "./src/swagger-docs-schema.ts",
+    "./seed/demo": "./src/seed/demo.ts"
   },
   "private": true,
   "scripts": {

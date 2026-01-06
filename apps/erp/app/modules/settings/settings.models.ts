@@ -29,6 +29,16 @@ export const apiKeyValidator = z.object({
   name: z.string().min(1, { message: "Name is required" })
 });
 
+export const onboardingIndustryTypes = [
+  "robotics_oem",
+  "cnc_aerospace",
+  "metal_fabrication",
+  "automotive_precision",
+  "custom"
+] as const;
+
+export const addressValidator = z.object({});
+
 const company = {
   name: z.string().min(1, { message: "Name is required" }),
   taxId: zfd.text(z.string().optional()),
@@ -42,7 +52,12 @@ const company = {
   phone: zfd.text(z.string().optional()),
   fax: zfd.text(z.string().optional()),
   email: zfd.text(z.string().optional()),
-  website: zfd.text(z.string().optional())
+  website: zfd.text(z.string().optional()),
+  industryId: z.enum(onboardingIndustryTypes).optional().default("custom"),
+  customIndustryDescription: z.string().optional(),
+  selectedModules: zfd.repeatable(z.array(z.string()).optional()),
+  featureRequests: z.string().optional(),
+  seedDemoData: zfd.checkbox()
 };
 
 export const companyValidator = z.object(company);

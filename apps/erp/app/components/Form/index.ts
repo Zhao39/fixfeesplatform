@@ -27,7 +27,6 @@ import {
   TimePicker,
   Timezone
 } from "@carbon/form";
-
 import Abilities from "./Abilities";
 import Ability from "./Ability";
 import Account from "./Account";
@@ -56,6 +55,7 @@ import Part from "./Part";
 import PaymentTerm from "./PaymentTerm";
 import Process from "./Process";
 import Processes from "./Processes";
+import RadioGroup from "./RadioGroup";
 import Sequence from "./Sequence";
 import SequenceOrCustomId from "./SequenceOrCustomId";
 import Service from "./Service";
@@ -125,6 +125,7 @@ export {
   PhoneInput,
   Process,
   Processes,
+  RadioGroup,
   Radios,
   Select,
   SelectControlled,

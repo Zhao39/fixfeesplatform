@@ -37,6 +37,7 @@ import { useOnboarding } from "~/hooks";
 import { insertEmployeeJob } from "~/modules/people";
 import { getLocationsList, upsertLocation } from "~/modules/resources";
 import {
+  addressValidator,
   getCompanies,
   getCompany,
   insertCompany,
@@ -44,30 +45,99 @@ import {
   seedCompany,
   updateCompany
 } from "~/modules/settings";
+import {
+  clearOnboardingDraft,
+  getOnboardingDraft
+} from "~/services/onboarding-draft.server";
 
 export async function loader({ request }: ActionFunctionArgs) {
   const { client, companyId } = await requirePermissions(request, {});
 
   const company = await getCompany(client, companyId ?? 1);
+  const draft = await getOnboardingDraft(request);
 
   if (company.error || !company.data) {
     return {
-      company: null
+      company: null,
+      draft
     };
   }
 
-  return { company: company.data };
+  return { company: company.data, draft };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
   assertIsPost(request);
   const { client, userId } = await requirePermissions(request, {});
 
-  // there are no entries in the userToCompany table which
-  // dictates RLS for the company table
+  // Get draft data from previous steps
+  const draft = await getOnboardingDraft(request);
 
+  // Validate address fields separately
+  const formData = await request.formData();
+
+  const addressValidation = await validator(
+    onboardingCompanyValidator
+  ).validate(formData);
+
+  if (addressValidation.error) {
+    return validationError(addressValidation.error);
+  }
+
+  const { next: _companyNext, ...addressData } = addressValidation.data;
+
+  // Merge form data with draft data
+  const mergedFormData = new FormData();
+  formData.forEach((value, key) => {
+    mergedFormData.append(key, value);
+  });
+
+  // Add draft data to form data if not already present
+  if (draft?.industry) {
+    if (!mergedFormData.has("industryId")) {
+      mergedFormData.append("industryId", draft.industry.industryId);
+    }
+    if (
+      draft.industry.customIndustryDescription &&
+      !mergedFormData.has("customIndustryDescription")
+    ) {
+      mergedFormData.append(
+        "customIndustryDescription",
+        draft.industry.customIndustryDescription
+      );
+    }
+  }
+
+  if (draft?.modules) {
+    const selectedModules = [
+      draft.modules.isSalesEnabled ? "Sales" : null,
+      draft.modules.isPurchasingEnabled ? "Purchasing" : null,
+      draft.modules.isPartsEnabled ? "Parts" : null,
+      draft.modules.isInventoryEnabled ? "Inventory" : null
+    ].filter(Boolean) as string[];
+
+    if (selectedModules.length > 0 && !mergedFormData.has("selectedModules")) {
+      selectedModules.forEach((module) => {
+        mergedFormData.append("selectedModules", module);
+      });
+    }
+
+    if (
+      draft.modules.featureRequests &&
+      !mergedFormData.has("featureRequests")
+    ) {
+      mergedFormData.append("featureRequests", draft.modules.featureRequests);
+    }
+
+    // seedDemoData uses zfd.checkbox() - append "on" if true, omit if false
+    if (draft.modules.seedDemoData && !mergedFormData.has("seedDemoData")) {
+      mergedFormData.append("seedDemoData", "on");
+    }
+  }
+
+  // Validate the merged form data with the full company validator
   const validation = await validator(onboardingCompanyValidator).validate(
-    await request.formData()
+    mergedFormData
   );
 
   if (validation.error) {
@@ -78,6 +148,14 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const { next, ...d } = validation.data;
 
+  // Merge seedDemoData from draft if not already in validation data
+  if (
+    draft?.modules?.seedDemoData !== undefined &&
+    d.seedDemoData === undefined
+  ) {
+    d.seedDemoData = draft.modules.seedDemoData;
+  }
+
   let companyId: string | undefined;
 
   const companies = await getCompanies(client, userId);
@@ -87,6 +165,8 @@ export async function action({ request }: ActionFunctionArgs) {
   const location = locations?.data?.[0];
 
   if (company && location) {
+    // Extract only location fields (address fields + name)
+
     const [companyUpdate, locationUpdate] = await Promise.all([
       updateCompany(serviceRole, company.id!, {
         ...d,
@@ -94,7 +174,7 @@ export async function action({ request }: ActionFunctionArgs) {
       }),
       upsertLocation(serviceRole, {
         ...location,
-        ...d,
+        ...addressData,
         timezone: getLocalTimeZone(),
         updatedBy: userId
       })
@@ -138,8 +218,42 @@ export async function action({ request }: ActionFunctionArgs) {
       });
     }
 
-    // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
-    const { baseCurrencyCode, website, ...locationData } = d;
+    // Trigger demo data seeding if requested
+    const companyData = await getCompany(serviceRole, companyId);
+    if (
+      companyData.data?.seedDemoData &&
+      companyData.data?.industryId &&
+      companyData.data?.selectedModules
+    ) {
+      // Use the selected industry, or default to cnc_aerospace if custom
+      const industryId =
+        companyData.data.industryId === "custom"
+          ? "cnc_aerospace"
+          : companyData.data.industryId;
+
+      // If seedDemoData is true, seed all core modules regardless of selection
+      const modules = companyData.data.seedDemoData
+        ? ["Sales", "Purchasing", "Parts", "Inventory"]
+        : companyData.data.selectedModules;
+
+      tasks.trigger("seed-demo-data", {
+        companyId,
+        industryId,
+        modules,
+        userId
+      });
+    }
+
+    // Extract only location fields (address fields + name)
+    // Exclude company-only fields
+    const locationData = {
+      addressLine1: d.addressLine1,
+      addressLine2: d.addressLine2,
+      city: d.city,
+      stateProvince: d.stateProvince,
+      postalCode: d.postalCode,
+      countryCode: d.countryCode
+    };
 
     // TODO: move all of this to transaction
     const [locationInsert] = await Promise.all([
@@ -178,33 +292,39 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const sessionCookie = await updateCompanySession(request, companyId!);
   const companyIdCookie = setCompanyId(companyId!);
+  const clearDraftCookie = await clearOnboardingDraft(request);
 
   throw redirect(next, {
     headers: [
       ["Set-Cookie", sessionCookie],
-      ["Set-Cookie", companyIdCookie]
+      ["Set-Cookie", companyIdCookie],
+      ["Set-Cookie", clearDraftCookie]
     ]
   });
 }
 
 export default function OnboardingCompany() {
-  const { company } = useLoaderData<typeof loader>();
+  const { company, draft } = useLoaderData<typeof loader>();
   const { next, previous } = useOnboarding();
 
   const initialValues = {
-    name: company?.name ?? "",
-    addressLine1: company?.addressLine1 ?? "",
-    city: company?.city ?? "",
-    stateProvince: company?.stateProvince ?? "",
-    postalCode: company?.postalCode ?? "",
-    countryCode: company?.countryCode ?? "US",
-    baseCurrencyCode: company?.baseCurrencyCode ?? "USD"
+    name: company?.name ?? draft?.company?.name ?? "",
+    addressLine1: company?.addressLine1 ?? draft?.company?.addressLine1 ?? "",
+    addressLine2: company?.addressLine2 ?? draft?.company?.addressLine2 ?? "",
+    city: company?.city ?? draft?.company?.city ?? "",
+    stateProvince:
+      company?.stateProvince ?? draft?.company?.stateProvince ?? "",
+    postalCode: company?.postalCode ?? draft?.company?.postalCode ?? "",
+    countryCode: company?.countryCode ?? draft?.company?.countryCode ?? "US",
+    baseCurrencyCode:
+      company?.baseCurrencyCode ?? draft?.company?.baseCurrencyCode ?? "USD",
+    website: company?.website ?? draft?.company?.website ?? ""
   };
 
   return (
     <Card className="max-w-lg">
       <ValidatedForm
-        validator={onboardingCompanyValidator}
+        validator={addressValidator}
         defaultValues={initialValues}
         method="post"
       >

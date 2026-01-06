@@ -1981,10 +1981,13 @@ export type Database = {
           city: string | null
           countryCode: string | null
           createdAt: string
+          customIndustryDescription: string | null
           email: string | null
           externalId: Json | null
           fax: string | null
+          featureRequests: string | null
           id: string
+          industryId: Database["public"]["Enums"]["onboardingIndustry"] | null
           logoDark: string | null
           logoDarkIcon: string | null
           logoLight: string | null
@@ -1993,6 +1996,8 @@ export type Database = {
           ownerId: string | null
           phone: string | null
           postalCode: string | null
+          seedDemoData: boolean
+          selectedModules: string[] | null
           slackChannel: string | null
           stateProvince: string | null
           suggestionNotificationGroup: string[]
@@ -2007,10 +2012,13 @@ export type Database = {
           city?: string | null
           countryCode?: string | null
           createdAt?: string
+          customIndustryDescription?: string | null
           email?: string | null
           externalId?: Json | null
           fax?: string | null
+          featureRequests?: string | null
           id?: string
+          industryId?: Database["public"]["Enums"]["onboardingIndustry"] | null
           logoDark?: string | null
           logoDarkIcon?: string | null
           logoLight?: string | null
@@ -2019,6 +2027,8 @@ export type Database = {
           ownerId?: string | null
           phone?: string | null
           postalCode?: string | null
+          seedDemoData?: boolean
+          selectedModules?: string[] | null
           slackChannel?: string | null
           stateProvince?: string | null
           suggestionNotificationGroup?: string[]
@@ -2033,10 +2043,13 @@ export type Database = {
           city?: string | null
           countryCode?: string | null
           createdAt?: string
+          customIndustryDescription?: string | null
           email?: string | null
           externalId?: Json | null
           fax?: string | null
+          featureRequests?: string | null
           id?: string
+          industryId?: Database["public"]["Enums"]["onboardingIndustry"] | null
           logoDark?: string | null
           logoDarkIcon?: string | null
           logoLight?: string | null
@@ -2045,6 +2058,8 @@ export type Database = {
           ownerId?: string | null
           phone?: string | null
           postalCode?: string | null
+          seedDemoData?: boolean
+          selectedModules?: string[] | null
           slackChannel?: string | null
           stateProvince?: string | null
           suggestionNotificationGroup?: string[]
@@ -3611,11 +3626,15 @@ export type Database = {
           customerStatusId: string | null
           customerTypeId: string | null
           customFields: Json | null
+          demoTemplateRowId: string | null
+          demoTemplateSetId: string | null
+          demoTouchedAt: string | null
           embedding: unknown
           externalId: Json | null
           fax: string | null
           id: string
           invoicingContactId: string | null
+          isDemo: boolean
           logo: string | null
           name: string
           phone: string | null
@@ -3637,11 +3656,15 @@ export type Database = {
           customerStatusId?: string | null
           customerTypeId?: string | null
           customFields?: Json | null
+          demoTemplateRowId?: string | null
+          demoTemplateSetId?: string | null
+          demoTouchedAt?: string | null
           embedding?: unknown
           externalId?: Json | null
           fax?: string | null
           id?: string
           invoicingContactId?: string | null
+          isDemo?: boolean
           logo?: string | null
           name: string
           phone?: string | null
@@ -3663,11 +3686,15 @@ export type Database = {
           customerStatusId?: string | null
           customerTypeId?: string | null
           customFields?: Json | null
+          demoTemplateRowId?: string | null
+          demoTemplateSetId?: string | null
+          demoTouchedAt?: string | null
           embedding?: unknown
           externalId?: Json | null
           fax?: string | null
           id?: string
           invoicingContactId?: string | null
+          isDemo?: boolean
           logo?: string | null
           name?: string
           phone?: string | null
@@ -3832,6 +3859,13 @@ export type Database = {
             columns: ["customerTypeId"]
             isOneToOne: false
             referencedRelation: "customerType"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "customer_demoTemplateSetId_fkey"
+            columns: ["demoTemplateSetId"]
+            isOneToOne: false
+            referencedRelation: "templateSet"
             referencedColumns: ["id"]
           },
           {
@@ -5625,6 +5659,248 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
+          },
+        ]
+      }
+      demoModule: {
+        Row: {
+          description: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          description?: string | null
+          id: string
+          name: string
+        }
+        Update: {
+          description?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      demoSeedRun: {
+        Row: {
+          companyId: string
+          createdAt: string
+          error: string | null
+          finishedAt: string | null
+          id: string
+          industryId: string
+          requestedBy: string | null
+          requestedModules: string[]
+          startedAt: string | null
+          status: string
+        }
+        Insert: {
+          companyId: string
+          createdAt?: string
+          error?: string | null
+          finishedAt?: string | null
+          id?: string
+          industryId: string
+          requestedBy?: string | null
+          requestedModules: string[]
+          startedAt?: string | null
+          status?: string
+        }
+        Update: {
+          companyId?: string
+          createdAt?: string
+          error?: string | null
+          finishedAt?: string | null
+          id?: string
+          industryId?: string
+          requestedBy?: string | null
+          requestedModules?: string[]
+          startedAt?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "demoSeedRun_companyId_fkey"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "demoSeedRun_companyId_fkey"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "demoSeedRun_companyId_fkey"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "demoSeedRun_companyId_fkey"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "demoSeedRun_industryId_fkey"
+            columns: ["industryId"]
+            isOneToOne: false
+            referencedRelation: "industry"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "demoSeedRun_requestedBy_fkey"
+            columns: ["requestedBy"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "demoSeedRun_requestedBy_fkey"
+            columns: ["requestedBy"]
+            isOneToOne: false
+            referencedRelation: "employeesAcrossCompanies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "demoSeedRun_requestedBy_fkey"
+            columns: ["requestedBy"]
+            isOneToOne: false
+            referencedRelation: "employeeSummary"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "demoSeedRun_requestedBy_fkey"
+            columns: ["requestedBy"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "demoSeedRun_requestedBy_fkey"
+            columns: ["requestedBy"]
+            isOneToOne: false
+            referencedRelation: "userDefaults"
+            referencedColumns: ["userId"]
+          },
+        ]
+      }
+      demoSeedState: {
+        Row: {
+          companyId: string
+          createdAt: string
+          lastError: string | null
+          lockedAt: string | null
+          moduleId: string
+          seededAt: string | null
+          seededBy: string | null
+          status: string
+          templateSetId: string
+        }
+        Insert: {
+          companyId: string
+          createdAt?: string
+          lastError?: string | null
+          lockedAt?: string | null
+          moduleId: string
+          seededAt?: string | null
+          seededBy?: string | null
+          status?: string
+          templateSetId: string
+        }
+        Update: {
+          companyId?: string
+          createdAt?: string
+          lastError?: string | null
+          lockedAt?: string | null
+          moduleId?: string
+          seededAt?: string | null
+          seededBy?: string | null
+          status?: string
+          templateSetId?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "demoSeedState_companyId_fkey"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "demoSeedState_companyId_fkey"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "demoSeedState_companyId_fkey"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "demoSeedState_companyId_fkey"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "demoSeedState_moduleId_fkey"
+            columns: ["moduleId"]
+            isOneToOne: false
+            referencedRelation: "demoModule"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "demoSeedState_seededBy_fkey"
+            columns: ["seededBy"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "demoSeedState_seededBy_fkey"
+            columns: ["seededBy"]
+            isOneToOne: false
+            referencedRelation: "employeesAcrossCompanies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "demoSeedState_seededBy_fkey"
+            columns: ["seededBy"]
+            isOneToOne: false
+            referencedRelation: "employeeSummary"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "demoSeedState_seededBy_fkey"
+            columns: ["seededBy"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "demoSeedState_seededBy_fkey"
+            columns: ["seededBy"]
+            isOneToOne: false
+            referencedRelation: "userDefaults"
+            referencedColumns: ["userId"]
+          },
+          {
+            foreignKeyName: "demoSeedState_templateSetId_fkey"
+            columns: ["templateSetId"]
+            isOneToOne: false
+            referencedRelation: "templateSet"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -8049,6 +8325,24 @@ export type Database = {
           },
         ]
       }
+      industry: {
+        Row: {
+          description: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          description?: string | null
+          id: string
+          name: string
+        }
+        Update: {
+          description?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       integration: {
         Row: {
           id: string
@@ -8172,10 +8466,14 @@ export type Database = {
           createdAt: string
           createdBy: string
           defaultMethodType: Database["public"]["Enums"]["methodType"] | null
+          demoTemplateRowId: string | null
+          demoTemplateSetId: string | null
+          demoTouchedAt: string | null
           description: string | null
           embedding: unknown
           externalId: Json | null
           id: string
+          isDemo: boolean
           itemTrackingType: Database["public"]["Enums"]["itemTrackingType"]
           modelUploadId: string | null
           name: string
@@ -8198,10 +8496,14 @@ export type Database = {
           createdAt?: string
           createdBy: string
           defaultMethodType?: Database["public"]["Enums"]["methodType"] | null
+          demoTemplateRowId?: string | null
+          demoTemplateSetId?: string | null
+          demoTouchedAt?: string | null
           description?: string | null
           embedding?: unknown
           externalId?: Json | null
           id?: string
+          isDemo?: boolean
           itemTrackingType: Database["public"]["Enums"]["itemTrackingType"]
           modelUploadId?: string | null
           name: string
@@ -8224,10 +8526,14 @@ export type Database = {
           createdAt?: string
           createdBy?: string
           defaultMethodType?: Database["public"]["Enums"]["methodType"] | null
+          demoTemplateRowId?: string | null
+          demoTemplateSetId?: string | null
+          demoTouchedAt?: string | null
           description?: string | null
           embedding?: unknown
           externalId?: Json | null
           id?: string
+          isDemo?: boolean
           itemTrackingType?: Database["public"]["Enums"]["itemTrackingType"]
           modelUploadId?: string | null
           name?: string
@@ -8341,6 +8647,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
+          },
+          {
+            foreignKeyName: "item_demoTemplateSetId_fkey"
+            columns: ["demoTemplateSetId"]
+            isOneToOne: false
+            referencedRelation: "templateSet"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "item_modelUploadId_fkey"
@@ -19986,9 +20299,13 @@ export type Database = {
           createdAt: string
           createdBy: string
           customFields: Json | null
+          demoTemplateRowId: string | null
+          demoTemplateSetId: string | null
+          demoTouchedAt: string | null
           externalId: Json | null
           fromDate: string | null
           id: string
+          isDemo: boolean
           tags: string[] | null
           toDate: string | null
           updatedAt: string | null
@@ -20001,9 +20318,13 @@ export type Database = {
           createdAt?: string
           createdBy: string
           customFields?: Json | null
+          demoTemplateRowId?: string | null
+          demoTemplateSetId?: string | null
+          demoTouchedAt?: string | null
           externalId?: Json | null
           fromDate?: string | null
           id?: string
+          isDemo?: boolean
           tags?: string[] | null
           toDate?: string | null
           updatedAt?: string | null
@@ -20016,9 +20337,13 @@ export type Database = {
           createdAt?: string
           createdBy?: string
           customFields?: Json | null
+          demoTemplateRowId?: string | null
+          demoTemplateSetId?: string | null
+          demoTouchedAt?: string | null
           externalId?: Json | null
           fromDate?: string | null
           id?: string
+          isDemo?: boolean
           tags?: string[] | null
           toDate?: string | null
           updatedAt?: string | null
@@ -20122,6 +20447,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
+          },
+          {
+            foreignKeyName: "part_demoTemplateSetId_fkey"
+            columns: ["demoTemplateSetId"]
+            isOneToOne: false
+            referencedRelation: "templateSet"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "part_updatedBy_fkey"
@@ -23509,12 +23841,16 @@ export type Database = {
           createdBy: string
           currencyCode: string | null
           customFields: Json | null
+          demoTemplateRowId: string | null
+          demoTemplateSetId: string | null
+          demoTouchedAt: string | null
           exchangeRate: number | null
           exchangeRateUpdatedAt: string | null
           externalId: Json | null
           externalNotes: Json | null
           id: string
           internalNotes: Json | null
+          isDemo: boolean
           jobId: string | null
           jobReadableId: string | null
           orderDate: string | null
@@ -23540,12 +23876,16 @@ export type Database = {
           createdBy: string
           currencyCode?: string | null
           customFields?: Json | null
+          demoTemplateRowId?: string | null
+          demoTemplateSetId?: string | null
+          demoTouchedAt?: string | null
           exchangeRate?: number | null
           exchangeRateUpdatedAt?: string | null
           externalId?: Json | null
           externalNotes?: Json | null
           id?: string
           internalNotes?: Json | null
+          isDemo?: boolean
           jobId?: string | null
           jobReadableId?: string | null
           orderDate?: string | null
@@ -23571,12 +23911,16 @@ export type Database = {
           createdBy?: string
           currencyCode?: string | null
           customFields?: Json | null
+          demoTemplateRowId?: string | null
+          demoTemplateSetId?: string | null
+          demoTouchedAt?: string | null
           exchangeRate?: number | null
           exchangeRateUpdatedAt?: string | null
           externalId?: Json | null
           externalNotes?: Json | null
           id?: string
           internalNotes?: Json | null
+          isDemo?: boolean
           jobId?: string | null
           jobReadableId?: string | null
           orderDate?: string | null
@@ -23733,6 +24077,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "currencyCode"
             referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "purchaseOrder_demoTemplateSetId_fkey"
+            columns: ["demoTemplateSetId"]
+            isOneToOne: false
+            referencedRelation: "templateSet"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "purchaseOrder_jobId_fkey"
@@ -24098,6 +24449,9 @@ export type Database = {
           createdAt: string
           createdBy: string
           customFields: Json | null
+          demoTemplateRowId: string | null
+          demoTemplateSetId: string | null
+          demoTouchedAt: string | null
           description: string | null
           exchangeRate: number
           extendedPrice: number | null
@@ -24106,6 +24460,7 @@ export type Database = {
           internalNotes: Json | null
           inventoryUnitOfMeasureCode: string | null
           invoicedComplete: boolean
+          isDemo: boolean
           itemId: string | null
           jobId: string | null
           jobOperationId: string | null
@@ -24145,6 +24500,9 @@ export type Database = {
           createdAt?: string
           createdBy: string
           customFields?: Json | null
+          demoTemplateRowId?: string | null
+          demoTemplateSetId?: string | null
+          demoTouchedAt?: string | null
           description?: string | null
           exchangeRate?: number
           extendedPrice?: number | null
@@ -24153,6 +24511,7 @@ export type Database = {
           internalNotes?: Json | null
           inventoryUnitOfMeasureCode?: string | null
           invoicedComplete?: boolean
+          isDemo?: boolean
           itemId?: string | null
           jobId?: string | null
           jobOperationId?: string | null
@@ -24192,6 +24551,9 @@ export type Database = {
           createdAt?: string
           createdBy?: string
           customFields?: Json | null
+          demoTemplateRowId?: string | null
+          demoTemplateSetId?: string | null
+          demoTouchedAt?: string | null
           description?: string | null
           exchangeRate?: number
           extendedPrice?: number | null
@@ -24200,6 +24562,7 @@ export type Database = {
           internalNotes?: Json | null
           inventoryUnitOfMeasureCode?: string | null
           invoicedComplete?: boolean
+          isDemo?: boolean
           itemId?: string | null
           jobId?: string | null
           jobOperationId?: string | null
@@ -24280,6 +24643,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
+          },
+          {
+            foreignKeyName: "purchaseOrderLine_demoTemplateSetId_fkey"
+            columns: ["demoTemplateSetId"]
+            isOneToOne: false
+            referencedRelation: "templateSet"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "purchaseOrderLine_inventoryUnitOfMeasureCode_fkey"
@@ -25312,6 +25682,9 @@ export type Database = {
           customerLocationId: string | null
           customerReference: string | null
           customFields: Json | null
+          demoTemplateRowId: string | null
+          demoTemplateSetId: string | null
+          demoTouchedAt: string | null
           digitalQuoteAcceptedBy: string | null
           digitalQuoteAcceptedByEmail: string | null
           digitalQuoteRejectedBy: string | null
@@ -25326,6 +25699,7 @@ export type Database = {
           externalNotes: Json | null
           id: string
           internalNotes: Json | null
+          isDemo: boolean
           locationId: string | null
           opportunityId: string | null
           quoteId: string
@@ -25349,6 +25723,9 @@ export type Database = {
           customerLocationId?: string | null
           customerReference?: string | null
           customFields?: Json | null
+          demoTemplateRowId?: string | null
+          demoTemplateSetId?: string | null
+          demoTouchedAt?: string | null
           digitalQuoteAcceptedBy?: string | null
           digitalQuoteAcceptedByEmail?: string | null
           digitalQuoteRejectedBy?: string | null
@@ -25363,6 +25740,7 @@ export type Database = {
           externalNotes?: Json | null
           id?: string
           internalNotes?: Json | null
+          isDemo?: boolean
           locationId?: string | null
           opportunityId?: string | null
           quoteId: string
@@ -25386,6 +25764,9 @@ export type Database = {
           customerLocationId?: string | null
           customerReference?: string | null
           customFields?: Json | null
+          demoTemplateRowId?: string | null
+          demoTemplateSetId?: string | null
+          demoTouchedAt?: string | null
           digitalQuoteAcceptedBy?: string | null
           digitalQuoteAcceptedByEmail?: string | null
           digitalQuoteRejectedBy?: string | null
@@ -25400,6 +25781,7 @@ export type Database = {
           externalNotes?: Json | null
           id?: string
           internalNotes?: Json | null
+          isDemo?: boolean
           locationId?: string | null
           opportunityId?: string | null
           quoteId?: string
@@ -25556,6 +25938,13 @@ export type Database = {
             columns: ["customerLocationId"]
             isOneToOne: false
             referencedRelation: "customerLocation"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quote_demoTemplateSetId_fkey"
+            columns: ["demoTemplateSetId"]
+            isOneToOne: false
+            referencedRelation: "templateSet"
             referencedColumns: ["id"]
           },
           {
@@ -25767,11 +26156,15 @@ export type Database = {
           customerPartId: string | null
           customerPartRevision: string | null
           customFields: Json | null
+          demoTemplateRowId: string | null
+          demoTemplateSetId: string | null
+          demoTouchedAt: string | null
           description: string
           estimatorId: string | null
           externalNotes: Json | null
           id: string
           internalNotes: Json | null
+          isDemo: boolean
           itemId: string
           itemType: string
           locationId: string | null
@@ -25797,11 +26190,15 @@ export type Database = {
           customerPartId?: string | null
           customerPartRevision?: string | null
           customFields?: Json | null
+          demoTemplateRowId?: string | null
+          demoTemplateSetId?: string | null
+          demoTouchedAt?: string | null
           description: string
           estimatorId?: string | null
           externalNotes?: Json | null
           id?: string
           internalNotes?: Json | null
+          isDemo?: boolean
           itemId: string
           itemType?: string
           locationId?: string | null
@@ -25827,11 +26224,15 @@ export type Database = {
           customerPartId?: string | null
           customerPartRevision?: string | null
           customFields?: Json | null
+          demoTemplateRowId?: string | null
+          demoTemplateSetId?: string | null
+          demoTouchedAt?: string | null
           description?: string
           estimatorId?: string | null
           externalNotes?: Json | null
           id?: string
           internalNotes?: Json | null
+          isDemo?: boolean
           itemId?: string
           itemType?: string
           locationId?: string | null
@@ -25912,6 +26313,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
+          },
+          {
+            foreignKeyName: "quoteLine_demoTemplateSetId_fkey"
+            columns: ["demoTemplateSetId"]
+            isOneToOne: false
+            referencedRelation: "templateSet"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "quoteLine_estimatorId_fkey"
@@ -33759,11 +34167,15 @@ export type Database = {
           createdBy: string | null
           currencyCode: string | null
           customFields: Json | null
+          demoTemplateRowId: string | null
+          demoTemplateSetId: string | null
+          demoTouchedAt: string | null
           embedding: unknown
           externalId: Json | null
           fax: string | null
           id: string
           invoicingContactId: string | null
+          isDemo: boolean
           logo: string | null
           name: string
           phone: string | null
@@ -33785,11 +34197,15 @@ export type Database = {
           createdBy?: string | null
           currencyCode?: string | null
           customFields?: Json | null
+          demoTemplateRowId?: string | null
+          demoTemplateSetId?: string | null
+          demoTouchedAt?: string | null
           embedding?: unknown
           externalId?: Json | null
           fax?: string | null
           id?: string
           invoicingContactId?: string | null
+          isDemo?: boolean
           logo?: string | null
           name: string
           phone?: string | null
@@ -33811,11 +34227,15 @@ export type Database = {
           createdBy?: string | null
           currencyCode?: string | null
           customFields?: Json | null
+          demoTemplateRowId?: string | null
+          demoTemplateSetId?: string | null
+          demoTouchedAt?: string | null
           embedding?: unknown
           externalId?: Json | null
           fax?: string | null
           id?: string
           invoicingContactId?: string | null
+          isDemo?: boolean
           logo?: string | null
           name?: string
           phone?: string | null
@@ -33969,6 +34389,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "currencyCode"
             referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "supplier_demoTemplateSetId_fkey"
+            columns: ["demoTemplateSetId"]
+            isOneToOne: false
+            referencedRelation: "templateSet"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "supplier_invoicingContactId_fkey"
@@ -36994,6 +37421,60 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
+          },
+        ]
+      }
+      templateSet: {
+        Row: {
+          createdAt: string
+          createdBy: string | null
+          description: string | null
+          id: string
+          industryId: string
+          isSystem: boolean
+          key: string
+          moduleId: string
+          name: string
+          version: number
+        }
+        Insert: {
+          createdAt?: string
+          createdBy?: string | null
+          description?: string | null
+          id?: string
+          industryId: string
+          isSystem?: boolean
+          key: string
+          moduleId: string
+          name: string
+          version?: number
+        }
+        Update: {
+          createdAt?: string
+          createdBy?: string | null
+          description?: string | null
+          id?: string
+          industryId?: string
+          isSystem?: boolean
+          key?: string
+          moduleId?: string
+          name?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "templateSet_industryId_fkey"
+            columns: ["industryId"]
+            isOneToOne: false
+            referencedRelation: "industry"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "templateSet_moduleId_fkey"
+            columns: ["moduleId"]
+            isOneToOne: false
+            referencedRelation: "demoModule"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -41830,6 +42311,55 @@ export type Database = {
         }
         Relationships: []
       }
+      demoSeedDashboard: {
+        Row: {
+          companyId: string | null
+          lastError: string | null
+          lockedAt: string | null
+          moduleId: string | null
+          seededAt: string | null
+          status: string | null
+          templateKey: string | null
+          version: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "demoSeedState_companyId_fkey"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "demoSeedState_companyId_fkey"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "demoSeedState_companyId_fkey"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "demoSeedState_companyId_fkey"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "demoSeedState_moduleId_fkey"
+            columns: ["moduleId"]
+            isOneToOne: false
+            referencedRelation: "demoModule"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       documentExtensions: {
         Row: {
           extension: string | null
@@ -45548,14 +46078,14 @@ export type Database = {
           },
           {
             foreignKeyName: "partner_id_fkey"
-            columns: ["id"]
+            columns: ["supplierLocationId"]
             isOneToOne: false
             referencedRelation: "supplierLocation"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "partner_id_fkey"
-            columns: ["supplierLocationId"]
+            columns: ["id"]
             isOneToOne: false
             referencedRelation: "supplierLocation"
             referencedColumns: ["id"]
@@ -52381,6 +52911,17 @@ export type Database = {
           },
         ]
       }
+      templateSchemaMismatches: {
+        Row: {
+          column_name: unknown
+          live_nullable: string | null
+          live_type: string | null
+          table_name: unknown
+          tpl_nullable: string | null
+          tpl_type: string | null
+        }
+        Relationships: []
+      }
       tools: {
         Row: {
           active: boolean | null
@@ -52970,6 +53511,7 @@ export type Database = {
     }
     Functions: {
       _xid_machine_id: { Args: never; Returns: number }
+      assert_no_template_schema_mismatches: { Args: never; Returns: undefined }
       check_operation_dependencies: {
         Args: { operation_id: string }
         Returns: boolean
@@ -53020,9 +53562,9 @@ export type Database = {
           rfq_readable_id: string
         }[]
       }
-      drop_company_search_index: {
-        Args: { p_company_id: string }
-        Returns: undefined
+      demo_id: {
+        Args: { p_company_id: string; p_template_row_id: string }
+        Returns: string
       }
       employee_requires_period: {
         Args: { employee_start_date: string; period: string }
@@ -53216,6 +53758,25 @@ export type Database = {
       get_customer_ids_with_customer_permission: {
         Args: { permission: string }
         Returns: string[]
+      }
+      get_demo_statistics: {
+        Args: { p_company_id: string }
+        Returns: {
+          demoCount: number
+          entity: string
+          totalCount: number
+          touchedCount: number
+          untouchedCount: number
+        }[]
+      }
+      get_demo_status: {
+        Args: { p_company_id: string }
+        Returns: {
+          moduleId: string
+          seededAt: string
+          status: string
+          templateKey: string
+        }[]
       }
       get_direct_ancestors_of_tracked_entity: {
         Args: { p_tracked_entity_id: string }
@@ -54350,6 +54911,7 @@ export type Database = {
         Args: { claim: string; company: string }
         Returns: boolean
       }
+      has_demo_data: { Args: { p_company_id: string }; Returns: boolean }
       has_role: {
         Args: { company: string; required_role: string }
         Returns: boolean
@@ -54411,27 +54973,14 @@ export type Database = {
         Args: { alphabet: string; mask: number; size: number; step: number }
         Returns: string
       }
-      populate_company_search_index: {
-        Args: { p_company_id: string }
-        Returns: undefined
-      }
-      search_company_index: {
+      seed_demo: {
         Args: {
           p_company_id: string
-          p_entity_types: string[]
-          p_limit?: number
-          p_query: string
+          p_industry_id: string
+          p_module_ids: string[]
+          p_seeded_by: string
         }
-        Returns: {
-          description: string
-          entityId: string
-          entityType: string
-          id: number
-          link: string
-          metadata: Json
-          tags: string[]
-          title: string
-        }[]
+        Returns: undefined
       }
       suppliers_search: {
         Args: {
@@ -54748,6 +55297,12 @@ export type Database = {
         | "Completed"
         | "Skipped"
       oeeImpact: "Down" | "Planned" | "Impact" | "No Impact"
+      onboardingIndustry:
+        | "robotics_oem"
+        | "cnc_aerospace"
+        | "metal_fabrication"
+        | "automotive_precision"
+        | "custom"
       operationType: "Inside" | "Outside"
       payableLineType:
         | "Comment"
@@ -55880,6 +56435,13 @@ export const Constants = {
         "Skipped",
       ],
       oeeImpact: ["Down", "Planned", "Impact", "No Impact"],
+      onboardingIndustry: [
+        "robotics_oem",
+        "cnc_aerospace",
+        "metal_fabrication",
+        "automotive_precision",
+        "custom",
+      ],
       operationType: ["Inside", "Outside"],
       payableLineType: [
         "Comment",
