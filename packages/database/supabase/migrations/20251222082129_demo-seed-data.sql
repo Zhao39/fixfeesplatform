@@ -15,7 +15,7 @@ VALUES
 ON CONFLICT ("key") DO NOTHING;
 
 -- Template Customers
-INSERT INTO demo_templates.customer ("templateSetId", "templateRowId", "name", "customerTypeId", "customerStatusId", "taxId")
+INSERT INTO demo_templates."customer" ("templateSetId", "templateRowId", "name", "customerTypeId", "customerStatusId", "taxId")
 VALUES
   ('robotics_oem_sales_v1', 'cust_001', 'SmartFactory Automation', NULL, NULL, '45-1234567'),
   ('robotics_oem_sales_v1', 'cust_002', 'Global Logistics Corp', NULL, NULL, '78-9876543'),
@@ -23,7 +23,7 @@ VALUES
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- Template Items
-INSERT INTO demo_templates.item ("templateSetId", "templateRowId", "readableId", "name", "description", "type", "itemTrackingType", "replenishmentSystem", "unitOfMeasureCode", "active")
+INSERT INTO demo_templates."item" ("templateSetId", "templateRowId", "readableId", "name", "description", "type", "itemTrackingType", "replenishmentSystem", "unitOfMeasureCode", "active")
 VALUES
   ('robotics_oem_sales_v1', 'item_001', 'HUM-R1', 'HumanoBot R1', 'Entry-level humanoid robot for warehouse automation', 'Part', 'Inventory', 'Make', 'EA', TRUE),
   ('robotics_oem_sales_v1', 'item_002', 'HUM-R2-PRO', 'HumanoBot R2 Pro', 'Advanced humanoid robot with AI vision system', 'Part', 'Inventory', 'Make', 'EA', TRUE),
@@ -33,7 +33,7 @@ VALUES
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- Template Quotes
-INSERT INTO demo_templates.quote ("templateSetId", "templateRowId", "quoteId", "tplCustomerId", "status", "expirationDate", "customerReference")
+INSERT INTO demo_templates."quote" ("templateSetId", "templateRowId", "quoteId", "tplCustomerId", "status", "expirationDate", "customerReference")
 VALUES
   ('robotics_oem_sales_v1', 'quote_001', 'Q-2025-001', 'cust_001', 'Draft', CURRENT_DATE + INTERVAL '45 days', 'SMART-WAREHOUSE-2025'),
   ('robotics_oem_sales_v1', 'quote_002', 'Q-2025-002', 'cust_002', 'Draft', CURRENT_DATE + INTERVAL '45 days', 'LOG-AUTO-456'),
@@ -41,7 +41,7 @@ VALUES
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- Template Quote Lines
-INSERT INTO demo_templates.quoteLine ("templateSetId", "templateRowId", "tplQuoteId", "tplItemId", "description", "quantity", "unitPrice")
+INSERT INTO demo_templates."quoteLine" ("templateSetId", "templateRowId", "tplQuoteId", "tplItemId", "description", "quantity", "unitPrice")
 VALUES
   ('robotics_oem_sales_v1', 'qline_001', 'quote_001', 'item_001', 'HumanoBot R1 - Standard Config', 5, 85000.00),
   ('robotics_oem_sales_v1', 'qline_002', 'quote_001', 'item_004', 'Advanced Gripper Set', 10, 8500.00),
@@ -62,7 +62,7 @@ VALUES
 ON CONFLICT ("key") DO NOTHING;
 
 -- Template Customers
-INSERT INTO demo_templates.customer ("templateSetId", "templateRowId", "name", "customerTypeId", "customerStatusId", "taxId")
+INSERT INTO demo_templates."customer" ("templateSetId", "templateRowId", "name", "customerTypeId", "customerStatusId", "taxId")
 VALUES
   ('cnc_aerospace_sales_v1', 'cust_001', 'AeroSpace Dynamics', NULL, NULL, '12-3456789'),
   ('cnc_aerospace_sales_v1', 'cust_002', 'Satellite Systems Inc', NULL, NULL, '98-7654321'),
@@ -70,7 +70,7 @@ VALUES
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- Template Items
-INSERT INTO demo_templates.item ("templateSetId", "templateRowId", "readableId", "name", "description", "type", "itemTrackingType", "replenishmentSystem", "unitOfMeasureCode", "active")
+INSERT INTO demo_templates."item" ("templateSetId", "templateRowId", "readableId", "name", "description", "type", "itemTrackingType", "replenishmentSystem", "unitOfMeasureCode", "active")
 VALUES
   ('cnc_aerospace_sales_v1', 'item_001', 'ASP-BRK-7075', 'Aluminum 7075 Bracket', 'Aerospace-grade aluminum bracket with AS9100 cert', 'Part', 'Inventory', 'Make', 'EA', TRUE),
   ('cnc_aerospace_sales_v1', 'item_002', 'ASP-TI-HSG', 'Titanium Housing Assembly', 'Ti-6Al-4V housing for satellite components', 'Part', 'Inventory', 'Make', 'EA', TRUE),
@@ -80,7 +80,7 @@ VALUES
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- Template Quotes
-INSERT INTO demo_templates.quote ("templateSetId", "templateRowId", "quoteId", "tplCustomerId", "status", "expirationDate", "customerReference")
+INSERT INTO demo_templates."quote" ("templateSetId", "templateRowId", "quoteId", "tplCustomerId", "status", "expirationDate", "customerReference")
 VALUES
   ('cnc_aerospace_sales_v1', 'quote_001', 'Q-ASP-001', 'cust_001', 'Draft', CURRENT_DATE + INTERVAL '30 days', 'RFQ-AERO-2025-045'),
   ('cnc_aerospace_sales_v1', 'quote_002', 'Q-ASP-002', 'cust_002', 'Draft', CURRENT_DATE + INTERVAL '30 days', 'SAT-COMP-789'),
@@ -88,7 +88,7 @@ VALUES
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- Template Quote Lines
-INSERT INTO demo_templates.quoteLine ("templateSetId", "templateRowId", "tplQuoteId", "tplItemId", "description", "quantity", "unitPrice")
+INSERT INTO demo_templates."quoteLine" ("templateSetId", "templateRowId", "tplQuoteId", "tplItemId", "description", "quantity", "unitPrice")
 VALUES
   ('cnc_aerospace_sales_v1', 'qline_001', 'quote_001', 'item_001', 'Aluminum 7075 Bracket - AS9100 Certified', 250, 125.00),
   ('cnc_aerospace_sales_v1', 'qline_002', 'quote_001', 'item_004', 'Mounting Block Assembly', 250, 85.00),
@@ -107,7 +107,7 @@ VALUES
 ON CONFLICT ("key") DO NOTHING;
 
 -- Template Customers
-INSERT INTO demo_templates.customer ("templateSetId", "templateRowId", "name", "customerTypeId", "customerStatusId", "taxId")
+INSERT INTO demo_templates."customer" ("templateSetId", "templateRowId", "name", "customerTypeId", "customerStatusId", "taxId")
 VALUES
   ('metal_fab_sales_v1', 'cust_001', 'BuildRight Construction', NULL, NULL, '33-2468135'),
   ('metal_fab_sales_v1', 'cust_002', 'Industrial Steel Solutions', NULL, NULL, '44-1357924'),
@@ -115,7 +115,7 @@ VALUES
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- Template Items
-INSERT INTO demo_templates.item ("templateSetId", "templateRowId", "readableId", "name", "description", "type", "itemTrackingType", "replenishmentSystem", "unitOfMeasureCode", "active")
+INSERT INTO demo_templates."item" ("templateSetId", "templateRowId", "readableId", "name", "description", "type", "itemTrackingType", "replenishmentSystem", "unitOfMeasureCode", "active")
 VALUES
   ('metal_fab_sales_v1', 'item_001', 'TF-BEAM-W12', 'W12x26 Steel I-Beam', 'Structural steel I-beam, 20ft length', 'Part', 'Non-Inventory', 'Make', 'EA', TRUE),
   ('metal_fab_sales_v1', 'item_002', 'TF-TRUSS-CUST', 'Custom Steel Truss', 'Welded steel truss assembly per spec', 'Part', 'Non-Inventory', 'Make', 'EA', TRUE),
@@ -125,7 +125,7 @@ VALUES
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- Template Quotes
-INSERT INTO demo_templates.quote ("templateSetId", "templateRowId", "quoteId", "tplCustomerId", "status", "expirationDate", "customerReference")
+INSERT INTO demo_templates."quote" ("templateSetId", "templateRowId", "quoteId", "tplCustomerId", "status", "expirationDate", "customerReference")
 VALUES
   ('metal_fab_sales_v1', 'quote_001', 'Q-TF-001', 'cust_001', 'Draft', CURRENT_DATE + INTERVAL '30 days', 'BUILD-2025-789'),
   ('metal_fab_sales_v1', 'quote_002', 'Q-TF-002', 'cust_002', 'Draft', CURRENT_DATE + INTERVAL '30 days', 'IND-STEEL-456'),
@@ -133,7 +133,7 @@ VALUES
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- Template Quote Lines
-INSERT INTO demo_templates.quoteLine ("templateSetId", "templateRowId", "tplQuoteId", "tplItemId", "description", "quantity", "unitPrice")
+INSERT INTO demo_templates."quoteLine" ("templateSetId", "templateRowId", "tplQuoteId", "tplItemId", "description", "quantity", "unitPrice")
 VALUES
   ('metal_fab_sales_v1', 'qline_001', 'quote_001', 'item_001', 'W12x26 Steel I-Beam - 20ft', 50, 285.00),
   ('metal_fab_sales_v1', 'qline_002', 'quote_001', 'item_003', 'Steel Base Plate - Heavy Duty', 50, 125.00),
@@ -152,7 +152,7 @@ VALUES
 ON CONFLICT ("key") DO NOTHING;
 
 -- Template Customers
-INSERT INTO demo_templates.customer ("templateSetId", "templateRowId", "name", "customerTypeId", "customerStatusId", "taxId")
+INSERT INTO demo_templates."customer" ("templateSetId", "templateRowId", "name", "customerTypeId", "customerStatusId", "taxId")
 VALUES
   ('auto_precision_sales_v1', 'cust_001', 'Performance Racing Systems', NULL, NULL, '66-1122334'),
   ('auto_precision_sales_v1', 'cust_002', 'Velocity Motorsports', NULL, NULL, '77-4455667'),
@@ -160,7 +160,7 @@ VALUES
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- Template Items
-INSERT INTO demo_templates.item ("templateSetId", "templateRowId", "readableId", "name", "description", "type", "itemTrackingType", "replenishmentSystem", "unitOfMeasureCode", "active")
+INSERT INTO demo_templates."item" ("templateSetId", "templateRowId", "readableId", "name", "description", "type", "itemTrackingType", "replenishmentSystem", "unitOfMeasureCode", "active")
 VALUES
   ('auto_precision_sales_v1', 'item_001', 'APX-PISTON-HP', 'High-Performance Piston Set', 'Forged aluminum pistons for racing engines', 'Part', 'Inventory', 'Make', 'SET', TRUE),
   ('auto_precision_sales_v1', 'item_002', 'APX-CRANK-TI', 'Titanium Crankshaft', 'Precision-balanced titanium crankshaft', 'Part', 'Inventory', 'Make', 'EA', TRUE),
@@ -170,7 +170,7 @@ VALUES
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- Template Quotes
-INSERT INTO demo_templates.quote ("templateSetId", "templateRowId", "quoteId", "tplCustomerId", "status", "expirationDate", "customerReference")
+INSERT INTO demo_templates."quote" ("templateSetId", "templateRowId", "quoteId", "tplCustomerId", "status", "expirationDate", "customerReference")
 VALUES
   ('auto_precision_sales_v1', 'quote_001', 'Q-APX-001', 'cust_001', 'Draft', CURRENT_DATE + INTERVAL '30 days', 'RACE-ENG-2025'),
   ('auto_precision_sales_v1', 'quote_002', 'Q-APX-002', 'cust_002', 'Draft', CURRENT_DATE + INTERVAL '30 days', 'VEL-BUILD-789'),
@@ -178,7 +178,7 @@ VALUES
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- Template Quote Lines
-INSERT INTO demo_templates.quoteLine ("templateSetId", "templateRowId", "tplQuoteId", "tplItemId", "description", "quantity", "unitPrice")
+INSERT INTO demo_templates."quoteLine" ("templateSetId", "templateRowId", "tplQuoteId", "tplItemId", "description", "quantity", "unitPrice")
 VALUES
   ('auto_precision_sales_v1', 'qline_001', 'quote_001', 'item_001', 'High-Performance Piston Set - Racing Spec', 10, 2850.00),
   ('auto_precision_sales_v1', 'qline_002', 'quote_001', 'item_003', 'Stainless Valve Set - High Temp', 10, 1250.00),
@@ -221,7 +221,7 @@ VALUES
 ON CONFLICT ("key") DO NOTHING;
 
 -- Template Items for Parts (finished goods with BOMs)
-INSERT INTO demo_templates.item ("templateSetId", "templateRowId", "readableId", "name", "description", "type", "itemTrackingType", "replenishmentSystem", "unitOfMeasureCode", "active")
+INSERT INTO demo_templates."item" ("templateSetId", "templateRowId", "readableId", "name", "description", "type", "itemTrackingType", "replenishmentSystem", "unitOfMeasureCode", "active")
 VALUES
   -- Finished goods
   ('cnc_aerospace_parts_v1', 'item_fg001', 'FG-BRK-100', 'Aluminum Bracket Assembly', 'Complete bracket assembly with hardware', 'Part', 'Non-Inventory', 'Make', 'EA', TRUE),
@@ -242,7 +242,7 @@ VALUES
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- Template Parts (these link items to their manufacturing details)
-INSERT INTO demo_templates.part ("templateSetId", "templateRowId", "approved", "fromDate", "toDate")
+INSERT INTO demo_templates."part" ("templateSetId", "templateRowId", "approved", "fromDate", "toDate")
 VALUES
   ('cnc_aerospace_parts_v1', 'item_fg001', TRUE, CURRENT_DATE - INTERVAL '30 days', NULL),
   ('cnc_aerospace_parts_v1', 'item_fg002', TRUE, CURRENT_DATE - INTERVAL '30 days', NULL),
@@ -263,7 +263,7 @@ VALUES
 ON CONFLICT ("key") DO NOTHING;
 
 -- Template Items for Inventory (raw materials and consumables)
-INSERT INTO demo_templates.item ("templateSetId", "templateRowId", "readableId", "name", "description", "type", "itemTrackingType", "replenishmentSystem", "unitOfMeasureCode", "active")
+INSERT INTO demo_templates."item" ("templateSetId", "templateRowId", "readableId", "name", "description", "type", "itemTrackingType", "replenishmentSystem", "unitOfMeasureCode", "active")
 VALUES
   -- Raw materials
   ('cnc_aerospace_inventory_v1', 'item_rm001', 'RM-AL-6061-1', 'Aluminum 6061 Bar 1" Dia', '1 inch diameter 6061 aluminum bar stock', 'Material', 'Non-Inventory', 'Buy', 'FT', TRUE),
@@ -298,7 +298,7 @@ VALUES
 ON CONFLICT ("key") DO NOTHING;
 
 -- Template Items for Robotics Parts
-INSERT INTO demo_templates.item ("templateSetId", "templateRowId", "readableId", "name", "description", "type", "itemTrackingType", "replenishmentSystem", "unitOfMeasureCode", "active")
+INSERT INTO demo_templates."item" ("templateSetId", "templateRowId", "readableId", "name", "description", "type", "itemTrackingType", "replenishmentSystem", "unitOfMeasureCode", "active")
 VALUES
   -- Robot assemblies
   ('robotics_oem_parts_v1', 'item_r001', 'ROB-ARM-6DOF', '6-Axis Robot Arm', 'Complete 6-axis robotic arm assembly', 'Part', 'Inventory', 'Make', 'EA', TRUE),
@@ -316,7 +316,7 @@ VALUES
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- Template Parts for Robotics
-INSERT INTO demo_templates.part ("templateSetId", "templateRowId", "approved", "fromDate", "toDate")
+INSERT INTO demo_templates."part" ("templateSetId", "templateRowId", "approved", "fromDate", "toDate")
 VALUES
   ('robotics_oem_parts_v1', 'item_r001', TRUE, CURRENT_DATE - INTERVAL '90 days', NULL),
   ('robotics_oem_parts_v1', 'item_r002', TRUE, CURRENT_DATE - INTERVAL '90 days', NULL),
@@ -335,7 +335,7 @@ VALUES
 ON CONFLICT ("key") DO NOTHING;
 
 -- Template Items for Robotics Inventory
-INSERT INTO demo_templates.item ("templateSetId", "templateRowId", "readableId", "name", "description", "type", "itemTrackingType", "replenishmentSystem", "unitOfMeasureCode", "active")
+INSERT INTO demo_templates."item" ("templateSetId", "templateRowId", "readableId", "name", "description", "type", "itemTrackingType", "replenishmentSystem", "unitOfMeasureCode", "active")
 VALUES
   -- Electronic components
   ('robotics_oem_inventory_v1', 'item_e001', 'EL-PLC-001', 'PLC Controller', 'Industrial PLC with I/O modules', 'Material', 'Inventory', 'Buy', 'EA', TRUE),
@@ -368,7 +368,7 @@ VALUES
 ON CONFLICT ("key") DO NOTHING;
 
 -- Template Items for General Parts
-INSERT INTO demo_templates.item ("templateSetId", "templateRowId", "readableId", "name", "description", "type", "itemTrackingType", "replenishmentSystem", "unitOfMeasureCode", "active")
+INSERT INTO demo_templates."item" ("templateSetId", "templateRowId", "readableId", "name", "description", "type", "itemTrackingType", "replenishmentSystem", "unitOfMeasureCode", "active")
 VALUES
   -- Finished products
   ('metal_fabrication_parts_v1', 'item_g001', 'PROD-001', 'Standard Widget', 'Standard production widget', 'Part', 'Non-Inventory', 'Buy and Make', 'EA', TRUE),
@@ -383,7 +383,7 @@ VALUES
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- Template Parts for General Manufacturing
-INSERT INTO demo_templates.part ("templateSetId", "templateRowId", "approved", "fromDate", "toDate")
+INSERT INTO demo_templates."part" ("templateSetId", "templateRowId", "approved", "fromDate", "toDate")
 VALUES
   ('metal_fabrication_parts_v1', 'item_g001', TRUE, CURRENT_DATE - INTERVAL '180 days', NULL),
   ('metal_fabrication_parts_v1', 'item_g002', TRUE, CURRENT_DATE - INTERVAL '180 days', NULL),
@@ -402,7 +402,7 @@ VALUES
 ON CONFLICT ("key") DO NOTHING;
 
 -- Template Items for General Inventory
-INSERT INTO demo_templates.item ("templateSetId", "templateRowId", "readableId", "name", "description", "type", "itemTrackingType", "replenishmentSystem", "unitOfMeasureCode", "active")
+INSERT INTO demo_templates."item" ("templateSetId", "templateRowId", "readableId", "name", "description", "type", "itemTrackingType", "replenishmentSystem", "unitOfMeasureCode", "active")
 VALUES
   -- Raw materials
   ('metal_fabrication_inventory_v1', 'item_rm001', 'RM-STEEL-SHEET', 'Steel Sheet 16GA', '16 gauge cold rolled steel sheet', 'Material', 'Non-Inventory', 'Buy', 'SQ FT', TRUE),
@@ -437,7 +437,7 @@ VALUES
 ON CONFLICT ("key") DO NOTHING;
 
 -- Template Suppliers
-INSERT INTO demo_templates.supplier ("templateSetId", "templateRowId", "name", "supplierTypeId", "supplierStatusId", "taxId")
+INSERT INTO demo_templates."supplier" ("templateSetId", "templateRowId", "name", "supplierTypeId", "supplierStatusId", "taxId")
 VALUES
   ('robotics_oem_purchasing_v1', 'supp_001', 'Precision Motors Inc', NULL, NULL, '12-3456789'),
   ('robotics_oem_purchasing_v1', 'supp_002', 'Advanced Electronics Supply', NULL, NULL, '23-4567890'),
@@ -445,7 +445,7 @@ VALUES
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- Template Items (materials/components for purchasing)
-INSERT INTO demo_templates.item ("templateSetId", "templateRowId", "readableId", "name", "description", "type", "itemTrackingType", "replenishmentSystem", "unitOfMeasureCode", "active")
+INSERT INTO demo_templates."item" ("templateSetId", "templateRowId", "readableId", "name", "description", "type", "itemTrackingType", "replenishmentSystem", "unitOfMeasureCode", "active")
 VALUES
   ('robotics_oem_purchasing_v1', 'item_001', 'MAT-SERVO-1KW', 'Servo Motor 1kW', '1kW AC servo motor for robot joints', 'Material', 'Inventory', 'Buy', 'EA', TRUE),
   ('robotics_oem_purchasing_v1', 'item_002', 'MAT-ENCODER-ABS', 'Absolute Encoder', 'High-resolution absolute encoder', 'Material', 'Inventory', 'Buy', 'EA', TRUE),
@@ -455,7 +455,7 @@ VALUES
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- Template Purchase Orders
-INSERT INTO demo_templates.purchaseOrder ("templateSetId", "templateRowId", "purchaseOrderId", "tplSupplierId", "purchaseOrderType", "status", "orderDate", "receiptPromisedDate", "receiptRequestedDate")
+INSERT INTO demo_templates."purchaseOrder" ("templateSetId", "templateRowId", "purchaseOrderId", "tplSupplierId", "purchaseOrderType", "status", "orderDate", "receiptPromisedDate", "receiptRequestedDate")
 VALUES
   ('robotics_oem_purchasing_v1', 'po_001', 'PO-2025-001', 'supp_001', 'Purchase', 'To Receive', CURRENT_DATE - INTERVAL '5 days', CURRENT_DATE + INTERVAL '15 days', CURRENT_DATE + INTERVAL '10 days'),
   ('robotics_oem_purchasing_v1', 'po_002', 'PO-2025-002', 'supp_002', 'Purchase', 'Draft', CURRENT_DATE, CURRENT_DATE + INTERVAL '30 days', CURRENT_DATE + INTERVAL '25 days'),
@@ -463,7 +463,7 @@ VALUES
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- Template Purchase Order Lines
-INSERT INTO demo_templates.purchaseOrderLine ("templateSetId", "templateRowId", "tplPurchaseOrderId", "tplItemId", "description", "quantity", "unitPrice", "receiptPromisedDate", "receiptRequestedDate")
+INSERT INTO demo_templates."purchaseOrderLine" ("templateSetId", "templateRowId", "tplPurchaseOrderId", "tplItemId", "description", "quantity", "unitPrice", "receiptPromisedDate", "receiptRequestedDate")
 VALUES
   ('robotics_oem_purchasing_v1', 'poline_001', 'po_001', 'item_001', 'Servo Motor 1kW - Standard', 20, 850.00, CURRENT_DATE + INTERVAL '15 days', CURRENT_DATE + INTERVAL '10 days'),
   ('robotics_oem_purchasing_v1', 'poline_002', 'po_001', 'item_002', 'Absolute Encoder - High Res', 20, 450.00, CURRENT_DATE + INTERVAL '15 days', CURRENT_DATE + INTERVAL '10 days'),
@@ -482,7 +482,7 @@ VALUES
 ON CONFLICT ("key") DO NOTHING;
 
 -- Template Suppliers
-INSERT INTO demo_templates.supplier ("templateSetId", "templateRowId", "name", "supplierTypeId", "supplierStatusId", "taxId")
+INSERT INTO demo_templates."supplier" ("templateSetId", "templateRowId", "name", "supplierTypeId", "supplierStatusId", "taxId")
 VALUES
   ('cnc_aerospace_purchasing_v1', 'supp_001', 'Aerospace Metals Supply', NULL, NULL, '11-2233445'),
   ('cnc_aerospace_purchasing_v1', 'supp_002', 'Precision Tooling Co', NULL, NULL, '22-3344556'),
@@ -490,7 +490,7 @@ VALUES
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- Template Items
-INSERT INTO demo_templates.item ("templateSetId", "templateRowId", "readableId", "name", "description", "type", "itemTrackingType", "replenishmentSystem", "unitOfMeasureCode", "active")
+INSERT INTO demo_templates."item" ("templateSetId", "templateRowId", "readableId", "name", "description", "type", "itemTrackingType", "replenishmentSystem", "unitOfMeasureCode", "active")
 VALUES
   ('cnc_aerospace_purchasing_v1', 'item_001', 'MAT-AL-6061-BAR', 'Aluminum 6061 Bar 2"', '2 inch diameter 6061 aluminum bar stock', 'Material', 'Non-Inventory', 'Buy', 'FT', TRUE),
   ('cnc_aerospace_purchasing_v1', 'item_002', 'MAT-TI-GR5-BAR', 'Titanium Grade 5 Bar 1"', '1 inch diameter Ti-6Al-4V bar stock', 'Material', 'Inventory', 'Buy', 'FT', TRUE),
@@ -500,7 +500,7 @@ VALUES
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- Template Purchase Orders
-INSERT INTO demo_templates.purchaseOrder ("templateSetId", "templateRowId", "purchaseOrderId", "tplSupplierId", "purchaseOrderType", "status", "orderDate", "receiptPromisedDate", "receiptRequestedDate")
+INSERT INTO demo_templates."purchaseOrder" ("templateSetId", "templateRowId", "purchaseOrderId", "tplSupplierId", "purchaseOrderType", "status", "orderDate", "receiptPromisedDate", "receiptRequestedDate")
 VALUES
   ('cnc_aerospace_purchasing_v1', 'po_001', 'PO-ASP-001', 'supp_001', 'Purchase', 'To Receive', CURRENT_DATE - INTERVAL '7 days', CURRENT_DATE + INTERVAL '14 days', CURRENT_DATE + INTERVAL '10 days'),
   ('cnc_aerospace_purchasing_v1', 'po_002', 'PO-ASP-002', 'supp_002', 'Purchase', 'Draft', CURRENT_DATE, CURRENT_DATE + INTERVAL '21 days', CURRENT_DATE + INTERVAL '18 days'),
@@ -508,7 +508,7 @@ VALUES
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- Template Purchase Order Lines
-INSERT INTO demo_templates.purchaseOrderLine ("templateSetId", "templateRowId", "tplPurchaseOrderId", "tplItemId", "description", "quantity", "unitPrice", "receiptPromisedDate", "receiptRequestedDate")
+INSERT INTO demo_templates."purchaseOrderLine" ("templateSetId", "templateRowId", "tplPurchaseOrderId", "tplItemId", "description", "quantity", "unitPrice", "receiptPromisedDate", "receiptRequestedDate")
 VALUES
   ('cnc_aerospace_purchasing_v1', 'poline_001', 'po_001', 'item_001', 'Aluminum 6061 Bar 2" - Aerospace Grade', 500, 8.50, CURRENT_DATE + INTERVAL '14 days', CURRENT_DATE + INTERVAL '10 days'),
   ('cnc_aerospace_purchasing_v1', 'poline_002', 'po_001', 'item_002', 'Titanium Grade 5 Bar 1"', 200, 45.00, CURRENT_DATE + INTERVAL '14 days', CURRENT_DATE + INTERVAL '10 days'),
@@ -527,7 +527,7 @@ VALUES
 ON CONFLICT ("key") DO NOTHING;
 
 -- Template Suppliers
-INSERT INTO demo_templates.supplier ("templateSetId", "templateRowId", "name", "supplierTypeId", "supplierStatusId", "taxId")
+INSERT INTO demo_templates."supplier" ("templateSetId", "templateRowId", "name", "supplierTypeId", "supplierStatusId", "taxId")
 VALUES
   ('metal_fabrication_purchasing_v1', 'supp_001', 'Steel Supply Co', NULL, NULL, '44-5566778'),
   ('metal_fabrication_purchasing_v1', 'supp_002', 'Industrial Hardware Supply', NULL, NULL, '55-6677889'),
@@ -535,7 +535,7 @@ VALUES
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- Template Items
-INSERT INTO demo_templates.item ("templateSetId", "templateRowId", "readableId", "name", "description", "type", "itemTrackingType", "replenishmentSystem", "unitOfMeasureCode", "active")
+INSERT INTO demo_templates."item" ("templateSetId", "templateRowId", "readableId", "name", "description", "type", "itemTrackingType", "replenishmentSystem", "unitOfMeasureCode", "active")
 VALUES
   ('metal_fabrication_purchasing_v1', 'item_001', 'MAT-STEEL-SHEET-16GA', 'Steel Sheet 16GA', '16 gauge cold rolled steel sheet', 'Material', 'Non-Inventory', 'Buy', 'SQ FT', TRUE),
   ('metal_fabrication_purchasing_v1', 'item_002', 'MAT-STEEL-BEAM-W12', 'W12x26 Steel I-Beam', 'W12x26 structural steel I-beam', 'Material', 'Non-Inventory', 'Buy', 'FT', TRUE),
@@ -545,7 +545,7 @@ VALUES
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- Template Purchase Orders
-INSERT INTO demo_templates.purchaseOrder ("templateSetId", "templateRowId", "purchaseOrderId", "tplSupplierId", "purchaseOrderType", "status", "orderDate", "receiptPromisedDate", "receiptRequestedDate")
+INSERT INTO demo_templates."purchaseOrder" ("templateSetId", "templateRowId", "purchaseOrderId", "tplSupplierId", "purchaseOrderType", "status", "orderDate", "receiptPromisedDate", "receiptRequestedDate")
 VALUES
   ('metal_fabrication_purchasing_v1', 'po_001', 'PO-TF-001', 'supp_001', 'Purchase', 'To Receive', CURRENT_DATE - INTERVAL '5 days', CURRENT_DATE + INTERVAL '10 days', CURRENT_DATE + INTERVAL '7 days'),
   ('metal_fabrication_purchasing_v1', 'po_002', 'PO-TF-002', 'supp_002', 'Purchase', 'Draft', CURRENT_DATE, CURRENT_DATE + INTERVAL '14 days', CURRENT_DATE + INTERVAL '12 days'),
@@ -553,7 +553,7 @@ VALUES
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- Template Purchase Order Lines
-INSERT INTO demo_templates.purchaseOrderLine ("templateSetId", "templateRowId", "tplPurchaseOrderId", "tplItemId", "description", "quantity", "unitPrice", "receiptPromisedDate", "receiptRequestedDate")
+INSERT INTO demo_templates."purchaseOrderLine" ("templateSetId", "templateRowId", "tplPurchaseOrderId", "tplItemId", "description", "quantity", "unitPrice", "receiptPromisedDate", "receiptRequestedDate")
 VALUES
   ('metal_fabrication_purchasing_v1', 'poline_001', 'po_001', 'item_001', 'Steel Sheet 16GA - Cold Rolled', 2000, 2.85, CURRENT_DATE + INTERVAL '10 days', CURRENT_DATE + INTERVAL '7 days'),
   ('metal_fabrication_purchasing_v1', 'poline_002', 'po_001', 'item_002', 'W12x26 Steel I-Beam - 20ft', 50, 285.00, CURRENT_DATE + INTERVAL '10 days', CURRENT_DATE + INTERVAL '7 days'),
@@ -572,7 +572,7 @@ VALUES
 ON CONFLICT ("key") DO NOTHING;
 
 -- Template Suppliers
-INSERT INTO demo_templates.supplier ("templateSetId", "templateRowId", "name", "supplierTypeId", "supplierStatusId", "taxId")
+INSERT INTO demo_templates."supplier" ("templateSetId", "templateRowId", "name", "supplierTypeId", "supplierStatusId", "taxId")
 VALUES
   ('automotive_precision_purchasing_v1', 'supp_001', 'Precision Metals Supply', NULL, NULL, '77-8899001'),
   ('automotive_precision_purchasing_v1', 'supp_002', 'Racing Components Inc', NULL, NULL, '88-9900112'),
@@ -580,7 +580,7 @@ VALUES
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- Template Items
-INSERT INTO demo_templates.item ("templateSetId", "templateRowId", "readableId", "name", "description", "type", "itemTrackingType", "replenishmentSystem", "unitOfMeasureCode", "active")
+INSERT INTO demo_templates."item" ("templateSetId", "templateRowId", "readableId", "name", "description", "type", "itemTrackingType", "replenishmentSystem", "unitOfMeasureCode", "active")
 VALUES
   ('automotive_precision_purchasing_v1', 'item_001', 'MAT-AL-FORGED-BLK', 'Forged Aluminum Blank', 'Forged aluminum blank for pistons', 'Material', 'Inventory', 'Buy', 'EA', TRUE),
   ('automotive_precision_purchasing_v1', 'item_002', 'MAT-TI-BAR-1', 'Titanium Bar 1"', '1 inch diameter titanium bar for crankshaft', 'Material', 'Inventory', 'Buy', 'FT', TRUE),
@@ -590,7 +590,7 @@ VALUES
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- Template Purchase Orders
-INSERT INTO demo_templates.purchaseOrder ("templateSetId", "templateRowId", "purchaseOrderId", "tplSupplierId", "purchaseOrderType", "status", "orderDate", "receiptPromisedDate", "receiptRequestedDate")
+INSERT INTO demo_templates."purchaseOrder" ("templateSetId", "templateRowId", "purchaseOrderId", "tplSupplierId", "purchaseOrderType", "status", "orderDate", "receiptPromisedDate", "receiptRequestedDate")
 VALUES
   ('automotive_precision_purchasing_v1', 'po_001', 'PO-APX-001', 'supp_001', 'Purchase', 'To Receive', CURRENT_DATE - INTERVAL '6 days', CURRENT_DATE + INTERVAL '14 days', CURRENT_DATE + INTERVAL '10 days'),
   ('automotive_precision_purchasing_v1', 'po_002', 'PO-APX-002', 'supp_002', 'Purchase', 'Draft', CURRENT_DATE, CURRENT_DATE + INTERVAL '21 days', CURRENT_DATE + INTERVAL '18 days'),
@@ -598,7 +598,7 @@ VALUES
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- Template Purchase Order Lines
-INSERT INTO demo_templates.purchaseOrderLine ("templateSetId", "templateRowId", "tplPurchaseOrderId", "tplItemId", "description", "quantity", "unitPrice", "receiptPromisedDate", "receiptRequestedDate")
+INSERT INTO demo_templates."purchaseOrderLine" ("templateSetId", "templateRowId", "tplPurchaseOrderId", "tplItemId", "description", "quantity", "unitPrice", "receiptPromisedDate", "receiptRequestedDate")
 VALUES
   ('automotive_precision_purchasing_v1', 'poline_001', 'po_001', 'item_001', 'Forged Aluminum Blank - Racing Grade', 50, 125.00, CURRENT_DATE + INTERVAL '14 days', CURRENT_DATE + INTERVAL '10 days'),
   ('automotive_precision_purchasing_v1', 'poline_002', 'po_001', 'item_002', 'Titanium Bar 1" - High Grade', 100, 85.00, CURRENT_DATE + INTERVAL '14 days', CURRENT_DATE + INTERVAL '10 days'),

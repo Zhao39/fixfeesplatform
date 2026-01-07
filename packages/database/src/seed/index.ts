@@ -1,2 +1,3 @@
-export * from "./modules.ts";
-export * from "./stripe.ts";
+export * from "./demo";
+export * from "./modules";
+export * from "./stripe";

@@ -1495,15 +1495,6 @@ export default {
             $ref: "#/parameters/rowFilter.quoteLine.isDemo",
           },
           {
-            $ref: "#/parameters/rowFilter.quoteLine.demoTemplateSetId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.quoteLine.demoTemplateRowId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.quoteLine.demoTouchedAt",
-          },
-          {
             $ref: "#/parameters/select",
           },
           {
@@ -1650,15 +1641,6 @@ export default {
             $ref: "#/parameters/rowFilter.quoteLine.isDemo",
           },
           {
-            $ref: "#/parameters/rowFilter.quoteLine.demoTemplateSetId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.quoteLine.demoTemplateRowId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.quoteLine.demoTouchedAt",
-          },
-          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -1757,15 +1739,6 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.quoteLine.isDemo",
-          },
-          {
-            $ref: "#/parameters/rowFilter.quoteLine.demoTemplateSetId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.quoteLine.demoTemplateRowId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.quoteLine.demoTouchedAt",
           },
           {
             $ref: "#/parameters/body.quoteLine",
@@ -5502,66 +5475,6 @@ export default {
         tags: ["templateSet"],
       },
     },
-    "/templateSchemaMismatches": {
-      get: {
-        parameters: [
-          {
-            $ref: "#/parameters/rowFilter.templateSchemaMismatches.table_name",
-          },
-          {
-            $ref: "#/parameters/rowFilter.templateSchemaMismatches.column_name",
-          },
-          {
-            $ref: "#/parameters/rowFilter.templateSchemaMismatches.live_type",
-          },
-          {
-            $ref: "#/parameters/rowFilter.templateSchemaMismatches.tpl_type",
-          },
-          {
-            $ref: "#/parameters/rowFilter.templateSchemaMismatches.live_nullable",
-          },
-          {
-            $ref: "#/parameters/rowFilter.templateSchemaMismatches.tpl_nullable",
-          },
-          {
-            $ref: "#/parameters/select",
-          },
-          {
-            $ref: "#/parameters/order",
-          },
-          {
-            $ref: "#/parameters/range",
-          },
-          {
-            $ref: "#/parameters/rangeUnit",
-          },
-          {
-            $ref: "#/parameters/offset",
-          },
-          {
-            $ref: "#/parameters/limit",
-          },
-          {
-            $ref: "#/parameters/preferCount",
-          },
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-            schema: {
-              items: {
-                $ref: "#/definitions/templateSchemaMismatches",
-              },
-              type: "array",
-            },
-          },
-          "206": {
-            description: "Partial Content",
-          },
-        },
-        tags: ["templateSchemaMismatches"],
-      },
-    },
     "/purchaseOrderLocations": {
       get: {
         parameters: [
@@ -6658,6 +6571,9 @@ export default {
             $ref: "#/parameters/rowFilter.supplierInteraction.supplierId",
           },
           {
+            $ref: "#/parameters/rowFilter.supplierInteraction.isDemo",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -6726,6 +6642,9 @@ export default {
             $ref: "#/parameters/rowFilter.supplierInteraction.supplierId",
           },
           {
+            $ref: "#/parameters/rowFilter.supplierInteraction.isDemo",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -6746,6 +6665,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.supplierInteraction.supplierId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierInteraction.isDemo",
           },
           {
             $ref: "#/parameters/body.supplierInteraction",
@@ -7048,72 +6970,6 @@ export default {
           },
         },
         tags: ["receipt"],
-      },
-    },
-    "/demoSeedDashboard": {
-      get: {
-        parameters: [
-          {
-            $ref: "#/parameters/rowFilter.demoSeedDashboard.companyId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.demoSeedDashboard.moduleId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.demoSeedDashboard.templateKey",
-          },
-          {
-            $ref: "#/parameters/rowFilter.demoSeedDashboard.version",
-          },
-          {
-            $ref: "#/parameters/rowFilter.demoSeedDashboard.status",
-          },
-          {
-            $ref: "#/parameters/rowFilter.demoSeedDashboard.seededAt",
-          },
-          {
-            $ref: "#/parameters/rowFilter.demoSeedDashboard.lockedAt",
-          },
-          {
-            $ref: "#/parameters/rowFilter.demoSeedDashboard.lastError",
-          },
-          {
-            $ref: "#/parameters/select",
-          },
-          {
-            $ref: "#/parameters/order",
-          },
-          {
-            $ref: "#/parameters/range",
-          },
-          {
-            $ref: "#/parameters/rangeUnit",
-          },
-          {
-            $ref: "#/parameters/offset",
-          },
-          {
-            $ref: "#/parameters/limit",
-          },
-          {
-            $ref: "#/parameters/preferCount",
-          },
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-            schema: {
-              items: {
-                $ref: "#/definitions/demoSeedDashboard",
-              },
-              type: "array",
-            },
-          },
-          "206": {
-            description: "Partial Content",
-          },
-        },
-        tags: ["demoSeedDashboard"],
       },
     },
     "/configurationParameterGroup": {
@@ -18490,6 +18346,9 @@ export default {
             $ref: "#/parameters/rowFilter.salesRfqLine.tags",
           },
           {
+            $ref: "#/parameters/rowFilter.salesRfqLine.isDemo",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -18606,6 +18465,9 @@ export default {
             $ref: "#/parameters/rowFilter.salesRfqLine.tags",
           },
           {
+            $ref: "#/parameters/rowFilter.salesRfqLine.isDemo",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -18674,6 +18536,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.salesRfqLine.tags",
+          },
+          {
+            $ref: "#/parameters/rowFilter.salesRfqLine.isDemo",
           },
           {
             $ref: "#/parameters/body.salesRfqLine",
@@ -24601,15 +24466,6 @@ export default {
             $ref: "#/parameters/rowFilter.purchaseOrderLine.isDemo",
           },
           {
-            $ref: "#/parameters/rowFilter.purchaseOrderLine.demoTemplateSetId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.purchaseOrderLine.demoTemplateRowId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.purchaseOrderLine.demoTouchedAt",
-          },
-          {
             $ref: "#/parameters/select",
           },
           {
@@ -24807,15 +24663,6 @@ export default {
             $ref: "#/parameters/rowFilter.purchaseOrderLine.isDemo",
           },
           {
-            $ref: "#/parameters/rowFilter.purchaseOrderLine.demoTemplateSetId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.purchaseOrderLine.demoTemplateRowId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.purchaseOrderLine.demoTouchedAt",
-          },
-          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -24965,15 +24812,6 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.purchaseOrderLine.isDemo",
-          },
-          {
-            $ref: "#/parameters/rowFilter.purchaseOrderLine.demoTemplateSetId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.purchaseOrderLine.demoTemplateRowId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.purchaseOrderLine.demoTouchedAt",
           },
           {
             $ref: "#/parameters/body.purchaseOrderLine",
@@ -37735,15 +37573,6 @@ export default {
             $ref: "#/parameters/rowFilter.customer.isDemo",
           },
           {
-            $ref: "#/parameters/rowFilter.customer.demoTemplateSetId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.customer.demoTemplateRowId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.customer.demoTouchedAt",
-          },
-          {
             $ref: "#/parameters/rowFilter.customer.salesContactId",
           },
           {
@@ -37878,15 +37707,6 @@ export default {
             $ref: "#/parameters/rowFilter.customer.isDemo",
           },
           {
-            $ref: "#/parameters/rowFilter.customer.demoTemplateSetId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.customer.demoTemplateRowId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.customer.demoTouchedAt",
-          },
-          {
             $ref: "#/parameters/rowFilter.customer.salesContactId",
           },
           {
@@ -37973,15 +37793,6 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.customer.isDemo",
-          },
-          {
-            $ref: "#/parameters/rowFilter.customer.demoTemplateSetId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.customer.demoTemplateRowId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.customer.demoTouchedAt",
           },
           {
             $ref: "#/parameters/rowFilter.customer.salesContactId",
@@ -38096,15 +37907,6 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.purchaseOrder.isDemo",
-          },
-          {
-            $ref: "#/parameters/rowFilter.purchaseOrder.demoTemplateSetId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.purchaseOrder.demoTemplateRowId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.purchaseOrder.demoTouchedAt",
           },
           {
             $ref: "#/parameters/select",
@@ -38256,15 +38058,6 @@ export default {
             $ref: "#/parameters/rowFilter.purchaseOrder.isDemo",
           },
           {
-            $ref: "#/parameters/rowFilter.purchaseOrder.demoTemplateSetId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.purchaseOrder.demoTemplateRowId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.purchaseOrder.demoTouchedAt",
-          },
-          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -38366,15 +38159,6 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.purchaseOrder.isDemo",
-          },
-          {
-            $ref: "#/parameters/rowFilter.purchaseOrder.demoTemplateSetId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.purchaseOrder.demoTemplateRowId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.purchaseOrder.demoTouchedAt",
           },
           {
             $ref: "#/parameters/body.purchaseOrder",
@@ -39481,6 +39265,9 @@ export default {
             $ref: "#/parameters/rowFilter.salesRfq.customerEngineeringContactId",
           },
           {
+            $ref: "#/parameters/rowFilter.salesRfq.isDemo",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -39621,6 +39408,9 @@ export default {
             $ref: "#/parameters/rowFilter.salesRfq.customerEngineeringContactId",
           },
           {
+            $ref: "#/parameters/rowFilter.salesRfq.isDemo",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -39713,6 +39503,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.salesRfq.customerEngineeringContactId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.salesRfq.isDemo",
           },
           {
             $ref: "#/parameters/body.salesRfq",
@@ -51586,9 +51379,6 @@ export default {
             $ref: "#/parameters/rowFilter.demoSeedState.seededAt",
           },
           {
-            $ref: "#/parameters/rowFilter.demoSeedState.lockedAt",
-          },
-          {
             $ref: "#/parameters/rowFilter.demoSeedState.lastError",
           },
           {
@@ -51672,9 +51462,6 @@ export default {
             $ref: "#/parameters/rowFilter.demoSeedState.seededAt",
           },
           {
-            $ref: "#/parameters/rowFilter.demoSeedState.lockedAt",
-          },
-          {
             $ref: "#/parameters/rowFilter.demoSeedState.lastError",
           },
           {
@@ -51710,9 +51497,6 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.demoSeedState.seededAt",
-          },
-          {
-            $ref: "#/parameters/rowFilter.demoSeedState.lockedAt",
           },
           {
             $ref: "#/parameters/rowFilter.demoSeedState.lastError",
@@ -53974,15 +53758,6 @@ export default {
             $ref: "#/parameters/rowFilter.supplier.isDemo",
           },
           {
-            $ref: "#/parameters/rowFilter.supplier.demoTemplateSetId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplier.demoTemplateRowId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplier.demoTouchedAt",
-          },
-          {
             $ref: "#/parameters/rowFilter.supplier.purchasingContactId",
           },
           {
@@ -54117,15 +53892,6 @@ export default {
             $ref: "#/parameters/rowFilter.supplier.isDemo",
           },
           {
-            $ref: "#/parameters/rowFilter.supplier.demoTemplateSetId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplier.demoTemplateRowId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplier.demoTouchedAt",
-          },
-          {
             $ref: "#/parameters/rowFilter.supplier.purchasingContactId",
           },
           {
@@ -54212,15 +53978,6 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.supplier.isDemo",
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplier.demoTemplateSetId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplier.demoTemplateRowId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplier.demoTouchedAt",
           },
           {
             $ref: "#/parameters/rowFilter.supplier.purchasingContactId",
@@ -55048,15 +54805,6 @@ export default {
             $ref: "#/parameters/rowFilter.item.isDemo",
           },
           {
-            $ref: "#/parameters/rowFilter.item.demoTemplateSetId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.item.demoTemplateRowId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.item.demoTouchedAt",
-          },
-          {
             $ref: "#/parameters/select",
           },
           {
@@ -55191,15 +54939,6 @@ export default {
             $ref: "#/parameters/rowFilter.item.isDemo",
           },
           {
-            $ref: "#/parameters/rowFilter.item.demoTemplateSetId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.item.demoTemplateRowId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.item.demoTouchedAt",
-          },
-          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -55286,15 +55025,6 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.item.isDemo",
-          },
-          {
-            $ref: "#/parameters/rowFilter.item.demoTemplateSetId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.item.demoTemplateRowId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.item.demoTouchedAt",
           },
           {
             $ref: "#/parameters/body.item",
@@ -58999,6 +58729,9 @@ export default {
             $ref: "#/parameters/rowFilter.opportunity.customerId",
           },
           {
+            $ref: "#/parameters/rowFilter.opportunity.isDemo",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -59073,6 +58806,9 @@ export default {
             $ref: "#/parameters/rowFilter.opportunity.customerId",
           },
           {
+            $ref: "#/parameters/rowFilter.opportunity.isDemo",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -59099,6 +58835,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.opportunity.customerId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.opportunity.isDemo",
           },
           {
             $ref: "#/parameters/body.opportunity",
@@ -59677,15 +59416,6 @@ export default {
             $ref: "#/parameters/rowFilter.quote.isDemo",
           },
           {
-            $ref: "#/parameters/rowFilter.quote.demoTemplateSetId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.quote.demoTemplateRowId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.quote.demoTouchedAt",
-          },
-          {
             $ref: "#/parameters/select",
           },
           {
@@ -59850,15 +59580,6 @@ export default {
             $ref: "#/parameters/rowFilter.quote.isDemo",
           },
           {
-            $ref: "#/parameters/rowFilter.quote.demoTemplateSetId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.quote.demoTemplateRowId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.quote.demoTouchedAt",
-          },
-          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -59975,15 +59696,6 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.quote.isDemo",
-          },
-          {
-            $ref: "#/parameters/rowFilter.quote.demoTemplateSetId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.quote.demoTemplateRowId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.quote.demoTouchedAt",
           },
           {
             $ref: "#/parameters/body.quote",
@@ -60904,15 +60616,6 @@ export default {
             $ref: "#/parameters/rowFilter.part.isDemo",
           },
           {
-            $ref: "#/parameters/rowFilter.part.demoTemplateSetId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.part.demoTemplateRowId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.part.demoTouchedAt",
-          },
-          {
             $ref: "#/parameters/select",
           },
           {
@@ -61014,15 +60717,6 @@ export default {
             $ref: "#/parameters/rowFilter.part.isDemo",
           },
           {
-            $ref: "#/parameters/rowFilter.part.demoTemplateSetId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.part.demoTemplateRowId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.part.demoTouchedAt",
-          },
-          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -61076,15 +60770,6 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.part.isDemo",
-          },
-          {
-            $ref: "#/parameters/rowFilter.part.demoTemplateSetId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.part.demoTemplateRowId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.part.demoTouchedAt",
           },
           {
             $ref: "#/parameters/body.part",
@@ -62640,89 +62325,6 @@ export default {
         tags: ["(rpc) get_jobs_by_date_range"],
       },
     },
-    "/rpc/assert_no_template_schema_mismatches": {
-      post: {
-        parameters: [
-          {
-            in: "body",
-            name: "args",
-            required: true,
-            schema: {
-              type: "object",
-            },
-          },
-          {
-            $ref: "#/parameters/preferParams",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) assert_no_template_schema_mismatches"],
-      },
-    },
-    "/rpc/seed_demo": {
-      post: {
-        parameters: [
-          {
-            in: "body",
-            name: "args",
-            required: true,
-            schema: {
-              properties: {
-                p_company_id: {
-                  format: "text",
-                  type: "string",
-                },
-                p_industry_id: {
-                  format: "text",
-                  type: "string",
-                },
-                p_module_ids: {
-                  format: "text[]",
-                  items: {
-                    type: "string",
-                  },
-                  type: "array",
-                },
-                p_seeded_by: {
-                  format: "text",
-                  type: "string",
-                },
-              },
-              required: [
-                "p_company_id",
-                "p_industry_id",
-                "p_module_ids",
-                "p_seeded_by",
-              ],
-              type: "object",
-            },
-          },
-          {
-            $ref: "#/parameters/preferParams",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) seed_demo"],
-      },
-    },
     "/rpc/get_period_end_date": {
       get: {
         parameters: [
@@ -63674,63 +63276,6 @@ export default {
         tags: ["(rpc) xid_decode"],
       },
     },
-    "/rpc/get_demo_status": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "p_company_id",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_demo_status"],
-      },
-      post: {
-        parameters: [
-          {
-            in: "body",
-            name: "args",
-            required: true,
-            schema: {
-              properties: {
-                p_company_id: {
-                  format: "text",
-                  type: "string",
-                },
-              },
-              required: ["p_company_id"],
-              type: "object",
-            },
-          },
-          {
-            $ref: "#/parameters/preferParams",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_demo_status"],
-      },
-    },
     "/rpc/nanoid_optimized": {
       post: {
         parameters: [
@@ -64381,63 +63926,6 @@ export default {
           },
         },
         tags: ["(rpc) get_assigned_job_operations"],
-      },
-    },
-    "/rpc/get_demo_statistics": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "p_company_id",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_demo_statistics"],
-      },
-      post: {
-        parameters: [
-          {
-            in: "body",
-            name: "args",
-            required: true,
-            schema: {
-              properties: {
-                p_company_id: {
-                  format: "text",
-                  type: "string",
-                },
-              },
-              required: ["p_company_id"],
-              type: "object",
-            },
-          },
-          {
-            $ref: "#/parameters/preferParams",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) get_demo_statistics"],
       },
     },
     "/rpc/xid_encode": {
@@ -65623,63 +65111,6 @@ export default {
         tags: ["(rpc) get_maintenance_schedules_by_location"],
       },
     },
-    "/rpc/has_demo_data": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "p_company_id",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) has_demo_data"],
-      },
-      post: {
-        parameters: [
-          {
-            in: "body",
-            name: "args",
-            required: true,
-            schema: {
-              properties: {
-                p_company_id: {
-                  format: "text",
-                  type: "string",
-                },
-              },
-              required: ["p_company_id"],
-              type: "object",
-            },
-          },
-          {
-            $ref: "#/parameters/preferParams",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) has_demo_data"],
-      },
-    },
     "/rpc/get_active_job_operations_by_employee": {
       post: {
         parameters: [
@@ -66255,74 +65686,6 @@ export default {
           },
         },
         tags: ["(rpc) get_opportunity_with_related_records"],
-      },
-    },
-    "/rpc/demo_id": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "p_company_id",
-            required: true,
-            type: "string",
-          },
-          {
-            format: "text",
-            in: "query",
-            name: "p_template_row_id",
-            required: true,
-            type: "string",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) demo_id"],
-      },
-      post: {
-        parameters: [
-          {
-            in: "body",
-            name: "args",
-            required: true,
-            schema: {
-              properties: {
-                p_company_id: {
-                  format: "text",
-                  type: "string",
-                },
-                p_template_row_id: {
-                  format: "text",
-                  type: "string",
-                },
-              },
-              required: ["p_company_id", "p_template_row_id"],
-              type: "object",
-            },
-          },
-          {
-            $ref: "#/parameters/preferParams",
-          },
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json",
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-          },
-        },
-        tags: ["(rpc) demo_id"],
       },
     },
     "/rpc/items_search": {
@@ -67058,7 +66421,6 @@ export default {
         "createdBy",
         "taxPercent",
         "unitPricePrecision",
-        "isDemo",
       ],
       properties: {
         id: {
@@ -67204,20 +66566,6 @@ export default {
           default: false,
           format: "boolean",
           type: "boolean",
-        },
-        demoTemplateSetId: {
-          description:
-            "Note:\nThis is a Foreign Key to `templateSet.id`.<fk table='templateSet' column='id'/>",
-          format: "text",
-          type: "string",
-        },
-        demoTemplateRowId: {
-          format: "text",
-          type: "string",
-        },
-        demoTouchedAt: {
-          format: "timestamp with time zone",
-          type: "string",
         },
       },
       type: "object",
@@ -68785,37 +68133,6 @@ export default {
       },
       type: "object",
     },
-    templateSchemaMismatches: {
-      properties: {
-        table_name: {
-          format: "name",
-          type: "string",
-        },
-        column_name: {
-          format: "name",
-          type: "string",
-        },
-        live_type: {
-          format: "character varying",
-          type: "string",
-        },
-        tpl_type: {
-          format: "character varying",
-          type: "string",
-        },
-        live_nullable: {
-          format: "character varying",
-          maxLength: 3,
-          type: "string",
-        },
-        tpl_nullable: {
-          format: "character varying",
-          maxLength: 3,
-          type: "string",
-        },
-      },
-      type: "object",
-    },
     purchaseOrderLocations: {
       properties: {
         id: {
@@ -69306,6 +68623,11 @@ export default {
           format: "text",
           type: "string",
         },
+        isDemo: {
+          default: false,
+          format: "boolean",
+          type: "boolean",
+        },
       },
       type: "object",
     },
@@ -69439,47 +68761,6 @@ export default {
         postedBy: {
           description:
             "Note:\nThis is a Foreign Key to `user.id`.<fk table='user' column='id'/>",
-          format: "text",
-          type: "string",
-        },
-      },
-      type: "object",
-    },
-    demoSeedDashboard: {
-      properties: {
-        companyId: {
-          description:
-            "Note:\nThis is a Primary Key.<pk/>\nThis is a Foreign Key to `company.id`.<fk table='company' column='id'/>",
-          format: "text",
-          type: "string",
-        },
-        moduleId: {
-          description:
-            "Note:\nThis is a Primary Key.<pk/>\nThis is a Foreign Key to `demoModule.id`.<fk table='demoModule' column='id'/>",
-          format: "text",
-          type: "string",
-        },
-        templateKey: {
-          format: "text",
-          type: "string",
-        },
-        version: {
-          format: "integer",
-          type: "integer",
-        },
-        status: {
-          format: "text",
-          type: "string",
-        },
-        seededAt: {
-          format: "timestamp with time zone",
-          type: "string",
-        },
-        lockedAt: {
-          format: "timestamp with time zone",
-          type: "string",
-        },
-        lastError: {
           format: "text",
           type: "string",
         },
@@ -75237,6 +74518,11 @@ export default {
           },
           type: "array",
         },
+        isDemo: {
+          default: false,
+          format: "boolean",
+          type: "boolean",
+        },
       },
       type: "object",
     },
@@ -77658,7 +76944,6 @@ export default {
         "exchangeRate",
         "supplierShippingCost",
         "supplierTaxAmount",
-        "isDemo",
       ],
       properties: {
         id: {
@@ -77885,20 +77170,6 @@ export default {
           default: false,
           format: "boolean",
           type: "boolean",
-        },
-        demoTemplateSetId: {
-          description:
-            "Note:\nThis is a Foreign Key to `templateSet.id`.<fk table='templateSet' column='id'/>",
-          format: "text",
-          type: "string",
-        },
-        demoTemplateRowId: {
-          format: "text",
-          type: "string",
-        },
-        demoTouchedAt: {
-          format: "timestamp with time zone",
-          type: "string",
         },
       },
       type: "object",
@@ -83778,14 +83049,7 @@ export default {
       type: "object",
     },
     customer: {
-      required: [
-        "id",
-        "name",
-        "companyId",
-        "createdAt",
-        "taxPercent",
-        "isDemo",
-      ],
+      required: ["id", "name", "companyId", "createdAt", "taxPercent"],
       properties: {
         id: {
           default: "public.id('cust'::text)",
@@ -83901,20 +83165,6 @@ export default {
           format: "boolean",
           type: "boolean",
         },
-        demoTemplateSetId: {
-          description:
-            "Note:\nThis is a Foreign Key to `templateSet.id`.<fk table='templateSet' column='id'/>",
-          format: "text",
-          type: "string",
-        },
-        demoTemplateRowId: {
-          format: "text",
-          type: "string",
-        },
-        demoTouchedAt: {
-          format: "timestamp with time zone",
-          type: "string",
-        },
         salesContactId: {
           description:
             "Note:\nThis is a Foreign Key to `customerContact.id`.<fk table='customerContact' column='id'/>",
@@ -83942,7 +83192,6 @@ export default {
         "createdBy",
         "supplierInteractionId",
         "purchaseOrderType",
-        "isDemo",
       ],
       properties: {
         id: {
@@ -84105,20 +83354,6 @@ export default {
           default: false,
           format: "boolean",
           type: "boolean",
-        },
-        demoTemplateSetId: {
-          description:
-            "Note:\nThis is a Foreign Key to `templateSet.id`.<fk table='templateSet' column='id'/>",
-          format: "text",
-          type: "string",
-        },
-        demoTemplateRowId: {
-          format: "text",
-          type: "string",
-        },
-        demoTouchedAt: {
-          format: "timestamp with time zone",
-          type: "string",
         },
       },
       type: "object",
@@ -84879,6 +84114,11 @@ export default {
             "Note:\nThis is a Foreign Key to `customerContact.id`.<fk table='customerContact' column='id'/>",
           format: "text",
           type: "string",
+        },
+        isDemo: {
+          default: false,
+          format: "boolean",
+          type: "boolean",
         },
       },
       type: "object",
@@ -90822,10 +90062,6 @@ export default {
           format: "timestamp with time zone",
           type: "string",
         },
-        lockedAt: {
-          format: "timestamp with time zone",
-          type: "string",
-        },
         lastError: {
           format: "text",
           type: "string",
@@ -91878,14 +91114,7 @@ export default {
       type: "object",
     },
     supplier: {
-      required: [
-        "id",
-        "name",
-        "companyId",
-        "createdAt",
-        "taxPercent",
-        "isDemo",
-      ],
+      required: ["id", "name", "companyId", "createdAt", "taxPercent"],
       properties: {
         id: {
           default: "public.id('sup'::text)",
@@ -92000,20 +91229,6 @@ export default {
           default: false,
           format: "boolean",
           type: "boolean",
-        },
-        demoTemplateSetId: {
-          description:
-            "Note:\nThis is a Foreign Key to `templateSet.id`.<fk table='templateSet' column='id'/>",
-          format: "text",
-          type: "string",
-        },
-        demoTemplateRowId: {
-          format: "text",
-          type: "string",
-        },
-        demoTouchedAt: {
-          format: "timestamp with time zone",
-          type: "string",
         },
         purchasingContactId: {
           description:
@@ -92488,7 +91703,6 @@ export default {
         "active",
         "createdBy",
         "createdAt",
-        "isDemo",
       ],
       properties: {
         id: {
@@ -92617,20 +91831,6 @@ export default {
           default: false,
           format: "boolean",
           type: "boolean",
-        },
-        demoTemplateSetId: {
-          description:
-            "Note:\nThis is a Foreign Key to `templateSet.id`.<fk table='templateSet' column='id'/>",
-          format: "text",
-          type: "string",
-        },
-        demoTemplateRowId: {
-          format: "text",
-          type: "string",
-        },
-        demoTouchedAt: {
-          format: "timestamp with time zone",
-          type: "string",
         },
       },
       type: "object",
@@ -94519,6 +93719,11 @@ export default {
           format: "text",
           type: "string",
         },
+        isDemo: {
+          default: false,
+          format: "boolean",
+          type: "boolean",
+        },
       },
       type: "object",
     },
@@ -94730,7 +93935,6 @@ export default {
         "companyId",
         "createdAt",
         "createdBy",
-        "isDemo",
       ],
       properties: {
         id: {
@@ -94915,20 +94119,6 @@ export default {
           default: false,
           format: "boolean",
           type: "boolean",
-        },
-        demoTemplateSetId: {
-          description:
-            "Note:\nThis is a Foreign Key to `templateSet.id`.<fk table='templateSet' column='id'/>",
-          format: "text",
-          type: "string",
-        },
-        demoTemplateRowId: {
-          format: "text",
-          type: "string",
-        },
-        demoTouchedAt: {
-          format: "timestamp with time zone",
-          type: "string",
         },
       },
       type: "object",
@@ -95357,14 +94547,7 @@ export default {
       type: "object",
     },
     part: {
-      required: [
-        "id",
-        "approved",
-        "companyId",
-        "createdBy",
-        "createdAt",
-        "isDemo",
-      ],
+      required: ["id", "approved", "companyId", "createdBy", "createdAt"],
       properties: {
         id: {
           default: "public.id('part'::text)",
@@ -95435,20 +94618,6 @@ export default {
           default: false,
           format: "boolean",
           type: "boolean",
-        },
-        demoTemplateSetId: {
-          description:
-            "Note:\nThis is a Foreign Key to `templateSet.id`.<fk table='templateSet' column='id'/>",
-          format: "text",
-          type: "string",
-        },
-        demoTemplateRowId: {
-          format: "text",
-          type: "string",
-        },
-        demoTouchedAt: {
-          format: "timestamp with time zone",
-          type: "string",
         },
       },
       type: "object",
@@ -96699,24 +95868,6 @@ export default {
     },
     "rowFilter.quoteLine.isDemo": {
       name: "isDemo",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.quoteLine.demoTemplateSetId": {
-      name: "demoTemplateSetId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.quoteLine.demoTemplateRowId": {
-      name: "demoTemplateRowId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.quoteLine.demoTouchedAt": {
-      name: "demoTouchedAt",
       required: false,
       in: "query",
       type: "string",
@@ -98464,51 +97615,6 @@ export default {
       in: "query",
       type: "string",
     },
-    "body.templateSchemaMismatches": {
-      name: "templateSchemaMismatches",
-      description: "templateSchemaMismatches",
-      required: false,
-      in: "body",
-      schema: {
-        $ref: "#/definitions/templateSchemaMismatches",
-      },
-    },
-    "rowFilter.templateSchemaMismatches.table_name": {
-      name: "table_name",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.templateSchemaMismatches.column_name": {
-      name: "column_name",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.templateSchemaMismatches.live_type": {
-      name: "live_type",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.templateSchemaMismatches.tpl_type": {
-      name: "tpl_type",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.templateSchemaMismatches.live_nullable": {
-      name: "live_nullable",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.templateSchemaMismatches.tpl_nullable": {
-      name: "tpl_nullable",
-      required: false,
-      in: "query",
-      type: "string",
-    },
     "body.purchaseOrderLocations": {
       name: "purchaseOrderLocations",
       description: "purchaseOrderLocations",
@@ -99088,6 +98194,12 @@ export default {
       in: "query",
       type: "string",
     },
+    "rowFilter.supplierInteraction.isDemo": {
+      name: "isDemo",
+      required: false,
+      in: "query",
+      type: "string",
+    },
     "body.receipt": {
       name: "receipt",
       description: "receipt",
@@ -99225,63 +98337,6 @@ export default {
     },
     "rowFilter.receipt.postedBy": {
       name: "postedBy",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "body.demoSeedDashboard": {
-      name: "demoSeedDashboard",
-      description: "demoSeedDashboard",
-      required: false,
-      in: "body",
-      schema: {
-        $ref: "#/definitions/demoSeedDashboard",
-      },
-    },
-    "rowFilter.demoSeedDashboard.companyId": {
-      name: "companyId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.demoSeedDashboard.moduleId": {
-      name: "moduleId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.demoSeedDashboard.templateKey": {
-      name: "templateKey",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.demoSeedDashboard.version": {
-      name: "version",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.demoSeedDashboard.status": {
-      name: "status",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.demoSeedDashboard.seededAt": {
-      name: "seededAt",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.demoSeedDashboard.lockedAt": {
-      name: "lockedAt",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.demoSeedDashboard.lastError": {
-      name: "lastError",
       required: false,
       in: "query",
       type: "string",
@@ -105739,6 +104794,12 @@ export default {
       in: "query",
       type: "string",
     },
+    "rowFilter.salesRfqLine.isDemo": {
+      name: "isDemo",
+      required: false,
+      in: "query",
+      type: "string",
+    },
     "body.fulfillment": {
       name: "fulfillment",
       description: "fulfillment",
@@ -108766,24 +107827,6 @@ export default {
     },
     "rowFilter.purchaseOrderLine.isDemo": {
       name: "isDemo",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.purchaseOrderLine.demoTemplateSetId": {
-      name: "demoTemplateSetId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.purchaseOrderLine.demoTemplateRowId": {
-      name: "demoTemplateRowId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.purchaseOrderLine.demoTouchedAt": {
-      name: "demoTouchedAt",
       required: false,
       in: "query",
       type: "string",
@@ -115485,24 +114528,6 @@ export default {
       in: "query",
       type: "string",
     },
-    "rowFilter.customer.demoTemplateSetId": {
-      name: "demoTemplateSetId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.customer.demoTemplateRowId": {
-      name: "demoTemplateRowId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.customer.demoTouchedAt": {
-      name: "demoTouchedAt",
-      required: false,
-      in: "query",
-      type: "string",
-    },
     "rowFilter.customer.salesContactId": {
       name: "salesContactId",
       required: false,
@@ -115700,24 +114725,6 @@ export default {
     },
     "rowFilter.purchaseOrder.isDemo": {
       name: "isDemo",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.purchaseOrder.demoTemplateSetId": {
-      name: "demoTemplateSetId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.purchaseOrder.demoTemplateRowId": {
-      name: "demoTemplateRowId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.purchaseOrder.demoTouchedAt": {
-      name: "demoTouchedAt",
       required: false,
       in: "query",
       type: "string",
@@ -116645,6 +115652,12 @@ export default {
     },
     "rowFilter.salesRfq.customerEngineeringContactId": {
       name: "customerEngineeringContactId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.salesRfq.isDemo": {
+      name: "isDemo",
       required: false,
       in: "query",
       type: "string",
@@ -123351,12 +122364,6 @@ export default {
       in: "query",
       type: "string",
     },
-    "rowFilter.demoSeedState.lockedAt": {
-      name: "lockedAt",
-      required: false,
-      in: "query",
-      type: "string",
-    },
     "rowFilter.demoSeedState.lastError": {
       name: "lastError",
       required: false,
@@ -124689,24 +123696,6 @@ export default {
       in: "query",
       type: "string",
     },
-    "rowFilter.supplier.demoTemplateSetId": {
-      name: "demoTemplateSetId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.supplier.demoTemplateRowId": {
-      name: "demoTemplateRowId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.supplier.demoTouchedAt": {
-      name: "demoTouchedAt",
-      required: false,
-      in: "query",
-      type: "string",
-    },
     "rowFilter.supplier.purchasingContactId": {
       name: "purchasingContactId",
       required: false,
@@ -125342,24 +124331,6 @@ export default {
     },
     "rowFilter.item.isDemo": {
       name: "isDemo",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.item.demoTemplateSetId": {
-      name: "demoTemplateSetId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.item.demoTemplateRowId": {
-      name: "demoTemplateRowId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.item.demoTouchedAt": {
-      name: "demoTouchedAt",
       required: false,
       in: "query",
       type: "string",
@@ -127488,6 +126459,12 @@ export default {
       in: "query",
       type: "string",
     },
+    "rowFilter.opportunity.isDemo": {
+      name: "isDemo",
+      required: false,
+      in: "query",
+      type: "string",
+    },
     "body.suggestions": {
       name: "suggestions",
       description: "suggestions",
@@ -127928,24 +126905,6 @@ export default {
     },
     "rowFilter.quote.isDemo": {
       name: "isDemo",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.quote.demoTemplateSetId": {
-      name: "demoTemplateSetId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.quote.demoTemplateRowId": {
-      name: "demoTemplateRowId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.quote.demoTouchedAt": {
-      name: "demoTouchedAt",
       required: false,
       in: "query",
       type: "string",
@@ -128459,24 +127418,6 @@ export default {
     },
     "rowFilter.part.isDemo": {
       name: "isDemo",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.part.demoTemplateSetId": {
-      name: "demoTemplateSetId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.part.demoTemplateRowId": {
-      name: "demoTemplateRowId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.part.demoTouchedAt": {
-      name: "demoTouchedAt",
       required: false,
       in: "query",
       type: "string",

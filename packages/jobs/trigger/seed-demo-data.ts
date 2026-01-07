@@ -6,13 +6,42 @@
  */
 
 import { getCarbonServiceRole } from "@carbon/auth";
+import {
+  createDemoSeeder,
+  type DemoModule,
+  type Industry
+} from "@carbon/database/seed/demo";
 import { task } from "@trigger.dev/sdk/v3";
+import { Kysely, PostgresDialect } from "kysely";
+import pg from "pg";
 
 export interface SeedDemoDataPayload {
   companyId: string;
   industryId: string;
   modules: string[];
   userId: string;
+}
+
+
+function createKyselyDb(): Kysely<any> {
+  const connectionString = process.env.SUPABASE_DB_URL;
+  if (!connectionString) {
+    throw new Error("SUPABASE_DB_URL environment variable is not set");
+  }
+
+  // Use connection pooler port for Supabase
+  const poolerUrl = connectionString.includes("supabase.co")
+    ? connectionString.replace("5432", "6543")
+    : connectionString;
+
+  const pool = new pg.Pool({
+    connectionString: poolerUrl,
+    max: 5
+  });
+
+  return new Kysely<any>({
+    dialect: new PostgresDialect({ pool })
+  });
 }
 
 export const seedDemoData = task({
@@ -23,7 +52,7 @@ export const seedDemoData = task({
     minTimeoutInMs: 1000,
     maxTimeoutInMs: 10000
   },
-  run: async (payload: SeedDemoDataPayload, { ctx }) => {
+  run: async (payload: SeedDemoDataPayload) => {
     const { companyId, industryId, modules, userId } = payload;
 
     console.info("Starting demo data seeding", {
@@ -33,11 +62,12 @@ export const seedDemoData = task({
       userId
     });
 
-    const client = getCarbonServiceRole();
+    const supabaseClient = getCarbonServiceRole();
+    let kyselyDb: Kysely<any> | null = null;
 
     try {
       // 1. Create a seed run record for tracking
-      const { data: seedRun, error: seedRunError } = await client
+      const { data: seedRun, error: seedRunError } = await supabaseClient
         .from("demoSeedRun")
         .insert({
           companyId,
@@ -59,29 +89,27 @@ export const seedDemoData = task({
 
       console.info("Created seed run record", { seedRunId: seedRun.id });
 
-      // 2. Call the seeding procedure
-      console.info("Calling seed_demo procedure");
+      // 2. Create Kysely database connection and seeder
+      kyselyDb = createKyselyDb();
+      const seeder = createDemoSeeder(kyselyDb);
 
-      const { error: seedError } = await client.rpc("seed_demo", {
-        p_company_id: companyId,
-        p_industry_id: industryId,
-        p_module_ids: modules,
-        p_seeded_by: userId
+      // 3. Seed demo data using the Kysely-based seeder
+      console.info("Starting demo data seeding with Kysely seeder");
+
+      await seeder.seedDemo({
+        companyId,
+        industryId: industryId as Industry,
+        moduleIds: modules as DemoModule[],
+        seededBy: userId
       });
 
-      if (seedError) {
-        throw seedError;
-      }
-
-      // 3. Get statistics about what was seeded
-      const { data: stats } = await client.rpc("get_demo_statistics", {
-        p_company_id: companyId
-      });
+      // 4. Get statistics about what was seeded
+      const stats = await seeder.getDemoStatistics(companyId);
 
       console.info("Demo data seeded successfully", { stats });
 
-      // 4. Update seed run status to done
-      await client
+      // 5. Update seed run status to done
+      await supabaseClient
         .from("demoSeedRun")
         .update({
           status: "done",
@@ -89,7 +117,7 @@ export const seedDemoData = task({
         })
         .eq("id", seedRun.id);
 
-      // 5. Return summary
+      // 6. Return summary
       return {
         success: true,
         seedRunId: seedRun.id,
@@ -103,7 +131,7 @@ export const seedDemoData = task({
 
       // Try to update seed run status to failed (best effort)
       try {
-        const { data: existingRun } = await client
+        const { data: existingRun } = await supabaseClient
           .from("demoSeedRun")
           .select("id")
           .eq("companyId", companyId)
@@ -112,7 +140,7 @@ export const seedDemoData = task({
           .single();
 
         if (existingRun) {
-          await client
+          await supabaseClient
             .from("demoSeedRun")
             .update({
               status: "failed",
@@ -126,6 +154,11 @@ export const seedDemoData = task({
       }
 
       throw error;
+    } finally {
+      // Clean up database connection
+      if (kyselyDb) {
+        await kyselyDb.destroy();
+      }
     }
   }
 });

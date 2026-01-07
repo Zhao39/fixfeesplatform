@@ -66,13 +66,8 @@ export interface DemoSeedState {
   status: DemoSeedStatus;
   seededBy?: string;
   seededAt?: string;
-  lockedAt?: string;
-  lastError?: {
-    message: string;
-    [key: string]: any;
-  };
+  lastError?: string;
   createdAt: string;
-  updatedAt: string;
 }
 
 export interface DemoSeedRun {
@@ -92,26 +87,10 @@ export interface DemoSeedRun {
   updatedAt: string;
 }
 
-export interface DemoSeedDashboard {
-  companyId: string;
-  moduleId: DemoModule;
-  templateKey: string;
-  version: number;
-  status: DemoSeedStatus;
-  seededAt?: string;
-  lockedAt?: string;
-  lastError?: {
-    message: string;
-    [key: string]: any;
-  };
-}
-
 export interface DemoStatistics {
   entity: string;
   totalCount: number;
   demoCount: number;
-  touchedCount: number;
-  untouchedCount: number;
 }
 
 export interface DemoStatusResult {
@@ -127,9 +106,6 @@ export interface DemoStatusResult {
  */
 export interface DemoTrackingFields {
   isDemo: boolean;
-  demoTemplateSetId?: string;
-  demoTemplateRowId?: string;
-  demoTouchedAt?: string;
 }
 
 /**
@@ -166,20 +142,6 @@ export function parseTemplateSetKey(key: string): {
  */
 export function isDemoData(entity: Partial<DemoTrackingFields>): boolean {
   return entity.isDemo === true;
-}
-
-/**
- * Check if demo data has been touched (edited by user)
- */
-export function isDemoTouched(entity: Partial<DemoTrackingFields>): boolean {
-  return entity.isDemo === true && entity.demoTouchedAt != null;
-}
-
-/**
- * Check if demo data is untouched (safe to cleanup)
- */
-export function isDemoUntouched(entity: Partial<DemoTrackingFields>): boolean {
-  return entity.isDemo === true && entity.demoTouchedAt == null;
 }
 
 /**
@@ -242,3 +204,12 @@ export const moduleInfo: Record<
     description: "Inventory tracking and management"
   }
 };
+
+// Re-export Kysely-based seeding utilities
+export {
+  cleanupDemoData,
+  createDemoSeeder,
+  DemoSeeder,
+  generateDemoId,
+  seedDemoData
+} from "./seed-demo-data";
