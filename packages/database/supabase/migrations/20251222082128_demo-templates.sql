@@ -111,6 +111,9 @@ ALTER TABLE "item" ADD COLUMN IF NOT EXISTS "isDemo" BOOLEAN DEFAULT FALSE;
 -- Parts
 ALTER TABLE "part" ADD COLUMN IF NOT EXISTS "isDemo" BOOLEAN  DEFAULT FALSE;
 
+-- Materials
+ALTER TABLE "material" ADD COLUMN IF NOT EXISTS "isDemo" BOOLEAN DEFAULT FALSE;
+
 -- Quotes
 ALTER TABLE "quote" ADD COLUMN IF NOT EXISTS "isDemo" BOOLEAN  DEFAULT FALSE;
 
@@ -173,6 +176,20 @@ CREATE TABLE IF NOT EXISTS demo_templates."part" (
   "approved"              BOOLEAN NOT NULL DEFAULT FALSE,
   "fromDate"              DATE,
   "toDate"                DATE,
+
+  PRIMARY KEY("templateSetId", "templateRowId")
+);
+
+-- Materials template
+-- Note: Uses name strings instead of IDs since materialForm/materialSubstance have auto-generated IDs
+CREATE TABLE IF NOT EXISTS demo_templates."material" (
+  "templateSetId"         TEXT NOT NULL REFERENCES "templateSet"("id") ON DELETE CASCADE,
+  "templateRowId"         TEXT NOT NULL,
+
+  -- Material fields (names to look up at runtime)
+  "materialFormName"      TEXT NOT NULL,  -- Will be looked up to get materialFormId
+  "materialSubstanceName" TEXT NOT NULL,  -- Will be looked up to get materialSubstanceId
+  "approved"              BOOLEAN NOT NULL DEFAULT FALSE,
 
   PRIMARY KEY("templateSetId", "templateRowId")
 );

@@ -58,6 +58,13 @@ interface DemoTemplatesSchema {
     revision: string | null;
     active: boolean;
   };
+  material: {
+    templateSetId: string;
+    templateRowId: string;
+    materialFormName: string;
+    materialSubstanceName: string;
+    approved: boolean;
+  };
   part: {
     templateSetId: string;
     templateRowId: string;
@@ -849,20 +856,36 @@ export class DemoSeeder {
         .execute();
     }
 
-    // 3. Get and seed template parts
+    // 3. Get and seed template parts with their corresponding item readableId
+    // NOTE: After the revisions migration, part.id must equal item.readableId
+    // The join gets the readableId from the template item that matches this part
     const templateParts = await templates
-      .selectFrom("part")
-      .selectAll()
-      .where("templateSetId", "=", templateSetId)
+      .selectFrom("part as p")
+      .innerJoin("item as it", (join) =>
+        join
+          .onRef("it.templateSetId", "=", "p.templateSetId")
+          .onRef("it.templateRowId", "=", "p.templateRowId")
+      )
+      .select([
+        "p.templateSetId",
+        "p.templateRowId",
+        "p.approved",
+        "p.fromDate",
+        "p.toDate",
+        "it.readableId"
+      ])
+      .where("p.templateSetId", "=", templateSetId)
       .execute();
 
     for (const tpl of templateParts) {
-      const demoId = generateDemoId(companyId, tpl.templateRowId);
+      // part.id should be the item's readableId, NOT a UUID
+      // This is how the parts view joins: part.id = item.readableId
+      const partId = tpl.readableId;
 
       await trx
         .insertInto("part")
         .values({
-          id: demoId,
+          id: partId,
           companyId,
           approved: tpl.approved,
           fromDate: tpl.fromDate,
@@ -890,7 +913,7 @@ export class DemoSeeder {
     // Ensure unitOfMeasure records exist before seeding items
     await this.ensureUnitOfMeasures(trx, companyId, templateSetId);
 
-    // Seed items (inventory is primarily item-based)
+    // 1. Seed items
     const templateItems = await templates
       .selectFrom("item")
       .selectAll()
@@ -918,6 +941,103 @@ export class DemoSeeder {
           createdBy: userId
         })
         .onConflict((oc) => oc.column("id").doNothing())
+        .execute();
+    }
+
+    // 2. Seed parts (for Part type items)
+    const templateParts = await templates
+      .selectFrom("part as p")
+      .innerJoin("item as it", (join) =>
+        join
+          .onRef("it.templateSetId", "=", "p.templateSetId")
+          .onRef("it.templateRowId", "=", "p.templateRowId")
+      )
+      .select([
+        "p.templateSetId",
+        "p.templateRowId",
+        "p.approved",
+        "p.fromDate",
+        "p.toDate",
+        "it.readableId"
+      ])
+      .where("p.templateSetId", "=", templateSetId)
+      .execute();
+
+    for (const tpl of templateParts) {
+      const partId = tpl.readableId;
+
+      await trx
+        .insertInto("part")
+        .values({
+          id: partId,
+          companyId,
+          approved: tpl.approved,
+          fromDate: tpl.fromDate,
+          toDate: tpl.toDate,
+          isDemo: true,
+          createdBy: userId
+        })
+        .onConflict((oc) => oc.columns(["id", "companyId"]).doNothing())
+        .execute();
+    }
+
+    // 3. Seed materials (for Material type items)
+    const templateMaterials = await templates
+      .selectFrom("material as m")
+      .innerJoin("item as it", (join) =>
+        join
+          .onRef("it.templateSetId", "=", "m.templateSetId")
+          .onRef("it.templateRowId", "=", "m.templateRowId")
+      )
+      .select([
+        "m.templateSetId",
+        "m.templateRowId",
+        "m.materialFormName",
+        "m.materialSubstanceName",
+        "m.approved",
+        "it.readableId"
+      ])
+      .where("m.templateSetId", "=", templateSetId)
+      .execute();
+
+    for (const tpl of templateMaterials) {
+      // Look up materialFormId by name (global system records have NULL companyId)
+      const materialForm = await trx
+        .selectFrom("materialForm")
+        .select("id")
+        .where("name", "=", tpl.materialFormName)
+        .where("companyId", "is", null)
+        .executeTakeFirst();
+
+      // Look up materialSubstanceId by name
+      const materialSubstance = await trx
+        .selectFrom("materialSubstance")
+        .select("id")
+        .where("name", "=", tpl.materialSubstanceName)
+        .where("companyId", "is", null)
+        .executeTakeFirst();
+
+      if (!materialForm || !materialSubstance) {
+        console.warn(
+          `Skipping material ${tpl.readableId}: form=${tpl.materialFormName} or substance=${tpl.materialSubstanceName} not found`
+        );
+        continue;
+      }
+
+      const materialId = tpl.readableId;
+
+      await trx
+        .insertInto("material")
+        .values({
+          id: materialId,
+          companyId,
+          materialFormId: materialForm.id,
+          materialSubstanceId: materialSubstance.id,
+          approved: tpl.approved,
+          isDemo: true,
+          createdBy: userId
+        })
+        .onConflict((oc) => oc.columns(["id", "companyId"]).doNothing())
         .execute();
     }
   }
@@ -1015,6 +1135,13 @@ export class DemoSeeder {
       // Delete supplier interactions
       await trx
         .deleteFrom("supplierInteraction")
+        .where("companyId", "=", companyId)
+        .where("isDemo", "=", true)
+        .execute();
+
+      // Delete materials before items (material.id references item.readableId)
+      await trx
+        .deleteFrom("material")
         .where("companyId", "=", companyId)
         .where("isDemo", "=", true)
         .execute();

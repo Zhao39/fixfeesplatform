@@ -11251,6 +11251,9 @@ export default {
             $ref: "#/parameters/rowFilter.material.materialTypeId",
           },
           {
+            $ref: "#/parameters/rowFilter.material.isDemo",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -11361,6 +11364,9 @@ export default {
             $ref: "#/parameters/rowFilter.material.materialTypeId",
           },
           {
+            $ref: "#/parameters/rowFilter.material.isDemo",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -11423,6 +11429,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.material.materialTypeId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.material.isDemo",
           },
           {
             $ref: "#/parameters/body.material",
@@ -71050,6 +71059,11 @@ export default {
           format: "text",
           type: "string",
         },
+        isDemo: {
+          default: false,
+          format: "boolean",
+          type: "boolean",
+        },
       },
       type: "object",
     },
@@ -100953,6 +100967,12 @@ export default {
     },
     "rowFilter.material.materialTypeId": {
       name: "materialTypeId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.material.isDemo": {
+      name: "isDemo",
       required: false,
       in: "query",
       type: "string",

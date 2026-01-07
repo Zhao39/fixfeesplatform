@@ -116,11 +116,11 @@ export async function action({ request }: ActionFunctionArgs) {
 
 // Icon mapping for industries
 const industryIcons: Record<string, React.ReactNode> = {
-  robotics_oem: <LuBot className="h-6 w-6" />,
-  cnc_aerospace: <LuCog className="h-6 w-6" />,
-  metal_fabrication: <LuFactory className="h-6 w-6" />,
-  automotive_precision: <LuWrench className="h-6 w-6" />,
-  custom: <LuCircleHelp className="h-6 w-6" />
+  robotics_oem: <LuBot className="h-5 w-5" />,
+  cnc_aerospace: <LuCog className="h-5 w-5" />,
+  metal_fabrication: <LuFactory className="h-5 w-5" />,
+  automotive_precision: <LuWrench className="h-5 w-5" />,
+  custom: <LuCircleHelp className="h-5 w-5" />
 };
 
 // IndustryCardSelector component for card-based radio selection
@@ -149,27 +149,26 @@ function IndustryCardSelector({
             key={value}
             htmlFor={`${id}:${value}`}
             className={cn(
-              "group relative flex cursor-pointer flex-col rounded-xl border-2 p-6 transition-all duration-200",
+              "group relative flex cursor-pointer flex-col rounded-xl border-2 p-4 transition-all duration-200",
               "bg-card hover:bg-accent/50",
               "border-border hover:border-primary/50",
               "has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:bg-primary/5",
-              "has-[[data-state=checked]]:shadow-lg has-[[data-state=checked]]:shadow-primary/10",
-              value === "custom" && "md:col-span-2"
+              "has-[[data-state=checked]]:shadow-lg has-[[data-state=checked]]:shadow-primary/10"
             )}
             onClick={() => onSelect(value)}
           >
-            <div className="flex flex-col h-full gap-4">
+            <div className="flex flex-col h-full gap-3">
               <div className="flex items-start justify-between">
                 {/* Icon container with gradient background */}
                 <div
                   className={cn(
-                    "flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg transition-all duration-200",
+                    "flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg transition-all duration-200",
                     "bg-gradient-to-br from-muted to-muted/50 text-muted-foreground",
                     "group-hover:from-primary/20 group-hover:to-primary/10 group-hover:text-primary",
                     "group-has-[[data-state=checked]]:from-primary group-has-[[data-state=checked]]:to-primary/80 group-has-[[data-state=checked]]:text-primary-foreground"
                   )}
                 >
-                  {industryIcons[value] || <LuFactory className="h-6 w-6" />}
+                  {industryIcons[value] || <LuFactory className="h-5 w-5" />}
                 </div>
 
                 <RadioGroupItem
@@ -186,26 +185,18 @@ function IndustryCardSelector({
               <div className="flex-1 min-w-0">
                 <h3
                   className={cn(
-                    "text-lg font-bold transition-colors mb-2",
+                    "text-base font-semibold transition-colors mb-1",
                     "text-foreground group-hover:text-primary",
                     "group-has-[[data-state=checked]]:text-primary"
                   )}
                 >
                   {label}
                 </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
+                <p className="text-sm text-muted-foreground leading-snug">
                   {description}
                 </p>
               </div>
             </div>
-
-            {/* Selection indicator bar */}
-            <div
-              className={cn(
-                "absolute bottom-0 left-0 h-1 w-full rounded-b-xl transition-all duration-300",
-                "bg-transparent group-has-[[data-state=checked]]:bg-gradient-to-r group-has-[[data-state=checked]]:from-primary group-has-[[data-state=checked]]:to-primary/60"
-              )}
-            />
           </label>
         ))}
       </RadioGroup>
@@ -261,7 +252,7 @@ export default function OnboardingIndustry() {
       >
         <CardHeader className="pb-2">
           <CardTitle className="text-2xl">
-            What type of organization are you?
+            Which best describes your company?
           </CardTitle>
           <CardDescription className="text-base">
             This helps us customize your experience with relevant features and

@@ -14622,6 +14622,7 @@ export type Database = {
           finishId: string | null
           gradeId: string | null
           id: string
+          isDemo: boolean | null
           materialFormId: string | null
           materialSubstanceId: string | null
           materialTypeId: string | null
@@ -14641,6 +14642,7 @@ export type Database = {
           finishId?: string | null
           gradeId?: string | null
           id?: string
+          isDemo?: boolean | null
           materialFormId?: string | null
           materialSubstanceId?: string | null
           materialTypeId?: string | null
@@ -14660,6 +14662,7 @@ export type Database = {
           finishId?: string | null
           gradeId?: string | null
           id?: string
+          isDemo?: boolean | null
           materialFormId?: string | null
           materialSubstanceId?: string | null
           materialTypeId?: string | null
