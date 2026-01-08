@@ -175,7 +175,7 @@ $ cp ./.env.example ./.env
 - `UPSTASH_REDIS_REST_URL=[UPSTASH_REDIS_REST_URL]`
 - `UPSTASH_REDIS_REST_TOKEN=[UPSTASH_REDIS_REST_TOKEN]`
 
-3. Navigate to the project you created in [https://cloud.trigger.dev/](Trigger.dev) and copy the following from the `Environments & API Keys` section:
+3. Navigate to the project you created in [https://cloud.trigger.dev](https://cloud.trigger.dev) and copy the following from the `Environments & API Keys` section:
 
 - `TRIGGER_SECRET_KEY=[Private 'dev' API Key, starting 'tr_dev_*']`
 - `TRIGGER_API_URL="https://api.trigger.dev"`
