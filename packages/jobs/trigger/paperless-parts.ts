@@ -204,6 +204,23 @@ export const paperlessPartsTask = task({
           );
         }
 
+        // Check if quote already exists
+        const existingQuote = await carbon
+          .from("quote")
+          .select("id")
+          .eq("externalId->>paperlessId", quotePayload.uuid)
+          .eq("companyId", payload.companyId)
+          .maybeSingle();
+
+        if (existingQuote?.data?.id) {
+          console.log("Quote already exists", existingQuote.data.id);
+          result = {
+            success: true,
+            message: "Quote already exists",
+          };
+          break;
+        }
+
         const [
           {
             customerId: quoteCustomerId,
@@ -258,6 +275,10 @@ export const paperlessPartsTask = task({
           exchangeRate: 1 as number | undefined,
           exchangeRateUpdatedAt: undefined as string | undefined,
           expirationDate: undefined as string | undefined,
+          revisionId: ppQuoteRevisionNumber ?? 0,
+          externalId: {
+            paperlessId: quotePayload.uuid,
+          },
         };
 
         const [
