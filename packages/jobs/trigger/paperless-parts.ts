@@ -247,24 +247,17 @@ export const paperlessPartsTask = task({
         }
 
         // Create a quote object from the Paperless Parts data
-        const quote = {
+        const quote: Database["public"]["Tables"]["quote"]["Insert"] = {
           companyId: payload.companyId,
           customerId: quoteCustomerId,
           customerContactId: quoteCustomerContactId,
           quoteId: quoteReadableId,
-          name: `Quote for ${
-            ppQuote.data.contact?.account?.name ||
-            `${ppQuote.data.contact?.first_name} ${ppQuote.data.contact?.last_name}`
-          }`,
           status: "Draft" as const,
           currencyCode: company.data.baseCurrencyCode,
           createdBy: quoteCreatedBy,
           exchangeRate: 1 as number | undefined,
           exchangeRateUpdatedAt: undefined as string | undefined,
           expirationDate: undefined as string | undefined,
-          externalId: {
-            paperlessPartsId: quotePayload.uuid,
-          },
         };
 
         const [

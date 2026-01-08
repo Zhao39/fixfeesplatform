@@ -1289,11 +1289,46 @@ export async function getCustomerIdAndContactId(
   if (existingCustomerContact.data) {
     customerContactId = existingCustomerContact.data.id;
   } else {
-    // If there is no matching contact in Carbon, we need to create a new contact in Carbon
-    const newContact = await carbon
+    // If there is no matching contact in Carbon, check if contact exists by email first
+    const existingContactByEmail = await carbon
       .from("contact")
-      .upsert(
-        {
+      .select("id")
+      .eq("companyId", company.id)
+      .eq("email", contact.email!)
+      .eq("isCustomer", true)
+      .maybeSingle();
+
+    let contactId: string;
+
+    if (existingContactByEmail.data) {
+      // Update the existing contact with the external ID
+      const updatedContact = await carbon
+        .from("contact")
+        .update({
+          firstName: contact.first_name!,
+          lastName: contact.last_name!,
+          externalId: {
+            paperlessPartsId: contact.id
+          }
+        })
+        .eq("id", existingContactByEmail.data.id)
+        .select()
+        .single();
+
+      if (updatedContact.error || !updatedContact.data) {
+        console.error("Failed to update contact in Carbon", updatedContact);
+        return {
+          customerContactId: null,
+          customerId
+        };
+      }
+
+      contactId = updatedContact.data.id;
+    } else {
+      // Create a new contact in Carbon
+      const newContact = await carbon
+        .from("contact")
+        .insert({
           companyId: company.id,
           firstName: contact.first_name!,
           lastName: contact.last_name!,
@@ -1302,40 +1337,51 @@ export async function getCustomerIdAndContactId(
           externalId: {
             paperlessPartsId: contact.id
           }
-        },
-        {
-          onConflict: "companyId, email, isCustomer"
-        }
-      )
-      .select()
-      .single();
+        })
+        .select()
+        .single();
 
-    if (newContact.error || !newContact.data) {
-      console.error("Failed to create contact in Carbon", newContact);
-      return {
-        customerContactId: null,
-        customerId
-      };
+      if (newContact.error || !newContact.data) {
+        console.error("Failed to create contact in Carbon", newContact);
+        return {
+          customerContactId: null,
+          customerId
+        };
+      }
+
+      contactId = newContact.data.id;
     }
 
-    const newCustomerContact = await carbon
+    // Check if customerContact already exists for this customer and contact
+    const existingCustomerContactLink = await carbon
       .from("customerContact")
-      .insert({
-        customerId,
-        contactId: newContact.data.id
-      })
-      .select()
-      .single();
+      .select("id")
+      .eq("customerId", customerId)
+      .eq("contactId", contactId)
+      .maybeSingle();
 
-    if (newCustomerContact.error || !newCustomerContact.data) {
-      console.error("Failed to create customerContact", newCustomerContact);
-      return {
-        customerContactId: null,
-        customerId
-      };
+    if (existingCustomerContactLink.data) {
+      customerContactId = existingCustomerContactLink.data.id;
+    } else {
+      const newCustomerContact = await carbon
+        .from("customerContact")
+        .insert({
+          customerId,
+          contactId
+        })
+        .select()
+        .single();
+
+      if (newCustomerContact.error || !newCustomerContact.data) {
+        console.error("Failed to create customerContact", newCustomerContact);
+        return {
+          customerContactId: null,
+          customerId
+        };
+      }
+
+      customerContactId = newCustomerContact.data.id;
     }
-
-    customerContactId = newCustomerContact.data.id;
   }
 
   return {
@@ -2779,8 +2825,7 @@ export async function insertQuoteLines(
               unitPrice: qp.unit_price ?? 0,
               leadTime: qp.lead_time ?? 0,
               discountPercent: 0,
-              createdBy,
-              companyId
+              createdBy
             }));
 
           const priceResult = await carbon
@@ -2863,7 +2908,7 @@ export async function insertQuoteLines(
                       machineUnit: "Minutes/Piece",
                       workInstruction: operation.notes
                         ? textToTiptap(operation.notes)
-                        : null,
+                        : {},
                       companyId,
                       createdBy
                     };
