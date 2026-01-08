@@ -8,6 +8,7 @@ import {
   getOrderLocationId,
   getPaperlessParts,
   insertOrderLines,
+  insertQuoteLines,
   OrderSchema,
 } from "@carbon/ee/paperless-parts";
 import type { SupabaseClient } from "@supabase/supabase-js";
@@ -217,7 +218,7 @@ export const paperlessPartsTask = task({
           getEmployeeAndSalesPersonId(carbon, {
             company: company.data,
             estimator: ppQuote.data.estimator,
-            salesPerson: ppQuote.data.sales_person,
+            salesPerson: ppQuote.data.salesperson,
           }),
         ]);
 
@@ -378,6 +379,30 @@ export const paperlessPartsTask = task({
             .from("quote")
             .update({ externalLinkId: quoteExternalLink.data.id })
             .eq("id", quoteId);
+        }
+
+        // Insert quote lines from Paperless Parts quote items
+        try {
+          await insertQuoteLines(carbon, {
+            quoteId,
+            opportunityId: quoteOpportunity.data?.id,
+            locationId: quoteLocationId,
+            companyId: payload.companyId,
+            createdBy: quoteCreatedBy,
+            quoteItems: ppQuote.data.quote_items ?? [],
+            defaultMethodType: methodType,
+            defaultTrackingType: trackingType,
+            billOfProcessBlackList,
+          });
+          console.log("✅ Quote lines successfully created");
+        } catch (error) {
+          console.error("Failed to insert quote lines:", error);
+          await deleteQuote(carbon, quoteId);
+          result = {
+            success: false,
+            message: "Failed to insert quote lines",
+          };
+          break;
         }
 
         console.info("🔰 New Carbon quote created from Paperless Parts");
