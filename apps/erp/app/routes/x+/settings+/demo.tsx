@@ -32,7 +32,6 @@ export const handle: Handle = {
 
 interface DemoStatistics {
   entity: string;
-  totalCount: number;
   demoCount: number;
 }
 
@@ -56,11 +55,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const statistics: DemoStatistics[] = [];
 
   for (const { name, table } of entities) {
-    const { count: totalCount } = await client
-      .from(table)
-      .select("*", { count: "exact", head: true })
-      .eq("companyId", companyId);
-
     const { count: demoCount } = await client
       .from(table)
       .select("*", { count: "exact", head: true })
@@ -69,7 +63,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
     statistics.push({
       entity: name,
-      totalCount: totalCount ?? 0,
       demoCount: demoCount ?? 0
     });
   }
@@ -236,9 +229,6 @@ export async function action({ request }: ActionFunctionArgs) {
       .eq("companyId", companyId)
       .eq("isDemo", true);
 
-    // 18. Clear the seed state
-    await client.from("demoSeedState").delete().eq("companyId", companyId);
-
     return redirect(
       path.to.demoData,
       await flash(request, success("Demo data deleted successfully"))
@@ -278,7 +268,6 @@ export default function DemoDataSettings() {
               <Thead>
                 <Tr>
                   <Th>Entity</Th>
-                  <Th className="text-right">Total Records</Th>
                   <Th className="text-right">Demo Records</Th>
                 </Tr>
               </Thead>
@@ -286,7 +275,6 @@ export default function DemoDataSettings() {
                 {statistics.map((stat) => (
                   <Tr key={stat.entity}>
                     <Td>{stat.entity}</Td>
-                    <Td className="text-right">{stat.totalCount}</Td>
                     <Td className="text-right">
                       {stat.demoCount > 0 ? (
                         <span className="text-orange-500 font-medium">
@@ -300,9 +288,6 @@ export default function DemoDataSettings() {
                 ))}
                 <Tr className="font-semibold border-t-2">
                   <Td>Total</Td>
-                  <Td className="text-right">
-                    {statistics.reduce((sum, s) => sum + s.totalCount, 0)}
-                  </Td>
                   <Td className="text-right">
                     {totalDemoRecords > 0 ? (
                       <span className="text-orange-500">

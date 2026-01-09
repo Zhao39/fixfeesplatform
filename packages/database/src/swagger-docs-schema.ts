@@ -37579,13 +37579,13 @@ export default {
             $ref: "#/parameters/rowFilter.customer.embedding",
           },
           {
-            $ref: "#/parameters/rowFilter.customer.isDemo",
-          },
-          {
             $ref: "#/parameters/rowFilter.customer.salesContactId",
           },
           {
             $ref: "#/parameters/rowFilter.customer.invoicingContactId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.customer.isDemo",
           },
           {
             $ref: "#/parameters/select",
@@ -37713,13 +37713,13 @@ export default {
             $ref: "#/parameters/rowFilter.customer.embedding",
           },
           {
-            $ref: "#/parameters/rowFilter.customer.isDemo",
-          },
-          {
             $ref: "#/parameters/rowFilter.customer.salesContactId",
           },
           {
             $ref: "#/parameters/rowFilter.customer.invoicingContactId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.customer.isDemo",
           },
           {
             $ref: "#/parameters/preferReturn",
@@ -37801,13 +37801,13 @@ export default {
             $ref: "#/parameters/rowFilter.customer.embedding",
           },
           {
-            $ref: "#/parameters/rowFilter.customer.isDemo",
-          },
-          {
             $ref: "#/parameters/rowFilter.customer.salesContactId",
           },
           {
             $ref: "#/parameters/rowFilter.customer.invoicingContactId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.customer.isDemo",
           },
           {
             $ref: "#/parameters/body.customer",
@@ -51366,168 +51366,6 @@ export default {
         tags: ["purchaseOrderLines"],
       },
     },
-    "/demoSeedState": {
-      get: {
-        parameters: [
-          {
-            $ref: "#/parameters/rowFilter.demoSeedState.companyId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.demoSeedState.moduleId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.demoSeedState.templateSetId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.demoSeedState.status",
-          },
-          {
-            $ref: "#/parameters/rowFilter.demoSeedState.seededBy",
-          },
-          {
-            $ref: "#/parameters/rowFilter.demoSeedState.seededAt",
-          },
-          {
-            $ref: "#/parameters/rowFilter.demoSeedState.lastError",
-          },
-          {
-            $ref: "#/parameters/rowFilter.demoSeedState.createdAt",
-          },
-          {
-            $ref: "#/parameters/select",
-          },
-          {
-            $ref: "#/parameters/order",
-          },
-          {
-            $ref: "#/parameters/range",
-          },
-          {
-            $ref: "#/parameters/rangeUnit",
-          },
-          {
-            $ref: "#/parameters/offset",
-          },
-          {
-            $ref: "#/parameters/limit",
-          },
-          {
-            $ref: "#/parameters/preferCount",
-          },
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-            schema: {
-              items: {
-                $ref: "#/definitions/demoSeedState",
-              },
-              type: "array",
-            },
-          },
-          "206": {
-            description: "Partial Content",
-          },
-        },
-        tags: ["demoSeedState"],
-      },
-      post: {
-        parameters: [
-          {
-            $ref: "#/parameters/body.demoSeedState",
-          },
-          {
-            $ref: "#/parameters/select",
-          },
-          {
-            $ref: "#/parameters/preferPost",
-          },
-        ],
-        responses: {
-          "201": {
-            description: "Created",
-          },
-        },
-        tags: ["demoSeedState"],
-      },
-      delete: {
-        parameters: [
-          {
-            $ref: "#/parameters/rowFilter.demoSeedState.companyId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.demoSeedState.moduleId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.demoSeedState.templateSetId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.demoSeedState.status",
-          },
-          {
-            $ref: "#/parameters/rowFilter.demoSeedState.seededBy",
-          },
-          {
-            $ref: "#/parameters/rowFilter.demoSeedState.seededAt",
-          },
-          {
-            $ref: "#/parameters/rowFilter.demoSeedState.lastError",
-          },
-          {
-            $ref: "#/parameters/rowFilter.demoSeedState.createdAt",
-          },
-          {
-            $ref: "#/parameters/preferReturn",
-          },
-        ],
-        responses: {
-          "204": {
-            description: "No Content",
-          },
-        },
-        tags: ["demoSeedState"],
-      },
-      patch: {
-        parameters: [
-          {
-            $ref: "#/parameters/rowFilter.demoSeedState.companyId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.demoSeedState.moduleId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.demoSeedState.templateSetId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.demoSeedState.status",
-          },
-          {
-            $ref: "#/parameters/rowFilter.demoSeedState.seededBy",
-          },
-          {
-            $ref: "#/parameters/rowFilter.demoSeedState.seededAt",
-          },
-          {
-            $ref: "#/parameters/rowFilter.demoSeedState.lastError",
-          },
-          {
-            $ref: "#/parameters/rowFilter.demoSeedState.createdAt",
-          },
-          {
-            $ref: "#/parameters/body.demoSeedState",
-          },
-          {
-            $ref: "#/parameters/preferReturn",
-          },
-        ],
-        responses: {
-          "204": {
-            description: "No Content",
-          },
-        },
-        tags: ["demoSeedState"],
-      },
-    },
     "/nonConformanceJobOperation": {
       get: {
         parameters: [
@@ -53764,13 +53602,13 @@ export default {
             $ref: "#/parameters/rowFilter.supplier.embedding",
           },
           {
-            $ref: "#/parameters/rowFilter.supplier.isDemo",
-          },
-          {
             $ref: "#/parameters/rowFilter.supplier.purchasingContactId",
           },
           {
             $ref: "#/parameters/rowFilter.supplier.invoicingContactId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplier.isDemo",
           },
           {
             $ref: "#/parameters/select",
@@ -53898,13 +53736,13 @@ export default {
             $ref: "#/parameters/rowFilter.supplier.embedding",
           },
           {
-            $ref: "#/parameters/rowFilter.supplier.isDemo",
-          },
-          {
             $ref: "#/parameters/rowFilter.supplier.purchasingContactId",
           },
           {
             $ref: "#/parameters/rowFilter.supplier.invoicingContactId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplier.isDemo",
           },
           {
             $ref: "#/parameters/preferReturn",
@@ -53986,13 +53824,13 @@ export default {
             $ref: "#/parameters/rowFilter.supplier.embedding",
           },
           {
-            $ref: "#/parameters/rowFilter.supplier.isDemo",
-          },
-          {
             $ref: "#/parameters/rowFilter.supplier.purchasingContactId",
           },
           {
             $ref: "#/parameters/rowFilter.supplier.invoicingContactId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplier.isDemo",
           },
           {
             $ref: "#/parameters/body.supplier",
@@ -59422,6 +59260,9 @@ export default {
             $ref: "#/parameters/rowFilter.quote.customerEngineeringContactId",
           },
           {
+            $ref: "#/parameters/rowFilter.quote.externalId",
+          },
+          {
             $ref: "#/parameters/rowFilter.quote.isDemo",
           },
           {
@@ -59586,6 +59427,9 @@ export default {
             $ref: "#/parameters/rowFilter.quote.customerEngineeringContactId",
           },
           {
+            $ref: "#/parameters/rowFilter.quote.externalId",
+          },
+          {
             $ref: "#/parameters/rowFilter.quote.isDemo",
           },
           {
@@ -59702,6 +59546,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.quote.customerEngineeringContactId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.quote.externalId",
           },
           {
             $ref: "#/parameters/rowFilter.quote.isDemo",
@@ -83174,11 +83021,6 @@ export default {
           format: "extensions.halfvec(384)",
           type: "string",
         },
-        isDemo: {
-          default: false,
-          format: "boolean",
-          type: "boolean",
-        },
         salesContactId: {
           description:
             "Note:\nThis is a Foreign Key to `customerContact.id`.<fk table='customerContact' column='id'/>",
@@ -83190,6 +83032,11 @@ export default {
             "Note:\nThis is a Foreign Key to `customerContact.id`.<fk table='customerContact' column='id'/>",
           format: "text",
           type: "string",
+        },
+        isDemo: {
+          default: false,
+          format: "boolean",
+          type: "boolean",
         },
       },
       type: "object",
@@ -88123,8 +87970,6 @@ export default {
           type: "array",
         },
         industryId: {
-          description:
-            "Selected industry type during onboarding (enum with custom option)",
           enum: [
             "robotics_oem",
             "cnc_aerospace",
@@ -88136,12 +87981,10 @@ export default {
           type: "string",
         },
         customIndustryDescription: {
-          description: 'Custom industry description if "custom" was selected',
           format: "text",
           type: "string",
         },
         selectedModules: {
-          description: "Array of module IDs selected during onboarding",
           format: "text[]",
           items: {
             type: "string",
@@ -88149,13 +87992,11 @@ export default {
           type: "array",
         },
         featureRequests: {
-          description: "Feature requests or needs submitted during onboarding",
           format: "text",
           type: "string",
         },
         seedDemoData: {
           default: false,
-          description: "Whether user requested demo data to be seeded",
           format: "boolean",
           type: "boolean",
         },
@@ -90034,60 +89875,6 @@ export default {
       },
       type: "object",
     },
-    demoSeedState: {
-      required: [
-        "companyId",
-        "moduleId",
-        "templateSetId",
-        "status",
-        "createdAt",
-      ],
-      properties: {
-        companyId: {
-          description:
-            "Note:\nThis is a Primary Key.<pk/>\nThis is a Foreign Key to `company.id`.<fk table='company' column='id'/>",
-          format: "text",
-          type: "string",
-        },
-        moduleId: {
-          description:
-            "Note:\nThis is a Primary Key.<pk/>\nThis is a Foreign Key to `demoModule.id`.<fk table='demoModule' column='id'/>",
-          format: "text",
-          type: "string",
-        },
-        templateSetId: {
-          description:
-            "Note:\nThis is a Foreign Key to `templateSet.id`.<fk table='templateSet' column='id'/>",
-          format: "text",
-          type: "string",
-        },
-        status: {
-          default: "pending",
-          format: "text",
-          type: "string",
-        },
-        seededBy: {
-          description:
-            "Note:\nThis is a Foreign Key to `user.id`.<fk table='user' column='id'/>",
-          format: "text",
-          type: "string",
-        },
-        seededAt: {
-          format: "timestamp with time zone",
-          type: "string",
-        },
-        lastError: {
-          format: "text",
-          type: "string",
-        },
-        createdAt: {
-          default: "now()",
-          format: "timestamp with time zone",
-          type: "string",
-        },
-      },
-      type: "object",
-    },
     nonConformanceJobOperation: {
       required: [
         "id",
@@ -91239,11 +91026,6 @@ export default {
           format: "extensions.halfvec(384)",
           type: "string",
         },
-        isDemo: {
-          default: false,
-          format: "boolean",
-          type: "boolean",
-        },
         purchasingContactId: {
           description:
             "Note:\nThis is a Foreign Key to `supplierContact.id`.<fk table='supplierContact' column='id'/>",
@@ -91255,6 +91037,11 @@ export default {
             "Note:\nThis is a Foreign Key to `supplierContact.id`.<fk table='supplierContact' column='id'/>",
           format: "text",
           type: "string",
+        },
+        isDemo: {
+          default: false,
+          format: "boolean",
+          type: "boolean",
         },
       },
       type: "object",
@@ -94128,6 +93915,9 @@ export default {
             "Note:\nThis is a Foreign Key to `customerContact.id`.<fk table='customerContact' column='id'/>",
           format: "text",
           type: "string",
+        },
+        externalId: {
+          format: "jsonb",
         },
         isDemo: {
           default: false,
@@ -114542,12 +114332,6 @@ export default {
       in: "query",
       type: "string",
     },
-    "rowFilter.customer.isDemo": {
-      name: "isDemo",
-      required: false,
-      in: "query",
-      type: "string",
-    },
     "rowFilter.customer.salesContactId": {
       name: "salesContactId",
       required: false,
@@ -114556,6 +114340,12 @@ export default {
     },
     "rowFilter.customer.invoicingContactId": {
       name: "invoicingContactId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.customer.isDemo": {
+      name: "isDemo",
       required: false,
       in: "query",
       type: "string",
@@ -120181,36 +119971,30 @@ export default {
     },
     "rowFilter.company.industryId": {
       name: "industryId",
-      description:
-        "Selected industry type during onboarding (enum with custom option)",
       required: false,
       in: "query",
       type: "string",
     },
     "rowFilter.company.customIndustryDescription": {
       name: "customIndustryDescription",
-      description: 'Custom industry description if "custom" was selected',
       required: false,
       in: "query",
       type: "string",
     },
     "rowFilter.company.selectedModules": {
       name: "selectedModules",
-      description: "Array of module IDs selected during onboarding",
       required: false,
       in: "query",
       type: "string",
     },
     "rowFilter.company.featureRequests": {
       name: "featureRequests",
-      description: "Feature requests or needs submitted during onboarding",
       required: false,
       in: "query",
       type: "string",
     },
     "rowFilter.company.seedDemoData": {
       name: "seedDemoData",
-      description: "Whether user requested demo data to be seeded",
       required: false,
       in: "query",
       type: "string",
@@ -122339,63 +122123,6 @@ export default {
       in: "query",
       type: "string",
     },
-    "body.demoSeedState": {
-      name: "demoSeedState",
-      description: "demoSeedState",
-      required: false,
-      in: "body",
-      schema: {
-        $ref: "#/definitions/demoSeedState",
-      },
-    },
-    "rowFilter.demoSeedState.companyId": {
-      name: "companyId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.demoSeedState.moduleId": {
-      name: "moduleId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.demoSeedState.templateSetId": {
-      name: "templateSetId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.demoSeedState.status": {
-      name: "status",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.demoSeedState.seededBy": {
-      name: "seededBy",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.demoSeedState.seededAt": {
-      name: "seededAt",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.demoSeedState.lastError": {
-      name: "lastError",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.demoSeedState.createdAt": {
-      name: "createdAt",
-      required: false,
-      in: "query",
-      type: "string",
-    },
     "body.nonConformanceJobOperation": {
       name: "nonConformanceJobOperation",
       description: "nonConformanceJobOperation",
@@ -123710,12 +123437,6 @@ export default {
       in: "query",
       type: "string",
     },
-    "rowFilter.supplier.isDemo": {
-      name: "isDemo",
-      required: false,
-      in: "query",
-      type: "string",
-    },
     "rowFilter.supplier.purchasingContactId": {
       name: "purchasingContactId",
       required: false,
@@ -123724,6 +123445,12 @@ export default {
     },
     "rowFilter.supplier.invoicingContactId": {
       name: "invoicingContactId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.supplier.isDemo": {
+      name: "isDemo",
       required: false,
       in: "query",
       type: "string",
@@ -126919,6 +126646,12 @@ export default {
     },
     "rowFilter.quote.customerEngineeringContactId": {
       name: "customerEngineeringContactId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.quote.externalId": {
+      name: "externalId",
       required: false,
       in: "query",
       type: "string",

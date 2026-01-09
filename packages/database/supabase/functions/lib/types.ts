@@ -5774,117 +5774,6 @@ export type Database = {
           },
         ]
       }
-      demoSeedState: {
-        Row: {
-          companyId: string
-          createdAt: string
-          lastError: string | null
-          moduleId: string
-          seededAt: string | null
-          seededBy: string | null
-          status: string
-          templateSetId: string
-        }
-        Insert: {
-          companyId: string
-          createdAt?: string
-          lastError?: string | null
-          moduleId: string
-          seededAt?: string | null
-          seededBy?: string | null
-          status?: string
-          templateSetId: string
-        }
-        Update: {
-          companyId?: string
-          createdAt?: string
-          lastError?: string | null
-          moduleId?: string
-          seededAt?: string | null
-          seededBy?: string | null
-          status?: string
-          templateSetId?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "demoSeedState_companyId_fkey"
-            columns: ["companyId"]
-            isOneToOne: false
-            referencedRelation: "companies"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "demoSeedState_companyId_fkey"
-            columns: ["companyId"]
-            isOneToOne: false
-            referencedRelation: "company"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "demoSeedState_companyId_fkey"
-            columns: ["companyId"]
-            isOneToOne: false
-            referencedRelation: "customFieldTables"
-            referencedColumns: ["companyId"]
-          },
-          {
-            foreignKeyName: "demoSeedState_companyId_fkey"
-            columns: ["companyId"]
-            isOneToOne: false
-            referencedRelation: "integrations"
-            referencedColumns: ["companyId"]
-          },
-          {
-            foreignKeyName: "demoSeedState_moduleId_fkey"
-            columns: ["moduleId"]
-            isOneToOne: false
-            referencedRelation: "demoModule"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "demoSeedState_seededBy_fkey"
-            columns: ["seededBy"]
-            isOneToOne: false
-            referencedRelation: "employees"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "demoSeedState_seededBy_fkey"
-            columns: ["seededBy"]
-            isOneToOne: false
-            referencedRelation: "employeesAcrossCompanies"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "demoSeedState_seededBy_fkey"
-            columns: ["seededBy"]
-            isOneToOne: false
-            referencedRelation: "employeeSummary"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "demoSeedState_seededBy_fkey"
-            columns: ["seededBy"]
-            isOneToOne: false
-            referencedRelation: "user"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "demoSeedState_seededBy_fkey"
-            columns: ["seededBy"]
-            isOneToOne: false
-            referencedRelation: "userDefaults"
-            referencedColumns: ["userId"]
-          },
-          {
-            foreignKeyName: "demoSeedState_templateSetId_fkey"
-            columns: ["templateSetId"]
-            isOneToOne: false
-            referencedRelation: "templateSet"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       department: {
         Row: {
           companyId: string
@@ -47293,14 +47182,14 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["supplierCountryCode"]
+            columns: ["customerCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
           },
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["customerCountryCode"]
+            columns: ["supplierCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
@@ -49985,14 +49874,14 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["invoiceCountryCode"]
+            columns: ["customerCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
           },
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["customerCountryCode"]
+            columns: ["invoiceCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
