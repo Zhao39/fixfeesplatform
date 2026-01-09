@@ -1,7 +1,9 @@
 import type { Database, Json } from "@carbon/database";
+import { integrations } from "@carbon/ee";
 import { redis } from "@carbon/kv";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { z } from "zod";
+import { Integration } from "~/modules/settings/types";
 import { sanitize } from "~/utils/supabase";
 import type { customFieldValidator } from "./settings.models";
 
@@ -336,4 +338,74 @@ export async function updateCustomFieldsSortOrder(
     );
     return Promise.all(updatePromises);
   }
+}
+
+export async function getIntegrationHealth(
+  companyId: string,
+  integration: Integration
+): Promise<Integration & { health: "healthy" | "unhealthy" | "inactive" }> {
+  if (!integration.active) {
+    return {
+      ...integration,
+      health: "inactive"
+    };
+  }
+
+  const check = integrations.find((i) => i.id === integration.id);
+
+  if (!check || !check.healthcheck) {
+    return {
+      ...integration,
+      health: "healthy"
+    };
+  }
+
+  const key = `integrations:${companyId}:${integration.id}:health`;
+
+  const cached = await redis.get<string>(key);
+
+  if (cached && parseInt(cached)) {
+    return {
+      ...integration,
+      health: cached === "1" ? "healthy" : "unhealthy"
+    };
+  }
+
+  const status = await check.healthcheck(
+    companyId,
+    integration.metadata as Record<string, any>
+  );
+
+  await redis.set(key, status ? "1" : "0", {
+    nx: true, // Only set if not exists
+    ex: INTEGRATION_CACHE_TTL // Cache for 5 minutes
+  });
+
+  return {
+    ...integration,
+    health: status ? "healthy" : "unhealthy"
+  };
+}
+
+export async function getIntegrationsWithHealth(
+  client: SupabaseClient<Database>,
+  companyId: string
+) {
+  const results = await client
+    .from("integrations")
+    .select("*")
+    .eq("companyId", companyId);
+
+  if (results.error) return results;
+
+  const integrations = results.data;
+
+  const withHealth = await Promise.all(
+    integrations.map((i) => getIntegrationHealth(companyId, i))
+  );
+
+  return {
+    data: withHealth,
+    error: null
+  };
 }

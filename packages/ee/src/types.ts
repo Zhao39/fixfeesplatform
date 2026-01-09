@@ -26,6 +26,10 @@ export type IntegrationConfig = {
     scopes: string[];
     tokenUrl: string;
   };
+  healthcheck?: (
+    companyId: string,
+    metadata: Record<string, unknown>
+  ) => Promise<boolean>;
   onInitialize?: () => void | Promise<void>;
   onUninstall?: () => void | Promise<void>;
 };
