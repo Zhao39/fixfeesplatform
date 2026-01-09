@@ -10,15 +10,15 @@ import {
 import { useUrlParams } from "@carbon/remix";
 import { useMemo, useState } from "react";
 import { SearchFilter } from "~/components";
-import { IntegrationCard } from "./IntegrationCard";
+import { IntegrationCard, IntegrationHealth } from "./IntegrationCard";
 
 type IntegrationsListProps = {
   availableIntegrations: IntegrationConfig[];
-  installedIntegrations: string[];
+  integrations: Array<IntegrationHealth>;
 };
 
 const IntegrationsList = ({
-  installedIntegrations,
+  integrations,
   availableIntegrations
 }: IntegrationsListProps) => {
   const [params] = useUrlParams();
@@ -26,6 +26,9 @@ const IntegrationsList = ({
     "all"
   );
   const search = params.get("search") || "";
+
+  const installed = integrations.filter((i) => i.id && i.active);
+  const installedIds = installed.map((i) => i.id);
 
   const filteredIntegrations = useMemo(() => {
     let filtered = availableIntegrations;
@@ -38,17 +41,17 @@ const IntegrationsList = ({
 
     if (filter === "installed") {
       filtered = filtered.filter((integration) =>
-        installedIntegrations.includes(integration.id)
+        installedIds.includes(integration.id)
       );
     } else if (filter === "available") {
       filtered = filtered.filter(
         (integration) =>
-          !installedIntegrations.includes(integration.id) && integration.active
+          !installedIds.includes(integration.id) && integration.active
       );
     }
 
     return filtered;
-  }, [availableIntegrations, installedIntegrations, search, filter]);
+  }, [availableIntegrations, installedIds, search, filter]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -80,7 +83,7 @@ const IntegrationsList = ({
             <IntegrationCard
               key={integration.id}
               integration={integration}
-              installed={installedIntegrations.includes(integration.id)}
+              installed={installed.find((i) => i.id === integration.id) || null}
             />
           );
         })}

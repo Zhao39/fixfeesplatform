@@ -8,7 +8,8 @@ import {
   redirect,
   useLoaderData
 } from "react-router";
-import { getIntegrations, IntegrationsList } from "~/modules/settings";
+import { IntegrationsList } from "~/modules/settings";
+import { getIntegrationsWithHealth } from "~/modules/settings/settings.server";
 import { path } from "~/utils/path";
 
 export const config = {
@@ -20,7 +21,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     view: "settings"
   });
 
-  const integrations = await getIntegrations(client, companyId);
+  const integrations = await getIntegrationsWithHealth(client, companyId);
   if (integrations.error) {
     throw redirect(
       path.to.settings,
@@ -31,21 +32,25 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
+  const items = integrations.data.map((i) => ({
+    id: i.id!,
+    active: i.active!,
+    health: i.health
+  }));
+
   return {
-    installedIntegrations: (integrations.data
-      .filter((i) => i.active)
-      .map((i) => i.id) ?? []) as string[],
+    integrations: items,
     state: crypto.randomUUID()
   };
 }
 
 export default function IntegrationsRoute() {
-  const { installedIntegrations } = useLoaderData<typeof loader>();
+  const { integrations } = useLoaderData<typeof loader>();
 
   return (
     <>
       <IntegrationsList
-        installedIntegrations={installedIntegrations}
+        integrations={integrations}
         availableIntegrations={availableIntegrations}
       />
       <Outlet />

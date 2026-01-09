@@ -6,18 +6,25 @@ import {
   CardContent,
   CardFooter,
   CardHeader,
-  CardTitle
+  CardTitle,
+  cn
 } from "@carbon/react";
 import { useRouteData } from "@carbon/remix";
 import { Link, useFetcher, useNavigate } from "react-router";
 import { path } from "~/utils/path";
+
+export type IntegrationHealth = {
+  id: string;
+  active: boolean;
+  health: "healthy" | "unhealthy" | "inactive";
+};
 
 export function IntegrationCard({
   integration,
   installed
 }: {
   integration: IntegrationConfig;
-  installed: boolean;
+  installed: IntegrationHealth | null;
 }) {
   const fetcher = useFetcher<{}>();
   const navigate = useNavigate();
@@ -117,7 +124,49 @@ export function IntegrationCard({
             Install
           </Button>
         )}
+        {installed && integration.active && (
+          <StatusBadge status={installed.health} />
+        )}
       </CardFooter>
     </Card>
   );
 }
+
+const StatusBadge = ({
+  status
+}: {
+  status: "healthy" | "unhealthy" | "inactive";
+}) => {
+  const colors = {
+    healthy: "bg-green-500",
+    unhealthy: "bg-red-500",
+    inactive: "bg-gray-400"
+  } as const;
+
+  const badgeVariants = {
+    healthy: "green",
+    unhealthy: "red",
+    inactive: "gray"
+  } as const;
+
+  const ping = colors[status] || "text-gray-400";
+  return (
+    <Badge
+      variant={badgeVariants[status]}
+      className="flex items-center mr-auto gap-x-2 py-0.5"
+    >
+      <span className="relative flex size-2">
+        <span
+          className={cn(
+            "absolute inline-flex h-full w-full animate-ping rounded-full opacity-75",
+            ping
+          )}
+        />
+        <span
+          className={cn("relative inline-flex size-2 rounded-full", ping)}
+        />
+      </span>
+      {status}
+    </Badge>
+  );
+};
