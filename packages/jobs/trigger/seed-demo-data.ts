@@ -1,12 +1,12 @@
 import { getCarbonServiceRole } from "@carbon/auth";
+import { getPostgresClient, getPostgresConnectionPool } from "@carbon/database/client";
 import {
   createDemoSeeder,
   type DemoModule,
   type Industry
 } from "@carbon/database/seed/demo";
 import { task } from "@trigger.dev/sdk/v3";
-import { Kysely, PostgresDialect } from "kysely";
-import pg from "pg";
+import { PostgresDriver } from "kysely";
 
 export interface SeedDemoDataPayload {
   companyId: string;
@@ -15,22 +15,6 @@ export interface SeedDemoDataPayload {
   userId: string;
 }
 
-function createKyselyDb(): Kysely<any> {
-  const connectionString = process.env.SUPABASE_DB_URL;
-  if (!connectionString) {
-    throw new Error("SUPABASE_DB_URL environment variable is not set");
-  }
-
-  const poolerUrl = connectionString.includes("supabase.co")
-    ? connectionString.replace("5432", "6543")
-    : connectionString;
-
-  return new Kysely<any>({
-    dialect: new PostgresDialect({
-      pool: new pg.Pool({ connectionString: poolerUrl, max: 5 })
-    })
-  });
-}
 
 export const seedDemoData = task({
   id: "seed-demo-data",
@@ -42,7 +26,6 @@ export const seedDemoData = task({
     console.info("Starting demo data seeding", { companyId, industryId, modules, userId });
 
     const supabaseClient = getCarbonServiceRole();
-    let kyselyDb: Kysely<any> | null = null;
 
     try {
       const { data: seedRun, error: seedRunError } = await supabaseClient
@@ -63,8 +46,7 @@ export const seedDemoData = task({
         throw seedRunError;
       }
 
-      kyselyDb = createKyselyDb();
-      const seeder = createDemoSeeder(kyselyDb);
+      const seeder = createDemoSeeder(getPostgresClient(getPostgresConnectionPool(5), PostgresDriver));
 
       await seeder.seedDemo({
         companyId,
@@ -115,8 +97,6 @@ export const seedDemoData = task({
       }
 
       throw error;
-    } finally {
-      if (kyselyDb) await kyselyDb.destroy();
     }
   }
 });

@@ -18,7 +18,7 @@
     ".": "./src/index.ts",
     "./client": "./src/client.ts",
     "./swagger-docs-schema": "./src/swagger-docs-schema.ts",
-    "./seed/demo": "./src/seed/demo.ts"
+    "./seed/demo": "./src/seed/seed-demo-data.ts"
   },
   "private": true,
   "scripts": {
