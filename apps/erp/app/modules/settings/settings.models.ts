@@ -55,8 +55,6 @@ const company = {
   website: zfd.text(z.string().optional()),
   industryId: z.enum(onboardingIndustryTypes).optional().default("custom"),
   customIndustryDescription: z.string().optional(),
-  selectedModules: zfd.repeatable(z.array(z.string()).optional()),
-  featureRequests: z.string().optional(),
   seedDemoData: zfd.checkbox()
 };
 

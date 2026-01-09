@@ -108,31 +108,9 @@ export async function action({ request }: ActionFunctionArgs) {
     }
   }
 
-  if (draft?.modules) {
-    const selectedModules = [
-      draft.modules.isSalesEnabled ? "Sales" : null,
-      draft.modules.isPurchasingEnabled ? "Purchasing" : null,
-      draft.modules.isPartsEnabled ? "Parts" : null,
-      draft.modules.isInventoryEnabled ? "Inventory" : null
-    ].filter(Boolean) as string[];
-
-    if (selectedModules.length > 0 && !mergedFormData.has("selectedModules")) {
-      selectedModules.forEach((module) => {
-        mergedFormData.append("selectedModules", module);
-      });
-    }
-
-    if (
-      draft.modules.featureRequests &&
-      !mergedFormData.has("featureRequests")
-    ) {
-      mergedFormData.append("featureRequests", draft.modules.featureRequests);
-    }
-
-    // seedDemoData uses zfd.checkbox() - append "on" if true, omit if false
-    if (draft.modules.seedDemoData && !mergedFormData.has("seedDemoData")) {
-      mergedFormData.append("seedDemoData", "on");
-    }
+  // seedDemoData uses zfd.checkbox() - append "on" if true, omit if false
+  if (draft?.industry?.seedDemoData && !mergedFormData.has("seedDemoData")) {
+    mergedFormData.append("seedDemoData", "on");
   }
 
   // Validate the merged form data with the full company validator
@@ -150,10 +128,10 @@ export async function action({ request }: ActionFunctionArgs) {
 
   // Merge seedDemoData from draft if not already in validation data
   if (
-    draft?.modules?.seedDemoData !== undefined &&
+    draft?.industry?.seedDemoData !== undefined &&
     d.seedDemoData === undefined
   ) {
-    d.seedDemoData = draft.modules.seedDemoData;
+    d.seedDemoData = draft.industry.seedDemoData;
   }
 
   let companyId: string | undefined;
@@ -220,26 +198,16 @@ export async function action({ request }: ActionFunctionArgs) {
 
     // Trigger demo data seeding if requested
     const companyData = await getCompany(serviceRole, companyId);
-    if (
-      companyData.data?.seedDemoData &&
-      companyData.data?.industryId &&
-      companyData.data?.selectedModules
-    ) {
+    if (companyData.data?.seedDemoData && companyData.data?.industryId) {
       // Use the selected industry, or default to cnc_aerospace if custom
       const industryId =
         companyData.data.industryId === "custom"
           ? "cnc_aerospace"
           : companyData.data.industryId;
 
-      // If seedDemoData is true, seed all core modules regardless of selection
-      const modules = companyData.data.seedDemoData
-        ? ["Sales", "Purchasing", "Parts", "Inventory"]
-        : companyData.data.selectedModules;
-
       tasks.trigger("seed-demo-data", {
         companyId,
         industryId,
-        modules,
         userId
       });
     }

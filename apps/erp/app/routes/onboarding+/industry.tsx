@@ -15,6 +15,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
+  Checkbox,
   cn,
   FormControl,
   FormErrorMessage,
@@ -38,6 +39,7 @@ import {
   useLoaderData
 } from "react-router";
 import { z } from "zod";
+import { zfd } from "zod-form-data";
 import { Hidden, Submit, TextArea } from "~/components/Form";
 import { useOnboarding } from "~/hooks";
 import {
@@ -52,6 +54,7 @@ const onboardingIndustryValidator = z.object({
     errorMap: () => ({ message: "Please select an industry type" })
   }),
   customIndustryDescription: z.string().optional(),
+  seedDemoData: zfd.checkbox(),
   next: z.string()
 });
 
@@ -81,14 +84,16 @@ export async function action({ request }: ActionFunctionArgs) {
     return validationError(validation.error);
   }
 
-  const { next, industryId, customIndustryDescription } = validation.data;
+  const { next, industryId, customIndustryDescription, seedDemoData } =
+    validation.data;
 
   // Store industry selection in session draft
   const draftCookie = await setOnboardingDraft(request, {
     industry: {
       industryId,
       customIndustryDescription:
-        industryId === "custom" ? customIndustryDescription : undefined
+        industryId === "custom" ? customIndustryDescription : undefined,
+      seedDemoData: seedDemoData ?? false
     }
   });
 
@@ -97,6 +102,7 @@ export async function action({ request }: ActionFunctionArgs) {
     industryId: industryId as any,
     customIndustryDescription:
       industryId === "custom" ? customIndustryDescription || null : null,
+    seedDemoData: seedDemoData ?? false,
     updatedBy: userId
   } as any);
 
@@ -240,7 +246,8 @@ export default function OnboardingIndustry() {
       validIndustryIds.includes(company.industryId as any)
         ? (company.industryId as ValidIndustryId)
         : undefined,
-    customIndustryDescription: company?.customIndustryDescription ?? ""
+    customIndustryDescription: company?.customIndustryDescription ?? "",
+    seedDemoData: company?.seedDemoData ?? false
   };
 
   return (
@@ -277,6 +284,14 @@ export default function OnboardingIndustry() {
                 rows={3}
               />
             )}
+
+            {/* Demo data checkbox */}
+            <HStack className="pt-2">
+              <Checkbox id="seedDemoData" name="seedDemoData" />
+              <label htmlFor="seedDemoData" className="text-sm">
+                Create demo data for me
+              </label>
+            </HStack>
           </VStack>
         </CardContent>
 

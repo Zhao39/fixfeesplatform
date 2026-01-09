@@ -496,7 +496,44 @@ export class DemoSeeder {
         .execute();
     }
 
-    // 4. Get and seed template quotes
+    // 4. Seed parts for Part-type items (required for items to be accessible)
+    const templateParts = await templates
+      .selectFrom("part as p")
+      .innerJoin("item as it", (join) =>
+        join
+          .onRef("it.templateSetId", "=", "p.templateSetId")
+          .onRef("it.templateRowId", "=", "p.templateRowId")
+      )
+      .select([
+        "p.templateSetId",
+        "p.templateRowId",
+        "p.approved",
+        "p.fromDate",
+        "p.toDate",
+        "it.readableId"
+      ])
+      .where("p.templateSetId", "=", templateSetId)
+      .execute();
+
+    for (const tpl of templateParts) {
+      const partId = tpl.readableId;
+
+      await trx
+        .insertInto("part")
+        .values({
+          id: partId,
+          companyId,
+          approved: tpl.approved,
+          fromDate: tpl.fromDate,
+          toDate: tpl.toDate,
+          isDemo: true,
+          createdBy: userId
+        })
+        .onConflict((oc) => oc.columns(["id", "companyId"]).doNothing())
+        .execute();
+    }
+
+    // 5. Get and seed template quotes
     const templateQuotes = await templates
       .selectFrom("quote")
       .selectAll()
@@ -539,9 +576,32 @@ export class DemoSeeder {
         })
         .onConflict((oc) => oc.column("id").doNothing())
         .execute();
+
+      // Create quoteShipment (required for quote to load properly)
+      await trx
+        .insertInto("quoteShipment")
+        .values({
+          id: demoId,
+          companyId,
+          updatedBy: userId
+        })
+        .onConflict((oc) => oc.column("id").doNothing())
+        .execute();
+
+      // Create quotePayment (required for quote to load properly)
+      await trx
+        .insertInto("quotePayment")
+        .values({
+          id: demoId,
+          companyId,
+          invoiceCustomerId: customerId,
+          updatedBy: userId
+        })
+        .onConflict((oc) => oc.column("id").doNothing())
+        .execute();
     }
 
-    // 5. Get and seed template quote lines with item data (using join)
+    // 6. Get and seed template quote lines with item data (using join)
     const templateQuoteLines = (await templates
       .selectFrom("quoteLine as ql")
       .innerJoin("item as it", (join) =>
@@ -589,7 +649,7 @@ export class DemoSeeder {
         .onConflict((oc) => oc.column("id").doNothing())
         .execute();
 
-      // 6. Seed quote line prices
+      // 7. Seed quote line prices
       await trx
         .insertInto("quoteLinePrice")
         .values({
@@ -677,6 +737,103 @@ export class DemoSeeder {
           createdBy: userId
         })
         .onConflict((oc) => oc.column("id").doNothing())
+        .execute();
+    }
+
+    // 3b. Seed materials for Material type items (if material templates exist)
+    const templateMaterials = await templates
+      .selectFrom("material as m")
+      .innerJoin("item as it", (join) =>
+        join
+          .onRef("it.templateSetId", "=", "m.templateSetId")
+          .onRef("it.templateRowId", "=", "m.templateRowId")
+      )
+      .select([
+        "m.templateSetId",
+        "m.templateRowId",
+        "m.materialFormName",
+        "m.materialSubstanceName",
+        "m.approved",
+        "it.readableId"
+      ])
+      .where("m.templateSetId", "=", templateSetId)
+      .execute();
+
+    for (const tpl of templateMaterials) {
+      // Look up materialFormId by name (global system records have NULL companyId)
+      const materialForm = await trx
+        .selectFrom("materialForm")
+        .select("id")
+        .where("name", "=", tpl.materialFormName)
+        .where("companyId", "is", null)
+        .executeTakeFirst();
+
+      // Look up materialSubstanceId by name
+      const materialSubstance = await trx
+        .selectFrom("materialSubstance")
+        .select("id")
+        .where("name", "=", tpl.materialSubstanceName)
+        .where("companyId", "is", null)
+        .executeTakeFirst();
+
+      if (!materialForm || !materialSubstance) {
+        console.warn(
+          `Skipping material ${tpl.readableId}: form=${tpl.materialFormName} or substance=${tpl.materialSubstanceName} not found`
+        );
+        continue;
+      }
+
+      const materialId = tpl.readableId;
+
+      await trx
+        .insertInto("material")
+        .values({
+          id: materialId,
+          companyId,
+          materialFormId: materialForm.id,
+          materialSubstanceId: materialSubstance.id,
+          approved: tpl.approved,
+          isDemo: true,
+          createdBy: userId
+        })
+        .onConflict((oc) => oc.columns(["id", "companyId"]).doNothing())
+        .execute();
+    }
+
+    // 3c. Seed parts for Part-type items (required for items to be accessible)
+    const templateParts = await templates
+      .selectFrom("part as p")
+      .innerJoin("item as it", (join) =>
+        join
+          .onRef("it.templateSetId", "=", "p.templateSetId")
+          .onRef("it.templateRowId", "=", "p.templateRowId")
+      )
+      .select([
+        "p.templateSetId",
+        "p.templateRowId",
+        "p.approved",
+        "p.fromDate",
+        "p.toDate",
+        "it.readableId"
+      ])
+      .where("p.templateSetId", "=", templateSetId)
+      .execute();
+
+    for (const tpl of templateParts) {
+      const partId = tpl.readableId;
+
+      await trx
+        .insertInto("part")
+        .values({
+          id: partId,
+          companyId,
+          approved: tpl.approved,
+          fromDate: tpl.fromDate,
+          toDate: tpl.toDate,
+          isDemo: true,
+          createdBy: userId
+        })
+        .onConflict((oc) => oc.columns(["id", "companyId"]).doNothing())
         .execute();
     }
 
@@ -1079,6 +1236,28 @@ export class DemoSeeder {
         .where("companyId", "=", companyId)
         .where("isDemo", "=", true)
         .execute();
+
+      // Delete quote related tables (quoteShipment and quotePayment)
+      const demoQuoteIds = await trx
+        .selectFrom("quote")
+        .select("id")
+        .where("companyId", "=", companyId)
+        .where("isDemo", "=", true)
+        .execute();
+
+      if (demoQuoteIds.length > 0) {
+        const quoteIdList = demoQuoteIds.map((r) => r.id);
+
+        await trx
+          .deleteFrom("quoteShipment")
+          .where("id", "in", quoteIdList)
+          .execute();
+
+        await trx
+          .deleteFrom("quotePayment")
+          .where("id", "in", quoteIdList)
+          .execute();
+      }
 
       await trx
         .deleteFrom("quote")

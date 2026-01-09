@@ -17,13 +17,6 @@ export type OnboardingDraft = {
   industry?: {
     industryId: string;
     customIndustryDescription?: string;
-  };
-  modules?: {
-    isSalesEnabled: boolean;
-    isPurchasingEnabled: boolean;
-    isPartsEnabled: boolean;
-    isInventoryEnabled: boolean;
-    featureRequests?: string;
     seedDemoData: boolean;
   };
   company?: {

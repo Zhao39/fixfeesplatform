@@ -18,7 +18,8 @@ import pg from "pg";
 export interface SeedDemoDataPayload {
   companyId: string;
   industryId: string;
-  modules: string[];
+  /** Optional - defaults to all modules if not provided */
+  modules?: string[];
   userId: string;
 }
 
@@ -53,7 +54,14 @@ export const seedDemoData = task({
     maxTimeoutInMs: 10000
   },
   run: async (payload: SeedDemoDataPayload) => {
-    const { companyId, industryId, modules, userId } = payload;
+    const { companyId, industryId, userId } = payload;
+    // Default to all modules if not provided
+    const modules = payload.modules ?? [
+      "Sales",
+      "Purchasing",
+      "Parts",
+      "Inventory"
+    ];
 
     console.info("Starting demo data seeding", {
       companyId,

@@ -4,6 +4,7 @@ import {
   LuClipboardCheck,
   LuCreditCard,
   LuCrown,
+  LuDatabase,
   LuFactory,
   LuImage,
   LuLayoutDashboard,
@@ -51,6 +52,12 @@ const settingsRoutes: AuthenticatedRouteGroup<{
         to: path.to.logos,
         role: "employee",
         icon: <LuImage />
+      },
+      {
+        name: "Demo Data",
+        to: path.to.demoData,
+        role: "employee",
+        icon: <LuDatabase />
       }
     ]
   },

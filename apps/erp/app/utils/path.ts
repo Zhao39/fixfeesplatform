@@ -356,7 +356,6 @@ export const path = {
       company: `${onboarding}/company`,
       industry: `${onboarding}/industry`,
       location: `${onboarding}/location`,
-      modules: `${onboarding}/modules`,
       plan: `${onboarding}/plan`,
       root: `${onboarding}`,
       theme: `${onboarding}/theme`,
@@ -435,6 +434,7 @@ export const path = {
     company: `${x}/settings/company`,
     companySwitch: (companyId: string) =>
       generatePath(`${x}/settings/company/switch/${companyId}`),
+    demoData: `${x}/settings/demo`,
     completeTrainingAssignment: (id: string) =>
       generatePath(`${share}/training/${id}`),
     configurationParameter: (itemId: string) =>
@@ -1588,7 +1588,6 @@ export const path = {
 export const onboardingSequence = [
   path.to.onboarding.theme,
   path.to.onboarding.user,
-  path.to.onboarding.modules,
   path.to.onboarding.industry,
   path.to.onboarding.company,
   path.to.onboarding.plan
