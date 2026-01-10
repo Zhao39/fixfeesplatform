@@ -27,6 +27,16 @@ export const entityTypeConfig: Record<
     textColor: "text-purple-600 dark:text-purple-400",
     icon: PiShareNetworkFill
   },
+  gauge: {
+    bgColor: "",
+    textColor: "",
+    icon: LuGauge
+  },
+  issue: {
+    bgColor: "",
+    textColor: "",
+    icon: LuOctagonAlert
+  },
   item: {
     bgColor: "bg-emerald-100 dark:bg-emerald-900/30",
     textColor: "text-emerald-600 dark:text-emerald-400",
@@ -56,26 +66,6 @@ export const entityTypeConfig: Record<
     bgColor: "bg-red-100 dark:bg-red-900/30",
     textColor: "text-red-600 dark:text-red-400",
     icon: LuFileCheck
-  },
-  equipmentType: {
-    bgColor: "bg-zinc-100 dark:bg-zinc-900/30",
-    textColor: "text-zinc-600 dark:text-zinc-400",
-    icon: LuWrench
-  },
-  workCellType: {
-    bgColor: "bg-zinc-100 dark:bg-zinc-900/30",
-    textColor: "text-zinc-600 dark:text-zinc-400",
-    icon: LuWrench
-  },
-  issue: {
-    bgColor: "",
-    textColor: "",
-    icon: LuOctagonAlert
-  },
-  gauge: {
-    bgColor: "",
-    textColor: "",
-    icon: LuGauge
   }
 };
 
@@ -93,16 +83,14 @@ export function getEntityTypeLabel(entityType: string): string {
   const labels: Record<string, string> = {
     customer: "Customer",
     supplier: "Supplier",
+    gauge: "Gauge",
+    issue: "Issue",
     item: "Item",
     job: "Job",
     employee: "Person",
     purchaseOrder: "Purchase Order",
     salesInvoice: "Sales Invoice",
-    purchaseInvoice: "Purchase Invoice",
-    equipmentType: "Equipment",
-    workCellType: "Work Cell",
-    issue: "Issue",
-    gauge: "Gauge"
+    purchaseInvoice: "Purchase Invoice"
   };
   return labels[entityType] ?? entityType;
 }
