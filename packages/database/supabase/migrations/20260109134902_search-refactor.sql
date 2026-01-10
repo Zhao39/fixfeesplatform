@@ -53,6 +53,9 @@ CREATE TABLE "searchIndexRegistry" (
     FOREIGN KEY ("companyId") REFERENCES "company"("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+-- Enable RLS (no policies - access via service role bypass only)
+ALTER TABLE "searchIndexRegistry" ENABLE ROW LEVEL SECURITY;
+
 -- =============================================================================
 -- PART 2: Create Table Creation Function
 -- =============================================================================
