@@ -19891,21 +19891,21 @@ export type Database = {
       opportunity: {
         Row: {
           companyId: string
-          customerId: string | null
+          customerId: string
           id: string
           purchaseOrderDocumentPath: string | null
           requestForQuoteDocumentPath: string | null
         }
         Insert: {
           companyId: string
-          customerId?: string | null
+          customerId: string
           id?: string
           purchaseOrderDocumentPath?: string | null
           requestForQuoteDocumentPath?: string | null
         }
         Update: {
           companyId?: string
-          customerId?: string | null
+          customerId?: string
           id?: string
           purchaseOrderDocumentPath?: string | null
           requestForQuoteDocumentPath?: string | null
@@ -31315,63 +31315,132 @@ export type Database = {
           },
         ]
       }
-      search: {
+      searchIndex_BJiGdDNuetJ1iyE8USN7AD: {
         Row: {
-          companyId: string | null
+          createdAt: string
           description: string | null
-          entity: Database["public"]["Enums"]["searchEntity"] | null
-          fts: unknown
+          entityId: string
+          entityType: string
           id: number
           link: string
-          name: string
-          uuid: string | null
+          metadata: Json | null
+          searchVector: unknown
+          tags: string[] | null
+          title: string
+          updatedAt: string | null
         }
         Insert: {
-          companyId?: string | null
+          createdAt?: string
           description?: string | null
-          entity?: Database["public"]["Enums"]["searchEntity"] | null
-          fts?: unknown
+          entityId: string
+          entityType: string
           id?: number
           link: string
-          name: string
-          uuid?: string | null
+          metadata?: Json | null
+          searchVector?: unknown
+          tags?: string[] | null
+          title: string
+          updatedAt?: string | null
         }
         Update: {
-          companyId?: string | null
+          createdAt?: string
           description?: string | null
-          entity?: Database["public"]["Enums"]["searchEntity"] | null
-          fts?: unknown
+          entityId?: string
+          entityType?: string
           id?: number
           link?: string
-          name?: string
-          uuid?: string | null
+          metadata?: Json | null
+          searchVector?: unknown
+          tags?: string[] | null
+          title?: string
+          updatedAt?: string | null
+        }
+        Relationships: []
+      }
+      searchIndex_L4saDKMCpFQurK9c3bEr1G: {
+        Row: {
+          createdAt: string
+          description: string | null
+          entityId: string
+          entityType: string
+          id: number
+          link: string
+          metadata: Json | null
+          searchVector: unknown
+          tags: string[] | null
+          title: string
+          updatedAt: string | null
+        }
+        Insert: {
+          createdAt?: string
+          description?: string | null
+          entityId: string
+          entityType: string
+          id?: number
+          link: string
+          metadata?: Json | null
+          searchVector?: unknown
+          tags?: string[] | null
+          title: string
+          updatedAt?: string | null
+        }
+        Update: {
+          createdAt?: string
+          description?: string | null
+          entityId?: string
+          entityType?: string
+          id?: number
+          link?: string
+          metadata?: Json | null
+          searchVector?: unknown
+          tags?: string[] | null
+          title?: string
+          updatedAt?: string | null
+        }
+        Relationships: []
+      }
+      searchIndexRegistry: {
+        Row: {
+          companyId: string
+          createdAt: string
+          lastRebuiltAt: string | null
+        }
+        Insert: {
+          companyId: string
+          createdAt?: string
+          lastRebuiltAt?: string | null
+        }
+        Update: {
+          companyId?: string
+          createdAt?: string
+          lastRebuiltAt?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "search_companyid_fkey"
+            foreignKeyName: "searchIndexRegistry_companyId_fkey"
             columns: ["companyId"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "companies"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "search_companyid_fkey"
+            foreignKeyName: "searchIndexRegistry_companyId_fkey"
             columns: ["companyId"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "company"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "search_companyid_fkey"
+            foreignKeyName: "searchIndexRegistry_companyId_fkey"
             columns: ["companyId"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "customFieldTables"
             referencedColumns: ["companyId"]
           },
           {
-            foreignKeyName: "search_companyid_fkey"
+            foreignKeyName: "searchIndexRegistry_companyId_fkey"
             columns: ["companyId"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "integrations"
             referencedColumns: ["companyId"]
           },
@@ -45376,14 +45445,14 @@ export type Database = {
           },
           {
             foreignKeyName: "partner_id_fkey"
-            columns: ["supplierLocationId"]
+            columns: ["id"]
             isOneToOne: false
             referencedRelation: "supplierLocation"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "partner_id_fkey"
-            columns: ["id"]
+            columns: ["supplierLocationId"]
             isOneToOne: false
             referencedRelation: "supplierLocation"
             referencedColumns: ["id"]
@@ -46756,14 +46825,14 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["supplierCountryCode"]
+            columns: ["customerCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
           },
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["customerCountryCode"]
+            columns: ["supplierCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
@@ -52801,6 +52870,10 @@ export type Database = {
         Args: { operation_id: string }
         Returns: boolean
       }
+      create_company_search_index: {
+        Args: { p_company_id: string }
+        Returns: undefined
+      }
       create_rfq_from_model_v1: {
         Args: {
           company_id: string
@@ -54225,6 +54298,28 @@ export type Database = {
         Args: { alphabet: string; mask: number; size: number; step: number }
         Returns: string
       }
+      populate_company_search_index: {
+        Args: { p_company_id: string }
+        Returns: undefined
+      }
+      search_company_index: {
+        Args: {
+          p_company_id: string
+          p_entity_types: string[]
+          p_limit?: number
+          p_query: string
+        }
+        Returns: {
+          description: string
+          entityId: string
+          entityType: string
+          id: number
+          link: string
+          metadata: Json
+          tags: string[]
+          title: string
+        }[]
+      }
       suppliers_search: {
         Args: {
           match_count: number
@@ -54690,28 +54785,6 @@ export type Database = {
         | "Reject"
         | "Request Approval"
       salesRfqStatus: "Draft" | "Ready for Quote" | "Closed" | "Quoted"
-      searchEntity:
-        | "Resource"
-        | "Person"
-        | "Customer"
-        | "Supplier"
-        | "Job"
-        | "Part"
-        | "Purchase Order"
-        | "Lead"
-        | "Opportunity"
-        | "Quotation"
-        | "Sales Order"
-        | "Request for Quotation"
-        | "Sales Invoice"
-        | "Purchase Invoice"
-        | "Document"
-        | "Sales RFQ"
-        | "Service"
-        | "Tool"
-        | "Consumable"
-        | "Material"
-        | "Fixture"
       serviceType: "Internal" | "External"
       shipmentSourceDocument:
         | "Sales Order"
@@ -55859,29 +55932,6 @@ export const Constants = {
         "Request Approval",
       ],
       salesRfqStatus: ["Draft", "Ready for Quote", "Closed", "Quoted"],
-      searchEntity: [
-        "Resource",
-        "Person",
-        "Customer",
-        "Supplier",
-        "Job",
-        "Part",
-        "Purchase Order",
-        "Lead",
-        "Opportunity",
-        "Quotation",
-        "Sales Order",
-        "Request for Quotation",
-        "Sales Invoice",
-        "Purchase Invoice",
-        "Document",
-        "Sales RFQ",
-        "Service",
-        "Tool",
-        "Consumable",
-        "Material",
-        "Fixture",
-      ],
       serviceType: ["Internal", "External"],
       shipmentSourceDocument: [
         "Sales Order",

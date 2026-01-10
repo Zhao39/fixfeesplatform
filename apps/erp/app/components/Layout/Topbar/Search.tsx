@@ -1,5 +1,3 @@
-import { useCarbon } from "@carbon/auth";
-import type { Database } from "@carbon/database";
 import type { ShortcutDefinition } from "@carbon/react";
 import {
   Button,
@@ -15,13 +13,12 @@ import {
   ModalContent,
   ShortcutKey,
   useDebounce,
-  useMount,
   useShortcutKeys,
   VStack
 } from "@carbon/react";
 import idb from "localforage";
 import { nanoid } from "nanoid";
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import {
   LuFileCheck,
   LuHardHat,
@@ -32,13 +29,9 @@ import {
   LuWrench
 } from "react-icons/lu";
 import { PiShareNetworkFill } from "react-icons/pi";
-import {
-  RiProgress2Line,
-  RiProgress4Line,
-  RiProgress8Line
-} from "react-icons/ri";
+import { RiProgress8Line } from "react-icons/ri";
 import { RxMagnifyingGlass } from "react-icons/rx";
-import { useNavigate } from "react-router";
+import { useFetcher, useNavigate } from "react-router";
 import { MethodItemTypeIcon } from "~/components/Icons";
 import { useModules, useUser } from "~/hooks";
 import useAccountSubmodules from "~/modules/account/ui/useAccountSubmodules";
@@ -55,18 +48,12 @@ import useResourcesSubmodules from "~/modules/resources/ui/useResourcesSubmodule
 import useSalesSubmodules from "~/modules/sales/ui/useSalesSubmodules";
 import useSettingsSubmodules from "~/modules/settings/ui/useSettingsSubmodules";
 import useUsersSubmodules from "~/modules/users/ui/useUsersSubmodules";
+import type { SearchResponse } from "~/routes/api+/search";
 import { useUIStore } from "~/stores/ui";
 
 import type { Authenticated, Route } from "~/types";
 
-type SearchResult = {
-  id: number;
-  name: string;
-  entity: Database["public"]["Enums"]["searchEntity"] | null;
-  uuid: string | null;
-  link: string;
-  description: string | null;
-};
+type RecentSearch = Route & { entityType?: string; module?: string };
 
 const shortcut: ShortcutDefinition = {
   key: "K",
@@ -74,19 +61,19 @@ const shortcut: ShortcutDefinition = {
 };
 
 const SearchModal = () => {
-  const { company } = useUser();
-  const { carbon } = useCarbon();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const fetcher = useFetcher<SearchResponse>();
   const { isSearchModalOpen, closeSearchModal } = useUIStore();
+  const { company } = useUser();
+  const storageKey = `recentSearches_${company.id}`;
 
   const [input, setInput] = useState("");
+  const [isDebouncing, setIsDebouncing] = useState(false);
   const debounceSearch = useDebounce((q: string) => {
-    if (q) {
-      getSearchResults(q);
-    } else {
-      setSearchResults([]);
+    if (q && q.length >= 2) {
+      fetcher.load(`/api/search?q=${encodeURIComponent(q)}`);
     }
+    setIsDebouncing(false);
   }, 500);
 
   useEffect(() => {
@@ -96,69 +83,60 @@ const SearchModal = () => {
   }, [isSearchModalOpen]);
 
   const staticResults = useGroupedSubmodules();
+  const modules = useModules();
 
-  const [recentResults, setRecentResults] = useState<Route[]>([]);
-  useMount(async () => {
-    const recentResultsFromStorage =
-      await idb.getItem<Route[]>("recentSearches");
-    if (recentResultsFromStorage) {
-      setRecentResults(recentResultsFromStorage);
-    }
-  });
+  const getModuleIcon = (moduleName: string) => {
+    const module = modules.find(
+      (m) => m.name.toLowerCase() === moduleName.toLowerCase()
+    );
+    return module?.icon;
+  };
 
-  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
-
-  const getSearchResults = useCallback(
-    async (q: string) => {
-      if (!carbon || !company.id) return;
-
-      setLoading(true);
-      const tokens = q.split(" ");
-      const search =
-        tokens.length > 1
-          ? tokens.map((token) => `"${token}"`).join(" <-> ")
-          : q;
-
-      const result = await carbon
-        ?.from("search")
-        .select()
-        .textSearch("fts", `*${search}:*`)
-        .eq("companyId", company.id)
-        .limit(20);
-
-      if (result?.data) {
-        setSearchResults(result.data);
+  const [recentResults, setRecentResults] = useState<RecentSearch[]>([]);
+  useEffect(() => {
+    const loadRecentSearches = async () => {
+      const recentResultsFromStorage =
+        await idb.getItem<RecentSearch[]>(storageKey);
+      if (recentResultsFromStorage) {
+        setRecentResults(recentResultsFromStorage);
       } else {
-        setSearchResults([]);
+        setRecentResults([]);
       }
-      setLoading(false);
-    },
-    [company.id, carbon]
+    };
+    loadRecentSearches();
+  }, [storageKey]);
+
+  const recentPaths = new Set(recentResults.map((r) => r.to));
+  const searchResults = (fetcher.data?.results ?? []).filter(
+    (r) => !recentPaths.has(r.link)
   );
+  const loading = fetcher.state === "loading";
 
   const onInputChange = (value: string) => {
     setInput(value);
-    if (value) {
-      setLoading(true);
-    } else {
-      setLoading(false);
+    if (value && value.length >= 2) {
+      setIsDebouncing(true);
     }
     debounceSearch(value);
   };
 
-  const onSelect = async (route: Route) => {
+  const onSelect = async (
+    route: Route,
+    entityType?: string,
+    module?: string
+  ) => {
     const { to, name } = route;
     navigate(route.to);
     closeSearchModal();
-    const newRecentSearches = [
-      { to, name },
-      ...((await idb.getItem<Route[]>("recentSearches"))?.filter(
+    const newRecentSearches: RecentSearch[] = [
+      { to, name, entityType, module },
+      ...((await idb.getItem<RecentSearch[]>(storageKey))?.filter(
         (item) => item.to !== to
       ) ?? [])
     ].slice(0, 5);
 
     setRecentResults(newRecentSearches);
-    idb.setItem("recentSearches", newRecentSearches);
+    idb.setItem(storageKey, newRecentSearches);
   };
 
   return (
@@ -181,45 +159,39 @@ const SearchModal = () => {
           />
           <CommandList>
             <CommandEmpty key="empty">
-              {loading ? "Loading..." : "No results found."}
+              {loading || isDebouncing ? "Loading..." : "No results found."}
             </CommandEmpty>
             {recentResults.length > 0 && (
               <>
                 <CommandGroup heading="Recent Searches" key="recent">
-                  {recentResults.map((result, index) => (
-                    <CommandItem
-                      key={`${result.to}-${nanoid()}-${index}`}
-                      onSelect={() => onSelect(result)}
-                      // append with : so we're not sharing a value with a static result
-                      value={`:${result.to}`}
-                    >
-                      <RxMagnifyingGlass className="w-4 h-4 flex-shrink-0 mr-2" />
-                      {result.name}
-                    </CommandItem>
-                  ))}
+                  {recentResults.map((result, index) => {
+                    const ModuleIcon = result.module
+                      ? getModuleIcon(result.module)
+                      : undefined;
+                    return (
+                      <CommandItem
+                        key={`${result.to}-${nanoid()}-${index}`}
+                        onSelect={() =>
+                          onSelect(result, result.entityType, result.module)
+                        }
+                        // append with : so we're not sharing a value with a static result
+                        value={`:${result.to}`}
+                      >
+                        {result.entityType ? (
+                          <ResultIcon entityType={result.entityType} />
+                        ) : ModuleIcon ? (
+                          <ModuleIcon className="w-4 h-4 flex-shrink-0 mr-2" />
+                        ) : (
+                          <RxMagnifyingGlass className="w-4 h-4 flex-shrink-0 mr-2" />
+                        )}
+                        {result.name}
+                      </CommandItem>
+                    );
+                  })}
                 </CommandGroup>
                 <CommandSeparator />
               </>
             )}
-            {Object.entries(staticResults).map(([module, submodules]) => (
-              <>
-                <CommandGroup heading={module} key={`static-${module}`}>
-                  {submodules.map((submodule, index) => (
-                    <CommandItem
-                      key={`${submodule.to}-${submodule.name}-${index}`}
-                      onSelect={() => onSelect(submodule)}
-                      value={`${module} ${submodule.name}`}
-                    >
-                      {submodule.icon && (
-                        <submodule.icon className="w-4 h-4 flex-shrink-0 mr-2" />
-                      )}
-                      <span>{submodule.name}</span>
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-                <CommandSeparator />
-              </>
-            ))}
             {searchResults.length > 0 && (
               <CommandGroup heading="Search Results" key="search">
                 {searchResults.map((result) => (
@@ -227,16 +199,19 @@ const SearchModal = () => {
                     key={`${result.id}-${nanoid()}`}
                     value={`${input}${result.id}`}
                     onSelect={() =>
-                      onSelect({
-                        to: result.link,
-                        name: result.name
-                      })
+                      onSelect(
+                        {
+                          to: result.link,
+                          name: result.title
+                        },
+                        result.entityType
+                      )
                     }
                   >
                     <HStack>
-                      <ResultIcon entity={result.entity} />
+                      <ResultIcon entityType={result.entityType} />
                       <VStack spacing={0}>
-                        <span>{result.name}</span>
+                        <span>{result.title}</span>
                         {result.description && (
                           <span className="text-xs text-muted-foreground">
                             {result.description}
@@ -248,6 +223,31 @@ const SearchModal = () => {
                 ))}
               </CommandGroup>
             )}
+            {Object.entries(staticResults).map(([module, submodules]) => {
+              const filteredSubmodules = submodules.filter(
+                (s) => !recentPaths.has(s.to)
+              );
+              if (filteredSubmodules.length === 0) return null;
+              return (
+                <>
+                  <CommandGroup heading={module} key={`static-${module}`}>
+                    {filteredSubmodules.map((submodule, index) => (
+                      <CommandItem
+                        key={`${submodule.to}-${submodule.name}-${index}`}
+                        onSelect={() => onSelect(submodule, undefined, module)}
+                        value={`${module} ${submodule.name}`}
+                      >
+                        {submodule.icon && (
+                          <submodule.icon className="w-4 h-4 flex-shrink-0 mr-2" />
+                        )}
+                        <span>{submodule.name}</span>
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                  <CommandSeparator />
+                </>
+              );
+            })}
           </CommandList>
         </Command>
       </ModalContent>
@@ -255,39 +255,31 @@ const SearchModal = () => {
   );
 };
 
-function ResultIcon({ entity }: { entity: SearchResult["entity"] | "Module" }) {
-  switch (entity) {
-    case "Customer":
+function ResultIcon({ entityType }: { entityType: string }) {
+  switch (entityType) {
+    case "customer":
       return <LuSquareUser className="w-4 h-4 flex-shrink-0 mr-2" />;
-    case "Document":
-      return <LuFileCheck className="w-4 h-4 flex-shrink-0 mr-2" />;
-    case "Job":
+    case "employee":
+      return <LuUser className="w-4 h-4 flex-shrink-0 mr-2" />;
+    case "job":
       return <LuHardHat className="w-4 h-4 flex-shrink-0 mr-2" />;
-    case "Part":
-    case "Material":
-    case "Tool":
-    case "Consumable":
+    case "item":
       return (
         <MethodItemTypeIcon
-          type={entity}
+          type="Part"
           className="w-4 h-4 flex-shrink-0 mr-2"
         />
       );
-    case "Person":
-      return <LuUser className="w-4 h-4 flex-shrink-0 mr-2" />;
-    case "Resource":
+    case "equipmentType":
+    case "workCellType":
       return <LuWrench className="w-4 h-4 flex-shrink-0 mr-2" />;
-    case "Purchase Order":
+    case "purchaseOrder":
       return <LuShoppingCart className="w-4 h-4 flex-shrink-0 mr-2" />;
-    case "Opportunity":
-    case "Lead":
-    case "Sales RFQ":
-      return <RiProgress2Line className="w-4 h-4 flex-shrink-0 mr-2" />;
-    case "Quotation":
-      return <RiProgress4Line className="w-4 h-4 flex-shrink-0 mr-2" />;
-    case "Sales Order":
+    case "salesInvoice":
       return <RiProgress8Line className="w-4 h-4 flex-shrink-0 mr-2" />;
-    case "Supplier":
+    case "purchaseInvoice":
+      return <LuFileCheck className="w-4 h-4 flex-shrink-0 mr-2" />;
+    case "supplier":
       return <PiShareNetworkFill className="w-4 h-4 flex-shrink-0 mr-2" />;
     default:
       return null;

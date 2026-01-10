@@ -24,15 +24,6 @@ DROP TRIGGER IF EXISTS create_item_search_result ON "item";
 DROP TRIGGER IF EXISTS update_item_search_result ON "item";
 DROP TRIGGER IF EXISTS delete_item_search_result ON "item";
 
--- Equipment Type triggers
-DROP TRIGGER IF EXISTS create_equipment_type_search_result ON "equipmentType";
-DROP TRIGGER IF EXISTS update_equipment_type_search_result ON "equipmentType";
-DROP TRIGGER IF EXISTS delete_equipment_type_search_result ON "equipmentType";
-
--- Work Cell Type triggers
-DROP TRIGGER IF EXISTS create_work_cell_type_search_result ON "workCellType";
-DROP TRIGGER IF EXISTS update_work_cell_type_search_result ON "workCellType";
-DROP TRIGGER IF EXISTS delete_work_cell_type_search_result ON "workCellType";
 
 -- Drop old functions
 DROP FUNCTION IF EXISTS create_employee_search_result();
@@ -44,12 +35,7 @@ DROP FUNCTION IF EXISTS update_supplier_search_result();
 DROP FUNCTION IF EXISTS create_item_search_result();
 DROP FUNCTION IF EXISTS update_item_search_result();
 DROP FUNCTION IF EXISTS delete_item_search_result();
-DROP FUNCTION IF EXISTS create_equipment_type_search_result();
-DROP FUNCTION IF EXISTS update_equipment_type_search_result();
-DROP FUNCTION IF EXISTS delete_equipment_type_search_result();
-DROP FUNCTION IF EXISTS create_work_cell_type_search_result();
-DROP FUNCTION IF EXISTS update_work_cell_type_search_result();
-DROP FUNCTION IF EXISTS delete_work_cell_type_search_result();
+
 
 -- Drop old table and type
 DROP TABLE IF EXISTS "search";
@@ -89,13 +75,7 @@ BEGIN
       "link" TEXT NOT NULL,
       "tags" TEXT[] DEFAULT ''{}'',
       "metadata" JSONB DEFAULT ''{}'',
-      "searchVector" TSVECTOR GENERATED ALWAYS AS (
-        to_tsvector(''english'',
-          COALESCE(title, '''') || '' '' ||
-          COALESCE(description, '''') || '' '' ||
-          COALESCE(array_to_string(tags, '' ''), '''')
-        )
-      ) STORED,
+      "searchVector" TSVECTOR,
       "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
       "updatedAt" TIMESTAMP WITH TIME ZONE,
       CONSTRAINT %I UNIQUE ("entityType", "entityId")
@@ -172,12 +152,13 @@ BEGIN
   END IF;
 
   EXECUTE format('
-    INSERT INTO %I ("entityType", "entityId", "title", "link", "tags", "metadata")
-    VALUES ($1, $2, $3, $4, $5, $6)
+    INSERT INTO %I ("entityType", "entityId", "title", "link", "tags", "metadata", "searchVector")
+    VALUES ($1, $2, $3, $4, $5, $6, to_tsvector(''english'', $3 || '' '' || COALESCE(array_to_string($5, '' ''), '''')))
     ON CONFLICT ("entityType", "entityId") DO UPDATE SET
       "title" = EXCLUDED."title",
       "tags" = EXCLUDED."tags",
       "metadata" = EXCLUDED."metadata",
+      "searchVector" = to_tsvector(''english'', EXCLUDED."title" || '' '' || COALESCE(array_to_string(EXCLUDED."tags", '' ''), '''')),
       "updatedAt" = NOW()
   ', v_table_name) USING
     'employee',
@@ -215,12 +196,13 @@ BEGIN
   SELECT name INTO v_cust_status FROM "customerStatus" WHERE id = NEW."customerStatusId";
 
   EXECUTE format('
-    INSERT INTO %I ("entityType", "entityId", "title", "link", "tags", "metadata")
-    VALUES ($1, $2, $3, $4, $5, $6)
+    INSERT INTO %I ("entityType", "entityId", "title", "link", "tags", "metadata", "searchVector")
+    VALUES ($1, $2, $3, $4, $5, $6, to_tsvector(''english'', $3 || '' '' || COALESCE(array_to_string($5, '' ''), '''')))
     ON CONFLICT ("entityType", "entityId") DO UPDATE SET
       "title" = EXCLUDED."title",
       "tags" = EXCLUDED."tags",
       "metadata" = EXCLUDED."metadata",
+      "searchVector" = to_tsvector(''english'', EXCLUDED."title" || '' '' || COALESCE(array_to_string(EXCLUDED."tags", '' ''), '''')),
       "updatedAt" = NOW()
   ', v_table_name) USING
     'customer',
@@ -258,12 +240,13 @@ BEGIN
   SELECT name INTO v_supp_status FROM "supplierStatus" WHERE id = NEW."supplierStatusId";
 
   EXECUTE format('
-    INSERT INTO %I ("entityType", "entityId", "title", "link", "tags", "metadata")
-    VALUES ($1, $2, $3, $4, $5, $6)
+    INSERT INTO %I ("entityType", "entityId", "title", "link", "tags", "metadata", "searchVector")
+    VALUES ($1, $2, $3, $4, $5, $6, to_tsvector(''english'', $3 || '' '' || COALESCE(array_to_string($5, '' ''), '''')))
     ON CONFLICT ("entityType", "entityId") DO UPDATE SET
       "title" = EXCLUDED."title",
       "tags" = EXCLUDED."tags",
       "metadata" = EXCLUDED."metadata",
+      "searchVector" = to_tsvector(''english'', EXCLUDED."title" || '' '' || COALESCE(array_to_string(EXCLUDED."tags", '' ''), '''')),
       "updatedAt" = NOW()
   ', v_table_name) USING
     'supplier',
@@ -286,6 +269,7 @@ RETURNS TRIGGER AS $$
 DECLARE
   v_table_name TEXT;
   v_link TEXT;
+  v_description TEXT;
 BEGIN
   IF TG_OP = 'DELETE' THEN
     v_table_name := 'searchIndex_' || OLD."companyId";
@@ -307,112 +291,31 @@ BEGIN
     ELSE '/x/part/' || NEW.id
   END;
 
+  v_description := NEW.name || ' ' || COALESCE(NEW.description, '');
+
   EXECUTE format('
-    INSERT INTO %I ("entityType", "entityId", "title", "description", "link", "tags", "metadata")
-    VALUES ($1, $2, $3, $4, $5, $6, $7)
+    INSERT INTO %I ("entityType", "entityId", "title", "description", "link", "tags", "metadata", "searchVector")
+    VALUES ($1, $2, $3, $4, $5, $6, $7, to_tsvector(''english'', $3 || '' '' || $4 || '' '' || COALESCE(array_to_string($6, '' ''), '''')))
     ON CONFLICT ("entityType", "entityId") DO UPDATE SET
       "title" = EXCLUDED."title",
       "description" = EXCLUDED."description",
       "link" = EXCLUDED."link",
       "tags" = EXCLUDED."tags",
       "metadata" = EXCLUDED."metadata",
+      "searchVector" = to_tsvector(''english'', EXCLUDED."title" || '' '' || EXCLUDED."description" || '' '' || COALESCE(array_to_string(EXCLUDED."tags", '' ''), '''')),
       "updatedAt" = NOW()
   ', v_table_name) USING
     'item',
     NEW.id,
     NEW."readableId",
-    NEW.name || ' ' || COALESCE(NEW.description, ''),
+    v_description,
     v_link,
     ARRAY_REMOVE(ARRAY[NEW.type::TEXT, NEW."replenishmentSystem"::TEXT], NULL),
-    jsonb_build_object('active', NEW.active, 'blocked', NEW.blocked);
+    jsonb_build_object('active', NEW.active);
 
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-
--- -----------------------------------------------------------------------------
--- 4.5 Equipment Type Sync
--- -----------------------------------------------------------------------------
-
-CREATE OR REPLACE FUNCTION sync_equipment_type_to_search_index()
-RETURNS TRIGGER AS $$
-DECLARE
-  v_table_name TEXT;
-BEGIN
-  IF TG_OP = 'DELETE' THEN
-    v_table_name := 'searchIndex_' || OLD."companyId";
-    EXECUTE format('DELETE FROM %I WHERE "entityType" = $1 AND "entityId" = $2', v_table_name)
-      USING 'equipmentType', OLD.id;
-    RETURN OLD;
-  END IF;
-
-  v_table_name := 'searchIndex_' || NEW."companyId";
-
-  EXECUTE format('
-    INSERT INTO %I ("entityType", "entityId", "title", "description", "link", "tags", "metadata")
-    VALUES ($1, $2, $3, $4, $5, $6, $7)
-    ON CONFLICT ("entityType", "entityId") DO UPDATE SET
-      "title" = EXCLUDED."title",
-      "description" = EXCLUDED."description",
-      "tags" = EXCLUDED."tags",
-      "metadata" = EXCLUDED."metadata",
-      "updatedAt" = NOW()
-  ', v_table_name) USING
-    'equipmentType',
-    NEW.id,
-    NEW.name,
-    COALESCE(NEW.description, ''),
-    '/x/resources/equipment/' || NEW.id,
-    ARRAY[CASE WHEN NEW.active THEN 'active' ELSE 'inactive' END],
-    jsonb_build_object('setupHours', NEW."setupHours");
-
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
--- -----------------------------------------------------------------------------
--- 4.6 Work Cell Type Sync
--- -----------------------------------------------------------------------------
-
-CREATE OR REPLACE FUNCTION sync_work_cell_type_to_search_index()
-RETURNS TRIGGER AS $$
-DECLARE
-  v_table_name TEXT;
-BEGIN
-  IF TG_OP = 'DELETE' THEN
-    v_table_name := 'searchIndex_' || OLD."companyId";
-    EXECUTE format('DELETE FROM %I WHERE "entityType" = $1 AND "entityId" = $2', v_table_name)
-      USING 'workCellType', OLD.id;
-    RETURN OLD;
-  END IF;
-
-  v_table_name := 'searchIndex_' || NEW."companyId";
-
-  EXECUTE format('
-    INSERT INTO %I ("entityType", "entityId", "title", "description", "link", "tags", "metadata")
-    VALUES ($1, $2, $3, $4, $5, $6, $7)
-    ON CONFLICT ("entityType", "entityId") DO UPDATE SET
-      "title" = EXCLUDED."title",
-      "description" = EXCLUDED."description",
-      "tags" = EXCLUDED."tags",
-      "metadata" = EXCLUDED."metadata",
-      "updatedAt" = NOW()
-  ', v_table_name) USING
-    'workCellType',
-    NEW.id,
-    NEW.name,
-    COALESCE(NEW.description, ''),
-    '/x/resources/work-cells/' || NEW.id,
-    ARRAY[CASE WHEN NEW.active THEN 'active' ELSE 'inactive' END],
-    jsonb_build_object('quotingRate', NEW."quotingRate");
-
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
--- -----------------------------------------------------------------------------
--- 4.7 Job Sync
--- -----------------------------------------------------------------------------
 
 CREATE OR REPLACE FUNCTION sync_job_to_search_index()
 RETURNS TRIGGER AS $$
@@ -420,6 +323,7 @@ DECLARE
   v_table_name TEXT;
   v_item_name TEXT;
   v_cust_name TEXT;
+  v_description TEXT;
 BEGIN
   IF TG_OP = 'DELETE' THEN
     v_table_name := 'searchIndex_' || OLD."companyId";
@@ -433,20 +337,23 @@ BEGIN
   SELECT name INTO v_item_name FROM "item" WHERE id = NEW."itemId";
   SELECT name INTO v_cust_name FROM "customer" WHERE id = NEW."customerId";
 
+  v_description := COALESCE(v_item_name, '') || ' ' || COALESCE(v_cust_name, '');
+
   EXECUTE format('
-    INSERT INTO %I ("entityType", "entityId", "title", "description", "link", "tags", "metadata")
-    VALUES ($1, $2, $3, $4, $5, $6, $7)
+    INSERT INTO %I ("entityType", "entityId", "title", "description", "link", "tags", "metadata", "searchVector")
+    VALUES ($1, $2, $3, $4, $5, $6, $7, to_tsvector(''english'', $3 || '' '' || $4 || '' '' || COALESCE(array_to_string($6, '' ''), '''')))
     ON CONFLICT ("entityType", "entityId") DO UPDATE SET
       "title" = EXCLUDED."title",
       "description" = EXCLUDED."description",
       "tags" = EXCLUDED."tags",
       "metadata" = EXCLUDED."metadata",
+      "searchVector" = to_tsvector(''english'', EXCLUDED."title" || '' '' || EXCLUDED."description" || '' '' || COALESCE(array_to_string(EXCLUDED."tags", '' ''), '''')),
       "updatedAt" = NOW()
   ', v_table_name) USING
     'job',
     NEW.id,
     NEW."jobId",
-    COALESCE(v_item_name, '') || ' ' || COALESCE(v_cust_name, ''),
+    v_description,
     '/x/job/' || NEW.id,
     ARRAY_REMOVE(ARRAY[NEW.status::TEXT, NEW."deadlineType"::TEXT], NULL),
     jsonb_build_object('quantity', NEW.quantity, 'dueDate', NEW."dueDate");
@@ -477,13 +384,14 @@ BEGIN
   SELECT name INTO v_supp_name FROM "supplier" WHERE id = NEW."supplierId";
 
   EXECUTE format('
-    INSERT INTO %I ("entityType", "entityId", "title", "description", "link", "tags", "metadata")
-    VALUES ($1, $2, $3, $4, $5, $6, $7)
+    INSERT INTO %I ("entityType", "entityId", "title", "description", "link", "tags", "metadata", "searchVector")
+    VALUES ($1, $2, $3, $4, $5, $6, $7, to_tsvector(''english'', $3 || '' '' || $4 || '' '' || COALESCE(array_to_string($6, '' ''), '''')))
     ON CONFLICT ("entityType", "entityId") DO UPDATE SET
       "title" = EXCLUDED."title",
       "description" = EXCLUDED."description",
       "tags" = EXCLUDED."tags",
       "metadata" = EXCLUDED."metadata",
+      "searchVector" = to_tsvector(''english'', EXCLUDED."title" || '' '' || EXCLUDED."description" || '' '' || COALESCE(array_to_string(EXCLUDED."tags", '' ''), '''')),
       "updatedAt" = NOW()
   ', v_table_name) USING
     'purchaseOrder',
@@ -520,13 +428,14 @@ BEGIN
   SELECT name INTO v_cust_name FROM "customer" WHERE id = NEW."customerId";
 
   EXECUTE format('
-    INSERT INTO %I ("entityType", "entityId", "title", "description", "link", "tags", "metadata")
-    VALUES ($1, $2, $3, $4, $5, $6, $7)
+    INSERT INTO %I ("entityType", "entityId", "title", "description", "link", "tags", "metadata", "searchVector")
+    VALUES ($1, $2, $3, $4, $5, $6, $7, to_tsvector(''english'', $3 || '' '' || $4 || '' '' || COALESCE(array_to_string($6, '' ''), '''')))
     ON CONFLICT ("entityType", "entityId") DO UPDATE SET
       "title" = EXCLUDED."title",
       "description" = EXCLUDED."description",
       "tags" = EXCLUDED."tags",
       "metadata" = EXCLUDED."metadata",
+      "searchVector" = to_tsvector(''english'', EXCLUDED."title" || '' '' || EXCLUDED."description" || '' '' || COALESCE(array_to_string(EXCLUDED."tags", '' ''), '''')),
       "updatedAt" = NOW()
   ', v_table_name) USING
     'salesInvoice',
@@ -563,13 +472,14 @@ BEGIN
   SELECT name INTO v_supp_name FROM "supplier" WHERE id = NEW."supplierId";
 
   EXECUTE format('
-    INSERT INTO %I ("entityType", "entityId", "title", "description", "link", "tags", "metadata")
-    VALUES ($1, $2, $3, $4, $5, $6, $7)
+    INSERT INTO %I ("entityType", "entityId", "title", "description", "link", "tags", "metadata", "searchVector")
+    VALUES ($1, $2, $3, $4, $5, $6, $7, to_tsvector(''english'', $3 || '' '' || $4 || '' '' || COALESCE(array_to_string($6, '' ''), '''')))
     ON CONFLICT ("entityType", "entityId") DO UPDATE SET
       "title" = EXCLUDED."title",
       "description" = EXCLUDED."description",
       "tags" = EXCLUDED."tags",
       "metadata" = EXCLUDED."metadata",
+      "searchVector" = to_tsvector(''english'', EXCLUDED."title" || '' '' || EXCLUDED."description" || '' '' || COALESCE(array_to_string(EXCLUDED."tags", '' ''), '''')),
       "updatedAt" = NOW()
   ', v_table_name) USING
     'purchaseInvoice',
@@ -640,32 +550,6 @@ CREATE TRIGGER sync_item_search_delete
   AFTER DELETE ON "item"
   FOR EACH ROW EXECUTE FUNCTION sync_item_to_search_index();
 
--- Equipment Type triggers
-CREATE TRIGGER sync_equipment_type_search_insert
-  AFTER INSERT ON "equipmentType"
-  FOR EACH ROW EXECUTE FUNCTION sync_equipment_type_to_search_index();
-
-CREATE TRIGGER sync_equipment_type_search_update
-  AFTER UPDATE ON "equipmentType"
-  FOR EACH ROW EXECUTE FUNCTION sync_equipment_type_to_search_index();
-
-CREATE TRIGGER sync_equipment_type_search_delete
-  AFTER DELETE ON "equipmentType"
-  FOR EACH ROW EXECUTE FUNCTION sync_equipment_type_to_search_index();
-
--- Work Cell Type triggers
-CREATE TRIGGER sync_work_cell_type_search_insert
-  AFTER INSERT ON "workCellType"
-  FOR EACH ROW EXECUTE FUNCTION sync_work_cell_type_to_search_index();
-
-CREATE TRIGGER sync_work_cell_type_search_update
-  AFTER UPDATE ON "workCellType"
-  FOR EACH ROW EXECUTE FUNCTION sync_work_cell_type_to_search_index();
-
-CREATE TRIGGER sync_work_cell_type_search_delete
-  AFTER DELETE ON "workCellType"
-  FOR EACH ROW EXECUTE FUNCTION sync_work_cell_type_to_search_index();
-
 -- Job triggers
 CREATE TRIGGER sync_job_search_insert
   AFTER INSERT ON "job"
@@ -729,14 +613,15 @@ DECLARE
 BEGIN
   -- Populate employees
   EXECUTE format('
-    INSERT INTO %I ("entityType", "entityId", "title", "link", "tags", "metadata")
+    INSERT INTO %I ("entityType", "entityId", "title", "link", "tags", "metadata", "searchVector")
     SELECT
       ''employee'',
       e.id,
       COALESCE(u."fullName", ''''),
       ''/x/person/'' || e.id,
       ARRAY_REMOVE(ARRAY[et.name], NULL),
-      jsonb_build_object(''active'', e.active)
+      jsonb_build_object(''active'', e.active),
+      to_tsvector(''english'', COALESCE(u."fullName", '''') || '' '' || COALESCE(array_to_string(ARRAY_REMOVE(ARRAY[et.name], NULL), '' ''), ''''))
     FROM "employee" e
     INNER JOIN "user" u ON u.id = e.id
     LEFT JOIN "employeeType" et ON et.id = e."employeeTypeId"
@@ -745,19 +630,21 @@ BEGIN
       "title" = EXCLUDED."title",
       "tags" = EXCLUDED."tags",
       "metadata" = EXCLUDED."metadata",
+      "searchVector" = EXCLUDED."searchVector",
       "updatedAt" = NOW()
   ', v_table_name) USING p_company_id;
 
   -- Populate customers
   EXECUTE format('
-    INSERT INTO %I ("entityType", "entityId", "title", "link", "tags", "metadata")
+    INSERT INTO %I ("entityType", "entityId", "title", "link", "tags", "metadata", "searchVector")
     SELECT
       ''customer'',
       c.id,
       c.name,
       ''/x/customer/'' || c.id,
       ARRAY_REMOVE(ARRAY[ct.name, cs.name], NULL),
-      jsonb_build_object(''taxId'', c."taxId")
+      jsonb_build_object(''taxId'', c."taxId"),
+      to_tsvector(''english'', c.name || '' '' || COALESCE(array_to_string(ARRAY_REMOVE(ARRAY[ct.name, cs.name], NULL), '' ''), ''''))
     FROM "customer" c
     LEFT JOIN "customerType" ct ON ct.id = c."customerTypeId"
     LEFT JOIN "customerStatus" cs ON cs.id = c."customerStatusId"
@@ -766,19 +653,21 @@ BEGIN
       "title" = EXCLUDED."title",
       "tags" = EXCLUDED."tags",
       "metadata" = EXCLUDED."metadata",
+      "searchVector" = EXCLUDED."searchVector",
       "updatedAt" = NOW()
   ', v_table_name) USING p_company_id;
 
   -- Populate suppliers
   EXECUTE format('
-    INSERT INTO %I ("entityType", "entityId", "title", "link", "tags", "metadata")
+    INSERT INTO %I ("entityType", "entityId", "title", "link", "tags", "metadata", "searchVector")
     SELECT
       ''supplier'',
       s.id,
       s.name,
       ''/x/supplier/'' || s.id,
       ARRAY_REMOVE(ARRAY[st.name, ss.name], NULL),
-      jsonb_build_object(''taxId'', s."taxId")
+      jsonb_build_object(''taxId'', s."taxId"),
+      to_tsvector(''english'', s.name || '' '' || COALESCE(array_to_string(ARRAY_REMOVE(ARRAY[st.name, ss.name], NULL), '' ''), ''''))
     FROM "supplier" s
     LEFT JOIN "supplierType" st ON st.id = s."supplierTypeId"
     LEFT JOIN "supplierStatus" ss ON ss.id = s."supplierStatusId"
@@ -787,12 +676,13 @@ BEGIN
       "title" = EXCLUDED."title",
       "tags" = EXCLUDED."tags",
       "metadata" = EXCLUDED."metadata",
+      "searchVector" = EXCLUDED."searchVector",
       "updatedAt" = NOW()
   ', v_table_name) USING p_company_id;
 
   -- Populate items
   EXECUTE format('
-    INSERT INTO %I ("entityType", "entityId", "title", "description", "link", "tags", "metadata")
+    INSERT INTO %I ("entityType", "entityId", "title", "description", "link", "tags", "metadata", "searchVector")
     SELECT
       ''item'',
       i.id,
@@ -808,7 +698,8 @@ BEGIN
         ELSE ''/x/part/'' || i.id
       END,
       ARRAY_REMOVE(ARRAY[i.type::TEXT, i."replenishmentSystem"::TEXT], NULL),
-      jsonb_build_object(''active'', i.active, ''blocked'', i.blocked)
+      jsonb_build_object(''active'', i.active),
+      to_tsvector(''english'', i."readableId" || '' '' || i.name || '' '' || COALESCE(i.description, '''') || '' '' || COALESCE(array_to_string(ARRAY_REMOVE(ARRAY[i.type::TEXT, i."replenishmentSystem"::TEXT], NULL), '' ''), ''''))
     FROM "item" i
     WHERE i."companyId" = $1
     ON CONFLICT ("entityType", "entityId") DO UPDATE SET
@@ -817,54 +708,14 @@ BEGIN
       "link" = EXCLUDED."link",
       "tags" = EXCLUDED."tags",
       "metadata" = EXCLUDED."metadata",
+      "searchVector" = EXCLUDED."searchVector",
       "updatedAt" = NOW()
   ', v_table_name) USING p_company_id;
 
-  -- Populate equipment types
-  EXECUTE format('
-    INSERT INTO %I ("entityType", "entityId", "title", "description", "link", "tags", "metadata")
-    SELECT
-      ''equipmentType'',
-      et.id,
-      et.name,
-      COALESCE(et.description, ''''),
-      ''/x/resources/equipment/'' || et.id,
-      ARRAY[CASE WHEN et.active THEN ''active'' ELSE ''inactive'' END],
-      jsonb_build_object(''setupHours'', et."setupHours")
-    FROM "equipmentType" et
-    WHERE et."companyId" = $1
-    ON CONFLICT ("entityType", "entityId") DO UPDATE SET
-      "title" = EXCLUDED."title",
-      "description" = EXCLUDED."description",
-      "tags" = EXCLUDED."tags",
-      "metadata" = EXCLUDED."metadata",
-      "updatedAt" = NOW()
-  ', v_table_name) USING p_company_id;
-
-  -- Populate work cell types
-  EXECUTE format('
-    INSERT INTO %I ("entityType", "entityId", "title", "description", "link", "tags", "metadata")
-    SELECT
-      ''workCellType'',
-      wct.id,
-      wct.name,
-      COALESCE(wct.description, ''''),
-      ''/x/resources/work-cells/'' || wct.id,
-      ARRAY[CASE WHEN wct.active THEN ''active'' ELSE ''inactive'' END],
-      jsonb_build_object(''quotingRate'', wct."quotingRate")
-    FROM "workCellType" wct
-    WHERE wct."companyId" = $1
-    ON CONFLICT ("entityType", "entityId") DO UPDATE SET
-      "title" = EXCLUDED."title",
-      "description" = EXCLUDED."description",
-      "tags" = EXCLUDED."tags",
-      "metadata" = EXCLUDED."metadata",
-      "updatedAt" = NOW()
-  ', v_table_name) USING p_company_id;
 
   -- Populate jobs
   EXECUTE format('
-    INSERT INTO %I ("entityType", "entityId", "title", "description", "link", "tags", "metadata")
+    INSERT INTO %I ("entityType", "entityId", "title", "description", "link", "tags", "metadata", "searchVector")
     SELECT
       ''job'',
       j.id,
@@ -872,7 +723,8 @@ BEGIN
       COALESCE(i.name, '''') || '' '' || COALESCE(c.name, ''''),
       ''/x/job/'' || j.id,
       ARRAY_REMOVE(ARRAY[j.status::TEXT, j."deadlineType"::TEXT], NULL),
-      jsonb_build_object(''quantity'', j.quantity, ''dueDate'', j."dueDate")
+      jsonb_build_object(''quantity'', j.quantity, ''dueDate'', j."dueDate"),
+      to_tsvector(''english'', j."jobId" || '' '' || COALESCE(i.name, '''') || '' '' || COALESCE(c.name, '''') || '' '' || COALESCE(array_to_string(ARRAY_REMOVE(ARRAY[j.status::TEXT, j."deadlineType"::TEXT], NULL), '' ''), ''''))
     FROM "job" j
     LEFT JOIN "item" i ON i.id = j."itemId"
     LEFT JOIN "customer" c ON c.id = j."customerId"
@@ -882,20 +734,22 @@ BEGIN
       "description" = EXCLUDED."description",
       "tags" = EXCLUDED."tags",
       "metadata" = EXCLUDED."metadata",
+      "searchVector" = EXCLUDED."searchVector",
       "updatedAt" = NOW()
   ', v_table_name) USING p_company_id;
 
   -- Populate purchase orders
   EXECUTE format('
-    INSERT INTO %I ("entityType", "entityId", "title", "description", "link", "tags", "metadata")
+    INSERT INTO %I ("entityType", "entityId", "title", "description", "link", "tags", "metadata", "searchVector")
     SELECT
       ''purchaseOrder'',
       po.id,
       po."purchaseOrderId",
       COALESCE(s.name, ''''),
       ''/x/purchase-order/'' || po.id,
-      ARRAY_REMOVE(ARRAY[po.status::TEXT, po.type::TEXT], NULL),
-      jsonb_build_object(''orderDate'', po."orderDate", ''supplierReference'', po."supplierReference")
+      ARRAY_REMOVE(ARRAY[po.status::TEXT], NULL),
+      jsonb_build_object(''orderDate'', po."orderDate", ''supplierReference'', po."supplierReference"),
+      to_tsvector(''english'', po."purchaseOrderId" || '' '' || COALESCE(s.name, '''') || '' '' || COALESCE(array_to_string(ARRAY_REMOVE(ARRAY[po.status::TEXT], NULL), '' ''), ''''))
     FROM "purchaseOrder" po
     LEFT JOIN "supplier" s ON s.id = po."supplierId"
     WHERE po."companyId" = $1
@@ -904,12 +758,13 @@ BEGIN
       "description" = EXCLUDED."description",
       "tags" = EXCLUDED."tags",
       "metadata" = EXCLUDED."metadata",
+      "searchVector" = EXCLUDED."searchVector",
       "updatedAt" = NOW()
   ', v_table_name) USING p_company_id;
 
   -- Populate sales invoices
   EXECUTE format('
-    INSERT INTO %I ("entityType", "entityId", "title", "description", "link", "tags", "metadata")
+    INSERT INTO %I ("entityType", "entityId", "title", "description", "link", "tags", "metadata", "searchVector")
     SELECT
       ''salesInvoice'',
       si.id,
@@ -917,7 +772,8 @@ BEGIN
       COALESCE(c.name, ''''),
       ''/x/invoicing/sales/'' || si.id,
       ARRAY_REMOVE(ARRAY[si.status::TEXT], NULL),
-      jsonb_build_object(''totalAmount'', si."totalAmount", ''dateDue'', si."dateDue")
+      jsonb_build_object(''totalAmount'', si."totalAmount", ''dateDue'', si."dateDue"),
+      to_tsvector(''english'', si."invoiceId" || '' '' || COALESCE(c.name, '''') || '' '' || COALESCE(array_to_string(ARRAY_REMOVE(ARRAY[si.status::TEXT], NULL), '' ''), ''''))
     FROM "salesInvoice" si
     LEFT JOIN "customer" c ON c.id = si."customerId"
     WHERE si."companyId" = $1
@@ -926,12 +782,13 @@ BEGIN
       "description" = EXCLUDED."description",
       "tags" = EXCLUDED."tags",
       "metadata" = EXCLUDED."metadata",
+      "searchVector" = EXCLUDED."searchVector",
       "updatedAt" = NOW()
   ', v_table_name) USING p_company_id;
 
   -- Populate purchase invoices
   EXECUTE format('
-    INSERT INTO %I ("entityType", "entityId", "title", "description", "link", "tags", "metadata")
+    INSERT INTO %I ("entityType", "entityId", "title", "description", "link", "tags", "metadata", "searchVector")
     SELECT
       ''purchaseInvoice'',
       pi.id,
@@ -939,7 +796,8 @@ BEGIN
       COALESCE(s.name, ''''),
       ''/x/invoicing/purchasing/'' || pi.id,
       ARRAY_REMOVE(ARRAY[pi.status::TEXT], NULL),
-      jsonb_build_object(''totalAmount'', pi."totalAmount", ''dateDue'', pi."dateDue")
+      jsonb_build_object(''totalAmount'', pi."totalAmount", ''dateDue'', pi."dateDue"),
+      to_tsvector(''english'', pi."invoiceId" || '' '' || COALESCE(s.name, '''') || '' '' || COALESCE(array_to_string(ARRAY_REMOVE(ARRAY[pi.status::TEXT], NULL), '' ''), ''''))
     FROM "purchaseInvoice" pi
     LEFT JOIN "supplier" s ON s.id = pi."supplierId"
     WHERE pi."companyId" = $1
@@ -948,6 +806,7 @@ BEGIN
       "description" = EXCLUDED."description",
       "tags" = EXCLUDED."tags",
       "metadata" = EXCLUDED."metadata",
+      "searchVector" = EXCLUDED."searchVector",
       "updatedAt" = NOW()
   ', v_table_name) USING p_company_id;
 
@@ -959,7 +818,56 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- =============================================================================
--- PART 7: Create Search Indexes for Existing Companies and Populate Data
+-- PART 7: Create Search Function for API
+-- =============================================================================
+
+CREATE OR REPLACE FUNCTION search_company_index(
+  p_company_id TEXT,
+  p_query TEXT,
+  p_entity_types TEXT[],
+  p_limit INT DEFAULT 20
+)
+RETURNS TABLE (
+  id BIGINT,
+  "entityType" TEXT,
+  "entityId" TEXT,
+  title TEXT,
+  description TEXT,
+  link TEXT,
+  tags TEXT[],
+  metadata JSONB
+) AS $$
+DECLARE
+  v_table_name TEXT;
+  v_search_query TEXT;
+BEGIN
+  v_table_name := 'searchIndex_' || p_company_id;
+
+  -- Build websearch-compatible query
+  v_search_query := websearch_to_tsquery('english', p_query)::TEXT;
+
+  RETURN QUERY EXECUTE format('
+    SELECT
+      si.id,
+      si."entityType",
+      si."entityId",
+      si.title,
+      si.description,
+      si.link,
+      si.tags,
+      si.metadata
+    FROM %I si
+    WHERE si."searchVector" @@ websearch_to_tsquery(''english'', $1)
+      AND si."entityType" = ANY($2)
+    ORDER BY ts_rank(si."searchVector", websearch_to_tsquery(''english'', $1)) DESC
+    LIMIT $3
+  ', v_table_name)
+  USING p_query, p_entity_types, p_limit;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- =============================================================================
+-- PART 8: Create Search Indexes for Existing Companies and Populate Data
 -- =============================================================================
 
 DO $$
