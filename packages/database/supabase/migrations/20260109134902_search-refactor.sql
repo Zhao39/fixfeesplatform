@@ -471,7 +471,7 @@ BEGIN
     NEW."purchaseOrderId",
     COALESCE(v_supp_name, ''),
     '/x/purchase-order/' || NEW.id,
-    ARRAY_REMOVE(ARRAY[NEW.status::TEXT, NEW.type::TEXT], NULL),
+    ARRAY_REMOVE(ARRAY[NEW.status::TEXT], NULL),
     jsonb_build_object('orderDate', NEW."orderDate", 'supplierReference', NEW."supplierReference");
 
   RETURN NEW;
