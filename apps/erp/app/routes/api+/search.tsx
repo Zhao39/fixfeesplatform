@@ -37,6 +37,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const url = new URL(request.url);
   const query = url.searchParams.get("q")?.trim();
+  const typeFilter = url.searchParams.get("type")?.trim();
 
   if (!query || query.length < 2) {
     return Response.json({ results: [] } satisfies SearchResponse);
@@ -46,7 +47,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const claims = await getUserClaims(userId, companyId);
 
   // Determine which entity types the user has permission to view
-  const allowedEntityTypes = Object.entries(entityPermissionMap)
+  let allowedEntityTypes = Object.entries(entityPermissionMap)
     .filter(([_, permissionModule]) => {
       const permission = claims.permissions[permissionModule];
       if (!permission) return false;
@@ -56,6 +57,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
       );
     })
     .map(([entityType]) => entityType);
+
+  // Apply type filter if provided
+  if (typeFilter && typeFilter !== "all") {
+    allowedEntityTypes = allowedEntityTypes.filter((t) => t === typeFilter);
+  }
 
   if (allowedEntityTypes.length === 0) {
     return Response.json({ results: [] } satisfies SearchResponse);
