@@ -1,7 +1,9 @@
 import type { IconType } from "react-icons";
 import {
   LuFileCheck,
+  LuGauge,
   LuHardHat,
+  LuOctagonAlert,
   LuShoppingCart,
   LuSquareUser,
   LuUser,
@@ -9,7 +11,6 @@ import {
 } from "react-icons/lu";
 import { PiShareNetworkFill } from "react-icons/pi";
 import { RiProgress8Line } from "react-icons/ri";
-import type { EntityTypeConfig } from "./types";
 
 // Entity type styling configuration
 export const entityTypeConfig: Record<
@@ -65,61 +66,18 @@ export const entityTypeConfig: Record<
     bgColor: "bg-zinc-100 dark:bg-zinc-900/30",
     textColor: "text-zinc-600 dark:text-zinc-400",
     icon: LuWrench
+  },
+  issue: {
+    bgColor: "",
+    textColor: "",
+    icon: LuOctagonAlert
+  },
+  gauge: {
+    bgColor: "",
+    textColor: "",
+    icon: LuGauge
   }
 };
-
-// Filter chips configuration
-export const filterChips: EntityTypeConfig[] = [
-  {
-    value: "all",
-    label: "All",
-    icon: null,
-    bgColor: "",
-    textColor: ""
-  },
-  {
-    value: "customer",
-    label: "Customers",
-    icon: LuSquareUser,
-    bgColor: "bg-blue-100 dark:bg-blue-900/30",
-    textColor: "text-blue-600 dark:text-blue-400"
-  },
-  {
-    value: "supplier",
-    label: "Suppliers",
-    icon: PiShareNetworkFill,
-    bgColor: "bg-purple-100 dark:bg-purple-900/30",
-    textColor: "text-purple-600 dark:text-purple-400"
-  },
-  {
-    value: "item",
-    label: "Items",
-    icon: LuWrench,
-    bgColor: "bg-emerald-100 dark:bg-emerald-900/30",
-    textColor: "text-emerald-600 dark:text-emerald-400"
-  },
-  {
-    value: "job",
-    label: "Jobs",
-    icon: LuHardHat,
-    bgColor: "bg-orange-100 dark:bg-orange-900/30",
-    textColor: "text-orange-600 dark:text-orange-400"
-  },
-  {
-    value: "employee",
-    label: "People",
-    icon: LuUser,
-    bgColor: "bg-cyan-100 dark:bg-cyan-900/30",
-    textColor: "text-cyan-600 dark:text-cyan-400"
-  },
-  {
-    value: "purchaseOrder",
-    label: "POs",
-    icon: LuShoppingCart,
-    bgColor: "bg-yellow-100 dark:bg-yellow-900/30",
-    textColor: "text-yellow-600 dark:text-yellow-400"
-  }
-];
 
 export function getEntityTypeConfig(entityType: string) {
   return (
@@ -142,7 +100,9 @@ export function getEntityTypeLabel(entityType: string): string {
     salesInvoice: "Sales Invoice",
     purchaseInvoice: "Purchase Invoice",
     equipmentType: "Equipment",
-    workCellType: "Work Cell"
+    workCellType: "Work Cell",
+    issue: "Issue",
+    gauge: "Gauge"
   };
   return labels[entityType] ?? entityType;
 }

@@ -2,7 +2,6 @@ import type { ShortcutDefinition } from "@carbon/react";
 import {
   Button,
   Command,
-  CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
@@ -22,13 +21,14 @@ import { memo, useEffect, useState } from "react";
 import {
   LuChevronRight,
   LuClock,
+  LuDraftingCompass,
   LuFileCheck,
   LuHardHat,
   LuSearch,
+  LuShieldX,
   LuShoppingCart,
   LuSquareUser,
   LuUser,
-  LuWrench,
   LuX
 } from "react-icons/lu";
 import { PiShareNetworkFill } from "react-icons/pi";
@@ -118,6 +118,26 @@ const SearchModal = () => {
   const searchResults = input.length >= 2 ? (fetcher.data?.results ?? []) : [];
   const loading = fetcher.state === "loading";
 
+  // Filter static results based on input for empty state detection
+  const normalizedInput = input.toLowerCase().trim();
+  const hasMatchingStaticResults =
+    normalizedInput.length === 0 ||
+    Object.entries(staticResults).some(([module, submodules]) =>
+      submodules.some(
+        (s) =>
+          !recentPaths.has(s.to) &&
+          `${module} ${s.name}`.toLowerCase().includes(normalizedInput)
+      )
+    );
+  const hasMatchingRecentResults =
+    normalizedInput.length === 0 ||
+    recentResults.some((r) => r.name.toLowerCase().includes(normalizedInput));
+
+  const hasAnyResults =
+    searchResults.length > 0 ||
+    hasMatchingStaticResults ||
+    hasMatchingRecentResults;
+
   const onInputChange = (value: string) => {
     setInput(value);
     if (value && value.length >= 2) {
@@ -165,28 +185,27 @@ const SearchModal = () => {
       }}
     >
       <ModalContent
-        className="rounded-xl p-0 h-[520px] max-w-2xl overflow-hidden"
+        className="rounded-xl p-0 h-[520px] max-w-2xl overflow-hidden dark:shadow-button"
         withCloseButton={false}
       >
         <Command className="h-full flex flex-col">
           {/* Search Input */}
-          <div className="border-b border-border">
-            <CommandInput
-              placeholder="Search across your workspace..."
-              value={input}
-              onValueChange={onInputChange}
-              className="h-14 text-base"
-            />
-          </div>
+
+          <CommandInput
+            placeholder="Search across your workspace..."
+            value={input}
+            onValueChange={onInputChange}
+            className="h-14 text-base"
+          />
 
           {/* Results */}
           <CommandList className="flex-1 max-h-none overflow-y-auto px-2 py-2">
             {loading || isDebouncing ? (
               <SearchEmptyState type="loading" />
+            ) : !hasAnyResults ? (
+              <SearchEmptyState type="no-results" query={input} />
             ) : (
               <>
-                <CommandEmpty key="empty">No results found.</CommandEmpty>
-
                 {/* Recent Searches */}
                 {recentResults.length > 0 && (
                   <>
@@ -383,13 +402,14 @@ function ResultIcon({ entityType }: { entityType: string }) {
       return <LuSquareUser className={iconClass} />;
     case "employee":
       return <LuUser className={iconClass} />;
+    case "gauge":
+      return <LuDraftingCompass className={iconClass} />;
     case "job":
       return <LuHardHat className={iconClass} />;
+    case "issue":
+      return <LuShieldX className={iconClass} />;
     case "item":
       return <MethodItemTypeIcon type="Part" className={iconClass} />;
-    case "equipmentType":
-    case "workCellType":
-      return <LuWrench className={iconClass} />;
     case "purchaseOrder":
       return <LuShoppingCart className={iconClass} />;
     case "salesInvoice":

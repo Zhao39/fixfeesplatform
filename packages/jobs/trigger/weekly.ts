@@ -90,6 +90,21 @@ export const weekly = schedules.task({
 
         console.log(`Companies to delete: ${companiesToDelete.length}`);
 
+        // Drop search index tables for companies being deleted
+        for (const company of companiesToDelete) {
+          const { error: dropSearchError } = await serviceRole.rpc(
+            "drop_company_search_index",
+            { p_company_id: company.id }
+          );
+          if (dropSearchError) {
+            console.error(
+              `Failed to drop search index for company ${company.name}: ${dropSearchError.message}`
+            );
+          } else {
+            console.log(`Dropped search index for company ${company.name}`);
+          }
+        }
+
         const { error: deletedCompaniesError } = await serviceRole
           .from("company")
           .delete()

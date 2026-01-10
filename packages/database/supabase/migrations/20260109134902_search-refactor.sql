@@ -24,6 +24,33 @@ DROP TRIGGER IF EXISTS create_item_search_result ON "item";
 DROP TRIGGER IF EXISTS update_item_search_result ON "item";
 DROP TRIGGER IF EXISTS delete_item_search_result ON "item";
 
+-- Job triggers
+DROP TRIGGER IF EXISTS create_job_search_result ON "job";
+DROP TRIGGER IF EXISTS update_job_search_result ON "job";
+DROP TRIGGER IF EXISTS delete_job_search_result ON "job";
+
+-- Purchase Order triggers
+DROP TRIGGER IF EXISTS create_purchase_order_search_result ON "purchaseOrder";
+DROP TRIGGER IF EXISTS update_purchase_order_search_result ON "purchaseOrder";
+DROP TRIGGER IF EXISTS delete_purchase_order_search_result ON "purchaseOrder";
+
+-- Sales Order triggers
+DROP TRIGGER IF EXISTS create_sales_order_search_result ON "salesOrder";
+DROP TRIGGER IF EXISTS update_sales_order_search_result ON "salesOrder";
+DROP TRIGGER IF EXISTS delete_sales_order_search_result ON "salesOrder";
+
+-- Quotation triggers
+DROP TRIGGER IF EXISTS create_quotation_search_result ON "quote";
+DROP TRIGGER IF EXISTS update_quotation_search_result ON "quote";
+DROP TRIGGER IF EXISTS delete_quotation_search_result ON "quote";
+
+-- Sales RFQ triggers
+DROP TRIGGER IF EXISTS create_sales_rfq_search_result ON "salesRfq";
+DROP TRIGGER IF EXISTS update_sales_rfq_search_result ON "salesRfq";
+DROP TRIGGER IF EXISTS delete_sales_rfq_search_result ON "salesRfq";
+
+
+
 
 -- Drop old functions
 DROP FUNCTION IF EXISTS create_employee_search_result();
@@ -35,6 +62,29 @@ DROP FUNCTION IF EXISTS update_supplier_search_result();
 DROP FUNCTION IF EXISTS create_item_search_result();
 DROP FUNCTION IF EXISTS update_item_search_result();
 DROP FUNCTION IF EXISTS delete_item_search_result();
+DROP FUNCTION IF EXISTS create_job_search_result();
+DROP FUNCTION IF EXISTS update_job_search_result();
+DROP FUNCTION IF EXISTS delete_job_search_result();
+DROP FUNCTION IF EXISTS create_purchase_order_search_result();
+DROP FUNCTION IF EXISTS update_purchase_order_search_result();
+DROP FUNCTION IF EXISTS delete_purchase_order_search_result();
+DROP FUNCTION IF EXISTS create_sales_order_search_result();
+DROP FUNCTION IF EXISTS update_sales_order_search_result();
+DROP FUNCTION IF EXISTS delete_sales_order_search_result();
+DROP FUNCTION IF EXISTS create_quotation_search_result();
+DROP FUNCTION IF EXISTS update_quotation_search_result();
+DROP FUNCTION IF EXISTS delete_quotation_search_result();
+DROP FUNCTION IF EXISTS create_sales_rfq_search_result();
+DROP FUNCTION IF EXISTS update_sales_rfq_search_result();
+DROP FUNCTION IF EXISTS delete_sales_rfq_search_result();
+DROP FUNCTION IF EXISTS create_work_cell_type_search_result();
+DROP FUNCTION IF EXISTS update_work_cell_type_search_result();
+DROP FUNCTION IF EXISTS delete_work_cell_type_search_result();
+DROP FUNCTION IF EXISTS create_equipment_type_search_result();
+DROP FUNCTION IF EXISTS update_equipment_type_search_result();
+DROP FUNCTION IF EXISTS delete_equipment_type_search_result();
+DROP FUNCTION IF EXISTS create_equipment_search_result();
+DROP FUNCTION IF EXISTS update_equipment_search_result();
 
 
 -- Drop old table and type
@@ -100,7 +150,26 @@ BEGIN
   VALUES (p_company_id)
   ON CONFLICT ("companyId") DO NOTHING;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY INVOKER;
+
+-- =============================================================================
+-- PART 2.1: Create Table Deletion Function
+-- =============================================================================
+
+CREATE OR REPLACE FUNCTION drop_company_search_index(p_company_id TEXT)
+RETURNS VOID AS $$
+DECLARE
+  v_table_name TEXT;
+BEGIN
+  v_table_name := 'searchIndex_' || p_company_id;
+
+  -- Drop the search index table if it exists
+  EXECUTE format('DROP TABLE IF EXISTS %I', v_table_name);
+
+  -- Remove from registry
+  DELETE FROM "searchIndexRegistry" WHERE "companyId" = p_company_id;
+END;
+$$ LANGUAGE plpgsql SECURITY INVOKER;
 
 -- =============================================================================
 -- PART 3: Create Company Trigger (auto-create search index for new companies)
@@ -497,6 +566,100 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
+-- -----------------------------------------------------------------------------
+-- 4.11 Non-Conformance (Issue) Sync
+-- -----------------------------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION sync_non_conformance_to_search_index()
+RETURNS TRIGGER AS $$
+DECLARE
+  v_table_name TEXT;
+  v_nc_type TEXT;
+  v_description TEXT;
+BEGIN
+  IF TG_OP = 'DELETE' THEN
+    v_table_name := 'searchIndex_' || OLD."companyId";
+    EXECUTE format('DELETE FROM %I WHERE "entityType" = $1 AND "entityId" = $2', v_table_name)
+      USING 'issue', OLD.id;
+    RETURN OLD;
+  END IF;
+
+  v_table_name := 'searchIndex_' || NEW."companyId";
+
+  SELECT name INTO v_nc_type FROM "nonConformanceType" WHERE id = NEW."nonConformanceTypeId";
+
+  v_description := NEW.name || ' ' || COALESCE(NEW.description, '');
+
+  EXECUTE format('
+    INSERT INTO %I ("entityType", "entityId", "title", "description", "link", "tags", "metadata", "searchVector")
+    VALUES ($1, $2, $3, $4, $5, $6, $7, to_tsvector(''english'', $3 || '' '' || $4 || '' '' || COALESCE(array_to_string($6, '' ''), '''')))
+    ON CONFLICT ("entityType", "entityId") DO UPDATE SET
+      "title" = EXCLUDED."title",
+      "description" = EXCLUDED."description",
+      "tags" = EXCLUDED."tags",
+      "metadata" = EXCLUDED."metadata",
+      "searchVector" = to_tsvector(''english'', EXCLUDED."title" || '' '' || EXCLUDED."description" || '' '' || COALESCE(array_to_string(EXCLUDED."tags", '' ''), '''')),
+      "updatedAt" = NOW()
+  ', v_table_name) USING
+    'issue',
+    NEW.id,
+    NEW."nonConformanceId",
+    v_description,
+    '/x/issue/' || NEW.id,
+    ARRAY_REMOVE(ARRAY[NEW.status::TEXT, NEW.priority::TEXT, v_nc_type], NULL),
+    jsonb_build_object('source', NEW.source, 'dueDate', NEW."dueDate");
+
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- -----------------------------------------------------------------------------
+-- 4.12 Gauge Sync
+-- -----------------------------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION sync_gauge_to_search_index()
+RETURNS TRIGGER AS $$
+DECLARE
+  v_table_name TEXT;
+  v_gauge_type TEXT;
+  v_description TEXT;
+BEGIN
+  IF TG_OP = 'DELETE' THEN
+    v_table_name := 'searchIndex_' || OLD."companyId";
+    EXECUTE format('DELETE FROM %I WHERE "entityType" = $1 AND "entityId" = $2', v_table_name)
+      USING 'gauge', OLD.id;
+    RETURN OLD;
+  END IF;
+
+  v_table_name := 'searchIndex_' || NEW."companyId";
+
+  SELECT name INTO v_gauge_type FROM "gaugeType" WHERE id = NEW."gaugeTypeId";
+
+  v_description := COALESCE(NEW.description, '') || ' ' || COALESCE(NEW."serialNumber", '');
+
+  EXECUTE format('
+    INSERT INTO %I ("entityType", "entityId", "title", "description", "link", "tags", "metadata", "searchVector")
+    VALUES ($1, $2, $3, $4, $5, $6, $7, to_tsvector(''english'', $3 || '' '' || $4 || '' '' || COALESCE(array_to_string($6, '' ''), '''')))
+    ON CONFLICT ("entityType", "entityId") DO UPDATE SET
+      "title" = EXCLUDED."title",
+      "description" = EXCLUDED."description",
+      "tags" = EXCLUDED."tags",
+      "metadata" = EXCLUDED."metadata",
+      "searchVector" = to_tsvector(''english'', EXCLUDED."title" || '' '' || EXCLUDED."description" || '' '' || COALESCE(array_to_string(EXCLUDED."tags", '' ''), '''')),
+      "updatedAt" = NOW()
+  ', v_table_name) USING
+    'gauge',
+    NEW.id,
+    NEW."gaugeId",
+    v_description,
+    '/x/quality/gauges/' || NEW.id,
+    ARRAY_REMOVE(ARRAY[NEW."gaugeStatus"::TEXT, NEW."gaugeCalibrationStatus"::TEXT, v_gauge_type], NULL),
+    jsonb_build_object('nextCalibrationDate', NEW."nextCalibrationDate", 'serialNumber', NEW."serialNumber");
+
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
 -- =============================================================================
 -- PART 5: Create Entity Table Triggers
 -- =============================================================================
@@ -604,6 +767,32 @@ CREATE TRIGGER sync_purchase_invoice_search_update
 CREATE TRIGGER sync_purchase_invoice_search_delete
   AFTER DELETE ON "purchaseInvoice"
   FOR EACH ROW EXECUTE FUNCTION sync_purchase_invoice_to_search_index();
+
+-- Non-Conformance (Issue) triggers
+CREATE TRIGGER sync_non_conformance_search_insert
+  AFTER INSERT ON "nonConformance"
+  FOR EACH ROW EXECUTE FUNCTION sync_non_conformance_to_search_index();
+
+CREATE TRIGGER sync_non_conformance_search_update
+  AFTER UPDATE ON "nonConformance"
+  FOR EACH ROW EXECUTE FUNCTION sync_non_conformance_to_search_index();
+
+CREATE TRIGGER sync_non_conformance_search_delete
+  AFTER DELETE ON "nonConformance"
+  FOR EACH ROW EXECUTE FUNCTION sync_non_conformance_to_search_index();
+
+-- Gauge triggers
+CREATE TRIGGER sync_gauge_search_insert
+  AFTER INSERT ON "gauge"
+  FOR EACH ROW EXECUTE FUNCTION sync_gauge_to_search_index();
+
+CREATE TRIGGER sync_gauge_search_update
+  AFTER UPDATE ON "gauge"
+  FOR EACH ROW EXECUTE FUNCTION sync_gauge_to_search_index();
+
+CREATE TRIGGER sync_gauge_search_delete
+  AFTER DELETE ON "gauge"
+  FOR EACH ROW EXECUTE FUNCTION sync_gauge_to_search_index();
 
 -- =============================================================================
 -- PART 6: Create Population Function
@@ -813,6 +1002,54 @@ BEGIN
       "updatedAt" = NOW()
   ', v_table_name) USING p_company_id;
 
+  -- Populate non-conformances (issues)
+  EXECUTE format('
+    INSERT INTO %I ("entityType", "entityId", "title", "description", "link", "tags", "metadata", "searchVector")
+    SELECT
+      ''issue'',
+      nc.id,
+      nc."nonConformanceId",
+      nc.name || '' '' || COALESCE(nc.description, ''''),
+      ''/x/issue/'' || nc.id,
+      ARRAY_REMOVE(ARRAY[nc.status::TEXT, nc.priority::TEXT, nct.name], NULL),
+      jsonb_build_object(''source'', nc.source, ''dueDate'', nc."dueDate"),
+      to_tsvector(''english'', nc."nonConformanceId" || '' '' || nc.name || '' '' || COALESCE(nc.description, '''') || '' '' || COALESCE(array_to_string(ARRAY_REMOVE(ARRAY[nc.status::TEXT, nc.priority::TEXT, nct.name], NULL), '' ''), ''''))
+    FROM "nonConformance" nc
+    LEFT JOIN "nonConformanceType" nct ON nct.id = nc."nonConformanceTypeId"
+    WHERE nc."companyId" = $1
+    ON CONFLICT ("entityType", "entityId") DO UPDATE SET
+      "title" = EXCLUDED."title",
+      "description" = EXCLUDED."description",
+      "tags" = EXCLUDED."tags",
+      "metadata" = EXCLUDED."metadata",
+      "searchVector" = EXCLUDED."searchVector",
+      "updatedAt" = NOW()
+  ', v_table_name) USING p_company_id;
+
+  -- Populate gauges
+  EXECUTE format('
+    INSERT INTO %I ("entityType", "entityId", "title", "description", "link", "tags", "metadata", "searchVector")
+    SELECT
+      ''gauge'',
+      g.id,
+      g."gaugeId",
+      COALESCE(g.description, '''') || '' '' || COALESCE(g."serialNumber", ''''),
+      ''/x/quality/gauges/'' || g.id,
+      ARRAY_REMOVE(ARRAY[g."gaugeStatus"::TEXT, g."gaugeCalibrationStatus"::TEXT, gt.name], NULL),
+      jsonb_build_object(''nextCalibrationDate'', g."nextCalibrationDate", ''serialNumber'', g."serialNumber"),
+      to_tsvector(''english'', g."gaugeId" || '' '' || COALESCE(g.description, '''') || '' '' || COALESCE(g."serialNumber", '''') || '' '' || COALESCE(array_to_string(ARRAY_REMOVE(ARRAY[g."gaugeStatus"::TEXT, g."gaugeCalibrationStatus"::TEXT, gt.name], NULL), '' ''), ''''))
+    FROM "gauge" g
+    LEFT JOIN "gaugeType" gt ON gt.id = g."gaugeTypeId"
+    WHERE g."companyId" = $1
+    ON CONFLICT ("entityType", "entityId") DO UPDATE SET
+      "title" = EXCLUDED."title",
+      "description" = EXCLUDED."description",
+      "tags" = EXCLUDED."tags",
+      "metadata" = EXCLUDED."metadata",
+      "searchVector" = EXCLUDED."searchVector",
+      "updatedAt" = NOW()
+  ', v_table_name) USING p_company_id;
+
   -- Update registry
   UPDATE "searchIndexRegistry"
   SET "lastRebuiltAt" = NOW()
@@ -842,12 +1079,10 @@ RETURNS TABLE (
 ) AS $$
 DECLARE
   v_table_name TEXT;
-  v_search_query TEXT;
+  v_like_pattern TEXT;
 BEGIN
   v_table_name := 'searchIndex_' || p_company_id;
-
-  -- Build websearch-compatible query
-  v_search_query := websearch_to_tsquery('english', p_query)::TEXT;
+  v_like_pattern := '%' || p_query || '%';
 
   RETURN QUERY EXECUTE format('
     SELECT
@@ -860,14 +1095,24 @@ BEGIN
       si.tags,
       si.metadata
     FROM %I si
-    WHERE si."searchVector" @@ websearch_to_tsquery(''english'', $1)
-      AND si."entityType" = ANY($2)
-    ORDER BY ts_rank(si."searchVector", websearch_to_tsquery(''english'', $1)) DESC
-    LIMIT $3
+    WHERE (
+      si.title ILIKE $1
+      OR si.description ILIKE $1
+      OR si."searchVector" @@ websearch_to_tsquery(''english'', $2)
+    )
+      AND si."entityType" = ANY($3)
+    ORDER BY
+      -- Prefix match on title first (starts with query)
+      CASE WHEN lower(si.title) LIKE lower($4) THEN 0 ELSE 1 END,
+      -- Contains match in title
+      CASE WHEN si.title ILIKE $1 THEN 0 ELSE 1 END,
+      -- Then by recency (higher id = more recent)
+      si.id DESC
+    LIMIT $5
   ', v_table_name)
-  USING p_query, p_entity_types, p_limit;
+  USING v_like_pattern, p_query, p_entity_types, p_query || '%', p_limit;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY INVOKER;
 
 -- =============================================================================
 -- PART 8: Create Search Indexes for Existing Companies and Populate Data
