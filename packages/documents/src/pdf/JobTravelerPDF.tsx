@@ -14,6 +14,7 @@ interface JobTravelerProps extends PDF {
   customer: Database["public"]["Tables"]["customer"]["Row"] | null;
   item: Database["public"]["Tables"]["item"]["Row"];
   batchNumber: string | undefined;
+  bomId?: string;
   notes?: JSONContent;
   thumbnail?: string | null;
 }
@@ -95,6 +96,7 @@ type JobHeaderProps = {
   customer: Database["public"]["Tables"]["customer"]["Row"] | null;
   item: Database["public"]["Tables"]["item"]["Row"];
   batchNumber?: string;
+  bomId?: string;
   thumbnail?: string | null;
 };
 
@@ -104,6 +106,7 @@ const JobHeader = ({
   customer,
   item,
   batchNumber,
+  bomId,
   thumbnail
 }: JobHeaderProps) => {
   const getTargetInfo = () => {
@@ -224,15 +227,14 @@ export const JobTravelerPageContent = ({
   customer,
   item,
   batchNumber,
+  bomId,
   notes,
   thumbnail
 }: Omit<JobTravelerProps, "meta" | "title" | "locale" | "jobMakeMethod">) => {
   const subtitle = batchNumber
     ? batchNumber
     : (item.name ?? item.readableIdWithRevision);
-  const tertiaryTitle = batchNumber
-    ? `${item.name ?? item.readableIdWithRevision}`
-    : undefined;
+  const tertiaryTitle = `Assembly ${bomId}`;
 
   return (
     <View style={tw("flex flex-col")}>
@@ -254,6 +256,7 @@ export const JobTravelerPageContent = ({
           customer={customer}
           item={item}
           batchNumber={batchNumber}
+          bomId={bomId}
           thumbnail={thumbnail}
         />
       </View>
@@ -375,6 +378,7 @@ const JobTravelerPDF = ({
   customer,
   item,
   batchNumber,
+  bomId,
   meta,
   notes,
   thumbnail,
@@ -396,6 +400,7 @@ const JobTravelerPDF = ({
         customer={customer}
         item={item}
         batchNumber={batchNumber}
+        bomId={bomId}
         notes={notes}
         thumbnail={thumbnail}
       />
