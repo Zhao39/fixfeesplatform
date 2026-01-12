@@ -3,15 +3,23 @@
  */
 import { getCarbonServiceRole } from "@carbon/auth";
 import {
+  getPostgresClient,
+  getPostgresConnectionPool,
+} from "@carbon/database/client";
+import {
   AccountingEntity,
   AccountingSyncSchema,
   EntityMap,
   getAccountingIntegration,
   getEntityWithExternalId,
   getProviderIntegration,
+  RatelimitError,
   SyncFn,
+  upsertContactAndLinkToCustomer,
+  upsertCustomerFromAccounting,
 } from "@carbon/ee/accounting";
 import { logger, task } from "@trigger.dev/sdk";
+import { PostgresDriver } from "kysely";
 import z from "zod";
 
 const PayloadSchema = AccountingSyncSchema.extend({
@@ -22,52 +30,57 @@ const PayloadSchema = AccountingSyncSchema.extend({
 
 type Payload = z.infer<typeof PayloadSchema>;
 
+const pool = getPostgresConnectionPool(1);
+
+const kysely = getPostgresClient(pool, PostgresDriver);
+
 const UPSERT_MAP: Record<keyof EntityMap, SyncFn> = {
   async customer({ client, entity, payload, provider }) {
-    const customer = await getEntityWithExternalId(
-      client,
-      "customer",
-      payload.companyId,
-      provider.id,
-      { externalId: entity.entityId }
-    );
-
-    if (!customer && customer) {
-      logger.info(`Customer ${entity.entityId} found, updating...`);
-
-      const id = customer.externalId[provider.id].id;
-
-      const remote = await provider.contacts.get(id);
-
-      return {
-        id: entity.entityId,
-        message: "Updated successfully",
-      };
-    }
-
-    logger.info(`Customer ${entity.entityId} not found, creating...`);
-
-    // If not found, fetch from provider and create a new customer
-    const remote = await provider.contacts.get(entity.entityId);
-
-    if (!remote.isCustomer) {
-      return {
-        id: entity.entityId,
-        message: "Skipped: Contact is not a customer",
-      };
-    }
-
-    logger.info(`Inserting customer with contact id: ${remote.id}`, remote);
-
     try {
+      const customer = await getEntityWithExternalId(
+        client,
+        "customer",
+        payload.companyId,
+        provider.id,
+        { externalId: entity.entityId }
+      );
+
+      // Fetch from provider
+      const remote = await provider.contacts.get(entity.entityId);
+
+      logger.info(`Upserting customer with contact id: ${remote.id}`, remote);
+
+      await kysely.transaction().execute(async (tx) => {
+        if (!customer) {
+          logger.info(`Customer ${entity.entityId} not found, creating...`);
+        }
+
+        // Atomically upsert customer and get the customer ID
+        const customerId = await upsertCustomerFromAccounting(
+          tx,
+          remote,
+          { companyId: payload.companyId, provider: provider.id },
+          customer?.id
+        );
+
+        logger.info(`Customer ID: ${customerId}`);
+
+        // Atomically upsert contact and link to customer
+        await upsertContactAndLinkToCustomer(tx, remote, customerId, {
+          companyId: payload.companyId,
+          provider: provider.id,
+        });
+
+        logger.info(`Successfully synced customer ${entity.entityId}`);
+      });
     } catch (error) {
       logger.error(
-        `Failed to create customer for contact id: ${remote.id} ${error.message}`
+        `Failed to upsert customer ${error.message}`
       );
 
       return {
         id: entity.entityId,
-        message: `Failed to create customer: ${
+        message: `Failed to upsert customer: ${
           error instanceof Error ? error.message : "Unknown error"
         }`,
       };
@@ -107,6 +120,18 @@ const DELETE_MAP: Record<keyof EntityMap, SyncFn> = {
 
 export const fromAccountsSyncTask = task({
   id: "from-accounting-sync",
+  retry: { maxAttempts: 2, randomize: true },
+  // catchError(err)  {
+  //   if (err instanceof RatelimitError) {
+  //     return {
+  //       retryAt: err.retryAt,
+  //     };
+  //   }
+
+  //   return {
+  //     skipRetrying: true,
+  //   };
+  // },
   run: async (input: Payload) => {
     const payload = PayloadSchema.parse(input);
 
@@ -143,10 +168,13 @@ export const fromAccountsSyncTask = task({
 
         const result = await handler({
           client,
+          kysely,
           entity,
           provider,
           payload: { syncDirection: payload.syncDirection, ...payload },
         });
+
+        logger.info("Result:", { result });
 
         results.success.push(result);
       } catch (error) {

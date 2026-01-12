@@ -27,7 +27,7 @@ export interface ReadableResource<T> {
 export type WritableResource<T, Create, Update> = {
   create(data: Create): Promise<T>;
   update(id: string, data: Update): Promise<T>;
-  upsert(data: Update & { id: string }): Promise<T>;
+  upsert(...data: Array<Update & { id: string }>): Promise<T>;
   delete(id: string): Promise<void>;
 };
 

@@ -1,4 +1,5 @@
 import z from "zod";
+import { OAuthClientOptions } from "./utils";
 
 /**
  * Provider core interfaces and base classes.
@@ -6,7 +7,7 @@ import z from "zod";
 export type ProviderConfig<T = unknown> = {
   id: ProviderID;
   companyId: string;
-  onTokenRefresh?: (creds: ProviderCredentials) => void;
+  onTokenRefresh?: OAuthClientOptions["onTokenRefresh"];
 } & T;
 
 export enum ProviderID {

@@ -1,4 +1,5 @@
 import { Database } from "@carbon/database";
+import { getPostgresClient } from "@carbon/database/client";
 import { SupabaseClient } from "@supabase/supabase-js";
 import z from "zod";
 import { AccountingEntityType } from "../entities";
@@ -18,6 +19,7 @@ export type AccountingSyncPayload = z.infer<typeof AccountingSyncSchema>;
 
 export type SyncFn = (input: {
   client: SupabaseClient<Database>;
+  kysely: ReturnType<typeof getPostgresClient>;
   entity: AccountingEntity;
   provider: AccountingProvider;
   payload: AccountingSyncPayload;

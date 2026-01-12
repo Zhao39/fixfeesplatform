@@ -30,9 +30,9 @@ import {
   AccountingSyncPayload,
   getProviderIntegration,
   ProviderCredentials,
-  ProviderID
+  ProviderID,
+  XeroProvider
 } from "@carbon/ee/accounting";
-import { XeroProvider } from "@carbon/ee/xero";
 import { tasks } from "@trigger.dev/sdk/v3";
 import crypto from "crypto";
 import { type ActionFunctionArgs, data } from "react-router";
@@ -57,7 +57,7 @@ const WebhookSchema = z.object({
   lastEventSequence: z.number()
 });
 
-async function verifySignature(payload: string, header: string) {
+function verifySignature(payload: string, header: string) {
   if (!XERO_WEBHOOK_SECRET) {
     console.warn("XERO_WEBHOOK_SECRET is not configured");
     return payload;
@@ -274,7 +274,7 @@ export async function action({ request }: ActionFunctionArgs) {
         success: false,
         error: "Invalid JSON payload"
       },
-      { status: 400 }
+      { status: 401 }
     );
   }
 
@@ -287,7 +287,7 @@ export async function action({ request }: ActionFunctionArgs) {
         success: false,
         error: "Invalid payload format"
       },
-      { status: 400 }
+      { status: 401 }
     );
   }
 
@@ -424,7 +424,8 @@ export async function action({ request }: ActionFunctionArgs) {
 
           // Trigger the background job using Trigger.dev
           const handle = await tasks.trigger("from-accounting-sync", payload, {
-            tags: [ProviderID.XERO, payload.syncType]
+            tags: [ProviderID.XERO, payload.syncType],
+            concurrencyKey: `from-accounting-sync:${companyId}`
           });
 
           console.log(

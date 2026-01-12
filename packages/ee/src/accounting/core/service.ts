@@ -1,6 +1,7 @@
 import type { Database } from "@carbon/database";
 import type { KyselyTx } from "@carbon/database/client";
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { sql } from "kysely";
 import { Accounting, TablesWithExternalId } from "../entities";
 import { XeroProvider } from "../providers";
 import {
@@ -51,7 +52,9 @@ export const getProviderIntegration = (
   const { accessToken, refreshToken, tenantId } = config ?? {};
 
   // Create a callback function to update the integration metadata when tokens are refreshed
-  const onTokenRefresh = async (auth: ProviderCredentials) => {
+  const onTokenRefresh = async (
+    auth: ProviderCredentials
+  ): Promise<ProviderCredentials> => {
     try {
       console.log("Refreshing tokens for", provider, "integration");
       const update: ProviderCredentials = {
@@ -67,15 +70,14 @@ export const getProviderIntegration = (
         .eq("companyId", companyId)
         .eq("id", provider);
 
-      console.log(
-        `Updated ${provider} integration metadata for company ${companyId}`,
-        config
-      );
+      return update;
     } catch (error) {
       console.error(
         `Failed to update ${provider} integration metadata:`,
         error
       );
+
+      return auth;
     }
   };
 
@@ -191,14 +193,195 @@ export const getEntityWithExternalId = async <T extends TablesWithExternalId>(
 };
 
 export const upsertAccountingCustomer = async (
-  client: SupabaseClient<Database>,
+  tx: KyselyTx,
   remote: Accounting.Contact,
   payload: AccountingSyncPayload
-) => {};
+) => {
+  const contact = await tx
+    .selectFrom("contact")
+    .select(["id", "companyId", "email"])
+    .where((eq) => {
+      const clauses = [eq("companyId", "=", payload.companyId)];
 
-export const upsertAccountingContact = async (
+      if (remote.email) {
+        clauses.push(eq("email", "=", remote.email));
+      }
+
+      return eq.and(clauses);
+    })
+    .executeTakeFirst();
+
+  if (contact) {
+    await tx
+      .updateTable("contact")
+      .set({
+        email: remote.email ?? contact.email,
+        firstName: remote.firstName ?? null,
+        lastName: remote.lastName ?? null,
+        isCustomer: remote.isCustomer,
+        externalId: sql`jsonb_set("externalId", '{${payload.provider}}', ${sql.raw(
+          JSON.stringify({
+            id: remote.id,
+            lastSyncedAt: new Date().toISOString(),
+            provider: payload.provider
+          })
+        )}::jsonb, true)`
+      })
+      .where((eq) =>
+        eq.and([
+          eq("companyId", "=", contact.companyId),
+          eq("email", "=", contact.id)
+        ])
+      )
+      .execute();
+  }
+
+  const workPhone = remote.phones.find((p) => p.type === "DEFAULT");
+  const mobilePhone = remote.phones.find((p) => p.type === "MOBILE");
+
+  const inserted = await tx
+    .insertInto("contact")
+    .values({
+      companyId: payload.companyId,
+      email: remote.email ?? null,
+      firstName: remote.firstName ?? null,
+      lastName: remote.lastName ?? null,
+      workPhone: workPhone ? workPhone.phone : null,
+      mobilePhone: mobilePhone ? mobilePhone.phone : null,
+      isCustomer: remote.isCustomer,
+      externalId: {
+        [payload.provider]: {
+          id: remote.id,
+          lastSyncedAt: new Date().toISOString(),
+          provider: payload.provider
+        }
+      }
+    })
+    .execute();
+
+  return inserted;
+};
+
+/**
+ * Atomically upserts a customer from accounting provider data
+ * @returns The customer ID (existing or newly created)
+ */
+export const upsertCustomerFromAccounting = async (
+  tx: KyselyTx,
+  remote: Accounting.Contact,
+  payload: AccountingSyncPayload,
+  id?: string
+): Promise<string> => {
+  if (id) {
+    const result = await tx
+      .updateTable("customer")
+      .set({
+        name: remote.name,
+        externalId: sql`COALESCE("externalId", '{}'::jsonb) || ${JSON.stringify(
+          {
+            [payload.provider]: {
+              id: remote.id,
+              lastSyncedAt: new Date().toISOString(),
+              provider: payload.provider
+            }
+          }
+        )}::jsonb`
+      })
+      .where((eq) =>
+        eq.and([eq("companyId", "=", payload.companyId), eq("id", "=", id)])
+      )
+      .returning("id")
+      .executeTakeFirstOrThrow();
+
+    return result.id;
+  }
+
+  const customer = await tx
+    .insertInto("customer")
+    .values({
+      companyId: payload.companyId,
+      name: remote.name,
+      externalId: {
+        [payload.provider]: {
+          id: remote.id,
+          lastSyncedAt: new Date().toISOString(),
+          provider: payload.provider
+        }
+      }
+    })
+    .returning("id")
+    .executeTakeFirst();
+
+  if (!customer?.id) {
+    throw new Error("Failed to create customer");
+  }
+
+  return customer.id;
+};
+
+/**
+ * Atomically upserts a contact and links it to a customer
+ * Handles conflict resolution for existing contacts with the same email
+ */
+export const upsertContactAndLinkToCustomer = async (
   tx: KyselyTx,
   remote: Accounting.Contact,
   customerId: string,
   payload: AccountingSyncPayload
-) => {};
+): Promise<void> => {
+  const contact = await tx
+    .insertInto("contact")
+    .values({
+      companyId: payload.companyId,
+      email: remote.email ?? null,
+      firstName: remote.firstName ?? null,
+      lastName: remote.lastName ?? null,
+      workPhone: remote.workPhone ?? null,
+      mobilePhone: remote.mobilePhone ?? null,
+      homePhone: remote.homePhone ?? null,
+      fax: remote.fax ?? null,
+      isCustomer: true,
+      externalId: {
+        [payload.provider]: {
+          id: remote.id,
+          lastSyncedAt: new Date().toISOString(),
+          provider: payload.provider
+        }
+      }
+    })
+    .onConflict((oc) =>
+      oc
+        .columns(["companyId", "isCustomer", "email"])
+        .where((eq) => eq("email", "is not", null))
+        .doUpdateSet({
+          firstName: sql`EXCLUDED."firstName"`,
+          lastName: sql`EXCLUDED."lastName"`,
+          workPhone: sql`EXCLUDED."workPhone"`,
+          mobilePhone: sql`EXCLUDED."mobilePhone"`,
+          homePhone: sql`EXCLUDED."homePhone"`,
+          fax: sql`EXCLUDED."fax"`,
+          externalId: sql`contact."externalId" || EXCLUDED."externalId"`
+        })
+    )
+    .returningAll()
+    .executeTakeFirst();
+
+  if (!contact?.id) {
+    throw new Error("Failed to upsert contact");
+  }
+
+  const connection = {
+    contactId: contact.id,
+    customerId
+  };
+
+  const linked = await tx
+    .updateTable("customerContact")
+    .set(connection)
+    .where((eq) => eq("customerId", "=", customerId))
+    .executeTakeFirst();
+
+  if (!linked.numUpdatedRows) {
+    await tx.insertInto("customerContact").values(connection).execute();
+  }
+};

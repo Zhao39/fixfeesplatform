@@ -2,35 +2,22 @@ import { ProviderCredentials } from "./models";
 import { AuthProvider } from "./provider";
 
 export class HTTPClient {
-  constructor(
-    private baseUrl?: string,
-    private maxRetries: number = 3
-  ) {}
+  constructor(private baseUrl?: string) {}
 
   async request<T>(method: string, path: string, opts: RequestInit = {}) {
-    const response = await this.fetch(method, path, opts);
-    return this.parseResponse<T>(response);
-  }
+    let response!: Response;
 
-  async requestWithRetry<T>(
-    method: string,
-    path: string,
-    opts: RequestInit = {}
-  ) {
-    let attempt = 0;
+    try {
+      response = await this.fetch(method, path, opts);
 
-    while (true) {
-      const response = await this.fetch(method, path, opts);
+      if (response.status === 429) {
+        throw new RatelimitError("Rate limit exceeded", response);
+      }
 
-      if (this.shouldRetry(response, attempt)) {
-        attempt++;
-
-        const retryAfterMs = this.getRetryAfterMs(response);
-        if (retryAfterMs !== undefined) {
-          await this.sleep(retryAfterMs);
-        }
-
-        continue;
+      return this.parseResponse<T>(response);
+    } catch (error) {
+      if (error instanceof RatelimitError) {
+        throw error;
       }
 
       return this.parseResponse<T>(response);
@@ -80,31 +67,6 @@ export class HTTPClient {
       data: null
     } as const;
   }
-
-  private shouldRetry(response: Response, attempt: number): boolean {
-    return response.status === 429 && attempt < this.maxRetries;
-  }
-
-  private getRetryAfterMs(response: Response): number | undefined {
-    const retryAfter = response.headers.get("Retry-After");
-    if (!retryAfter) return undefined;
-
-    const seconds = Number(retryAfter);
-    if (!Number.isNaN(seconds)) {
-      return seconds * 1000;
-    }
-
-    const date = Date.parse(retryAfter);
-    if (!Number.isNaN(date)) {
-      return Math.max(0, date - Date.now());
-    }
-
-    return undefined;
-  }
-
-  private sleep(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
 }
 
 export class NotImplementedError extends Error {
@@ -114,7 +76,18 @@ export class NotImplementedError extends Error {
   }
 }
 
-interface OAuthClientOptions {
+export class RatelimitError extends Error {
+  constructor(
+    message: string,
+    public response: Response
+  ) {
+    super(message);
+    this.name = "RatelimitError";
+    this.response = response;
+  }
+}
+
+export interface OAuthClientOptions {
   clientId: string;
   clientSecret: string;
   tokenUrl: string;
@@ -122,7 +95,7 @@ interface OAuthClientOptions {
   refreshToken?: string;
   redirectUri?: string;
   getAuthUrl: (scopes: string[], redirectUri: string) => string;
-  onTokenRefresh?: (creds: ProviderCredentials) => void;
+  onTokenRefresh?: (creds: ProviderCredentials) => ProviderCredentials;
 }
 
 export function createOAuthClient({
@@ -171,11 +144,17 @@ export function createOAuthClient({
         ).toISOString()
       } satisfies ProviderCredentials;
 
-      options.onTokenRefresh?.(newCreds);
+      creds = {
+        ...creds,
+        ...(options.onTokenRefresh
+          ? await options.onTokenRefresh(newCreds)
+          : newCreds)
+      };
 
       return newCreds;
     },
     async refresh() {
+      console.log("Refreshing OAuth tokens", creds);
       if (!creds?.refreshToken) {
         throw new Error("No refresh token available");
       }
@@ -210,7 +189,12 @@ export function createOAuthClient({
         tenantId: creds?.tenantId
       } satisfies ProviderCredentials;
 
-      options.onTokenRefresh?.(newCreds);
+      creds = {
+        ...creds,
+        ...(options.onTokenRefresh
+          ? await options.onTokenRefresh(newCreds)
+          : newCreds)
+      };
 
       return newCreds;
     },

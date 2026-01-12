@@ -10,7 +10,7 @@ import {
   type ProviderConfig,
 } from "@carbon/ee/accounting";
 import { QuickBooksProvider } from "@carbon/ee/quickbooks";
-import { XeroProvider } from "@carbon/ee/xero";
+import { XeroProvider } from "@carbon/ee/accounting";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { task } from "@trigger.dev/sdk/v3";

@@ -1,12 +1,17 @@
-import { XERO_CLIENT_ID } from "@carbon/auth";
+import { getCarbonServiceRole, NODE_ENV, XERO_CLIENT_ID } from "@carbon/auth";
 import type { ComponentProps } from "react";
 import { z } from "zod";
+import {
+  getProviderIntegration,
+  ProviderCredentials,
+  ProviderID
+} from "../accounting";
 import type { IntegrationConfig } from "../types";
 
 export const Xero: IntegrationConfig = {
   name: "Xero",
   id: "xero",
-  active: false,
+  active: NODE_ENV !== "production",
   category: "Accounting",
   logo: Logo,
   description:
@@ -27,6 +32,16 @@ export const Xero: IntegrationConfig = {
       "accounting.settings"
     ],
     tokenUrl: "https://login.xero.com/identity/connect/token"
+  },
+  async healthcheck(companyId, metadata) {
+    const provider = getProviderIntegration(
+      getCarbonServiceRole(),
+      companyId,
+      ProviderID.XERO,
+      metadata as ProviderCredentials
+    );
+
+    return await provider.validate();
   }
 };
 

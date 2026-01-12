@@ -26,12 +26,12 @@ export const ContactSchema = z.object({
   creditLimit: z.number().nullish(),
   paymentTerms: z.string().nullish(),
   updatedAt: z.string().datetime(),
-  phones: z.array(
-    z.object({
-      type: z.string().optional(),
-      phone: z.string().optional()
-    })
-  ),
+  workPhone: withNullable(z.string()),
+  mobilePhone: withNullable(z.string()),
+  fax: withNullable(z.string()),
+  homePhone: withNullable(z.string()),
+  isVendor: z.boolean(),
+  isCustomer: z.boolean(),
   addresses: z.array(
     z.object({
       label: z.string().nullish(),
@@ -44,6 +44,5 @@ export const ContactSchema = z.object({
       postalCode: z.string().nullish()
     })
   ),
-  isVendor: z.boolean(),
-  isCustomer: z.boolean()
+  raw: z.record(z.any())
 });

@@ -1,4 +1,4 @@
-import { QUICKBOOKS_CLIENT_ID } from "@carbon/auth";
+import { NODE_ENV, QUICKBOOKS_CLIENT_ID } from "@carbon/auth";
 import type { ComponentProps } from "react";
 import { z } from "zod";
 import type { IntegrationConfig } from "../types";
@@ -6,7 +6,7 @@ import type { IntegrationConfig } from "../types";
 export const QuickBooks: IntegrationConfig = {
   name: "QuickBooks",
   id: "quickbooks",
-  active: false,
+  active: NODE_ENV !== "production",
   category: "Accounting",
   logo: Logo,
   description:

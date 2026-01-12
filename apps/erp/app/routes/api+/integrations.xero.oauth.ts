@@ -2,7 +2,6 @@ import { VERCEL_URL, XERO_CLIENT_ID, XERO_CLIENT_SECRET } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { Xero } from "@carbon/ee";
 import { getProviderIntegration, ProviderID } from "@carbon/ee/accounting";
-import { XeroProvider } from "@carbon/ee/xero";
 import { data, type LoaderFunctionArgs, redirect } from "react-router";
 import { upsertCompanyIntegration } from "~/modules/settings/settings.server";
 import { oAuthCallbackSchema } from "~/modules/shared";
@@ -117,6 +116,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       );
     }
   } catch (err) {
+    console.error("Xero OAuth Error:", err);
     return data(
       { error: "Failed to exchange code for token" },
       { status: 500 }
