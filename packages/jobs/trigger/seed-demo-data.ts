@@ -27,6 +27,8 @@ export const seedDemoData = task({
 
     const supabaseClient = getCarbonServiceRole();
 
+    let seedRunId: string | undefined;
+
     try {
       const { data: seedRun, error: seedRunError } = await supabaseClient
         .from("demoSeedRun")
@@ -46,6 +48,8 @@ export const seedDemoData = task({
         throw seedRunError;
       }
 
+      seedRunId = seedRun.id;
+
       const seeder = createDemoSeeder(getPostgresClient(getPostgresConnectionPool(5), PostgresDriver));
 
       await seeder.seedDemo({
@@ -60,11 +64,11 @@ export const seedDemoData = task({
       await supabaseClient
         .from("demoSeedRun")
         .update({ status: "done", finishedAt: new Date().toISOString() })
-        .eq("id", seedRun.id);
+        .eq("id", seedRunId);
 
       return {
         success: true,
-        seedRunId: seedRun.id,
+        seedRunId,
         companyId,
         industryId,
         modules,
@@ -73,16 +77,9 @@ export const seedDemoData = task({
     } catch (error) {
       console.error("Failed to seed demo data", { error });
 
-      try {
-        const { data: existingRun } = await supabaseClient
-          .from("demoSeedRun")
-          .select("id")
-          .eq("companyId", companyId)
-          .order("createdAt", { ascending: false })
-          .limit(1)
-          .single();
-
-        if (existingRun) {
+      // Update the seed run status to failed
+      if (seedRunId) {
+        try {
           await supabaseClient
             .from("demoSeedRun")
             .update({
@@ -90,10 +87,10 @@ export const seedDemoData = task({
               error: error instanceof Error ? error.message : "Unknown error",
               finishedAt: new Date().toISOString()
             })
-            .eq("id", existingRun.id);
+            .eq("id", seedRunId);
+        } catch (updateError) {
+          console.error("Failed to update seed run status", { updateError });
         }
-      } catch (updateError) {
-        console.error("Failed to update seed run status", { updateError });
       }
 
       throw error;

@@ -328,10 +328,13 @@ export class DemoSeeder {
       .where("templateSetId", "=", templateSetId)
       .execute();
 
-    for (const tpl of templateItems) {
-      await trx
-        .insertInto("item")
-        .values({
+    if (templateItems.length === 0) return;
+
+    // Batch insert all items at once
+    await trx
+      .insertInto("item")
+      .values(
+        templateItems.map((tpl) => ({
           id: generateDemoId(companyId, tpl.templateRowId),
           companyId,
           readableId: tpl.readableId,
@@ -345,10 +348,10 @@ export class DemoSeeder {
           active: tpl.active,
           isDemo: true,
           createdBy: userId
-        })
-        .onConflict((oc) => oc.column("id").doNothing())
-        .execute();
-    }
+        }))
+      )
+      .onConflict((oc) => oc.column("id").doNothing())
+      .execute();
   }
 
   private async seedParts(
@@ -375,10 +378,13 @@ export class DemoSeeder {
       .where("p.templateSetId", "=", templateSetId)
       .execute();
 
-    for (const tpl of templateParts) {
-      await trx
-        .insertInto("part")
-        .values({
+    if (templateParts.length === 0) return;
+
+    // Batch insert all parts at once
+    await trx
+      .insertInto("part")
+      .values(
+        templateParts.map((tpl) => ({
           id: tpl.readableId,
           companyId,
           approved: tpl.approved,
@@ -386,10 +392,10 @@ export class DemoSeeder {
           toDate: tpl.toDate,
           isDemo: true,
           createdBy: userId
-        })
-        .onConflict((oc) => oc.columns(["id", "companyId"]).doNothing())
-        .execute();
-    }
+        }))
+      )
+      .onConflict((oc) => oc.columns(["id", "companyId"]).doNothing())
+      .execute();
   }
 
   private async seedMaterials(
@@ -415,39 +421,63 @@ export class DemoSeeder {
       .where("m.templateSetId", "=", templateSetId)
       .execute();
 
-    for (const tpl of templateMaterials) {
-      const materialForm = await trx
+    if (templateMaterials.length === 0) return;
+
+    // Fetch all material forms and substances in bulk instead of N+1 queries
+    const formNames = [
+      ...new Set(templateMaterials.map((m) => m.materialFormName))
+    ];
+    const substanceNames = [
+      ...new Set(templateMaterials.map((m) => m.materialSubstanceName))
+    ];
+
+    const [forms, substances] = await Promise.all([
+      trx
         .selectFrom("materialForm")
-        .select("id")
-        .where("name", "=", tpl.materialFormName)
+        .select(["id", "name"])
+        .where("name", "in", formNames)
         .where("companyId", "is", null)
-        .executeTakeFirst();
-
-      const materialSubstance = await trx
+        .execute(),
+      trx
         .selectFrom("materialSubstance")
-        .select("id")
-        .where("name", "=", tpl.materialSubstanceName)
+        .select(["id", "name"])
+        .where("name", "in", substanceNames)
         .where("companyId", "is", null)
-        .executeTakeFirst();
+        .execute()
+    ]);
 
-      if (!materialForm || !materialSubstance) {
-        console.warn(
-          `Skipping material ${tpl.readableId}: form or substance not found`
-        );
-        continue;
-      }
+    const formMap = new Map(forms.map((f) => [f.name, f.id]));
+    const substanceMap = new Map(substances.map((s) => [s.name, s.id]));
 
-      await trx
-        .insertInto("material")
-        .values({
+    // Build values for batch insert, skipping invalid materials
+    const validMaterials = templateMaterials
+      .map((tpl) => {
+        const formId = formMap.get(tpl.materialFormName);
+        const substanceId = substanceMap.get(tpl.materialSubstanceName);
+
+        if (!formId || !substanceId) {
+          console.warn(
+            `Skipping material ${tpl.readableId}: form or substance not found`
+          );
+          return null;
+        }
+
+        return {
           id: tpl.readableId,
           companyId,
-          materialFormId: materialForm.id,
-          materialSubstanceId: materialSubstance.id,
+          materialFormId: formId,
+          materialSubstanceId: substanceId,
           approved: tpl.approved,
           isDemo: true,
           createdBy: userId
-        })
+        };
+      })
+      .filter((m): m is NonNullable<typeof m> => m !== null);
+
+    if (validMaterials.length > 0) {
+      await trx
+        .insertInto("material")
+        .values(validMaterials)
         .onConflict((oc) => oc.columns(["id", "companyId"]).doNothing())
         .execute();
     }
@@ -468,20 +498,22 @@ export class DemoSeeder {
       .where("templateSetId", "=", templateSetId)
       .execute();
 
-    for (const tpl of templateCustomers) {
+    if (templateCustomers.length > 0) {
       await trx
         .insertInto("customer")
-        .values({
-          id: generateDemoId(companyId, tpl.templateRowId),
-          companyId,
-          name: tpl.name,
-          customerTypeId: tpl.customerTypeId,
-          customerStatusId: tpl.customerStatusId,
-          taxId: tpl.taxId,
-          accountManagerId: userId,
-          isDemo: true,
-          createdBy: userId
-        })
+        .values(
+          templateCustomers.map((tpl) => ({
+            id: generateDemoId(companyId, tpl.templateRowId),
+            companyId,
+            name: tpl.name,
+            customerTypeId: tpl.customerTypeId,
+            customerStatusId: tpl.customerStatusId,
+            taxId: tpl.taxId,
+            accountManagerId: userId,
+            isDemo: true,
+            createdBy: userId
+          }))
+        )
         .onConflict((oc) => oc.column("id").doNothing())
         .execute();
     }
@@ -623,20 +655,22 @@ export class DemoSeeder {
       .where("templateSetId", "=", templateSetId)
       .execute();
 
-    for (const tpl of templateSuppliers) {
+    if (templateSuppliers.length > 0) {
       await trx
         .insertInto("supplier")
-        .values({
-          id: generateDemoId(companyId, tpl.templateRowId),
-          companyId,
-          name: tpl.name,
-          supplierTypeId: tpl.supplierTypeId,
-          supplierStatusId: tpl.supplierStatusId,
-          taxId: tpl.taxId,
-          accountManagerId: userId,
-          isDemo: true,
-          createdBy: userId
-        })
+        .values(
+          templateSuppliers.map((tpl) => ({
+            id: generateDemoId(companyId, tpl.templateRowId),
+            companyId,
+            name: tpl.name,
+            supplierTypeId: tpl.supplierTypeId,
+            supplierStatusId: tpl.supplierStatusId,
+            taxId: tpl.taxId,
+            accountManagerId: userId,
+            isDemo: true,
+            createdBy: userId
+          }))
+        )
         .onConflict((oc) => oc.column("id").doNothing())
         .execute();
     }
