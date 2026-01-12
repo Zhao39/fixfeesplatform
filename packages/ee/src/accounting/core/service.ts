@@ -52,9 +52,7 @@ export const getProviderIntegration = (
   const { accessToken, refreshToken, tenantId } = config ?? {};
 
   // Create a callback function to update the integration metadata when tokens are refreshed
-  const onTokenRefresh = async (
-    auth: ProviderCredentials
-  ): Promise<ProviderCredentials> => {
+  const onTokenRefresh = async (auth: ProviderCredentials) => {
     try {
       console.log("Refreshing tokens for", provider, "integration");
       const update: ProviderCredentials = {
@@ -69,15 +67,11 @@ export const getProviderIntegration = (
         .update({ metadata: update })
         .eq("companyId", companyId)
         .eq("id", provider);
-
-      return update;
     } catch (error) {
       console.error(
         `Failed to update ${provider} integration metadata:`,
         error
       );
-
-      return auth;
     }
   };
 
@@ -383,5 +377,129 @@ export const upsertContactAndLinkToCustomer = async (
 
   if (!linked.numUpdatedRows) {
     await tx.insertInto("customerContact").values(connection).execute();
+  }
+};
+
+/**
+ * Atomically upserts a supplier from accounting provider data
+ * @returns The supplier ID (existing or newly created)
+ */
+export const upsertSupplierFromAccounting = async (
+  tx: KyselyTx,
+  remote: Accounting.Contact,
+  payload: AccountingSyncPayload,
+  id?: string
+): Promise<string> => {
+  if (id) {
+    const result = await tx
+      .updateTable("supplier")
+      .set({
+        name: remote.name,
+        externalId: sql`COALESCE("externalId", '{}'::jsonb) || ${JSON.stringify(
+          {
+            [payload.provider]: {
+              id: remote.id,
+              lastSyncedAt: new Date().toISOString(),
+              provider: payload.provider
+            }
+          }
+        )}::jsonb`
+      })
+      .where((eq) =>
+        eq.and([eq("companyId", "=", payload.companyId), eq("id", "=", id)])
+      )
+      .returning("id")
+      .executeTakeFirstOrThrow();
+
+    return result.id;
+  }
+
+  const supplier = await tx
+    .insertInto("supplier")
+    .values({
+      companyId: payload.companyId,
+      name: remote.name,
+      externalId: {
+        [payload.provider]: {
+          id: remote.id,
+          lastSyncedAt: new Date().toISOString(),
+          provider: payload.provider
+        }
+      }
+    })
+    .returning("id")
+    .executeTakeFirst();
+
+  if (!supplier?.id) {
+    throw new Error("Failed to create supplier");
+  }
+
+  return supplier.id;
+};
+
+/**
+ * Atomically upserts a contact and links it to a supplier
+ * Handles conflict resolution for existing contacts with the same email
+ */
+export const upsertContactAndLinkToSupplier = async (
+  tx: KyselyTx,
+  remote: Accounting.Contact,
+  supplierId: string,
+  payload: AccountingSyncPayload
+): Promise<void> => {
+  const contact = await tx
+    .insertInto("contact")
+    .values({
+      companyId: payload.companyId,
+      email: remote.email ?? null,
+      firstName: remote.firstName ?? null,
+      lastName: remote.lastName ?? null,
+      workPhone: remote.workPhone ?? null,
+      mobilePhone: remote.mobilePhone ?? null,
+      homePhone: remote.homePhone ?? null,
+      fax: remote.fax ?? null,
+      isSupplier: true,
+      externalId: {
+        [payload.provider]: {
+          id: remote.id,
+          lastSyncedAt: new Date().toISOString(),
+          provider: payload.provider
+        }
+      }
+    })
+    .onConflict((oc) =>
+      oc
+        .columns(["companyId", "isSupplier", "email"])
+        .where((eq) => eq("email", "is not", null))
+        .doUpdateSet({
+          firstName: sql`EXCLUDED."firstName"`,
+          lastName: sql`EXCLUDED."lastName"`,
+          workPhone: sql`EXCLUDED."workPhone"`,
+          mobilePhone: sql`EXCLUDED."mobilePhone"`,
+          homePhone: sql`EXCLUDED."homePhone"`,
+          fax: sql`EXCLUDED."fax"`,
+          externalId: sql`contact."externalId" || EXCLUDED."externalId"`
+        })
+    )
+    .returningAll()
+    .executeTakeFirst();
+
+  if (!contact?.id) {
+    throw new Error("Failed to upsert contact");
+  }
+
+  const connection = {
+    contactId: contact.id,
+    supplierId
+  };
+
+  const linked = await tx
+    .updateTable("supplierContact")
+    .set(connection)
+    .where((eq) => eq("supplierId", "=", supplierId))
+    .executeTakeFirst();
+
+  if (!linked.numUpdatedRows) {
+    await tx.insertInto("supplierContact").values(connection).execute();
   }
 };

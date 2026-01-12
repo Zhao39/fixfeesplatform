@@ -2,6 +2,7 @@
  * Task to sync entities to accounting providers from Carbon
  */
 import { getCarbonServiceRole } from "@carbon/auth";
+import { getPostgresClient, getPostgresConnectionPool } from "@carbon/database/client";
 import {
   AccountingEntity,
   AccountingSyncSchema,
@@ -11,8 +12,11 @@ import {
   getProviderIntegration,
   SyncFn,
 } from "@carbon/ee/accounting";
+import { PostgresDriver } from "kysely";
 import { task } from "@trigger.dev/sdk";
 import z from "zod";
+
+const kysely = getPostgresClient(getPostgresConnectionPool(1), PostgresDriver);
 
 const PayloadSchema = AccountingSyncSchema.extend({
   syncDirection: AccountingSyncSchema.shape.syncDirection.exclude([
@@ -111,6 +115,7 @@ export const toAccountsSyncTask = task({
 
         const result = await handler({
           client,
+          kysely,
           entity,
           provider,
           payload: { syncDirection: payload.syncDirection, ...payload },

@@ -95,7 +95,7 @@ export interface OAuthClientOptions {
   refreshToken?: string;
   redirectUri?: string;
   getAuthUrl: (scopes: string[], redirectUri: string) => string;
-  onTokenRefresh?: (creds: ProviderCredentials) => ProviderCredentials;
+  onTokenRefresh?: (creds: ProviderCredentials) => Promise<void>;
 }
 
 export function createOAuthClient({
@@ -146,10 +146,10 @@ export function createOAuthClient({
 
       creds = {
         ...creds,
-        ...(options.onTokenRefresh
-          ? await options.onTokenRefresh(newCreds)
-          : newCreds)
+        ...newCreds
       };
+
+      options.onTokenRefresh && (await options.onTokenRefresh(newCreds));
 
       return newCreds;
     },
@@ -191,10 +191,10 @@ export function createOAuthClient({
 
       creds = {
         ...creds,
-        ...(options.onTokenRefresh
-          ? await options.onTokenRefresh(newCreds)
-          : newCreds)
+        ...newCreds
       };
+
+      options.onTokenRefresh && (await options.onTokenRefresh(newCreds));
 
       return newCreds;
     },

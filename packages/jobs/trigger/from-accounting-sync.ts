@@ -16,11 +16,15 @@ import {
   RatelimitError,
   SyncFn,
   upsertContactAndLinkToCustomer,
+  upsertContactAndLinkToSupplier,
   upsertCustomerFromAccounting,
+  upsertSupplierFromAccounting,
 } from "@carbon/ee/accounting";
 import { logger, task } from "@trigger.dev/sdk";
 import { PostgresDriver } from "kysely";
 import z from "zod";
+
+const kysely = getPostgresClient(getPostgresConnectionPool(1), PostgresDriver);
 
 const PayloadSchema = AccountingSyncSchema.extend({
   syncDirection: AccountingSyncSchema.shape.syncDirection.exclude([
@@ -29,10 +33,6 @@ const PayloadSchema = AccountingSyncSchema.extend({
 });
 
 type Payload = z.infer<typeof PayloadSchema>;
-
-const pool = getPostgresConnectionPool(1);
-
-const kysely = getPostgresClient(pool, PostgresDriver);
 
 const UPSERT_MAP: Record<keyof EntityMap, SyncFn> = {
   async customer({ client, entity, payload, provider }) {
@@ -74,9 +74,7 @@ const UPSERT_MAP: Record<keyof EntityMap, SyncFn> = {
         logger.info(`Successfully synced customer ${entity.entityId}`);
       });
     } catch (error) {
-      logger.error(
-        `Failed to upsert customer ${error.message}`
-      );
+      logger.error(`Failed to upsert customer ${error.message}`);
 
       return {
         id: entity.entityId,
@@ -91,7 +89,60 @@ const UPSERT_MAP: Record<keyof EntityMap, SyncFn> = {
       message: "Created successfully",
     };
   },
-  async vendor({ client, entity, payload, provider }) {},
+  async vendor({ client, entity, payload, provider }) {
+    try {
+      const supplier = await getEntityWithExternalId(
+        client,
+        "supplier",
+        payload.companyId,
+        provider.id,
+        { externalId: entity.entityId }
+      );
+
+      // Fetch from provider
+      const remote = await provider.contacts.get(entity.entityId);
+
+      logger.info(`Upserting vendor with contact id: ${remote.id}`, remote);
+
+      await kysely.transaction().execute(async (tx) => {
+        if (!supplier) {
+          logger.info(`Vendor ${entity.entityId} not found, creating...`);
+        }
+
+        // Atomically upsert supplier and get the supplier ID
+        const supplierId = await upsertSupplierFromAccounting(
+          tx,
+          remote,
+          { companyId: payload.companyId, provider: provider.id },
+          supplier?.id
+        );
+
+        logger.info(`Supplier ID: ${supplierId}`);
+
+        // Atomically upsert contact and link to supplier
+        await upsertContactAndLinkToSupplier(tx, remote, supplierId, {
+          companyId: payload.companyId,
+          provider: provider.id,
+        });
+
+        logger.info(`Successfully synced vendor ${entity.entityId}`);
+      });
+    } catch (error) {
+      logger.error(`Failed to upsert vendor ${error.message}`);
+
+      return {
+        id: entity.entityId,
+        message: `Failed to upsert vendor: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`,
+      };
+    }
+
+    return {
+      id: entity.entityId,
+      message: "Created successfully",
+    };
+  },
 };
 
 const DELETE_MAP: Record<keyof EntityMap, SyncFn> = {
@@ -115,7 +166,26 @@ const DELETE_MAP: Record<keyof EntityMap, SyncFn> = {
       message: "Deleted successfully",
     };
   },
-  async vendor({ client, entity, payload, provider }) {},
+  async vendor({ client, entity, payload, provider }) {
+    const supplier = await getEntityWithExternalId(
+      client,
+      "supplier",
+      payload.companyId,
+      provider.id,
+      { id: entity.entityId }
+    );
+
+    // if (supplier.error || !supplier.data) {
+    //   throw new Error(`Supplier ${entity.entityId} not found`);
+    // }
+
+    // const externalId = supplier.data.externalId[provider.id];
+
+    return {
+      id: entity.entityId,
+      message: "Deleted successfully",
+    };
+  },
 };
 
 export const fromAccountsSyncTask = task({
