@@ -1588,8 +1588,8 @@ export const path = {
 export const onboardingSequence = [
   path.to.onboarding.theme,
   path.to.onboarding.user,
-  path.to.onboarding.industry,
   path.to.onboarding.company,
+  path.to.onboarding.industry,
   path.to.onboarding.plan
 ] as const;
 

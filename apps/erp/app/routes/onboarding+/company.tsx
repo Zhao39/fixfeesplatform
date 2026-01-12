@@ -1,11 +1,5 @@
-import {
-  assertIsPost,
-  CarbonEdition,
-  getCarbonServiceRole
-} from "@carbon/auth";
+import { assertIsPost } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
-import { setCompanyId } from "@carbon/auth/company.server";
-import { updateCompanySession } from "@carbon/auth/session.server";
 import { ValidatedForm, validationError, validator } from "@carbon/form";
 import {
   Button,
@@ -17,9 +11,6 @@ import {
   HStack,
   VStack
 } from "@carbon/react";
-import { Edition } from "@carbon/utils";
-import { getLocalTimeZone } from "@internationalized/date";
-import { tasks } from "@trigger.dev/sdk";
 import {
   type ActionFunctionArgs,
   Link,
@@ -34,20 +25,10 @@ import {
   Submit
 } from "~/components/Form";
 import { useOnboarding } from "~/hooks";
-import { insertEmployeeJob } from "~/modules/people";
-import { getLocationsList, upsertLocation } from "~/modules/resources";
+import { addressValidator, getCompany } from "~/modules/settings";
 import {
-  addressValidator,
-  getCompanies,
-  getCompany,
-  insertCompany,
-  onboardingCompanyValidator,
-  seedCompany,
-  updateCompany
-} from "~/modules/settings";
-import {
-  clearOnboardingDraft,
-  getOnboardingDraft
+  getOnboardingDraft,
+  setOnboardingDraft
 } from "~/services/onboarding-draft.server";
 
 export async function loader({ request }: ActionFunctionArgs) {
@@ -68,206 +49,25 @@ export async function loader({ request }: ActionFunctionArgs) {
 
 export async function action({ request }: ActionFunctionArgs) {
   assertIsPost(request);
-  const { client, userId } = await requirePermissions(request, {});
+  await requirePermissions(request, {});
 
-  // Get draft data from previous steps
-  const draft = await getOnboardingDraft(request);
-
-  // Validate address fields separately
   const formData = await request.formData();
 
-  const addressValidation = await validator(
-    onboardingCompanyValidator
-  ).validate(formData);
-
-  if (addressValidation.error) {
-    return validationError(addressValidation.error);
-  }
-
-  const { next: _companyNext, ...addressData } = addressValidation.data;
-
-  // Merge form data with draft data
-  const mergedFormData = new FormData();
-  formData.forEach((value, key) => {
-    mergedFormData.append(key, value);
-  });
-
-  // Add draft data to form data if not already present
-  if (draft?.industry) {
-    if (!mergedFormData.has("industryId")) {
-      mergedFormData.append("industryId", draft.industry.industryId);
-    }
-    if (
-      draft.industry.customIndustryDescription &&
-      !mergedFormData.has("customIndustryDescription")
-    ) {
-      mergedFormData.append(
-        "customIndustryDescription",
-        draft.industry.customIndustryDescription
-      );
-    }
-  }
-
-  // seedDemoData uses zfd.checkbox() - append "on" if true, omit if false
-  if (draft?.industry?.seedDemoData && !mergedFormData.has("seedDemoData")) {
-    mergedFormData.append("seedDemoData", "on");
-  }
-
-  // Validate the merged form data with the full company validator
-  const validation = await validator(onboardingCompanyValidator).validate(
-    mergedFormData
-  );
+  const validation = await validator(addressValidator).validate(formData);
 
   if (validation.error) {
     return validationError(validation.error);
   }
 
-  const serviceRole = getCarbonServiceRole();
+  const { next, ...companyData } = validation.data;
 
-  const { next, ...d } = validation.data;
-
-  // Merge seedDemoData from draft if not already in validation data
-  if (
-    draft?.industry?.seedDemoData !== undefined &&
-    d.seedDemoData === undefined
-  ) {
-    d.seedDemoData = draft.industry.seedDemoData;
-  }
-
-  let companyId: string | undefined;
-
-  const companies = await getCompanies(client, userId);
-  const company = companies?.data?.[0];
-
-  const locations = await getLocationsList(client, company?.id ?? "");
-  const location = locations?.data?.[0];
-
-  if (company && location) {
-    // Extract only location fields (address fields + name)
-
-    const [companyUpdate, locationUpdate] = await Promise.all([
-      updateCompany(serviceRole, company.id!, {
-        ...d,
-        updatedBy: userId
-      }),
-      upsertLocation(serviceRole, {
-        ...location,
-        ...addressData,
-        timezone: getLocalTimeZone(),
-        updatedBy: userId
-      })
-    ]);
-    if (companyUpdate.error) {
-      console.error(companyUpdate.error);
-      throw new Error("Fatal: failed to update company");
-    }
-    if (locationUpdate.error) {
-      console.error(locationUpdate.error);
-      throw new Error("Fatal: failed to update location");
-    }
-  } else {
-    if (!companyId) {
-      const [companyInsert] = await Promise.all([
-        insertCompany(serviceRole, d, userId)
-      ]);
-      if (companyInsert.error) {
-        console.error(companyInsert.error);
-        throw new Error("Fatal: failed to insert company");
-      }
-
-      companyId = companyInsert.data?.id;
-    }
-
-    if (!companyId) {
-      throw new Error("Fatal: failed to get company ID");
-    }
-
-    const seed = await seedCompany(serviceRole, companyId, userId);
-    if (seed.error) {
-      console.error(seed.error);
-      throw new Error("Fatal: failed to seed company");
-    }
-
-    if (CarbonEdition === Edition.Cloud) {
-      tasks.trigger("onboard", {
-        type: "lead",
-        companyId,
-        userId
-      });
-    }
-
-    // Trigger demo data seeding if requested
-    const companyData = await getCompany(serviceRole, companyId);
-    if (companyData.data?.seedDemoData && companyData.data?.industryId) {
-      // Use the selected industry, or default to cnc_aerospace if custom
-      const industryId =
-        companyData.data.industryId === "custom"
-          ? "cnc_aerospace"
-          : companyData.data.industryId;
-
-      tasks.trigger("seed-demo-data", {
-        companyId,
-        industryId,
-        userId
-      });
-    }
-
-    // Extract only location fields (address fields + name)
-    // Exclude company-only fields
-    const locationData = {
-      addressLine1: d.addressLine1,
-      addressLine2: d.addressLine2,
-      city: d.city,
-      stateProvince: d.stateProvince,
-      postalCode: d.postalCode,
-      countryCode: d.countryCode
-    };
-
-    // TODO: move all of this to transaction
-    const [locationInsert] = await Promise.all([
-      upsertLocation(serviceRole, {
-        ...locationData,
-        name: "Headquarters",
-        companyId,
-        timezone: getLocalTimeZone(),
-        createdBy: userId
-      })
-    ]);
-
-    if (locationInsert.error) {
-      console.error(locationInsert.error);
-      throw new Error("Fatal: failed to insert location");
-    }
-
-    const locationId = locationInsert.data?.id;
-    if (!locationId) {
-      throw new Error("Fatal: failed to get location ID");
-    }
-
-    const [job] = await Promise.all([
-      insertEmployeeJob(serviceRole, {
-        id: userId,
-        companyId,
-        locationId
-      })
-    ]);
-
-    if (job.error) {
-      console.error(job.error);
-      throw new Error("Fatal: failed to insert job");
-    }
-  }
-
-  const sessionCookie = await updateCompanySession(request, companyId!);
-  const companyIdCookie = setCompanyId(companyId!);
-  const clearDraftCookie = await clearOnboardingDraft(request);
+  // Store company data in session draft for the next step (industry)
+  const draftCookie = await setOnboardingDraft(request, {
+    company: companyData
+  });
 
   throw redirect(next, {
-    headers: [
-      ["Set-Cookie", sessionCookie],
-      ["Set-Cookie", companyIdCookie],
-      ["Set-Cookie", clearDraftCookie]
-    ]
+    headers: [["Set-Cookie", draftCookie]]
   });
 }
 

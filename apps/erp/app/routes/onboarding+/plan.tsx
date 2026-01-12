@@ -81,7 +81,7 @@ export async function loader({ request }: ActionFunctionArgs) {
   const plans = await getPlans(client);
 
   if (!companyId) {
-    throw redirect(path.to.onboarding.company);
+    throw redirect(path.to.onboarding.industry);
   }
 
   if (plans.error || !plans.data) {

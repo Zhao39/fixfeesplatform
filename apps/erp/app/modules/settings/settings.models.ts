@@ -37,11 +37,8 @@ export const onboardingIndustryTypes = [
   "custom"
 ] as const;
 
-export const addressValidator = z.object({});
-
-const company = {
+const companyAddress = {
   name: z.string().min(1, { message: "Name is required" }),
-  taxId: zfd.text(z.string().optional()),
   addressLine1: z.string().min(1, { message: "Address is required" }),
   addressLine2: zfd.text(z.string().optional()),
   city: z.string().min(1, { message: "City is required" }),
@@ -49,10 +46,20 @@ const company = {
   postalCode: z.string().min(1, { message: "Postal Code is required" }),
   countryCode: z.string().min(1, { message: "Country is required" }),
   baseCurrencyCode: zfd.text(z.string()),
+  website: zfd.text(z.string().optional())
+};
+
+export const addressValidator = z.object({
+  ...companyAddress,
+  next: z.string().min(1, { message: "Next is required" })
+});
+
+const company = {
+  ...companyAddress,
+  taxId: zfd.text(z.string().optional()),
   phone: zfd.text(z.string().optional()),
   fax: zfd.text(z.string().optional()),
   email: zfd.text(z.string().optional()),
-  website: zfd.text(z.string().optional()),
   industryId: z.enum(onboardingIndustryTypes).optional().default("custom"),
   customIndustryDescription: z.string().optional(),
   seedDemoData: zfd.checkbox()

@@ -1,5 +1,11 @@
-import { assertIsPost } from "@carbon/auth";
+import {
+  assertIsPost,
+  CarbonEdition,
+  getCarbonServiceRole
+} from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
+import { setCompanyId } from "@carbon/auth/company.server";
+import { updateCompanySession } from "@carbon/auth/session.server";
 import { industries, industryInfo } from "@carbon/database/seed/demo";
 import {
   useField,
@@ -24,6 +30,9 @@ import {
   RadioGroupItem,
   VStack
 } from "@carbon/react";
+import { Edition } from "@carbon/utils";
+import { getLocalTimeZone } from "@internationalized/date";
+import { tasks } from "@trigger.dev/sdk";
 import { useId, useState } from "react";
 import {
   LuBot,
@@ -42,12 +51,21 @@ import { z } from "zod";
 import { zfd } from "zod-form-data";
 import { Hidden, Submit, TextArea } from "~/components/Form";
 import { useOnboarding } from "~/hooks";
+import { insertEmployeeJob } from "~/modules/people";
+import { getLocationsList, upsertLocation } from "~/modules/resources";
 import {
+  getCompanies,
   getCompany,
+  insertCompany,
+  onboardingCompanyValidator,
   onboardingIndustryTypes,
+  seedCompany,
   updateCompany
 } from "~/modules/settings";
-import { setOnboardingDraft } from "~/services/onboarding-draft.server";
+import {
+  clearOnboardingDraft,
+  getOnboardingDraft
+} from "~/services/onboarding-draft.server";
 
 const onboardingIndustryValidator = z.object({
   industryId: z.enum(onboardingIndustryTypes, {
@@ -62,61 +80,212 @@ export async function loader({ request }: ActionFunctionArgs) {
   const { client, companyId } = await requirePermissions(request, {});
 
   const company = await getCompany(client, companyId);
+  const draft = await getOnboardingDraft(request);
 
   if (company.error || !company.data) {
     return {
-      company: null
+      company: null,
+      draft
     };
   }
 
-  return { company: company.data };
+  return { company: company.data, draft };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
   assertIsPost(request);
-  const { client, userId, companyId } = await requirePermissions(request, {});
+  const { client, userId } = await requirePermissions(request, {});
 
-  const validation = await validator(onboardingIndustryValidator).validate(
-    await request.formData()
+  // Get draft data from previous step (company)
+  const draft = await getOnboardingDraft(request);
+
+  const formData = await request.formData();
+
+  // Validate industry fields
+  const industryValidation = await validator(
+    onboardingIndustryValidator
+  ).validate(formData);
+
+  if (industryValidation.error) {
+    return validationError(industryValidation.error);
+  }
+
+  const { industryId, seedDemoData } = industryValidation.data;
+
+  // Merge form data with draft data from company step
+  const mergedFormData = formData;
+
+  // Add company data from draft
+  if (draft?.company) {
+    if (draft.company.name) mergedFormData.append("name", draft.company.name);
+    if (draft.company.addressLine1)
+      mergedFormData.append("addressLine1", draft.company.addressLine1);
+    if (draft.company.addressLine2)
+      mergedFormData.append("addressLine2", draft.company.addressLine2);
+    if (draft.company.city) mergedFormData.append("city", draft.company.city);
+    if (draft.company.stateProvince)
+      mergedFormData.append("stateProvince", draft.company.stateProvince);
+    if (draft.company.postalCode)
+      mergedFormData.append("postalCode", draft.company.postalCode);
+    if (draft.company.countryCode)
+      mergedFormData.append("countryCode", draft.company.countryCode);
+    if (draft.company.baseCurrencyCode)
+      mergedFormData.append("baseCurrencyCode", draft.company.baseCurrencyCode);
+    if (draft.company.website)
+      mergedFormData.append("website", draft.company.website);
+  }
+
+  // Validate the merged form data with the full company validator
+  const validation = await validator(onboardingCompanyValidator).validate(
+    mergedFormData
   );
 
   if (validation.error) {
     return validationError(validation.error);
   }
 
-  const { next, industryId, customIndustryDescription, seedDemoData } =
-    validation.data;
+  const serviceRole = getCarbonServiceRole();
 
-  // Store industry selection in session draft
-  const draftCookie = await setOnboardingDraft(request, {
-    industry: {
-      industryId,
-      customIndustryDescription:
-        industryId === "custom" ? customIndustryDescription : undefined,
-      seedDemoData: seedDemoData ?? false
+  const { next, ...d } = validation.data;
+
+  // Add industry data to the company data
+  const companyData = {
+    ...d
+  };
+
+  let companyId: string | undefined;
+
+  const companies = await getCompanies(client, userId);
+  const company = companies?.data?.[0];
+
+  const locations = await getLocationsList(client, company?.id ?? "");
+  const location = locations?.data?.[0];
+
+  // Extract address data for location
+  const addressData = {
+    addressLine1: d.addressLine1,
+    addressLine2: d.addressLine2,
+    city: d.city,
+    stateProvince: d.stateProvince,
+    postalCode: d.postalCode,
+    countryCode: d.countryCode
+  };
+
+  if (company && location) {
+    // Update existing company and location
+    const [companyUpdate, locationUpdate] = await Promise.all([
+      updateCompany(serviceRole, company.id!, {
+        ...companyData,
+        updatedBy: userId
+      }),
+      upsertLocation(serviceRole, {
+        ...location,
+        ...addressData,
+        timezone: getLocalTimeZone(),
+        updatedBy: userId
+      })
+    ]);
+    if (companyUpdate.error) {
+      console.error(companyUpdate.error);
+      throw new Error("Fatal: failed to update company");
     }
-  });
+    if (locationUpdate.error) {
+      console.error(locationUpdate.error);
+      throw new Error("Fatal: failed to update location");
+    }
 
-  // Store industry selection in company
-  const updateResult = await updateCompany(client, companyId, {
-    industryId: industryId as any,
-    customIndustryDescription:
-      industryId === "custom" ? customIndustryDescription || null : null,
-    seedDemoData: seedDemoData ?? false,
-    updatedBy: userId
-  } as any);
-
-  if (updateResult.error) {
-    console.error(updateResult.error);
-    return validationError({
-      fieldErrors: {
-        customIndustryDescription: "Failed to save industry selection"
+    companyId = company.id!;
+  } else {
+    // Create new company
+    if (!companyId) {
+      const [companyInsert] = await Promise.all([
+        insertCompany(serviceRole, companyData, userId)
+      ]);
+      if (companyInsert.error) {
+        console.error(companyInsert.error);
+        throw new Error("Fatal: failed to insert company");
       }
-    });
+
+      companyId = companyInsert.data?.id;
+    }
+
+    if (!companyId) {
+      throw new Error("Fatal: failed to get company ID");
+    }
+
+    const seed = await seedCompany(serviceRole, companyId, userId);
+    if (seed.error) {
+      console.error(seed.error);
+      throw new Error("Fatal: failed to seed company");
+    }
+
+    if (CarbonEdition === Edition.Cloud) {
+      tasks.trigger("onboard", {
+        type: "lead",
+        companyId,
+        userId
+      });
+    }
+
+    // Trigger demo data seeding if requested
+    if (seedDemoData && industryId) {
+      // Use the selected industry, or default to cnc_aerospace if custom
+      const demoIndustryId =
+        industryId === "custom" ? "cnc_aerospace" : industryId;
+
+      tasks.trigger("seed-demo-data", {
+        companyId,
+        industryId: demoIndustryId,
+        userId
+      });
+    }
+
+    // Create location
+    const [locationInsert] = await Promise.all([
+      upsertLocation(serviceRole, {
+        ...addressData,
+        name: "Headquarters",
+        companyId,
+        timezone: getLocalTimeZone(),
+        createdBy: userId
+      })
+    ]);
+
+    if (locationInsert.error) {
+      console.error(locationInsert.error);
+      throw new Error("Fatal: failed to insert location");
+    }
+
+    const locationId = locationInsert.data?.id;
+    if (!locationId) {
+      throw new Error("Fatal: failed to get location ID");
+    }
+
+    // Create employee job
+    const [job] = await Promise.all([
+      insertEmployeeJob(serviceRole, {
+        id: userId,
+        companyId,
+        locationId
+      })
+    ]);
+
+    if (job.error) {
+      console.error(job.error);
+      throw new Error("Fatal: failed to insert job");
+    }
   }
 
+  const sessionCookie = await updateCompanySession(request, companyId!);
+  const companyIdCookie = setCompanyId(companyId!);
+  const clearDraftCookie = await clearOnboardingDraft(request);
+
   throw redirect(next, {
-    headers: [["Set-Cookie", draftCookie]]
+    headers: [
+      ["Set-Cookie", sessionCookie],
+      ["Set-Cookie", companyIdCookie],
+      ["Set-Cookie", clearDraftCookie]
+    ]
   });
 }
 
@@ -236,15 +405,12 @@ export default function OnboardingIndustry() {
     "metal_fabrication",
     "automotive_precision",
     "custom"
-  ] as const;
-
-  type ValidIndustryId = (typeof validIndustryIds)[number];
-
+  ];
   const initialValues = {
     industryId:
       company?.industryId &&
       validIndustryIds.includes(company.industryId as any)
-        ? (company.industryId as ValidIndustryId)
+        ? company.industryId
         : undefined,
     customIndustryDescription: company?.customIndustryDescription ?? "",
     seedDemoData: company?.seedDemoData ?? false
@@ -275,7 +441,7 @@ export default function OnboardingIndustry() {
               onSelect={setSelectedIndustryId}
             />
 
-            {/* Custom industry description field - shown conditionally via JS */}
+            {/* Custom industry description */}
             {selectedIndustryId === "custom" && (
               <TextArea
                 name="customIndustryDescription"
