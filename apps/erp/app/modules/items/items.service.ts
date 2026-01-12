@@ -210,16 +210,7 @@ export async function deleteConfigurationParameterGroup(
 }
 
 export async function deleteItem(client: SupabaseClient<Database>, id: string) {
-  const [itemDelete, searchDelete] = await Promise.all([
-    client.from("item").delete().eq("id", id),
-    client.from("search").delete().eq("uuid", id)
-  ]);
-
-  if (searchDelete.error) {
-    return searchDelete;
-  }
-
-  return itemDelete;
+  return client.from("item").delete().eq("id", id);
 }
 
 export async function deleteItemPostingGroup(

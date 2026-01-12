@@ -100,11 +100,6 @@ export async function deactivateCustomer(
         .from("customerAccount")
         .delete()
         .eq("id", userId)
-        .eq("companyId", companyId),
-      serviceRole
-        .from("search")
-        .delete()
-        .eq("uuid", userId)
         .eq("companyId", companyId)
     ]);
 
@@ -166,11 +161,6 @@ export async function deactivateEmployee(
         .from("employee")
         .delete()
         .eq("id", userId)
-        .eq("companyId", companyId),
-      serviceRole
-        .from("search")
-        .delete()
-        .eq("uuid", userId)
         .eq("companyId", companyId),
       serviceRole.from("employeeJob").delete().eq("id", userId)
     ]);
@@ -294,11 +284,6 @@ export async function deactivateSupplier(
         .from("supplierAccount")
         .delete()
         .eq("id", userId)
-        .eq("companyId", companyId),
-      serviceRole
-        .from("search")
-        .delete()
-        .eq("uuid", userId)
         .eq("companyId", companyId)
     ]);
 
