@@ -132,9 +132,32 @@ const SalesOrdersTable = memo(({ data, count }: SalesOrdersTableProps) => {
       {
         accessorKey: "status",
         header: "Status",
-        cell: (item) => {
-          const status = item.getValue<(typeof salesOrderStatusType)[number]>();
-          return <SalesStatus status={status} />;
+        cell: ({ row }) => {
+          const status =
+            row.getValue<(typeof salesOrderStatusType)[number]>("status");
+          const jobs = (row.original.jobs ?? []) as SalesOrderJob[];
+          const lines =
+            (row.original.lines as {
+              id: string;
+              saleQuantity: number;
+              methodType: "Buy" | "Make" | "Pick";
+            }[]) ?? [];
+          return (
+            <SalesStatus
+              status={status}
+              jobs={jobs.map((job) => ({
+                salesOrderLineId: job.salesOrderLineId,
+                productionQuantity: job.productionQuantity,
+                quantityComplete: job.quantityComplete,
+                status: job.status
+              }))}
+              lines={lines.map((line) => ({
+                id: line.id,
+                methodType: line.methodType,
+                saleQuantity: line.saleQuantity
+              }))}
+            />
+          );
         },
         meta: {
           filter: {
