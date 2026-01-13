@@ -15,7 +15,11 @@ import {
   toast,
   VStack
 } from "@carbon/react";
-import { convertKbToString, supportedModelTypes } from "@carbon/utils";
+import {
+  convertKbToString,
+  getFileSizeLimit,
+  supportedModelTypes
+} from "@carbon/utils";
 import type { PostgrestResponse } from "@supabase/supabase-js";
 import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
@@ -53,7 +57,7 @@ type PartFormProps = {
   onClose?: () => void;
 };
 
-const fileSizeLimitMb = 120;
+const SIZE_LIMIT = getFileSizeLimit("CAD_MODEL_UPLOAD");
 
 function startsWithLetter(value: string) {
   return /^[A-Za-z]/.test(value);
@@ -113,10 +117,9 @@ const PartForm = ({ initialValues, type = "card", onClose }: PartFormProps) => {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     multiple: false,
-    maxSize: fileSizeLimitMb * 1024 * 1024, // 50 MB
+    maxSize: SIZE_LIMIT.bytes,
     onDropAccepted: async (acceptedFiles) => {
       const file = acceptedFiles[0];
-      const fileSizeLimit = fileSizeLimitMb * 1024 * 1024;
 
       const fileExtension = file.name.split(".").pop()?.toLowerCase();
       if (!fileExtension || !supportedModelTypes.includes(fileExtension)) {
@@ -125,8 +128,8 @@ const PartForm = ({ initialValues, type = "card", onClose }: PartFormProps) => {
         return;
       }
 
-      if (file.size > fileSizeLimit) {
-        toast.error(`File size too big (max. ${fileSizeLimitMb} MB)`);
+      if (file.size > SIZE_LIMIT.bytes) {
+        toast.error(`File size too big (max. ${SIZE_LIMIT.format()})`);
         return;
       }
 
@@ -136,7 +139,7 @@ const PartForm = ({ initialValues, type = "card", onClose }: PartFormProps) => {
       const { errors } = fileRejections[0];
       let message;
       if (errors[0].code === "file-too-large") {
-        message = `File size too big (max. ${fileSizeLimitMb} MB)`;
+        message = `File size too big (max. ${SIZE_LIMIT.format()})`;
       } else if (errors[0].code === "file-invalid-type") {
         message = "File type not supported";
       } else {

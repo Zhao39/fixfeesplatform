@@ -9,7 +9,11 @@ import {
   toast
 } from "@carbon/react";
 import { useMode } from "@carbon/remix";
-import { convertKbToString, supportedModelTypes } from "@carbon/utils";
+import {
+  convertKbToString,
+  getFileSizeLimit,
+  supportedModelTypes
+} from "@carbon/utils";
 import { nanoid } from "nanoid";
 import { useState } from "react";
 import { useDropzone } from "react-dropzone";
@@ -18,7 +22,7 @@ import { useFetcher } from "react-router";
 import { useUser } from "~/hooks";
 import { getPrivateUrl, path } from "~/utils/path";
 
-const fileSizeLimitMb = 120;
+const SIZE_LIMIT = getFileSizeLimit("CAD_MODEL_UPLOAD");
 
 type CadModelProps = {
   modelPath: string | null;
@@ -159,10 +163,9 @@ const CadModelUpload = ({
   const { getRootProps, getInputProps } = useDropzone({
     disabled: hasFile,
     multiple: false,
-    maxSize: fileSizeLimitMb * 1024 * 1024, // 50 MB
+    maxSize: SIZE_LIMIT.bytes,
     onDropAccepted: (acceptedFiles) => {
       const file = acceptedFiles[0];
-      const fileSizeLimit = fileSizeLimitMb * 1024 * 1024;
 
       const fileExtension = file.name.split(".").pop()?.toLowerCase();
       if (!fileExtension || !supportedModelTypes.includes(fileExtension)) {
@@ -171,8 +174,8 @@ const CadModelUpload = ({
         return;
       }
 
-      if (file.size > fileSizeLimit) {
-        toast.error(`File size too big (max. ${fileSizeLimitMb} MB)`);
+      if (file.size > SIZE_LIMIT.bytes) {
+        toast.error(`File size too big (max. ${SIZE_LIMIT.format()})`);
         return;
       }
 
@@ -182,7 +185,7 @@ const CadModelUpload = ({
       const { errors } = fileRejections[0];
       let message;
       if (errors[0].code === "file-too-large") {
-        message = `File size too big (max. ${fileSizeLimitMb} MB)`;
+        message = `File size too big (max. ${SIZE_LIMIT.format()})`;
       } else if (errors[0].code === "file-invalid-type") {
         message = "File type not supported";
       } else {
