@@ -24,7 +24,7 @@ const SalesStatus = ({ status, jobs, lines }: SalesOrderStatusProps) => {
     lines !== undefined &&
     hasIncompleteJobs({ jobs, lines });
 
-  if (isManufacturing) {
+  if (isManufacturing && !(status === "Closed" || status === "Cancelled")) {
     return (
       <Status color="yellow" tooltip={status}>
         In Progress
