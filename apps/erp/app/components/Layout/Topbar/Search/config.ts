@@ -4,13 +4,18 @@ import {
   LuGauge,
   LuHardHat,
   LuOctagonAlert,
+  LuPackageSearch,
   LuShoppingCart,
   LuSquareUser,
   LuUser,
   LuWrench
 } from "react-icons/lu";
 import { PiShareNetworkFill } from "react-icons/pi";
-import { RiProgress8Line } from "react-icons/ri";
+import {
+  RiProgress2Line,
+  RiProgress4Line,
+  RiProgress8Line
+} from "react-icons/ri";
 
 // Entity type styling configuration
 export const entityTypeConfig: Record<
@@ -66,6 +71,26 @@ export const entityTypeConfig: Record<
     bgColor: "bg-red-100 dark:bg-red-900/30",
     textColor: "text-red-600 dark:text-red-400",
     icon: LuFileCheck
+  },
+  quote: {
+    bgColor: "bg-indigo-100 dark:bg-indigo-900/30",
+    textColor: "text-indigo-600 dark:text-indigo-400",
+    icon: RiProgress4Line
+  },
+  salesRfq: {
+    bgColor: "bg-pink-100 dark:bg-pink-900/30",
+    textColor: "text-pink-600 dark:text-pink-400",
+    icon: RiProgress2Line
+  },
+  salesOrder: {
+    bgColor: "bg-teal-100 dark:bg-teal-900/30",
+    textColor: "text-teal-600 dark:text-teal-400",
+    icon: RiProgress8Line
+  },
+  supplierQuote: {
+    bgColor: "bg-violet-100 dark:bg-violet-900/30",
+    textColor: "text-violet-600 dark:text-violet-400",
+    icon: LuPackageSearch
   }
 };
 
@@ -90,7 +115,11 @@ export function getEntityTypeLabel(entityType: string): string {
     employee: "Person",
     purchaseOrder: "Purchase Order",
     salesInvoice: "Sales Invoice",
-    purchaseInvoice: "Purchase Invoice"
+    purchaseInvoice: "Purchase Invoice",
+    quote: "Quote",
+    salesRfq: "RFQ",
+    salesOrder: "Sales Order",
+    supplierQuote: "Supplier Quote"
   };
   return labels[entityType] ?? entityType;
 }

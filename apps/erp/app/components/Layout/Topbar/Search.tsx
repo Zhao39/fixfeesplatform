@@ -24,6 +24,7 @@ import {
   LuDraftingCompass,
   LuFileCheck,
   LuHardHat,
+  LuPackageSearch,
   LuSearch,
   LuShieldX,
   LuShoppingCart,
@@ -32,7 +33,11 @@ import {
   LuX
 } from "react-icons/lu";
 import { PiShareNetworkFill } from "react-icons/pi";
-import { RiProgress8Line } from "react-icons/ri";
+import {
+  RiProgress2Line,
+  RiProgress4Line,
+  RiProgress8Line
+} from "react-icons/ri";
 import { RxMagnifyingGlass } from "react-icons/rx";
 import { useFetcher, useNavigate } from "react-router";
 import { MethodItemTypeIcon } from "~/components/Icons";
@@ -418,6 +423,14 @@ function ResultIcon({ entityType }: { entityType: string }) {
       return <LuFileCheck className={iconClass} />;
     case "supplier":
       return <PiShareNetworkFill className={iconClass} />;
+    case "quote":
+      return <RiProgress4Line className={iconClass} />;
+    case "salesRfq":
+      return <RiProgress2Line className={iconClass} />;
+    case "salesOrder":
+      return <RiProgress8Line className={iconClass} />;
+    case "supplierQuote":
+      return <LuPackageSearch className={iconClass} />;
     default:
       return null;
   }

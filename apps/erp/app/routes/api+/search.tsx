@@ -14,7 +14,11 @@ const entityPermissionMap: Record<string, string> = {
   job: "production",
   purchaseOrder: "purchasing",
   salesInvoice: "invoicing",
-  purchaseInvoice: "invoicing"
+  purchaseInvoice: "invoicing",
+  quote: "sales",
+  salesRfq: "sales",
+  salesOrder: "sales",
+  supplierQuote: "purchasing"
 };
 
 export type SearchResult = {
