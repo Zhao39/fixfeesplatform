@@ -6,7 +6,7 @@ import {
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { setCompanyId } from "@carbon/auth/company.server";
 import { updateCompanySession } from "@carbon/auth/session.server";
-import { industries, industryInfo } from "@carbon/database/seed/demo";
+import { Industry, industries, industryInfo } from "@carbon/database/seed/demo";
 import {
   useField,
   ValidatedForm,
@@ -21,7 +21,6 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-  Checkbox,
   cn,
   FormControl,
   FormErrorMessage,
@@ -38,7 +37,9 @@ import {
   LuBot,
   LuCircleHelp,
   LuCog,
+  LuDatabase,
   LuFactory,
+  LuFileX,
   LuWrench
 } from "react-icons/lu";
 import {
@@ -67,14 +68,30 @@ import {
   getOnboardingDraft
 } from "~/services/onboarding-draft.server";
 
-const onboardingIndustryValidator = z.object({
-  industryId: z.enum(onboardingIndustryTypes, {
-    errorMap: () => ({ message: "Please select an industry type" })
-  }),
-  customIndustryDescription: z.string().optional(),
-  seedDemoData: zfd.checkbox(),
-  next: z.string()
-});
+const onboardingIndustryValidator = z
+  .object({
+    industryId: z
+      .enum(onboardingIndustryTypes, {
+        errorMap: () => ({ message: "Please select an industry type" })
+      })
+      .optional(),
+    customIndustryDescription: z.string().optional(),
+    seedDemoData: zfd.checkbox(),
+    next: z.string()
+  })
+  .refine(
+    (data) => {
+      // If seedDemoData is true, industryId is required
+      if (data.seedDemoData && !data.industryId) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: "Please select an industry type for demo data",
+      path: ["industryId"]
+    }
+  );
 
 export async function loader({ request }: ActionFunctionArgs) {
   const { client, companyId } = await requirePermissions(request, {});
@@ -111,6 +128,9 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   const { industryId, seedDemoData } = industryValidation.data;
+
+  // Set a default industry if none selected (when not seeding demo data)
+  const finalIndustryId = industryId || "custom";
 
   // Merge form data with draft data from company step
   const mergedFormData = formData;
@@ -228,10 +248,10 @@ export async function action({ request }: ActionFunctionArgs) {
     }
 
     // Trigger demo data seeding if requested
-    if (seedDemoData && industryId) {
+    if (seedDemoData && finalIndustryId) {
       // Use the selected industry, or default to cnc_aerospace if custom
       const demoIndustryId =
-        industryId === "custom" ? "cnc_aerospace" : industryId;
+        finalIndustryId === "custom" ? "cnc_aerospace" : finalIndustryId;
 
       tasks.trigger("seed-demo-data", {
         companyId,
@@ -298,7 +318,97 @@ const industryIcons: Record<string, React.ReactNode> = {
   custom: <LuCircleHelp className="h-5 w-5" />
 };
 
-// IndustryCardSelector component for card-based radio selection
+// Demo data option icons
+const demoDataIcons: Record<string, React.ReactNode> = {
+  yes: <LuDatabase className="h-5 w-5" />,
+  no: <LuFileX className="h-5 w-5" />
+};
+
+// CardSelector component for card-based radio selection
+function CardSelector({
+  name,
+  options,
+  icons,
+  value,
+  onChange,
+  error
+}: {
+  name: string;
+  options: { value: string; label: string; description: string }[];
+  icons: Record<string, React.ReactNode>;
+  value: string;
+  onChange: (value: string) => void;
+  error?: string;
+}) {
+  const id = useId();
+
+  return (
+    <FormControl isInvalid={!!error}>
+      <RadioGroup
+        name={name}
+        value={value}
+        onValueChange={onChange}
+        className="grid grid-cols-1 md:grid-cols-2 gap-4"
+      >
+        {options.map(({ value: optValue, label, description }) => (
+          <label
+            key={optValue}
+            htmlFor={`${id}:${optValue}`}
+            className={cn(
+              "group relative flex cursor-pointer flex-col rounded-xl border-2 p-4 transition-all duration-200",
+              "bg-card hover:bg-accent/50",
+              "border-border hover:border-primary/50",
+              "has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:bg-primary/5",
+              "has-[[data-state=checked]]:shadow-lg has-[[data-state=checked]]:shadow-primary/10"
+            )}
+          >
+            <div className="flex flex-col h-full gap-3">
+              <div className="flex items-start justify-between">
+                <div
+                  className={cn(
+                    "flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg transition-all duration-200",
+                    "bg-gradient-to-br from-muted to-muted/50 text-muted-foreground",
+                    "group-hover:from-primary/20 group-hover:to-primary/10 group-hover:text-primary",
+                    "group-has-[[data-state=checked]]:from-primary group-has-[[data-state=checked]]:to-primary/80 group-has-[[data-state=checked]]:text-primary-foreground"
+                  )}
+                >
+                  {icons[optValue] || <LuFactory className="h-5 w-5" />}
+                </div>
+
+                <RadioGroupItem
+                  value={optValue}
+                  id={`${id}:${optValue}`}
+                  className={cn(
+                    "h-5 w-5 border-2 transition-all mt-1",
+                    "group-has-[[data-state=checked]]:border-primary group-has-[[data-state=checked]]:text-primary"
+                  )}
+                />
+              </div>
+
+              <div className="flex-1 min-w-0">
+                <h3
+                  className={cn(
+                    "text-base font-semibold transition-colors mb-1",
+                    "text-foreground group-hover:text-primary",
+                    "group-has-[[data-state=checked]]:text-primary"
+                  )}
+                >
+                  {label}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-snug">
+                  {description}
+                </p>
+              </div>
+            </div>
+          </label>
+        ))}
+      </RadioGroup>
+      {error && <FormErrorMessage>{error}</FormErrorMessage>}
+    </FormControl>
+  );
+}
+
+// IndustryCardSelector component for card-based radio selection (with form field binding)
 function IndustryCardSelector({
   name,
   options,
@@ -334,7 +444,6 @@ function IndustryCardSelector({
           >
             <div className="flex flex-col h-full gap-3">
               <div className="flex items-start justify-between">
-                {/* Icon container with gradient background */}
                 <div
                   className={cn(
                     "flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg transition-all duration-200",
@@ -356,7 +465,6 @@ function IndustryCardSelector({
                 />
               </div>
 
-              {/* Content */}
               <div className="flex-1 min-w-0">
                 <h3
                   className={cn(
@@ -380,14 +488,42 @@ function IndustryCardSelector({
   );
 }
 
-export default function OnboardingIndustry() {
-  const [selectedIndustryId, setSelectedIndustryId] = useState<string>("");
+type Step = "demo-data-question" | "industry-selection";
 
+export default function OnboardingIndustry() {
   const { company } = useLoaderData<typeof loader>();
   const { next, previous } = useOnboarding();
 
+  // Determine initial step based on existing company data
+  const getInitialStep = (): Step => {
+    if (company?.seedDemoData) {
+      return "industry-selection";
+    }
+    return "demo-data-question";
+  };
+
+  const [step, setStep] = useState<Step>(getInitialStep);
+  const [prefersDemoData, setPrefersDemoData] = useState<string>("no");
+  const [selectedIndustryId, setSelectedIndustryId] = useState<string>(
+    company?.industryId ?? ""
+  );
+
+  const demoDataOptions = [
+    {
+      value: "yes",
+      label: "Yes, pre-populate demo data",
+      description:
+        "We'll add sample customers, suppliers, parts, and quotes to help you explore Carbon"
+    },
+    {
+      value: "no",
+      label: "No, start with a clean slate",
+      description: "Begin with an empty environment and add your own data"
+    }
+  ];
+
   const industryOptions = [
-    ...industries.map((id) => ({
+    ...industries.map((id: Industry) => ({
       value: id,
       label: industryInfo[id].name,
       description: industryInfo[id].description
@@ -406,15 +542,39 @@ export default function OnboardingIndustry() {
     "automotive_precision",
     "custom"
   ];
+
   const initialValues = {
     industryId:
       company?.industryId &&
-      validIndustryIds.includes(company.industryId as any)
+      validIndustryIds.includes(company.industryId as string)
         ? company.industryId
         : undefined,
     customIndustryDescription: company?.customIndustryDescription ?? "",
     seedDemoData: company?.seedDemoData ?? false
   };
+
+  const handleDemoDataChange = (value: string) => {
+    setPrefersDemoData(value);
+  };
+
+  const handleBack = () => {
+    if (step === "industry-selection") {
+      setStep("demo-data-question");
+    }
+    // If on first step, the Link component handles navigation to previous page
+  };
+
+  const handleNext = () => {
+    if (step === "demo-data-question" && prefersDemoData === "yes") {
+      setStep("industry-selection");
+    }
+    // If "no" or on industry selection step, form submission handles it
+  };
+
+  const canProceed =
+    step === "demo-data-question"
+      ? prefersDemoData !== ""
+      : selectedIndustryId !== "";
 
   return (
     <Card className="max-w-3xl">
@@ -423,60 +583,101 @@ export default function OnboardingIndustry() {
         defaultValues={initialValues}
         method="post"
       >
-        <CardHeader className="pb-2">
-          <CardTitle className="text-2xl">
-            Which best describes your company?
-          </CardTitle>
-          <CardDescription className="text-base">
-            This helps us customize your experience with relevant features and
-            demo data
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="pt-6">
-          <Hidden name="next" value={next} />
-          <VStack spacing={4}>
-            <IndustryCardSelector
-              name="industryId"
-              options={industryOptions}
-              onSelect={setSelectedIndustryId}
-            />
-
-            {/* Custom industry description */}
-            {selectedIndustryId === "custom" && (
-              <TextArea
-                name="customIndustryDescription"
-                label="Describe your organization type"
-                placeholder="e.g., Medical device manufacturing, Food processing, Chemical manufacturing, etc."
-                rows={3}
+        {step === "demo-data-question" ? (
+          <>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-2xl">
+                Would you like us to pre-populate your environment with demo
+                data?
+              </CardTitle>
+              <CardDescription className="text-base">
+                Demo data includes sample customers, suppliers, parts, and
+                quotes to help you explore Carbon's features
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="pt-6">
+              <Hidden name="next" value={next} />
+              {prefersDemoData === "yes" && (
+                <Hidden name="seedDemoData" value="on" />
+              )}
+              <CardSelector
+                name="demoDataChoice"
+                options={demoDataOptions}
+                icons={demoDataIcons}
+                value={prefersDemoData}
+                onChange={handleDemoDataChange}
               />
-            )}
+            </CardContent>
 
-            {/* Demo data checkbox */}
-            <HStack className="pt-2">
-              <Checkbox id="seedDemoData" name="seedDemoData" />
-              <label htmlFor="seedDemoData" className="text-sm">
-                Create demo data for me
-              </label>
-            </HStack>
-          </VStack>
-        </CardContent>
+            <CardFooter className="pt-4">
+              <HStack>
+                <Button
+                  variant="solid"
+                  isDisabled={!previous}
+                  size="md"
+                  asChild
+                  tabIndex={-1}
+                >
+                  <Link to={previous} prefetch="intent">
+                    Previous
+                  </Link>
+                </Button>
+                {prefersDemoData === "no" ? (
+                  <Submit isDisabled={!canProceed}>Next</Submit>
+                ) : (
+                  <Button
+                    variant="primary"
+                    isDisabled={!canProceed}
+                    onClick={handleNext}
+                    type="button"
+                  >
+                    Next
+                  </Button>
+                )}
+              </HStack>
+            </CardFooter>
+          </>
+        ) : (
+          <>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-2xl">
+                Which best describes your company?
+              </CardTitle>
+              <CardDescription className="text-base">
+                We'll customize the demo data to match your industry
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="pt-6">
+              <Hidden name="next" value={next} />
+              <Hidden name="seedDemoData" value="on" />
+              <VStack spacing={4}>
+                <IndustryCardSelector
+                  name="industryId"
+                  options={industryOptions}
+                  onSelect={setSelectedIndustryId}
+                />
 
-        <CardFooter className="pt-4">
-          <HStack>
-            <Button
-              variant="solid"
-              isDisabled={!previous}
-              size="md"
-              asChild
-              tabIndex={-1}
-            >
-              <Link to={previous} prefetch="intent">
-                Previous
-              </Link>
-            </Button>
-            <Submit>Next</Submit>
-          </HStack>
-        </CardFooter>
+                {selectedIndustryId === "custom" && (
+                  <TextArea
+                    name="customIndustryDescription"
+                    label="Describe your organization type"
+                    placeholder="e.g., Medical device manufacturing, Food processing, Chemical manufacturing, etc."
+                    rows={3}
+                  />
+                )}
+              </VStack>
+            </CardContent>
+
+            <CardFooter className="pt-4">
+              <HStack>
+                <Button variant="solid" size="md" onClick={handleBack}>
+                  Previous
+                </Button>
+                <Submit isDisabled={!canProceed}>Next</Submit>
+              </HStack>
+            </CardFooter>
+          </>
+        )}
       </ValidatedForm>
     </Card>
   );
