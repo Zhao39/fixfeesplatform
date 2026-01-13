@@ -10447,7 +10447,6 @@ export type Database = {
       }
       jobMaterial: {
         Row: {
-          bomId: string | null
           companyId: string
           createdAt: string
           createdBy: string
@@ -10477,7 +10476,6 @@ export type Database = {
           updatedBy: string | null
         }
         Insert: {
-          bomId?: string | null
           companyId: string
           createdAt?: string
           createdBy: string
@@ -10507,7 +10505,6 @@ export type Database = {
           updatedBy?: string | null
         }
         Update: {
-          bomId?: string | null
           companyId?: string
           createdAt?: string
           createdBy?: string
@@ -15358,7 +15355,6 @@ export type Database = {
       }
       methodMaterial: {
         Row: {
-          bomId: string | null
           companyId: string
           createdAt: string
           createdBy: string
@@ -15382,7 +15378,6 @@ export type Database = {
           updatedBy: string | null
         }
         Insert: {
-          bomId?: string | null
           companyId: string
           createdAt?: string
           createdBy: string
@@ -15406,7 +15401,6 @@ export type Database = {
           updatedBy?: string | null
         }
         Update: {
-          bomId?: string | null
           companyId?: string
           createdAt?: string
           createdBy?: string
@@ -20077,7 +20071,7 @@ export type Database = {
       opportunity: {
         Row: {
           companyId: string
-          customerId: string
+          customerId: string | null
           id: string
           isDemo: boolean | null
           purchaseOrderDocumentPath: string | null
@@ -20085,7 +20079,7 @@ export type Database = {
         }
         Insert: {
           companyId: string
-          customerId: string
+          customerId?: string | null
           id?: string
           isDemo?: boolean | null
           purchaseOrderDocumentPath?: string | null
@@ -20093,7 +20087,7 @@ export type Database = {
         }
         Update: {
           companyId?: string
-          customerId?: string
+          customerId?: string | null
           id?: string
           isDemo?: boolean | null
           purchaseOrderDocumentPath?: string | null
@@ -26683,7 +26677,6 @@ export type Database = {
       }
       quoteMaterial: {
         Row: {
-          bomId: string | null
           companyId: string
           createdAt: string
           createdBy: string
@@ -26710,7 +26703,6 @@ export type Database = {
           updatedBy: string | null
         }
         Insert: {
-          bomId?: string | null
           companyId: string
           createdAt?: string
           createdBy: string
@@ -26737,7 +26729,6 @@ export type Database = {
           updatedBy?: string | null
         }
         Update: {
-          bomId?: string | null
           companyId?: string
           createdAt?: string
           createdBy?: string
@@ -31527,174 +31518,6 @@ export type Database = {
             referencedColumns: ["userId"]
           },
         ]
-      }
-      searchIndex_BJiGdDNuetJ1iyE8USN7AD: {
-        Row: {
-          createdAt: string
-          description: string | null
-          entityId: string
-          entityType: string
-          id: number
-          link: string
-          metadata: Json | null
-          searchVector: unknown
-          tags: string[] | null
-          title: string
-          updatedAt: string | null
-        }
-        Insert: {
-          createdAt?: string
-          description?: string | null
-          entityId: string
-          entityType: string
-          id?: number
-          link: string
-          metadata?: Json | null
-          searchVector?: unknown
-          tags?: string[] | null
-          title: string
-          updatedAt?: string | null
-        }
-        Update: {
-          createdAt?: string
-          description?: string | null
-          entityId?: string
-          entityType?: string
-          id?: number
-          link?: string
-          metadata?: Json | null
-          searchVector?: unknown
-          tags?: string[] | null
-          title?: string
-          updatedAt?: string | null
-        }
-        Relationships: []
-      }
-      searchIndex_L4saDKMCpFQurK9c3bEr1G: {
-        Row: {
-          createdAt: string
-          description: string | null
-          entityId: string
-          entityType: string
-          id: number
-          link: string
-          metadata: Json | null
-          searchVector: unknown
-          tags: string[] | null
-          title: string
-          updatedAt: string | null
-        }
-        Insert: {
-          createdAt?: string
-          description?: string | null
-          entityId: string
-          entityType: string
-          id?: number
-          link: string
-          metadata?: Json | null
-          searchVector?: unknown
-          tags?: string[] | null
-          title: string
-          updatedAt?: string | null
-        }
-        Update: {
-          createdAt?: string
-          description?: string | null
-          entityId?: string
-          entityType?: string
-          id?: number
-          link?: string
-          metadata?: Json | null
-          searchVector?: unknown
-          tags?: string[] | null
-          title?: string
-          updatedAt?: string | null
-        }
-        Relationships: []
-      }
-      searchIndex_Nrc78GJXti5gro8G5m3k9u: {
-        Row: {
-          createdAt: string
-          description: string | null
-          entityId: string
-          entityType: string
-          id: number
-          link: string
-          metadata: Json | null
-          searchVector: unknown
-          tags: string[] | null
-          title: string
-          updatedAt: string | null
-        }
-        Insert: {
-          createdAt?: string
-          description?: string | null
-          entityId: string
-          entityType: string
-          id?: number
-          link: string
-          metadata?: Json | null
-          searchVector?: unknown
-          tags?: string[] | null
-          title: string
-          updatedAt?: string | null
-        }
-        Update: {
-          createdAt?: string
-          description?: string | null
-          entityId?: string
-          entityType?: string
-          id?: number
-          link?: string
-          metadata?: Json | null
-          searchVector?: unknown
-          tags?: string[] | null
-          title?: string
-          updatedAt?: string | null
-        }
-        Relationships: []
-      }
-      searchIndex_TzPMV5bvte7aRhGwLwmjs9: {
-        Row: {
-          createdAt: string
-          description: string | null
-          entityId: string
-          entityType: string
-          id: number
-          link: string
-          metadata: Json | null
-          searchVector: unknown
-          tags: string[] | null
-          title: string
-          updatedAt: string | null
-        }
-        Insert: {
-          createdAt?: string
-          description?: string | null
-          entityId: string
-          entityType: string
-          id?: number
-          link: string
-          metadata?: Json | null
-          searchVector?: unknown
-          tags?: string[] | null
-          title: string
-          updatedAt?: string | null
-        }
-        Update: {
-          createdAt?: string
-          description?: string | null
-          entityId?: string
-          entityType?: string
-          id?: number
-          link?: string
-          metadata?: Json | null
-          searchVector?: unknown
-          tags?: string[] | null
-          title?: string
-          updatedAt?: string | null
-        }
-        Relationships: []
       }
       searchIndexRegistry: {
         Row: {
@@ -43170,7 +42993,6 @@ export type Database = {
       }
       jobMaterialWithMakeMethodId: {
         Row: {
-          bomId: string | null
           companyId: string | null
           createdAt: string | null
           createdBy: string | null
@@ -43197,6 +43019,7 @@ export type Database = {
           requiresSerialTracking: boolean | null
           scrapQuantity: number | null
           shelfId: string | null
+          shelfName: string | null
           unitCost: number | null
           unitOfMeasureCode: string | null
           updatedAt: string | null
@@ -48408,7 +48231,6 @@ export type Database = {
       }
       quoteMaterialWithMakeMethodId: {
         Row: {
-          bomId: string | null
           companyId: string | null
           createdAt: string | null
           createdBy: string | null
@@ -50417,14 +50239,14 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["customerCountryCode"]
+            columns: ["paymentCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
           },
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["paymentCountryCode"]
+            columns: ["customerCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
@@ -53274,6 +53096,10 @@ export type Database = {
           rfq_readable_id: string
         }[]
       }
+      drop_company_search_index: {
+        Args: { p_company_id: string }
+        Returns: undefined
+      }
       employee_requires_period: {
         Args: { employee_start_date: string; period: string }
         Returns: boolean
@@ -53623,7 +53449,6 @@ export type Database = {
       get_job_method: {
         Args: { jid: string }
         Returns: {
-          bomId: string
           description: string
           isRoot: boolean
           itemId: string
@@ -53647,7 +53472,6 @@ export type Database = {
       get_job_methods_by_method_id: {
         Args: { mid: string }
         Returns: {
-          bomId: string
           description: string
           isRoot: boolean
           itemId: string
@@ -53945,7 +53769,6 @@ export type Database = {
       get_method_tree: {
         Args: { uid: string }
         Returns: {
-          bomId: string
           description: string
           externalId: Json
           isRoot: boolean
@@ -54283,7 +54106,6 @@ export type Database = {
       get_quote_methods: {
         Args: { qid: string }
         Returns: {
-          bomId: string
           description: string
           externalId: Json
           isRoot: boolean
@@ -54309,7 +54131,6 @@ export type Database = {
       get_quote_methods_by_method_id: {
         Args: { mid: string }
         Returns: {
-          bomId: string
           description: string
           externalId: Json
           isRoot: boolean
@@ -54660,6 +54481,32 @@ export type Database = {
       nanoid_optimized: {
         Args: { alphabet: string; mask: number; size: number; step: number }
         Returns: string
+      }
+      populate_company_search_index: {
+        Args: { p_company_id: string }
+        Returns: undefined
+      }
+      populate_sales_search_results: {
+        Args: { p_company_id: string }
+        Returns: undefined
+      }
+      search_company_index: {
+        Args: {
+          p_company_id: string
+          p_entity_types: string[]
+          p_limit?: number
+          p_query: string
+        }
+        Returns: {
+          description: string
+          entityId: string
+          entityType: string
+          id: number
+          link: string
+          metadata: Json
+          tags: string[]
+          title: string
+        }[]
       }
       suppliers_search: {
         Args: {

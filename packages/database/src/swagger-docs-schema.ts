@@ -13543,6 +13543,9 @@ export default {
             $ref: "#/parameters/rowFilter.configurationParameter.updatedBy",
           },
           {
+            $ref: "#/parameters/rowFilter.configurationParameter.materialFormFilterId",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -13641,6 +13644,9 @@ export default {
             $ref: "#/parameters/rowFilter.configurationParameter.updatedBy",
           },
           {
+            $ref: "#/parameters/rowFilter.configurationParameter.materialFormFilterId",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -13691,6 +13697,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.configurationParameter.updatedBy",
+          },
+          {
+            $ref: "#/parameters/rowFilter.configurationParameter.materialFormFilterId",
           },
           {
             $ref: "#/parameters/body.configurationParameter",
@@ -63822,6 +63831,41 @@ export default {
         tags: ["(rpc) xid_encode"],
       },
     },
+    "/rpc/populate_sales_search_results": {
+      post: {
+        parameters: [
+          {
+            in: "body",
+            name: "args",
+            required: true,
+            schema: {
+              properties: {
+                p_company_id: {
+                  format: "text",
+                  type: "string",
+                },
+              },
+              required: ["p_company_id"],
+              type: "object",
+            },
+          },
+          {
+            $ref: "#/parameters/preferParams",
+          },
+        ],
+        produces: [
+          "application/json",
+          "application/vnd.pgrst.object+json;nulls=stripped",
+          "application/vnd.pgrst.object+json",
+        ],
+        responses: {
+          "200": {
+            description: "OK",
+          },
+        },
+        tags: ["(rpc) populate_sales_search_results"],
+      },
+    },
     "/rpc/get_direct_descendants_of_tracked_entity": {
       post: {
         parameters: [
@@ -72118,6 +72162,12 @@ export default {
         updatedBy: {
           description:
             "Note:\nThis is a Foreign Key to `user.id`.<fk table='user' column='id'/>",
+          format: "text",
+          type: "string",
+        },
+        materialFormFilterId: {
+          description:
+            "Note:\nThis is a Foreign Key to `materialForm.id`.<fk table='materialForm' column='id'/>",
           format: "text",
           type: "string",
         },
@@ -102122,6 +102172,12 @@ export default {
     },
     "rowFilter.configurationParameter.updatedBy": {
       name: "updatedBy",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.configurationParameter.materialFormFilterId": {
+      name: "materialFormFilterId",
       required: false,
       in: "query",
       type: "string",
