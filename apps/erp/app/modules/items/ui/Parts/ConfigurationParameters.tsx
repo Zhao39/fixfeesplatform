@@ -998,50 +998,44 @@ function ConfigurableParameter({
             <div className="py-4 px-8 bg-muted/30 rounded-md">
               <div className="grid grid-cols-1 gap-2">
                 <div>
-                  <span className="text-xs text-muted-foreground">ID</span>
-                  <div className="text-sm font-mono">{parameter.key}.id</div>
+                  <span className="text-sm">ID</span>
+                  <div className="text-xs font-mono text-muted-foreground">
+                    {parameter.key}.id
+                  </div>
                 </div>
                 <div>
-                  <span className="text-xs text-muted-foreground">
-                    Material Form
-                  </span>
-                  <div className="text-sm font-mono">
+                  <span className="text-sm">Material Form</span>
+                  <div className="text-xs font-mono text-muted-foreground">
                     {parameter.key}.materialFormId
                   </div>
                 </div>
                 <div>
-                  <span className="text-xs text-muted-foreground">
-                    Substance
-                  </span>
-                  <div className="text-sm font-mono">
+                  <span className="text-sm">Substance</span>
+                  <div className="text-xs font-mono text-muted-foreground">
                     {parameter.key}.materialSubstanceId
                   </div>
                 </div>
                 <div>
-                  <span className="text-xs text-muted-foreground">
-                    Dimension
-                  </span>
-                  <div className="text-sm font-mono">
+                  <span className="text-sm">Dimension</span>
+                  <div className="text-xs font-mono text-muted-foreground">
                     {parameter.key}.dimensionId
                   </div>
                 </div>
                 <div>
-                  <span className="text-xs text-muted-foreground">Grade</span>
-                  <div className="text-sm font-mono">
+                  <span className="text-sm">Grade</span>
+                  <div className="text-xs font-mono text-muted-foreground">
                     {parameter.key}.gradeId
                   </div>
                 </div>
                 <div>
-                  <span className="text-xs text-muted-foreground">Finish</span>
-                  <div className="text-sm font-mono">
+                  <span className="text-sm">Finish</span>
+                  <div className="text-xs font-mono text-muted-foreground">
                     {parameter.key}.finishId
                   </div>
                 </div>
                 <div>
-                  <span className="text-xs text-muted-foreground">
-                    Material Type
-                  </span>
-                  <div className="text-sm font-mono">
+                  <span className="text-sm">Material Type</span>
+                  <div className="text-xs font-mono text-muted-foreground">
                     {parameter.key}.materialTypeId
                   </div>
                 </div>
