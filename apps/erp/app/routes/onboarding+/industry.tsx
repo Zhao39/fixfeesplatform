@@ -503,7 +503,7 @@ export default function OnboardingIndustry() {
   };
 
   const [step, setStep] = useState<Step>(getInitialStep);
-  const [prefersDemoData, setPrefersDemoData] = useState<string>("no");
+  const [prefersDemoData, setPrefersDemoData] = useState<string>("yes");
   const [selectedIndustryId, setSelectedIndustryId] = useState<string>(
     company?.industryId ?? ""
   );

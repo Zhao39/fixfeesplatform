@@ -137,6 +137,58 @@ interface DemoTemplatesSchema {
     receiptPromisedDate: string | null;
     receiptRequestedDate: string | null;
   };
+  workCenter: {
+    templateSetId: string;
+    templateRowId: string;
+    name: string;
+    description: string | null;
+    machineRate: number;
+    overheadRate: number;
+    laborRate: number;
+    defaultStandardFactor: string;
+  };
+  process: {
+    templateSetId: string;
+    templateRowId: string;
+    name: string;
+    defaultStandardFactor: string;
+  };
+  workCenterProcess: {
+    templateSetId: string;
+    tplWorkCenterId: string;
+    tplProcessId: string;
+  };
+  makeMethod: {
+    templateSetId: string;
+    templateRowId: string;
+    tplItemId: string;
+  };
+  methodMaterial: {
+    templateSetId: string;
+    templateRowId: string;
+    tplMakeMethodId: string;
+    tplItemId: string;
+    methodType: string;
+    tplMaterialMakeMethodId: string | null;
+    quantity: number;
+    unitOfMeasureCode: string;
+  };
+  methodOperation: {
+    templateSetId: string;
+    templateRowId: string;
+    tplMakeMethodId: string;
+    tplProcessId: string;
+    tplWorkCenterId: string | null;
+    order: number;
+    operationOrder: string;
+    description: string | null;
+    setupTime: number;
+    setupUnit: string;
+    laborTime: number;
+    laborUnit: string;
+    machineTime: number;
+    machineUnit: string;
+  };
 }
 
 const UOM_CODE_TO_NAME: Record<string, string> = {
@@ -483,6 +535,248 @@ export class DemoSeeder {
     }
   }
 
+  private async seedWorkCenters(
+    trx: Transaction<any>,
+    companyId: string,
+    templateSetId: string,
+    userId: string
+  ) {
+    const templates = this.getTemplates(trx);
+    const templateWorkCenters = await templates
+      .selectFrom("workCenter")
+      .selectAll()
+      .where("templateSetId", "=", templateSetId)
+      .execute();
+
+    if (templateWorkCenters.length === 0) return;
+
+    await trx
+      .insertInto("workCenter")
+      .values(
+        templateWorkCenters.map((tpl) => ({
+          id: generateDemoId(companyId, tpl.templateRowId),
+          companyId,
+          name: tpl.name,
+          description: tpl.description,
+          machineRate: tpl.machineRate,
+          overheadRate: tpl.overheadRate,
+          laborRate: tpl.laborRate,
+          defaultStandardFactor: sql`${tpl.defaultStandardFactor}::"factor"`,
+          active: true,
+          isDemo: true,
+          createdBy: userId
+        }))
+      )
+      .onConflict((oc) => oc.column("id").doNothing())
+      .execute();
+  }
+
+  private async seedProcesses(
+    trx: Transaction<any>,
+    companyId: string,
+    templateSetId: string,
+    userId: string
+  ) {
+    const templates = this.getTemplates(trx);
+    const templateProcesses = await templates
+      .selectFrom("process")
+      .selectAll()
+      .where("templateSetId", "=", templateSetId)
+      .execute();
+
+    if (templateProcesses.length === 0) return;
+
+    await trx
+      .insertInto("process")
+      .values(
+        templateProcesses.map((tpl) => ({
+          id: generateDemoId(companyId, tpl.templateRowId),
+          companyId,
+          name: tpl.name,
+          defaultStandardFactor: sql`${tpl.defaultStandardFactor}::"factor"`,
+          isDemo: true,
+          createdBy: userId
+        }))
+      )
+      .onConflict((oc) => oc.column("id").doNothing())
+      .execute();
+  }
+
+  private async seedWorkCenterProcesses(
+    trx: Transaction<any>,
+    companyId: string,
+    templateSetId: string,
+    userId: string
+  ) {
+    const templates = this.getTemplates(trx);
+    const templateWCPs = await templates
+      .selectFrom("workCenterProcess")
+      .selectAll()
+      .where("templateSetId", "=", templateSetId)
+      .execute();
+
+    if (templateWCPs.length === 0) return;
+
+    await trx
+      .insertInto("workCenterProcess")
+      .values(
+        templateWCPs.map((tpl) => ({
+          workCenterId: generateDemoId(companyId, tpl.tplWorkCenterId),
+          processId: generateDemoId(companyId, tpl.tplProcessId),
+          companyId,
+          isDemo: true,
+          createdBy: userId
+        }))
+      )
+      .onConflict((oc) => oc.columns(["workCenterId", "processId"]).doNothing())
+      .execute();
+  }
+
+  /**
+   * Seeds make methods. Since the trigger is disabled during seeding,
+   * we can use straightforward batch inserts with deterministic IDs.
+   */
+  private async seedMakeMethods(
+    trx: Transaction<any>,
+    companyId: string,
+    templateSetId: string,
+    userId: string
+  ): Promise<Map<string, string>> {
+    const templates = this.getTemplates(trx);
+    const templateMethods = await templates
+      .selectFrom("makeMethod")
+      .selectAll()
+      .where("templateSetId", "=", templateSetId)
+      .execute();
+
+    const templateToDbIdMap = new Map<string, string>();
+
+    if (templateMethods.length === 0) return templateToDbIdMap;
+
+    // Build the ID map with deterministic IDs
+    for (const tpl of templateMethods) {
+      templateToDbIdMap.set(
+        tpl.templateRowId,
+        generateDemoId(companyId, tpl.templateRowId)
+      );
+    }
+
+    // Batch insert all make methods at once
+    await trx
+      .insertInto("makeMethod")
+      .values(
+        templateMethods.map((tpl) => ({
+          id: generateDemoId(companyId, tpl.templateRowId),
+          itemId: generateDemoId(companyId, tpl.tplItemId),
+          companyId,
+          isDemo: true,
+          status: sql`'Active'::"makeMethodStatus"`,
+          version: 1,
+          createdBy: userId
+        }))
+      )
+      .onConflict((oc) => oc.column("id").doNothing())
+      .execute();
+
+    return templateToDbIdMap;
+  }
+
+  private async seedMethodMaterials(
+    trx: Transaction<any>,
+    companyId: string,
+    templateSetId: string,
+    userId: string,
+    makeMethodIdMap: Map<string, string>
+  ) {
+    const templates = this.getTemplates(trx);
+    const templateMaterials = await templates
+      .selectFrom("methodMaterial")
+      .selectAll()
+      .where("templateSetId", "=", templateSetId)
+      .execute();
+
+    if (templateMaterials.length === 0) return;
+
+    // Filter to only materials whose makeMethod exists in our mapping
+    const validMaterials = templateMaterials.filter((tpl) =>
+      makeMethodIdMap.has(tpl.tplMakeMethodId)
+    );
+
+    if (validMaterials.length === 0) return;
+
+    await trx
+      .insertInto("methodMaterial")
+      .values(
+        validMaterials.map((tpl) => ({
+          id: generateDemoId(companyId, tpl.templateRowId),
+          companyId,
+          makeMethodId: makeMethodIdMap.get(tpl.tplMakeMethodId)!,
+          itemId: generateDemoId(companyId, tpl.tplItemId),
+          methodType: sql`${tpl.methodType}::"methodType"`,
+          materialMakeMethodId: tpl.tplMaterialMakeMethodId
+            ? (makeMethodIdMap.get(tpl.tplMaterialMakeMethodId) ?? null)
+            : null,
+          quantity: tpl.quantity,
+          unitOfMeasureCode: tpl.unitOfMeasureCode,
+          isDemo: true,
+          createdBy: userId
+        }))
+      )
+      .onConflict((oc) => oc.column("id").doNothing())
+      .execute();
+  }
+
+  private async seedMethodOperations(
+    trx: Transaction<any>,
+    companyId: string,
+    templateSetId: string,
+    userId: string,
+    makeMethodIdMap: Map<string, string>
+  ) {
+    const templates = this.getTemplates(trx);
+    const templateOps = await templates
+      .selectFrom("methodOperation")
+      .selectAll()
+      .where("templateSetId", "=", templateSetId)
+      .execute();
+
+    if (templateOps.length === 0) return;
+
+    // Filter to only operations whose makeMethod exists in our mapping
+    const validOps = templateOps.filter((tpl) =>
+      makeMethodIdMap.has(tpl.tplMakeMethodId)
+    );
+
+    if (validOps.length === 0) return;
+
+    await trx
+      .insertInto("methodOperation")
+      .values(
+        validOps.map((tpl) => ({
+          id: generateDemoId(companyId, tpl.templateRowId),
+          companyId,
+          makeMethodId: makeMethodIdMap.get(tpl.tplMakeMethodId)!,
+          processId: generateDemoId(companyId, tpl.tplProcessId),
+          workCenterId: tpl.tplWorkCenterId
+            ? generateDemoId(companyId, tpl.tplWorkCenterId)
+            : null,
+          order: tpl.order,
+          operationOrder: sql`${tpl.operationOrder}::"methodOperationOrder"`,
+          description: tpl.description,
+          setupTime: tpl.setupTime,
+          setupUnit: sql`${tpl.setupUnit}::"factor"`,
+          laborTime: tpl.laborTime,
+          laborUnit: sql`${tpl.laborUnit}::"factor"`,
+          machineTime: tpl.machineTime,
+          machineUnit: sql`${tpl.machineUnit}::"factor"`,
+          isDemo: true,
+          createdBy: userId
+        }))
+      )
+      .onConflict((oc) => oc.column("id").doNothing())
+      .execute();
+  }
+
   private async seedSalesDemo(
     trx: Transaction<any>,
     companyId: string,
@@ -519,8 +813,19 @@ export class DemoSeeder {
     }
 
     await this.ensureUnitOfMeasures(trx, companyId, templateSetId);
-    await this.seedItems(trx, companyId, templateSetId, userId);
-    await this.seedParts(trx, companyId, templateSetId, userId);
+
+    // Disable trigger to prevent auto-creation of makeMethod records
+    await sql`ALTER TABLE "item" DISABLE TRIGGER create_make_method_related_records`.execute(
+      trx
+    );
+    try {
+      await this.seedItems(trx, companyId, templateSetId, userId);
+      await this.seedParts(trx, companyId, templateSetId, userId);
+    } finally {
+      await sql`ALTER TABLE "item" ENABLE TRIGGER create_make_method_related_records`.execute(
+        trx
+      );
+    }
 
     // Seed quotes
     const templateQuotes = await templates
@@ -676,9 +981,20 @@ export class DemoSeeder {
     }
 
     await this.ensureUnitOfMeasures(trx, companyId, templateSetId);
-    await this.seedItems(trx, companyId, templateSetId, userId);
-    await this.seedMaterials(trx, companyId, templateSetId, userId);
-    await this.seedParts(trx, companyId, templateSetId, userId);
+
+    // Disable trigger to prevent auto-creation of makeMethod records
+    await sql`ALTER TABLE "item" DISABLE TRIGGER create_make_method_related_records`.execute(
+      trx
+    );
+    try {
+      await this.seedItems(trx, companyId, templateSetId, userId);
+      await this.seedMaterials(trx, companyId, templateSetId, userId);
+      await this.seedParts(trx, companyId, templateSetId, userId);
+    } finally {
+      await sql`ALTER TABLE "item" ENABLE TRIGGER create_make_method_related_records`.execute(
+        trx
+      );
+    }
 
     // Seed purchase orders
     const templatePOs = await templates
@@ -797,8 +1113,47 @@ export class DemoSeeder {
   ): Promise<void> {
     const userId = await this.getCompanyUser(trx, companyId);
     await this.ensureUnitOfMeasures(trx, companyId, templateSetId);
-    await this.seedItems(trx, companyId, templateSetId, userId);
-    await this.seedParts(trx, companyId, templateSetId, userId);
+
+    // Disable the trigger that auto-creates makeMethod records.
+    // This allows the seeder to have full control with deterministic IDs.
+    await sql`ALTER TABLE "item" DISABLE TRIGGER create_make_method_related_records`.execute(
+      trx
+    );
+
+    try {
+      await this.seedItems(trx, companyId, templateSetId, userId);
+      await this.seedParts(trx, companyId, templateSetId, userId);
+      await this.seedMaterials(trx, companyId, templateSetId, userId);
+      // Seed manufacturing data (work centers, processes, BOMs)
+      await this.seedWorkCenters(trx, companyId, templateSetId, userId);
+      await this.seedProcesses(trx, companyId, templateSetId, userId);
+      await this.seedWorkCenterProcesses(trx, companyId, templateSetId, userId);
+      const makeMethodIdMap = await this.seedMakeMethods(
+        trx,
+        companyId,
+        templateSetId,
+        userId
+      );
+      await this.seedMethodMaterials(
+        trx,
+        companyId,
+        templateSetId,
+        userId,
+        makeMethodIdMap
+      );
+      await this.seedMethodOperations(
+        trx,
+        companyId,
+        templateSetId,
+        userId,
+        makeMethodIdMap
+      );
+    } finally {
+      // Re-enable the trigger for normal operation
+      await sql`ALTER TABLE "item" ENABLE TRIGGER create_make_method_related_records`.execute(
+        trx
+      );
+    }
   }
 
   private async seedInventoryDemo(
@@ -808,9 +1163,20 @@ export class DemoSeeder {
   ): Promise<void> {
     const userId = await this.getCompanyUser(trx, companyId);
     await this.ensureUnitOfMeasures(trx, companyId, templateSetId);
-    await this.seedItems(trx, companyId, templateSetId, userId);
-    await this.seedParts(trx, companyId, templateSetId, userId);
-    await this.seedMaterials(trx, companyId, templateSetId, userId);
+
+    // Disable trigger to prevent auto-creation of makeMethod records
+    await sql`ALTER TABLE "item" DISABLE TRIGGER create_make_method_related_records`.execute(
+      trx
+    );
+    try {
+      await this.seedItems(trx, companyId, templateSetId, userId);
+      await this.seedParts(trx, companyId, templateSetId, userId);
+      await this.seedMaterials(trx, companyId, templateSetId, userId);
+    } finally {
+      await sql`ALTER TABLE "item" ENABLE TRIGGER create_make_method_related_records`.execute(
+        trx
+      );
+    }
   }
 
   async cleanupAllDemoData(companyId: string): Promise<void> {
@@ -913,6 +1279,41 @@ export class DemoSeeder {
         .where("companyId", "=", companyId)
         .where("isDemo", "=", true)
         .execute();
+
+      // Delete manufacturing BOM data (order matters due to FK constraints)
+      await trx
+        .deleteFrom("methodOperation")
+        .where("companyId", "=", companyId)
+        .where("isDemo", "=", true)
+        .execute();
+      await trx
+        .deleteFrom("methodMaterial")
+        .where("companyId", "=", companyId)
+        .where("isDemo", "=", true)
+        .execute();
+      await trx
+        .deleteFrom("makeMethod")
+        .where("companyId", "=", companyId)
+        .where("isDemo", "=", true)
+        .execute();
+
+      // Delete work center and process data
+      await trx
+        .deleteFrom("workCenterProcess")
+        .where("companyId", "=", companyId)
+        .where("isDemo", "=", true)
+        .execute();
+      await trx
+        .deleteFrom("process")
+        .where("companyId", "=", companyId)
+        .where("isDemo", "=", true)
+        .execute();
+      await trx
+        .deleteFrom("workCenter")
+        .where("companyId", "=", companyId)
+        .where("isDemo", "=", true)
+        .execute();
+
       await trx
         .deleteFrom("material")
         .where("companyId", "=", companyId)
@@ -964,7 +1365,12 @@ export class DemoSeeder {
       { name: "purchaseOrders", table: "purchaseOrder" as const },
       { name: "purchaseOrderLines", table: "purchaseOrderLine" as const },
       { name: "customers", table: "customer" as const },
-      { name: "suppliers", table: "supplier" as const }
+      { name: "suppliers", table: "supplier" as const },
+      { name: "workCenters", table: "workCenter" as const },
+      { name: "processes", table: "process" as const },
+      { name: "makeMethods", table: "makeMethod" as const },
+      { name: "methodMaterials", table: "methodMaterial" as const },
+      { name: "methodOperations", table: "methodOperation" as const }
     ];
 
     const results: Array<{

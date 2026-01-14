@@ -12,11 +12,11 @@ INSERT INTO "templateSet" ("id", "industryId", "moduleId", "version", "key", "na
   ('cnc_aerospace_parts_v1', 'cnc_aerospace', 'Parts', 1, 'cnc_aerospace.parts.v1', 'SkyLine Precision Parts Demo', 'Demo data for aerospace CNC parts', TRUE),
   ('cnc_aerospace_inventory_v1', 'cnc_aerospace', 'Inventory', 1, 'cnc_aerospace.inventory.v1', 'SkyLine Precision Inventory Demo', 'Demo data for aerospace CNC inventory', TRUE),
   ('cnc_aerospace_purchasing_v1', 'cnc_aerospace', 'Purchasing', 1, 'cnc_aerospace.purchasing.v1', 'SkyLine Precision Purchasing Demo', 'Demo data for aerospace CNC purchasing', TRUE),
-  ('metal_fab_sales_v1', 'metal_fabrication', 'Sales', 1, 'metal_fabrication.sales.v1', 'TitanFab Industries Sales Demo', 'Demo data for metal fabrication sales', TRUE),
+  ('metal_fabrication_sales_v1', 'metal_fabrication', 'Sales', 1, 'metal_fabrication.sales.v1', 'TitanFab Industries Sales Demo', 'Demo data for metal fabrication sales', TRUE),
   ('metal_fabrication_parts_v1', 'metal_fabrication', 'Parts', 1, 'metal_fabrication.parts.v1', 'TitanFab Industries Parts Demo', 'Demo data for metal fabrication parts', TRUE),
   ('metal_fabrication_inventory_v1', 'metal_fabrication', 'Inventory', 1, 'metal_fabrication.inventory.v1', 'TitanFab Industries Inventory Demo', 'Demo data for metal fabrication inventory', TRUE),
   ('metal_fabrication_purchasing_v1', 'metal_fabrication', 'Purchasing', 1, 'metal_fabrication.purchasing.v1', 'TitanFab Industries Purchasing Demo', 'Demo data for metal fabrication purchasing', TRUE),
-  ('auto_precision_sales_v1', 'automotive_precision', 'Sales', 1, 'automotive_precision.sales.v1', 'Apex Motors Engineering Sales Demo', 'Demo data for automotive precision sales', TRUE),
+  ('automotive_precision_sales_v1', 'automotive_precision', 'Sales', 1, 'automotive_precision.sales.v1', 'Apex Motors Engineering Sales Demo', 'Demo data for automotive precision sales', TRUE),
   ('automotive_precision_parts_v1', 'automotive_precision', 'Parts', 1, 'automotive_precision.parts.v1', 'Apex Motors Engineering Parts Demo', 'Demo data for automotive precision parts', TRUE),
   ('automotive_precision_inventory_v1', 'automotive_precision', 'Inventory', 1, 'automotive_precision.inventory.v1', 'Apex Motors Engineering Inventory Demo', 'Demo data for automotive precision inventory', TRUE),
   ('automotive_precision_purchasing_v1', 'automotive_precision', 'Purchasing', 1, 'automotive_precision.purchasing.v1', 'Apex Motors Engineering Purchasing Demo', 'Demo data for automotive precision purchasing', TRUE)
@@ -30,12 +30,12 @@ INSERT INTO demo_templates."customer" ("templateSetId", "templateRowId", "name",
   ('cnc_aerospace_sales_v1', 'cust_001', 'AeroSpace Dynamics', '12-3456789'),
   ('cnc_aerospace_sales_v1', 'cust_002', 'Satellite Systems Inc', '98-7654321'),
   ('cnc_aerospace_sales_v1', 'cust_003', 'Defense Aviation Corp', '45-6789012'),
-  ('metal_fab_sales_v1', 'cust_001', 'BuildRight Construction', '33-2468135'),
-  ('metal_fab_sales_v1', 'cust_002', 'Industrial Steel Solutions', '44-1357924'),
-  ('metal_fab_sales_v1', 'cust_003', 'Metro Infrastructure Group', '55-9876543'),
-  ('auto_precision_sales_v1', 'cust_001', 'Performance Racing Systems', '66-1122334'),
-  ('auto_precision_sales_v1', 'cust_002', 'Velocity Motorsports', '77-4455667'),
-  ('auto_precision_sales_v1', 'cust_003', 'Elite Automotive Group', '88-7788990')
+  ('metal_fabrication_sales_v1', 'cust_001', 'BuildRight Construction', '33-2468135'),
+  ('metal_fabrication_sales_v1', 'cust_002', 'Industrial Steel Solutions', '44-1357924'),
+  ('metal_fabrication_sales_v1', 'cust_003', 'Metro Infrastructure Group', '55-9876543'),
+  ('automotive_precision_sales_v1', 'cust_001', 'Performance Racing Systems', '66-1122334'),
+  ('automotive_precision_sales_v1', 'cust_002', 'Velocity Motorsports', '77-4455667'),
+  ('automotive_precision_sales_v1', 'cust_003', 'Elite Automotive Group', '88-7788990')
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- SALES MODULE: Items
@@ -46,12 +46,12 @@ INSERT INTO demo_templates."item" ("templateSetId", "templateRowId", "readableId
   ('cnc_aerospace_sales_v1', 'item_001', 'ASP-BRK-7075', 'Aluminum 7075 Bracket', 'Aerospace-grade aluminum bracket with AS9100 cert', 'Part', 'Inventory', 'Make', 'EA', TRUE),
   ('cnc_aerospace_sales_v1', 'item_002', 'ASP-TI-HSG', 'Titanium Housing Assembly', 'Ti-6Al-4V housing for satellite components', 'Part', 'Inventory', 'Make', 'EA', TRUE),
   ('cnc_aerospace_sales_v1', 'item_003', 'ASP-COMP-PLT', 'Carbon Composite Plate', 'CNC machined carbon fiber composite plate', 'Part', 'Inventory', 'Make', 'EA', TRUE),
-  ('metal_fab_sales_v1', 'item_001', 'TF-BEAM-W12', 'W12x26 Steel I-Beam', 'Structural steel I-beam, 20ft length', 'Part', 'Inventory', 'Make', 'EA', TRUE),
-  ('metal_fab_sales_v1', 'item_002', 'TF-TRUSS-CUST', 'Custom Steel Truss', 'Welded steel truss assembly per spec', 'Part', 'Inventory', 'Make', 'EA', TRUE),
-  ('metal_fab_sales_v1', 'item_003', 'TF-PLATE-BASE', 'Steel Base Plate', 'Heavy-duty base plate with anchor holes', 'Part', 'Inventory', 'Make', 'EA', TRUE),
-  ('auto_precision_sales_v1', 'item_001', 'APX-PISTON-HP', 'High-Performance Piston Set', 'Forged aluminum pistons for racing engines', 'Part', 'Inventory', 'Make', 'EA', TRUE),
-  ('auto_precision_sales_v1', 'item_002', 'APX-CRANK-TI', 'Titanium Crankshaft', 'Precision-balanced titanium crankshaft', 'Part', 'Inventory', 'Make', 'EA', TRUE),
-  ('auto_precision_sales_v1', 'item_003', 'APX-VALVE-SS', 'Stainless Valve Set', 'High-temp stainless steel valve set', 'Part', 'Inventory', 'Make', 'EA', TRUE)
+  ('metal_fabrication_sales_v1', 'item_001', 'TF-BEAM-W12', 'W12x26 Steel I-Beam', 'Structural steel I-beam, 20ft length', 'Part', 'Inventory', 'Make', 'EA', TRUE),
+  ('metal_fabrication_sales_v1', 'item_002', 'TF-TRUSS-CUST', 'Custom Steel Truss', 'Welded steel truss assembly per spec', 'Part', 'Inventory', 'Make', 'EA', TRUE),
+  ('metal_fabrication_sales_v1', 'item_003', 'TF-PLATE-BASE', 'Steel Base Plate', 'Heavy-duty base plate with anchor holes', 'Part', 'Inventory', 'Make', 'EA', TRUE),
+  ('automotive_precision_sales_v1', 'item_001', 'APX-PISTON-HP', 'High-Performance Piston Set', 'Forged aluminum pistons for racing engines', 'Part', 'Inventory', 'Make', 'EA', TRUE),
+  ('automotive_precision_sales_v1', 'item_002', 'APX-CRANK-TI', 'Titanium Crankshaft', 'Precision-balanced titanium crankshaft', 'Part', 'Inventory', 'Make', 'EA', TRUE),
+  ('automotive_precision_sales_v1', 'item_003', 'APX-VALVE-SS', 'Stainless Valve Set', 'High-temp stainless steel valve set', 'Part', 'Inventory', 'Make', 'EA', TRUE)
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- SALES MODULE: Parts (for sales items)
@@ -62,12 +62,12 @@ INSERT INTO demo_templates."part" ("templateSetId", "templateRowId", "approved",
   ('cnc_aerospace_sales_v1', 'item_001', TRUE, CURRENT_DATE - INTERVAL '90 days'),
   ('cnc_aerospace_sales_v1', 'item_002', TRUE, CURRENT_DATE - INTERVAL '90 days'),
   ('cnc_aerospace_sales_v1', 'item_003', TRUE, CURRENT_DATE - INTERVAL '90 days'),
-  ('metal_fab_sales_v1', 'item_001', TRUE, CURRENT_DATE - INTERVAL '90 days'),
-  ('metal_fab_sales_v1', 'item_002', TRUE, CURRENT_DATE - INTERVAL '90 days'),
-  ('metal_fab_sales_v1', 'item_003', TRUE, CURRENT_DATE - INTERVAL '90 days'),
-  ('auto_precision_sales_v1', 'item_001', TRUE, CURRENT_DATE - INTERVAL '90 days'),
-  ('auto_precision_sales_v1', 'item_002', TRUE, CURRENT_DATE - INTERVAL '90 days'),
-  ('auto_precision_sales_v1', 'item_003', TRUE, CURRENT_DATE - INTERVAL '90 days')
+  ('metal_fabrication_sales_v1', 'item_001', TRUE, CURRENT_DATE - INTERVAL '90 days'),
+  ('metal_fabrication_sales_v1', 'item_002', TRUE, CURRENT_DATE - INTERVAL '90 days'),
+  ('metal_fabrication_sales_v1', 'item_003', TRUE, CURRENT_DATE - INTERVAL '90 days'),
+  ('automotive_precision_sales_v1', 'item_001', TRUE, CURRENT_DATE - INTERVAL '90 days'),
+  ('automotive_precision_sales_v1', 'item_002', TRUE, CURRENT_DATE - INTERVAL '90 days'),
+  ('automotive_precision_sales_v1', 'item_003', TRUE, CURRENT_DATE - INTERVAL '90 days')
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- SALES MODULE: Quotes
@@ -76,10 +76,10 @@ INSERT INTO demo_templates."quote" ("templateSetId", "templateRowId", "quoteId",
   ('robotics_oem_sales_v1', 'quote_002', 'Q-2025-002', 'cust_002', 'Draft', CURRENT_DATE + INTERVAL '30 days', 'CUST-REF-002'),
   ('cnc_aerospace_sales_v1', 'quote_001', 'Q-ASP-001', 'cust_001', 'Draft', CURRENT_DATE + INTERVAL '30 days', 'CUST-REF-001'),
   ('cnc_aerospace_sales_v1', 'quote_002', 'Q-ASP-002', 'cust_002', 'Draft', CURRENT_DATE + INTERVAL '30 days', 'CUST-REF-002'),
-  ('metal_fab_sales_v1', 'quote_001', 'Q-TF-001', 'cust_001', 'Draft', CURRENT_DATE + INTERVAL '30 days', 'CUST-REF-001'),
-  ('metal_fab_sales_v1', 'quote_002', 'Q-TF-002', 'cust_002', 'Draft', CURRENT_DATE + INTERVAL '30 days', 'CUST-REF-002'),
-  ('auto_precision_sales_v1', 'quote_001', 'Q-APX-001', 'cust_001', 'Draft', CURRENT_DATE + INTERVAL '30 days', 'CUST-REF-001'),
-  ('auto_precision_sales_v1', 'quote_002', 'Q-APX-002', 'cust_002', 'Draft', CURRENT_DATE + INTERVAL '30 days', 'CUST-REF-002')
+  ('metal_fabrication_sales_v1', 'quote_001', 'Q-TF-001', 'cust_001', 'Draft', CURRENT_DATE + INTERVAL '30 days', 'CUST-REF-001'),
+  ('metal_fabrication_sales_v1', 'quote_002', 'Q-TF-002', 'cust_002', 'Draft', CURRENT_DATE + INTERVAL '30 days', 'CUST-REF-002'),
+  ('automotive_precision_sales_v1', 'quote_001', 'Q-APX-001', 'cust_001', 'Draft', CURRENT_DATE + INTERVAL '30 days', 'CUST-REF-001'),
+  ('automotive_precision_sales_v1', 'quote_002', 'Q-APX-002', 'cust_002', 'Draft', CURRENT_DATE + INTERVAL '30 days', 'CUST-REF-002')
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- SALES MODULE: Quote Lines
@@ -90,12 +90,12 @@ INSERT INTO demo_templates."quoteLine" ("templateSetId", "templateRowId", "tplQu
   ('cnc_aerospace_sales_v1', 'qline_001', 'quote_001', 'item_001', 'Aluminum 7075 Bracket - AS9100', 250, 125.00),
   ('cnc_aerospace_sales_v1', 'qline_002', 'quote_001', 'item_003', 'Carbon Composite Plate', 100, 450.00),
   ('cnc_aerospace_sales_v1', 'qline_003', 'quote_002', 'item_002', 'Titanium Housing Assembly', 50, 875.00),
-  ('metal_fab_sales_v1', 'qline_001', 'quote_001', 'item_001', 'W12x26 Steel I-Beam - 20ft', 50, 285.00),
-  ('metal_fab_sales_v1', 'qline_002', 'quote_001', 'item_003', 'Steel Base Plate - Heavy Duty', 50, 125.00),
-  ('metal_fab_sales_v1', 'qline_003', 'quote_002', 'item_002', 'Custom Steel Truss - Per Drawing', 12, 1850.00),
-  ('auto_precision_sales_v1', 'qline_001', 'quote_001', 'item_001', 'High-Performance Piston Set', 10, 2850.00),
-  ('auto_precision_sales_v1', 'qline_002', 'quote_001', 'item_003', 'Stainless Valve Set - High Temp', 10, 1250.00),
-  ('auto_precision_sales_v1', 'qline_003', 'quote_002', 'item_002', 'Titanium Crankshaft - Balanced', 5, 8500.00)
+  ('metal_fabrication_sales_v1', 'qline_001', 'quote_001', 'item_001', 'W12x26 Steel I-Beam - 20ft', 50, 285.00),
+  ('metal_fabrication_sales_v1', 'qline_002', 'quote_001', 'item_003', 'Steel Base Plate - Heavy Duty', 50, 125.00),
+  ('metal_fabrication_sales_v1', 'qline_003', 'quote_002', 'item_002', 'Custom Steel Truss - Per Drawing', 12, 1850.00),
+  ('automotive_precision_sales_v1', 'qline_001', 'quote_001', 'item_001', 'High-Performance Piston Set', 10, 2850.00),
+  ('automotive_precision_sales_v1', 'qline_002', 'quote_001', 'item_003', 'Stainless Valve Set - High Temp', 10, 1250.00),
+  ('automotive_precision_sales_v1', 'qline_003', 'quote_002', 'item_002', 'Titanium Crankshaft - Balanced', 5, 8500.00)
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
 
 -- PARTS MODULE: Items (assemblies + components)
@@ -344,4 +344,204 @@ INSERT INTO demo_templates."material" ("templateSetId", "templateRowId", "materi
   -- Automotive Precision
   ('automotive_precision_purchasing_v1', 'mat_001', 'Billet', 'Aluminum', TRUE),
   ('automotive_precision_purchasing_v1', 'mat_002', 'Round Bar', 'Titanium', TRUE)
+ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
+
+-- ============================================================================
+-- MANUFACTURING DATA: Work Centers, Processes, BOMs, and Operations
+-- ============================================================================
+
+-- PARTS MODULE: Work Centers
+-- machineRate + overheadRate + laborRate = total hourly rate
+INSERT INTO demo_templates."workCenter" ("templateSetId", "templateRowId", "name", "description", "machineRate", "overheadRate", "laborRate", "defaultStandardFactor") VALUES
+  -- Robotics OEM
+  ('robotics_oem_parts_v1', 'wc_assembly', 'Assembly Line', 'Main robot assembly line', 25.00, 25.00, 75.00, 'Hours/Piece'),
+  ('robotics_oem_parts_v1', 'wc_welding', 'Welding Station', 'TIG/MIG welding station', 35.00, 30.00, 85.00, 'Hours/Piece'),
+  ('robotics_oem_parts_v1', 'wc_electronics', 'Electronics Lab', 'Electronics assembly and wiring', 30.00, 25.00, 80.00, 'Hours/Piece'),
+  ('robotics_oem_parts_v1', 'wc_test', 'Test Chamber', 'Robot testing and calibration', 45.00, 35.00, 95.00, 'Hours/Piece'),
+  -- CNC Aerospace
+  ('cnc_aerospace_parts_v1', 'wc_cnc_mill', 'CNC Mill 1', 'Haas VF-4 vertical machining center', 75.00, 45.00, 65.00, 'Hours/Piece'),
+  ('cnc_aerospace_parts_v1', 'wc_cnc_lathe', 'CNC Lathe 1', 'Mazak turning center', 70.00, 45.00, 60.00, 'Hours/Piece'),
+  ('cnc_aerospace_parts_v1', 'wc_inspect', 'Inspection Bay', 'CMM and quality inspection', 40.00, 30.00, 55.00, 'Hours/Piece'),
+  ('cnc_aerospace_parts_v1', 'wc_deburr', 'Deburr Station', 'Manual deburring and finishing', 20.00, 20.00, 45.00, 'Hours/Piece'),
+  -- Metal Fabrication
+  ('metal_fabrication_parts_v1', 'wc_cutting', 'Cutting Table', 'Plasma/laser cutting table', 55.00, 35.00, 55.00, 'Hours/Piece'),
+  ('metal_fabrication_parts_v1', 'wc_welding', 'Welding Bay', 'MIG/TIG welding station', 40.00, 30.00, 65.00, 'Hours/Piece'),
+  ('metal_fabrication_parts_v1', 'wc_press', 'Press Brake', 'CNC press brake', 60.00, 35.00, 60.00, 'Hours/Piece'),
+  ('metal_fabrication_parts_v1', 'wc_finish', 'Finish Area', 'Grinding, deburring, painting', 25.00, 25.00, 45.00, 'Hours/Piece'),
+  -- Automotive Precision
+  ('automotive_precision_parts_v1', 'wc_cnc', 'CNC Machining Center', '5-axis CNC machining', 80.00, 45.00, 70.00, 'Hours/Piece'),
+  ('automotive_precision_parts_v1', 'wc_assembly', 'Assembly Bench', 'Precision assembly station', 30.00, 30.00, 65.00, 'Hours/Piece'),
+  ('automotive_precision_parts_v1', 'wc_balance', 'Balancing Machine', 'Dynamic balancing equipment', 55.00, 35.00, 75.00, 'Hours/Piece'),
+  ('automotive_precision_parts_v1', 'wc_dyno', 'Dyno Room', 'Engine testing dynamometer', 85.00, 45.00, 95.00, 'Hours/Piece')
+ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
+
+-- PARTS MODULE: Processes
+INSERT INTO demo_templates."process" ("templateSetId", "templateRowId", "name", "defaultStandardFactor") VALUES
+  -- Robotics OEM
+  ('robotics_oem_parts_v1', 'proc_assembly', 'Assembly', 'Hours/Piece'),
+  ('robotics_oem_parts_v1', 'proc_welding', 'Welding', 'Hours/Piece'),
+  ('robotics_oem_parts_v1', 'proc_wiring', 'Wiring', 'Hours/Piece'),
+  ('robotics_oem_parts_v1', 'proc_programming', 'Programming', 'Hours/Piece'),
+  ('robotics_oem_parts_v1', 'proc_testing', 'Testing', 'Hours/Piece'),
+  -- CNC Aerospace
+  ('cnc_aerospace_parts_v1', 'proc_programming', 'Programming', 'Total Hours'),
+  ('cnc_aerospace_parts_v1', 'proc_op1', 'OP1 - Rough', 'Hours/Piece'),
+  ('cnc_aerospace_parts_v1', 'proc_op2', 'OP2 - Finish', 'Hours/Piece'),
+  ('cnc_aerospace_parts_v1', 'proc_inspect', 'Inspect', 'Hours/Piece'),
+  ('cnc_aerospace_parts_v1', 'proc_deburr', 'Deburr', 'Hours/Piece'),
+  -- Metal Fabrication
+  ('metal_fabrication_parts_v1', 'proc_cutting', 'Cutting', 'Hours/Piece'),
+  ('metal_fabrication_parts_v1', 'proc_welding', 'Welding', 'Hours/Piece'),
+  ('metal_fabrication_parts_v1', 'proc_forming', 'Forming', 'Hours/Piece'),
+  ('metal_fabrication_parts_v1', 'proc_finishing', 'Finishing', 'Hours/Piece'),
+  ('metal_fabrication_parts_v1', 'proc_assembly', 'Assembly', 'Hours/Piece'),
+  -- Automotive Precision
+  ('automotive_precision_parts_v1', 'proc_machining', 'Machining', 'Hours/Piece'),
+  ('automotive_precision_parts_v1', 'proc_assembly', 'Assembly', 'Hours/Piece'),
+  ('automotive_precision_parts_v1', 'proc_balancing', 'Balancing', 'Hours/Piece'),
+  ('automotive_precision_parts_v1', 'proc_testing', 'Testing', 'Hours/Piece')
+ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
+
+-- PARTS MODULE: Work Center Process Mappings
+INSERT INTO demo_templates."workCenterProcess" ("templateSetId", "tplWorkCenterId", "tplProcessId") VALUES
+  -- Robotics OEM
+  ('robotics_oem_parts_v1', 'wc_assembly', 'proc_assembly'),
+  ('robotics_oem_parts_v1', 'wc_welding', 'proc_welding'),
+  ('robotics_oem_parts_v1', 'wc_electronics', 'proc_wiring'),
+  ('robotics_oem_parts_v1', 'wc_electronics', 'proc_programming'),
+  ('robotics_oem_parts_v1', 'wc_test', 'proc_testing'),
+  -- CNC Aerospace
+  ('cnc_aerospace_parts_v1', 'wc_cnc_mill', 'proc_programming'),
+  ('cnc_aerospace_parts_v1', 'wc_cnc_mill', 'proc_op1'),
+  ('cnc_aerospace_parts_v1', 'wc_cnc_mill', 'proc_op2'),
+  ('cnc_aerospace_parts_v1', 'wc_cnc_lathe', 'proc_op1'),
+  ('cnc_aerospace_parts_v1', 'wc_cnc_lathe', 'proc_op2'),
+  ('cnc_aerospace_parts_v1', 'wc_inspect', 'proc_inspect'),
+  ('cnc_aerospace_parts_v1', 'wc_deburr', 'proc_deburr'),
+  -- Metal Fabrication
+  ('metal_fabrication_parts_v1', 'wc_cutting', 'proc_cutting'),
+  ('metal_fabrication_parts_v1', 'wc_welding', 'proc_welding'),
+  ('metal_fabrication_parts_v1', 'wc_press', 'proc_forming'),
+  ('metal_fabrication_parts_v1', 'wc_finish', 'proc_finishing'),
+  ('metal_fabrication_parts_v1', 'wc_finish', 'proc_assembly'),
+  -- Automotive Precision
+  ('automotive_precision_parts_v1', 'wc_cnc', 'proc_machining'),
+  ('automotive_precision_parts_v1', 'wc_assembly', 'proc_assembly'),
+  ('automotive_precision_parts_v1', 'wc_balance', 'proc_balancing'),
+  ('automotive_precision_parts_v1', 'wc_dyno', 'proc_testing')
+ON CONFLICT ("templateSetId", "tplWorkCenterId", "tplProcessId") DO NOTHING;
+
+-- PARTS MODULE: Make Methods (for assembly items)
+INSERT INTO demo_templates."makeMethod" ("templateSetId", "templateRowId", "tplItemId") VALUES
+  -- Robotics OEM: Nested BOM structure
+  ('robotics_oem_parts_v1', 'mm_arm', 'item_a001'),      -- 6-Axis Robot Arm
+  ('robotics_oem_parts_v1', 'mm_base', 'item_a002'),     -- Robot Base Assembly
+  ('robotics_oem_parts_v1', 'mm_joint1', 'item_a003'),   -- Joint 1 Assembly
+  -- CNC Aerospace: Flat BOM with operations
+  ('cnc_aerospace_parts_v1', 'mm_bracket', 'item_a001'),  -- Aluminum Bracket Assembly
+  ('cnc_aerospace_parts_v1', 'mm_housing', 'item_a002'),  -- Titanium Housing Assembly
+  ('cnc_aerospace_parts_v1', 'mm_shaft', 'item_a003'),    -- Shaft Assembly
+  -- Metal Fabrication
+  ('metal_fabrication_parts_v1', 'mm_widget1', 'item_a001'),  -- Standard Widget
+  ('metal_fabrication_parts_v1', 'mm_widget2', 'item_a002'),  -- Premium Widget
+  ('metal_fabrication_parts_v1', 'mm_assy', 'item_a003'),     -- Widget Assembly
+  -- Automotive Precision
+  ('automotive_precision_parts_v1', 'mm_piston', 'item_a001'),  -- Piston Assembly
+  ('automotive_precision_parts_v1', 'mm_crank', 'item_a002'),   -- Crankshaft Assembly
+  ('automotive_precision_parts_v1', 'mm_valve', 'item_a003')    -- Valve Train Assembly
+ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
+
+-- PARTS MODULE: Method Materials (BOM components)
+INSERT INTO demo_templates."methodMaterial" ("templateSetId", "templateRowId", "tplMakeMethodId", "tplItemId", "methodType", "tplMaterialMakeMethodId", "quantity", "unitOfMeasureCode") VALUES
+  -- Robotics OEM: 6-Axis Robot Arm has nested sub-assemblies
+  ('robotics_oem_parts_v1', 'mat_arm_base', 'mm_arm', 'item_a002', 'Make', 'mm_base', 1, 'EA'),
+  ('robotics_oem_parts_v1', 'mat_arm_joint', 'mm_arm', 'item_a003', 'Make', 'mm_joint1', 6, 'EA'),
+  -- Robot Base Assembly has bought components
+  ('robotics_oem_parts_v1', 'mat_base_motor', 'mm_base', 'item_c001', 'Buy', NULL, 1, 'EA'),
+  ('robotics_oem_parts_v1', 'mat_base_encoder', 'mm_base', 'item_c002', 'Buy', NULL, 1, 'EA'),
+  -- Joint 1 Assembly has bought components
+  ('robotics_oem_parts_v1', 'mat_joint_motor', 'mm_joint1', 'item_c001', 'Buy', NULL, 1, 'EA'),
+  ('robotics_oem_parts_v1', 'mat_joint_encoder', 'mm_joint1', 'item_c002', 'Buy', NULL, 1, 'EA'),
+  ('robotics_oem_parts_v1', 'mat_joint_gearbox', 'mm_joint1', 'item_c003', 'Buy', NULL, 1, 'EA'),
+
+  -- CNC Aerospace: Flat BOM with raw material
+  ('cnc_aerospace_parts_v1', 'mat_brk_screw', 'mm_bracket', 'item_c001', 'Buy', NULL, 8, 'EA'),
+  ('cnc_aerospace_parts_v1', 'mat_brk_washer', 'mm_bracket', 'item_c002', 'Buy', NULL, 8, 'EA'),
+  ('cnc_aerospace_parts_v1', 'mat_hsg_screw', 'mm_housing', 'item_c001', 'Buy', NULL, 12, 'EA'),
+  ('cnc_aerospace_parts_v1', 'mat_hsg_seal', 'mm_housing', 'item_c003', 'Buy', NULL, 2, 'EA'),
+  ('cnc_aerospace_parts_v1', 'mat_sft_screw', 'mm_shaft', 'item_c001', 'Buy', NULL, 4, 'EA'),
+  ('cnc_aerospace_parts_v1', 'mat_sft_washer', 'mm_shaft', 'item_c002', 'Buy', NULL, 4, 'EA'),
+
+  -- Metal Fabrication
+  ('metal_fabrication_parts_v1', 'mat_w1_base', 'mm_widget1', 'item_c001', 'Buy', NULL, 1, 'EA'),
+  ('metal_fabrication_parts_v1', 'mat_w1_top', 'mm_widget1', 'item_c002', 'Buy', NULL, 1, 'EA'),
+  ('metal_fabrication_parts_v1', 'mat_w2_base', 'mm_widget2', 'item_c001', 'Buy', NULL, 1, 'EA'),
+  ('metal_fabrication_parts_v1', 'mat_w2_top', 'mm_widget2', 'item_c002', 'Buy', NULL, 1, 'EA'),
+  ('metal_fabrication_parts_v1', 'mat_w2_spring', 'mm_widget2', 'item_c003', 'Buy', NULL, 2, 'EA'),
+  ('metal_fabrication_parts_v1', 'mat_assy_w1', 'mm_assy', 'item_a001', 'Make', 'mm_widget1', 1, 'EA'),
+  ('metal_fabrication_parts_v1', 'mat_assy_w2', 'mm_assy', 'item_a002', 'Make', 'mm_widget2', 1, 'EA'),
+
+  -- Automotive Precision
+  ('automotive_precision_parts_v1', 'mat_pis_ring', 'mm_piston', 'item_c001', 'Buy', NULL, 1, 'EA'),
+  ('automotive_precision_parts_v1', 'mat_crk_bearing', 'mm_crank', 'item_c002', 'Buy', NULL, 1, 'EA'),
+  ('automotive_precision_parts_v1', 'mat_vlv_spring', 'mm_valve', 'item_c003', 'Buy', NULL, 1, 'EA')
+ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;
+
+-- PARTS MODULE: Method Operations (routing steps)
+INSERT INTO demo_templates."methodOperation" ("templateSetId", "templateRowId", "tplMakeMethodId", "tplProcessId", "tplWorkCenterId", "order", "operationOrder", "description", "setupTime", "setupUnit", "laborTime", "laborUnit", "machineTime", "machineUnit") VALUES
+  -- Robotics OEM: 6-Axis Robot Arm
+  ('robotics_oem_parts_v1', 'op_arm_1', 'mm_arm', 'proc_assembly', 'wc_assembly', 1, 'After Previous', 'Final arm assembly', 0.5, 'Total Hours', 4.0, 'Hours/Piece', 0, 'Hours/Piece'),
+  ('robotics_oem_parts_v1', 'op_arm_2', 'mm_arm', 'proc_wiring', 'wc_electronics', 2, 'After Previous', 'Electrical wiring and connections', 0.25, 'Total Hours', 2.0, 'Hours/Piece', 0, 'Hours/Piece'),
+  ('robotics_oem_parts_v1', 'op_arm_3', 'mm_arm', 'proc_programming', 'wc_electronics', 3, 'After Previous', 'Controller programming', 0.5, 'Total Hours', 1.5, 'Hours/Piece', 0, 'Hours/Piece'),
+  ('robotics_oem_parts_v1', 'op_arm_4', 'mm_arm', 'proc_testing', 'wc_test', 4, 'After Previous', 'Full system testing and calibration', 0.25, 'Total Hours', 2.0, 'Hours/Piece', 0, 'Hours/Piece'),
+  -- Robot Base Assembly
+  ('robotics_oem_parts_v1', 'op_base_1', 'mm_base', 'proc_welding', 'wc_welding', 1, 'After Previous', 'Base frame welding', 0.5, 'Total Hours', 1.5, 'Hours/Piece', 0, 'Hours/Piece'),
+  ('robotics_oem_parts_v1', 'op_base_2', 'mm_base', 'proc_assembly', 'wc_assembly', 2, 'After Previous', 'Motor and encoder installation', 0.25, 'Total Hours', 1.0, 'Hours/Piece', 0, 'Hours/Piece'),
+  -- Joint 1 Assembly
+  ('robotics_oem_parts_v1', 'op_joint_1', 'mm_joint1', 'proc_assembly', 'wc_assembly', 1, 'After Previous', 'Joint assembly', 0.25, 'Total Hours', 0.75, 'Hours/Piece', 0, 'Hours/Piece'),
+  ('robotics_oem_parts_v1', 'op_joint_2', 'mm_joint1', 'proc_testing', 'wc_test', 2, 'After Previous', 'Joint testing', 0.1, 'Total Hours', 0.25, 'Hours/Piece', 0, 'Hours/Piece'),
+
+  -- CNC Aerospace: Aluminum Bracket (flat BOM with CNC operations)
+  ('cnc_aerospace_parts_v1', 'op_brk_1', 'mm_bracket', 'proc_programming', 'wc_cnc_mill', 1, 'After Previous', 'CAM programming', 0.5, 'Total Hours', 0, 'Hours/Piece', 0, 'Hours/Piece'),
+  ('cnc_aerospace_parts_v1', 'op_brk_2', 'mm_bracket', 'proc_op1', 'wc_cnc_mill', 2, 'After Previous', 'Rough machining', 0.25, 'Total Hours', 0.15, 'Hours/Piece', 0.15, 'Hours/Piece'),
+  ('cnc_aerospace_parts_v1', 'op_brk_3', 'mm_bracket', 'proc_op2', 'wc_cnc_mill', 3, 'After Previous', 'Finish machining', 0.1, 'Total Hours', 0.1, 'Hours/Piece', 0.1, 'Hours/Piece'),
+  ('cnc_aerospace_parts_v1', 'op_brk_4', 'mm_bracket', 'proc_deburr', 'wc_deburr', 4, 'After Previous', 'Deburr and clean', 0, 'Total Hours', 0.1, 'Hours/Piece', 0, 'Hours/Piece'),
+  ('cnc_aerospace_parts_v1', 'op_brk_5', 'mm_bracket', 'proc_inspect', 'wc_inspect', 5, 'After Previous', 'CMM inspection', 0.1, 'Total Hours', 0.15, 'Hours/Piece', 0, 'Hours/Piece'),
+  -- Titanium Housing
+  ('cnc_aerospace_parts_v1', 'op_hsg_1', 'mm_housing', 'proc_programming', 'wc_cnc_mill', 1, 'After Previous', 'CAM programming', 1.0, 'Total Hours', 0, 'Hours/Piece', 0, 'Hours/Piece'),
+  ('cnc_aerospace_parts_v1', 'op_hsg_2', 'mm_housing', 'proc_op1', 'wc_cnc_mill', 2, 'After Previous', 'Rough machining', 0.5, 'Total Hours', 0.35, 'Hours/Piece', 0.35, 'Hours/Piece'),
+  ('cnc_aerospace_parts_v1', 'op_hsg_3', 'mm_housing', 'proc_op2', 'wc_cnc_mill', 3, 'After Previous', 'Finish machining', 0.25, 'Total Hours', 0.25, 'Hours/Piece', 0.25, 'Hours/Piece'),
+  ('cnc_aerospace_parts_v1', 'op_hsg_4', 'mm_housing', 'proc_deburr', 'wc_deburr', 4, 'After Previous', 'Deburr and clean', 0, 'Total Hours', 0.2, 'Hours/Piece', 0, 'Hours/Piece'),
+  ('cnc_aerospace_parts_v1', 'op_hsg_5', 'mm_housing', 'proc_inspect', 'wc_inspect', 5, 'After Previous', 'Full CMM inspection', 0.15, 'Total Hours', 0.3, 'Hours/Piece', 0, 'Hours/Piece'),
+  -- Shaft Assembly
+  ('cnc_aerospace_parts_v1', 'op_sft_1', 'mm_shaft', 'proc_programming', 'wc_cnc_lathe', 1, 'After Previous', 'CAM programming', 0.5, 'Total Hours', 0, 'Hours/Piece', 0, 'Hours/Piece'),
+  ('cnc_aerospace_parts_v1', 'op_sft_2', 'mm_shaft', 'proc_op1', 'wc_cnc_lathe', 2, 'After Previous', 'Rough turning', 0.2, 'Total Hours', 0.12, 'Hours/Piece', 0.12, 'Hours/Piece'),
+  ('cnc_aerospace_parts_v1', 'op_sft_3', 'mm_shaft', 'proc_op2', 'wc_cnc_lathe', 3, 'After Previous', 'Finish turning', 0.1, 'Total Hours', 0.08, 'Hours/Piece', 0.08, 'Hours/Piece'),
+  ('cnc_aerospace_parts_v1', 'op_sft_4', 'mm_shaft', 'proc_inspect', 'wc_inspect', 4, 'After Previous', 'Dimensional inspection', 0.05, 'Total Hours', 0.1, 'Hours/Piece', 0, 'Hours/Piece'),
+
+  -- Metal Fabrication: Standard Widget
+  ('metal_fabrication_parts_v1', 'op_w1_1', 'mm_widget1', 'proc_cutting', 'wc_cutting', 1, 'After Previous', 'Cut base and top', 0.1, 'Total Hours', 0.08, 'Hours/Piece', 0.08, 'Hours/Piece'),
+  ('metal_fabrication_parts_v1', 'op_w1_2', 'mm_widget1', 'proc_forming', 'wc_press', 2, 'After Previous', 'Form base', 0.15, 'Total Hours', 0.1, 'Hours/Piece', 0.1, 'Hours/Piece'),
+  ('metal_fabrication_parts_v1', 'op_w1_3', 'mm_widget1', 'proc_welding', 'wc_welding', 3, 'After Previous', 'Weld assembly', 0.1, 'Total Hours', 0.15, 'Hours/Piece', 0, 'Hours/Piece'),
+  ('metal_fabrication_parts_v1', 'op_w1_4', 'mm_widget1', 'proc_finishing', 'wc_finish', 4, 'After Previous', 'Finish and paint', 0.05, 'Total Hours', 0.12, 'Hours/Piece', 0, 'Hours/Piece'),
+  -- Premium Widget
+  ('metal_fabrication_parts_v1', 'op_w2_1', 'mm_widget2', 'proc_cutting', 'wc_cutting', 1, 'After Previous', 'Precision cutting', 0.15, 'Total Hours', 0.1, 'Hours/Piece', 0.1, 'Hours/Piece'),
+  ('metal_fabrication_parts_v1', 'op_w2_2', 'mm_widget2', 'proc_forming', 'wc_press', 2, 'After Previous', 'Precision forming', 0.2, 'Total Hours', 0.15, 'Hours/Piece', 0.15, 'Hours/Piece'),
+  ('metal_fabrication_parts_v1', 'op_w2_3', 'mm_widget2', 'proc_welding', 'wc_welding', 3, 'After Previous', 'Precision welding', 0.15, 'Total Hours', 0.2, 'Hours/Piece', 0, 'Hours/Piece'),
+  ('metal_fabrication_parts_v1', 'op_w2_4', 'mm_widget2', 'proc_finishing', 'wc_finish', 4, 'After Previous', 'Premium finish', 0.1, 'Total Hours', 0.2, 'Hours/Piece', 0, 'Hours/Piece'),
+  -- Widget Assembly
+  ('metal_fabrication_parts_v1', 'op_assy_1', 'mm_assy', 'proc_assembly', 'wc_finish', 1, 'After Previous', 'Final assembly', 0.1, 'Total Hours', 0.25, 'Hours/Piece', 0, 'Hours/Piece'),
+
+  -- Automotive Precision: Piston Assembly
+  ('automotive_precision_parts_v1', 'op_pis_1', 'mm_piston', 'proc_machining', 'wc_cnc', 1, 'After Previous', 'CNC machining piston', 0.5, 'Total Hours', 0.35, 'Hours/Piece', 0.35, 'Hours/Piece'),
+  ('automotive_precision_parts_v1', 'op_pis_2', 'mm_piston', 'proc_assembly', 'wc_assembly', 2, 'After Previous', 'Ring installation', 0.1, 'Total Hours', 0.15, 'Hours/Piece', 0, 'Hours/Piece'),
+  ('automotive_precision_parts_v1', 'op_pis_3', 'mm_piston', 'proc_balancing', 'wc_balance', 3, 'After Previous', 'Weight matching', 0.15, 'Total Hours', 0.2, 'Hours/Piece', 0.1, 'Hours/Piece'),
+  -- Crankshaft Assembly
+  ('automotive_precision_parts_v1', 'op_crk_1', 'mm_crank', 'proc_machining', 'wc_cnc', 1, 'After Previous', 'CNC machining crankshaft', 1.0, 'Total Hours', 1.5, 'Hours/Piece', 1.5, 'Hours/Piece'),
+  ('automotive_precision_parts_v1', 'op_crk_2', 'mm_crank', 'proc_balancing', 'wc_balance', 2, 'After Previous', 'Dynamic balancing', 0.25, 'Total Hours', 0.5, 'Hours/Piece', 0.5, 'Hours/Piece'),
+  ('automotive_precision_parts_v1', 'op_crk_3', 'mm_crank', 'proc_testing', 'wc_dyno', 3, 'After Previous', 'Dyno testing', 0.5, 'Total Hours', 1.0, 'Hours/Piece', 0, 'Hours/Piece'),
+  -- Valve Train Assembly
+  ('automotive_precision_parts_v1', 'op_vlv_1', 'mm_valve', 'proc_machining', 'wc_cnc', 1, 'After Previous', 'Valve machining', 0.25, 'Total Hours', 0.2, 'Hours/Piece', 0.2, 'Hours/Piece'),
+  ('automotive_precision_parts_v1', 'op_vlv_2', 'mm_valve', 'proc_assembly', 'wc_assembly', 2, 'After Previous', 'Spring assembly', 0.1, 'Total Hours', 0.15, 'Hours/Piece', 0, 'Hours/Piece'),
+  ('automotive_precision_parts_v1', 'op_vlv_3', 'mm_valve', 'proc_testing', 'wc_dyno', 3, 'After Previous', 'Flow testing', 0.15, 'Total Hours', 0.25, 'Hours/Piece', 0, 'Hours/Piece')
 ON CONFLICT ("templateSetId", "templateRowId") DO NOTHING;

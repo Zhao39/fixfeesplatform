@@ -4585,6 +4585,9 @@ export default {
             $ref: "#/parameters/rowFilter.makeMethod.status",
           },
           {
+            $ref: "#/parameters/rowFilter.makeMethod.isDemo",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -4677,6 +4680,9 @@ export default {
             $ref: "#/parameters/rowFilter.makeMethod.status",
           },
           {
+            $ref: "#/parameters/rowFilter.makeMethod.isDemo",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -4721,6 +4727,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.makeMethod.status",
+          },
+          {
+            $ref: "#/parameters/rowFilter.makeMethod.isDemo",
           },
           {
             $ref: "#/parameters/body.makeMethod",
@@ -7477,6 +7486,9 @@ export default {
             $ref: "#/parameters/rowFilter.quoteOperation.procedureId",
           },
           {
+            $ref: "#/parameters/rowFilter.quoteOperation.isDemo",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -7632,6 +7644,9 @@ export default {
             $ref: "#/parameters/rowFilter.quoteOperation.procedureId",
           },
           {
+            $ref: "#/parameters/rowFilter.quoteOperation.isDemo",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -7739,6 +7754,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.quoteOperation.procedureId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.quoteOperation.isDemo",
           },
           {
             $ref: "#/parameters/body.quoteOperation",
@@ -9676,6 +9694,9 @@ export default {
             $ref: "#/parameters/rowFilter.methodMaterial.shelfIds",
           },
           {
+            $ref: "#/parameters/rowFilter.methodMaterial.isDemo",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -9798,6 +9819,9 @@ export default {
             $ref: "#/parameters/rowFilter.methodMaterial.shelfIds",
           },
           {
+            $ref: "#/parameters/rowFilter.methodMaterial.isDemo",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -9872,6 +9896,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.methodMaterial.shelfIds",
+          },
+          {
+            $ref: "#/parameters/rowFilter.methodMaterial.isDemo",
           },
           {
             $ref: "#/parameters/body.methodMaterial",
@@ -15412,6 +15439,9 @@ export default {
             $ref: "#/parameters/rowFilter.process.completeAllOnScan",
           },
           {
+            $ref: "#/parameters/rowFilter.process.isDemo",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -15507,6 +15537,9 @@ export default {
             $ref: "#/parameters/rowFilter.process.completeAllOnScan",
           },
           {
+            $ref: "#/parameters/rowFilter.process.isDemo",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -15554,6 +15587,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.process.completeAllOnScan",
+          },
+          {
+            $ref: "#/parameters/rowFilter.process.isDemo",
           },
           {
             $ref: "#/parameters/body.process",
@@ -21376,6 +21412,9 @@ export default {
             $ref: "#/parameters/rowFilter.workCenterProcess.updatedAt",
           },
           {
+            $ref: "#/parameters/rowFilter.workCenterProcess.isDemo",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -21456,6 +21495,9 @@ export default {
             $ref: "#/parameters/rowFilter.workCenterProcess.updatedAt",
           },
           {
+            $ref: "#/parameters/rowFilter.workCenterProcess.isDemo",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -21488,6 +21530,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.workCenterProcess.updatedAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.workCenterProcess.isDemo",
           },
           {
             $ref: "#/parameters/body.workCenterProcess",
@@ -30292,6 +30337,9 @@ export default {
             $ref: "#/parameters/rowFilter.quoteMaterial.shelfId",
           },
           {
+            $ref: "#/parameters/rowFilter.quoteMaterial.isDemo",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -30423,6 +30471,9 @@ export default {
             $ref: "#/parameters/rowFilter.quoteMaterial.shelfId",
           },
           {
+            $ref: "#/parameters/rowFilter.quoteMaterial.isDemo",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -30506,6 +30557,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.quoteMaterial.shelfId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.quoteMaterial.isDemo",
           },
           {
             $ref: "#/parameters/body.quoteMaterial",
@@ -43921,6 +43975,9 @@ export default {
             $ref: "#/parameters/rowFilter.methodOperation.operationUnitCost",
           },
           {
+            $ref: "#/parameters/rowFilter.methodOperation.isDemo",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -44061,6 +44118,9 @@ export default {
             $ref: "#/parameters/rowFilter.methodOperation.operationUnitCost",
           },
           {
+            $ref: "#/parameters/rowFilter.methodOperation.isDemo",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -44153,6 +44213,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.methodOperation.operationUnitCost",
+          },
+          {
+            $ref: "#/parameters/rowFilter.methodOperation.isDemo",
           },
           {
             $ref: "#/parameters/body.methodOperation",
@@ -53128,6 +53191,9 @@ export default {
             $ref: "#/parameters/rowFilter.quoteMakeMethod.version",
           },
           {
+            $ref: "#/parameters/rowFilter.quoteMakeMethod.isDemo",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -53229,6 +53295,9 @@ export default {
             $ref: "#/parameters/rowFilter.quoteMakeMethod.version",
           },
           {
+            $ref: "#/parameters/rowFilter.quoteMakeMethod.isDemo",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -53282,6 +53351,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.quoteMakeMethod.version",
+          },
+          {
+            $ref: "#/parameters/rowFilter.quoteMakeMethod.isDemo",
           },
           {
             $ref: "#/parameters/body.quoteMakeMethod",
@@ -56527,6 +56599,9 @@ export default {
             $ref: "#/parameters/rowFilter.workCenter.tags",
           },
           {
+            $ref: "#/parameters/rowFilter.workCenter.isDemo",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -56637,6 +56712,9 @@ export default {
             $ref: "#/parameters/rowFilter.workCenter.tags",
           },
           {
+            $ref: "#/parameters/rowFilter.workCenter.isDemo",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -56699,6 +56777,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.workCenter.tags",
+          },
+          {
+            $ref: "#/parameters/rowFilter.workCenter.isDemo",
           },
           {
             $ref: "#/parameters/body.workCenter",
@@ -67723,6 +67804,11 @@ export default {
           format: 'public."makeMethodStatus"',
           type: "string",
         },
+        isDemo: {
+          default: false,
+          format: "boolean",
+          type: "boolean",
+        },
       },
       type: "object",
     },
@@ -69053,6 +69139,11 @@ export default {
           format: "text",
           type: "string",
         },
+        isDemo: {
+          default: false,
+          format: "boolean",
+          type: "boolean",
+        },
       },
       type: "object",
     },
@@ -70131,6 +70222,11 @@ export default {
         },
         shelfIds: {
           format: "jsonb",
+        },
+        isDemo: {
+          default: false,
+          format: "boolean",
+          type: "boolean",
         },
       },
       type: "object",
@@ -73064,6 +73160,11 @@ export default {
           format: "boolean",
           type: "boolean",
         },
+        isDemo: {
+          default: false,
+          format: "boolean",
+          type: "boolean",
+        },
       },
       type: "object",
     },
@@ -75671,6 +75772,11 @@ export default {
         updatedAt: {
           format: "timestamp with time zone",
           type: "string",
+        },
+        isDemo: {
+          default: false,
+          format: "boolean",
+          type: "boolean",
         },
       },
       type: "object",
@@ -79734,6 +79840,11 @@ export default {
             "Note:\nThis is a Foreign Key to `shelf.id`.<fk table='shelf' column='id'/>",
           format: "text",
           type: "string",
+        },
+        isDemo: {
+          default: false,
+          format: "boolean",
+          type: "boolean",
         },
       },
       type: "object",
@@ -86407,6 +86518,11 @@ export default {
           format: "numeric",
           type: "number",
         },
+        isDemo: {
+          default: false,
+          format: "boolean",
+          type: "boolean",
+        },
       },
       type: "object",
     },
@@ -90670,6 +90786,11 @@ export default {
           format: "numeric",
           type: "number",
         },
+        isDemo: {
+          default: false,
+          format: "boolean",
+          type: "boolean",
+        },
       },
       type: "object",
     },
@@ -92719,6 +92840,11 @@ export default {
             type: "string",
           },
           type: "array",
+        },
+        isDemo: {
+          default: false,
+          format: "boolean",
+          type: "boolean",
         },
       },
       type: "object",
@@ -97145,6 +97271,12 @@ export default {
       in: "query",
       type: "string",
     },
+    "rowFilter.makeMethod.isDemo": {
+      name: "isDemo",
+      required: false,
+      in: "query",
+      type: "string",
+    },
     "body.shift": {
       name: "shift",
       description: "shift",
@@ -98564,6 +98696,12 @@ export default {
       in: "query",
       type: "string",
     },
+    "rowFilter.quoteOperation.isDemo": {
+      name: "isDemo",
+      required: false,
+      in: "query",
+      type: "string",
+    },
     "body.materialGrades": {
       name: "materialGrades",
       description: "materialGrades",
@@ -99871,6 +100009,12 @@ export default {
     },
     "rowFilter.methodMaterial.shelfIds": {
       name: "shelfIds",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.methodMaterial.isDemo": {
+      name: "isDemo",
       required: false,
       in: "query",
       type: "string",
@@ -103172,6 +103316,12 @@ export default {
       in: "query",
       type: "string",
     },
+    "rowFilter.process.isDemo": {
+      name: "isDemo",
+      required: false,
+      in: "query",
+      type: "string",
+    },
     "body.postingGroupInventory": {
       name: "postingGroupInventory",
       description: "postingGroupInventory",
@@ -106087,6 +106237,12 @@ export default {
     },
     "rowFilter.workCenterProcess.updatedAt": {
       name: "updatedAt",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.workCenterProcess.isDemo": {
+      name: "isDemo",
       required: false,
       in: "query",
       type: "string",
@@ -110597,6 +110753,12 @@ export default {
     },
     "rowFilter.quoteMaterial.shelfId": {
       name: "shelfId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.quoteMaterial.isDemo": {
+      name: "isDemo",
       required: false,
       in: "query",
       type: "string",
@@ -118231,6 +118393,12 @@ export default {
       in: "query",
       type: "string",
     },
+    "rowFilter.methodOperation.isDemo": {
+      name: "isDemo",
+      required: false,
+      in: "query",
+      type: "string",
+    },
     "body.jobMaterial": {
       name: "jobMaterial",
       description: "jobMaterial",
@@ -123016,6 +123184,12 @@ export default {
       in: "query",
       type: "string",
     },
+    "rowFilter.quoteMakeMethod.isDemo": {
+      name: "isDemo",
+      required: false,
+      in: "query",
+      type: "string",
+    },
     "body.purchaseOrders": {
       name: "purchaseOrders",
       description: "purchaseOrders",
@@ -125340,6 +125514,12 @@ export default {
     },
     "rowFilter.workCenter.tags": {
       name: "tags",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.workCenter.isDemo": {
+      name: "isDemo",
       required: false,
       in: "query",
       type: "string",

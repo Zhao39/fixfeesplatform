@@ -14361,6 +14361,7 @@ export type Database = {
           createdBy: string
           customFields: Json | null
           id: string
+          isDemo: boolean | null
           itemId: string
           status: Database["public"]["Enums"]["makeMethodStatus"]
           tags: string[] | null
@@ -14374,6 +14375,7 @@ export type Database = {
           createdBy: string
           customFields?: Json | null
           id?: string
+          isDemo?: boolean | null
           itemId: string
           status?: Database["public"]["Enums"]["makeMethodStatus"]
           tags?: string[] | null
@@ -14387,6 +14389,7 @@ export type Database = {
           createdBy?: string
           customFields?: Json | null
           id?: string
+          isDemo?: boolean | null
           itemId?: string
           status?: Database["public"]["Enums"]["makeMethodStatus"]
           tags?: string[] | null
@@ -15360,6 +15363,7 @@ export type Database = {
           createdBy: string
           customFields: Json | null
           id: string
+          isDemo: boolean | null
           itemId: string
           itemType: string
           kit: boolean
@@ -15383,6 +15387,7 @@ export type Database = {
           createdBy: string
           customFields?: Json | null
           id?: string
+          isDemo?: boolean | null
           itemId: string
           itemType?: string
           kit?: boolean
@@ -15406,6 +15411,7 @@ export type Database = {
           createdBy?: string
           customFields?: Json | null
           id?: string
+          isDemo?: boolean | null
           itemId?: string
           itemType?: string
           kit?: boolean
@@ -15637,6 +15643,7 @@ export type Database = {
           customFields: Json | null
           description: string
           id: string
+          isDemo: boolean | null
           laborTime: number
           laborUnit: Database["public"]["Enums"]["factor"]
           machineTime: number
@@ -15666,6 +15673,7 @@ export type Database = {
           customFields?: Json | null
           description: string
           id?: string
+          isDemo?: boolean | null
           laborTime?: number
           laborUnit?: Database["public"]["Enums"]["factor"]
           machineTime?: number
@@ -15695,6 +15703,7 @@ export type Database = {
           customFields?: Json | null
           description?: string
           id?: string
+          isDemo?: boolean | null
           laborTime?: number
           laborUnit?: Database["public"]["Enums"]["factor"]
           machineTime?: number
@@ -22139,6 +22148,7 @@ export type Database = {
           customFields: Json | null
           defaultStandardFactor: Database["public"]["Enums"]["factor"]
           id: string
+          isDemo: boolean | null
           name: string
           processType: Database["public"]["Enums"]["processType"]
           tags: string[] | null
@@ -22153,6 +22163,7 @@ export type Database = {
           customFields?: Json | null
           defaultStandardFactor: Database["public"]["Enums"]["factor"]
           id?: string
+          isDemo?: boolean | null
           name: string
           processType?: Database["public"]["Enums"]["processType"]
           tags?: string[] | null
@@ -22167,6 +22178,7 @@ export type Database = {
           customFields?: Json | null
           defaultStandardFactor?: Database["public"]["Enums"]["factor"]
           id?: string
+          isDemo?: boolean | null
           name?: string
           processType?: Database["public"]["Enums"]["processType"]
           tags?: string[] | null
@@ -26441,6 +26453,7 @@ export type Database = {
           createdBy: string
           customFields: Json | null
           id: string
+          isDemo: boolean | null
           itemId: string
           parentMaterialId: string | null
           quantityPerParent: number
@@ -26457,6 +26470,7 @@ export type Database = {
           createdBy: string
           customFields?: Json | null
           id?: string
+          isDemo?: boolean | null
           itemId: string
           parentMaterialId?: string | null
           quantityPerParent?: number
@@ -26473,6 +26487,7 @@ export type Database = {
           createdBy?: string
           customFields?: Json | null
           id?: string
+          isDemo?: boolean | null
           itemId?: string
           parentMaterialId?: string | null
           quantityPerParent?: number
@@ -26683,6 +26698,7 @@ export type Database = {
           customFields: Json | null
           description: string
           id: string
+          isDemo: boolean | null
           itemId: string
           itemType: string
           kit: boolean
@@ -26709,6 +26725,7 @@ export type Database = {
           customFields?: Json | null
           description: string
           id?: string
+          isDemo?: boolean | null
           itemId: string
           itemType?: string
           kit?: boolean
@@ -26735,6 +26752,7 @@ export type Database = {
           customFields?: Json | null
           description?: string
           id?: string
+          isDemo?: boolean | null
           itemId?: string
           itemType?: string
           kit?: boolean
@@ -26982,6 +27000,7 @@ export type Database = {
           customFields: Json | null
           description: string | null
           id: string
+          isDemo: boolean | null
           laborRate: number
           laborTime: number
           laborUnit: Database["public"]["Enums"]["factor"]
@@ -27016,6 +27035,7 @@ export type Database = {
           customFields?: Json | null
           description?: string | null
           id?: string
+          isDemo?: boolean | null
           laborRate?: number
           laborTime?: number
           laborUnit?: Database["public"]["Enums"]["factor"]
@@ -27050,6 +27070,7 @@ export type Database = {
           customFields?: Json | null
           description?: string | null
           id?: string
+          isDemo?: boolean | null
           laborRate?: number
           laborTime?: number
           laborUnit?: Database["public"]["Enums"]["factor"]
@@ -39949,6 +39970,7 @@ export type Database = {
           defaultStandardFactor: Database["public"]["Enums"]["factor"]
           description: string | null
           id: string
+          isDemo: boolean | null
           laborRate: number
           locationId: string | null
           machineRate: number
@@ -39968,6 +39990,7 @@ export type Database = {
           defaultStandardFactor?: Database["public"]["Enums"]["factor"]
           description?: string | null
           id?: string
+          isDemo?: boolean | null
           laborRate?: number
           locationId?: string | null
           machineRate?: number
@@ -39987,6 +40010,7 @@ export type Database = {
           defaultStandardFactor?: Database["public"]["Enums"]["factor"]
           description?: string | null
           id?: string
+          isDemo?: boolean | null
           laborRate?: number
           locationId?: string | null
           machineRate?: number
@@ -40117,6 +40141,7 @@ export type Database = {
           companyId: string
           createdAt: string
           createdBy: string
+          isDemo: boolean | null
           processId: string
           updatedAt: string | null
           updatedBy: string | null
@@ -40126,6 +40151,7 @@ export type Database = {
           companyId: string
           createdAt?: string
           createdBy: string
+          isDemo?: boolean | null
           processId: string
           updatedAt?: string | null
           updatedBy?: string | null
@@ -40135,6 +40161,7 @@ export type Database = {
           companyId?: string
           createdAt?: string
           createdBy?: string
+          isDemo?: boolean | null
           processId?: string
           updatedAt?: string | null
           updatedBy?: string | null
@@ -47005,14 +47032,14 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["customerCountryCode"]
+            columns: ["supplierCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
           },
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["supplierCountryCode"]
+            columns: ["customerCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
@@ -49696,14 +49723,14 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["customerCountryCode"]
+            columns: ["invoiceCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
           },
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["invoiceCountryCode"]
+            columns: ["customerCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]

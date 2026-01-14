@@ -70,6 +70,17 @@ ALTER TABLE "salesRfq" ADD COLUMN IF NOT EXISTS "isDemo" BOOLEAN DEFAULT FALSE;
 ALTER TABLE "salesRfqLine" ADD COLUMN IF NOT EXISTS "isDemo" BOOLEAN DEFAULT FALSE;
 ALTER TABLE "supplierInteraction" ADD COLUMN IF NOT EXISTS "isDemo" BOOLEAN DEFAULT FALSE;
 
+-- Add demo tracking columns for manufacturing tables
+ALTER TABLE "makeMethod" ADD COLUMN IF NOT EXISTS "isDemo" BOOLEAN DEFAULT FALSE;
+ALTER TABLE "methodMaterial" ADD COLUMN IF NOT EXISTS "isDemo" BOOLEAN DEFAULT FALSE;
+ALTER TABLE "methodOperation" ADD COLUMN IF NOT EXISTS "isDemo" BOOLEAN DEFAULT FALSE;
+ALTER TABLE "workCenter" ADD COLUMN IF NOT EXISTS "isDemo" BOOLEAN DEFAULT FALSE;
+ALTER TABLE "process" ADD COLUMN IF NOT EXISTS "isDemo" BOOLEAN DEFAULT FALSE;
+ALTER TABLE "workCenterProcess" ADD COLUMN IF NOT EXISTS "isDemo" BOOLEAN DEFAULT FALSE;
+ALTER TABLE "quoteMakeMethod" ADD COLUMN IF NOT EXISTS "isDemo" BOOLEAN DEFAULT FALSE;
+ALTER TABLE "quoteMaterial" ADD COLUMN IF NOT EXISTS "isDemo" BOOLEAN DEFAULT FALSE;
+ALTER TABLE "quoteOperation" ADD COLUMN IF NOT EXISTS "isDemo" BOOLEAN DEFAULT FALSE;
+
 -- Template schema
 CREATE SCHEMA IF NOT EXISTS demo_templates;
 REVOKE ALL ON SCHEMA demo_templates FROM PUBLIC;
@@ -182,6 +193,79 @@ CREATE TABLE IF NOT EXISTS demo_templates."purchaseOrderLine" (
   PRIMARY KEY("templateSetId", "templateRowId"),
   FOREIGN KEY ("templateSetId", "tplPurchaseOrderId") REFERENCES demo_templates."purchaseOrder"("templateSetId", "templateRowId"),
   FOREIGN KEY ("templateSetId", "tplItemId") REFERENCES demo_templates."item"("templateSetId", "templateRowId")
+);
+
+-- Manufacturing template tables
+
+CREATE TABLE IF NOT EXISTS demo_templates."workCenter" (
+  "templateSetId"         TEXT NOT NULL REFERENCES "templateSet"("id") ON DELETE CASCADE,
+  "templateRowId"         TEXT NOT NULL,
+  "name"                  TEXT NOT NULL,
+  "description"           TEXT,
+  "machineRate"           NUMERIC NOT NULL DEFAULT 0,
+  "overheadRate"          NUMERIC NOT NULL DEFAULT 0,
+  "laborRate"             NUMERIC NOT NULL DEFAULT 0,
+  "defaultStandardFactor" TEXT NOT NULL DEFAULT 'Minutes/Piece',
+  PRIMARY KEY("templateSetId", "templateRowId")
+);
+
+CREATE TABLE IF NOT EXISTS demo_templates."process" (
+  "templateSetId"         TEXT NOT NULL REFERENCES "templateSet"("id") ON DELETE CASCADE,
+  "templateRowId"         TEXT NOT NULL,
+  "name"                  TEXT NOT NULL,
+  "defaultStandardFactor" TEXT NOT NULL DEFAULT 'Minutes/Piece',
+  PRIMARY KEY("templateSetId", "templateRowId")
+);
+
+CREATE TABLE IF NOT EXISTS demo_templates."workCenterProcess" (
+  "templateSetId"    TEXT NOT NULL REFERENCES "templateSet"("id") ON DELETE CASCADE,
+  "tplWorkCenterId"  TEXT NOT NULL,
+  "tplProcessId"     TEXT NOT NULL,
+  PRIMARY KEY("templateSetId", "tplWorkCenterId", "tplProcessId"),
+  FOREIGN KEY ("templateSetId", "tplWorkCenterId") REFERENCES demo_templates."workCenter"("templateSetId", "templateRowId"),
+  FOREIGN KEY ("templateSetId", "tplProcessId") REFERENCES demo_templates."process"("templateSetId", "templateRowId")
+);
+
+CREATE TABLE IF NOT EXISTS demo_templates."makeMethod" (
+  "templateSetId"    TEXT NOT NULL REFERENCES "templateSet"("id") ON DELETE CASCADE,
+  "templateRowId"    TEXT NOT NULL,
+  "tplItemId"        TEXT NOT NULL,
+  PRIMARY KEY("templateSetId", "templateRowId"),
+  FOREIGN KEY ("templateSetId", "tplItemId") REFERENCES demo_templates."item"("templateSetId", "templateRowId")
+);
+
+CREATE TABLE IF NOT EXISTS demo_templates."methodMaterial" (
+  "templateSetId"           TEXT NOT NULL REFERENCES "templateSet"("id") ON DELETE CASCADE,
+  "templateRowId"           TEXT NOT NULL,
+  "tplMakeMethodId"         TEXT NOT NULL,
+  "tplItemId"               TEXT NOT NULL,
+  "methodType"              TEXT NOT NULL DEFAULT 'Buy',
+  "tplMaterialMakeMethodId" TEXT,
+  "quantity"                NUMERIC NOT NULL,
+  "unitOfMeasureCode"       TEXT NOT NULL DEFAULT 'EA',
+  PRIMARY KEY("templateSetId", "templateRowId"),
+  FOREIGN KEY ("templateSetId", "tplMakeMethodId") REFERENCES demo_templates."makeMethod"("templateSetId", "templateRowId"),
+  FOREIGN KEY ("templateSetId", "tplItemId") REFERENCES demo_templates."item"("templateSetId", "templateRowId")
+);
+
+CREATE TABLE IF NOT EXISTS demo_templates."methodOperation" (
+  "templateSetId"      TEXT NOT NULL REFERENCES "templateSet"("id") ON DELETE CASCADE,
+  "templateRowId"      TEXT NOT NULL,
+  "tplMakeMethodId"    TEXT NOT NULL,
+  "tplProcessId"       TEXT NOT NULL,
+  "tplWorkCenterId"    TEXT,
+  "order"              DOUBLE PRECISION NOT NULL DEFAULT 1,
+  "operationOrder"     TEXT NOT NULL DEFAULT 'After Previous',
+  "description"        TEXT,
+  "setupTime"          NUMERIC NOT NULL DEFAULT 0,
+  "setupUnit"          TEXT NOT NULL DEFAULT 'Total Hours',
+  "laborTime"          NUMERIC NOT NULL DEFAULT 0,
+  "laborUnit"          TEXT NOT NULL DEFAULT 'Hours/Piece',
+  "machineTime"        NUMERIC NOT NULL DEFAULT 0,
+  "machineUnit"        TEXT NOT NULL DEFAULT 'Hours/Piece',
+  PRIMARY KEY("templateSetId", "templateRowId"),
+  FOREIGN KEY ("templateSetId", "tplMakeMethodId") REFERENCES demo_templates."makeMethod"("templateSetId", "templateRowId"),
+  FOREIGN KEY ("templateSetId", "tplProcessId") REFERENCES demo_templates."process"("templateSetId", "templateRowId")
 );
 
 GRANT ALL ON ALL TABLES IN SCHEMA demo_templates TO service_role;
