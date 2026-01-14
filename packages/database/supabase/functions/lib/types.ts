@@ -10280,7 +10280,6 @@ export type Database = {
       }
       jobMaterial: {
         Row: {
-          bomId: string | null
           companyId: string
           createdAt: string
           createdBy: string
@@ -10310,7 +10309,6 @@ export type Database = {
           updatedBy: string | null
         }
         Insert: {
-          bomId?: string | null
           companyId: string
           createdAt?: string
           createdBy: string
@@ -10340,7 +10338,6 @@ export type Database = {
           updatedBy?: string | null
         }
         Update: {
-          bomId?: string | null
           companyId?: string
           createdAt?: string
           createdBy?: string
@@ -10602,6 +10599,7 @@ export type Database = {
           machineRate: number | null
           machineTime: number
           machineUnit: Database["public"]["Enums"]["factor"]
+          modelUploadId: string | null
           operationLeadTime: number
           operationMinimumCost: number
           operationOrder: Database["public"]["Enums"]["methodOperationOrder"]
@@ -10646,6 +10644,7 @@ export type Database = {
           machineRate?: number | null
           machineTime?: number
           machineUnit?: Database["public"]["Enums"]["factor"]
+          modelUploadId?: string | null
           operationLeadTime?: number
           operationMinimumCost?: number
           operationOrder?: Database["public"]["Enums"]["methodOperationOrder"]
@@ -10690,6 +10689,7 @@ export type Database = {
           machineRate?: number | null
           machineTime?: number
           machineUnit?: Database["public"]["Enums"]["factor"]
+          modelUploadId?: string | null
           operationLeadTime?: number
           operationMinimumCost?: number
           operationOrder?: Database["public"]["Enums"]["methodOperationOrder"]
@@ -10855,6 +10855,27 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "jobs"
             referencedColumns: ["jobMakeMethodId"]
+          },
+          {
+            foreignKeyName: "jobOperation_modelUploadId_fkey"
+            columns: ["modelUploadId"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["modelId"]
+          },
+          {
+            foreignKeyName: "jobOperation_modelUploadId_fkey"
+            columns: ["modelUploadId"]
+            isOneToOne: false
+            referencedRelation: "modelUpload"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jobOperation_modelUploadId_fkey"
+            columns: ["modelUploadId"]
+            isOneToOne: false
+            referencedRelation: "salesRfqLines"
+            referencedColumns: ["modelId"]
           },
           {
             foreignKeyName: "jobOperation_procedureId_fkey"
@@ -11337,6 +11358,9 @@ export type Database = {
       }
       jobOperationStep: {
         Row: {
+          assemblyNodeId: string | null
+          assemblyNodeName: string | null
+          assemblyNodeQuantity: number | null
           companyId: string
           createdAt: string
           createdBy: string
@@ -11358,6 +11382,9 @@ export type Database = {
           updatedBy: string | null
         }
         Insert: {
+          assemblyNodeId?: string | null
+          assemblyNodeName?: string | null
+          assemblyNodeQuantity?: number | null
           companyId: string
           createdAt?: string
           createdBy: string
@@ -11379,6 +11406,9 @@ export type Database = {
           updatedBy?: string | null
         }
         Update: {
+          assemblyNodeId?: string | null
+          assemblyNodeName?: string | null
+          assemblyNodeQuantity?: number | null
           companyId?: string
           createdAt?: string
           createdBy?: string
@@ -15188,7 +15218,6 @@ export type Database = {
       }
       methodMaterial: {
         Row: {
-          bomId: string | null
           companyId: string
           createdAt: string
           createdBy: string
@@ -15212,7 +15241,6 @@ export type Database = {
           updatedBy: string | null
         }
         Insert: {
-          bomId?: string | null
           companyId: string
           createdAt?: string
           createdBy: string
@@ -15236,7 +15264,6 @@ export type Database = {
           updatedBy?: string | null
         }
         Update: {
-          bomId?: string | null
           companyId?: string
           createdAt?: string
           createdBy?: string
@@ -16183,6 +16210,7 @@ export type Database = {
       }
       modelUpload: {
         Row: {
+          assemblyMetadata: Json | null
           autodeskUrn: string | null
           companyId: string
           createdAt: string | null
@@ -16190,12 +16218,16 @@ export type Database = {
           id: string
           modelPath: string
           name: string | null
+          parsedAt: string | null
+          parsingError: string | null
+          parsingStatus: string | null
           size: number | null
           thumbnailPath: string | null
           updatedAt: string | null
           updatedBy: string | null
         }
         Insert: {
+          assemblyMetadata?: Json | null
           autodeskUrn?: string | null
           companyId: string
           createdAt?: string | null
@@ -16203,12 +16235,16 @@ export type Database = {
           id?: string
           modelPath: string
           name?: string | null
+          parsedAt?: string | null
+          parsingError?: string | null
+          parsingStatus?: string | null
           size?: number | null
           thumbnailPath?: string | null
           updatedAt?: string | null
           updatedBy?: string | null
         }
         Update: {
+          assemblyMetadata?: Json | null
           autodeskUrn?: string | null
           companyId?: string
           createdAt?: string | null
@@ -16216,6 +16252,9 @@ export type Database = {
           id?: string
           modelPath?: string
           name?: string | null
+          parsedAt?: string | null
+          parsingError?: string | null
+          parsingStatus?: string | null
           size?: number | null
           thumbnailPath?: string | null
           updatedAt?: string | null
@@ -19907,21 +19946,21 @@ export type Database = {
       opportunity: {
         Row: {
           companyId: string
-          customerId: string
+          customerId: string | null
           id: string
           purchaseOrderDocumentPath: string | null
           requestForQuoteDocumentPath: string | null
         }
         Insert: {
           companyId: string
-          customerId: string
+          customerId?: string | null
           id?: string
           purchaseOrderDocumentPath?: string | null
           requestForQuoteDocumentPath?: string | null
         }
         Update: {
           companyId?: string
-          customerId?: string
+          customerId?: string | null
           id?: string
           purchaseOrderDocumentPath?: string | null
           requestForQuoteDocumentPath?: string | null
@@ -26495,7 +26534,6 @@ export type Database = {
       }
       quoteMaterial: {
         Row: {
-          bomId: string | null
           companyId: string
           createdAt: string
           createdBy: string
@@ -26522,7 +26560,6 @@ export type Database = {
           updatedBy: string | null
         }
         Insert: {
-          bomId?: string | null
           companyId: string
           createdAt?: string
           createdBy: string
@@ -26549,7 +26586,6 @@ export type Database = {
           updatedBy?: string | null
         }
         Update: {
-          bomId?: string | null
           companyId?: string
           createdAt?: string
           createdBy?: string
@@ -31333,174 +31369,6 @@ export type Database = {
             referencedColumns: ["userId"]
           },
         ]
-      }
-      searchIndex_BJiGdDNuetJ1iyE8USN7AD: {
-        Row: {
-          createdAt: string
-          description: string | null
-          entityId: string
-          entityType: string
-          id: number
-          link: string
-          metadata: Json | null
-          searchVector: unknown
-          tags: string[] | null
-          title: string
-          updatedAt: string | null
-        }
-        Insert: {
-          createdAt?: string
-          description?: string | null
-          entityId: string
-          entityType: string
-          id?: number
-          link: string
-          metadata?: Json | null
-          searchVector?: unknown
-          tags?: string[] | null
-          title: string
-          updatedAt?: string | null
-        }
-        Update: {
-          createdAt?: string
-          description?: string | null
-          entityId?: string
-          entityType?: string
-          id?: number
-          link?: string
-          metadata?: Json | null
-          searchVector?: unknown
-          tags?: string[] | null
-          title?: string
-          updatedAt?: string | null
-        }
-        Relationships: []
-      }
-      searchIndex_L4saDKMCpFQurK9c3bEr1G: {
-        Row: {
-          createdAt: string
-          description: string | null
-          entityId: string
-          entityType: string
-          id: number
-          link: string
-          metadata: Json | null
-          searchVector: unknown
-          tags: string[] | null
-          title: string
-          updatedAt: string | null
-        }
-        Insert: {
-          createdAt?: string
-          description?: string | null
-          entityId: string
-          entityType: string
-          id?: number
-          link: string
-          metadata?: Json | null
-          searchVector?: unknown
-          tags?: string[] | null
-          title: string
-          updatedAt?: string | null
-        }
-        Update: {
-          createdAt?: string
-          description?: string | null
-          entityId?: string
-          entityType?: string
-          id?: number
-          link?: string
-          metadata?: Json | null
-          searchVector?: unknown
-          tags?: string[] | null
-          title?: string
-          updatedAt?: string | null
-        }
-        Relationships: []
-      }
-      searchIndex_Nrc78GJXti5gro8G5m3k9u: {
-        Row: {
-          createdAt: string
-          description: string | null
-          entityId: string
-          entityType: string
-          id: number
-          link: string
-          metadata: Json | null
-          searchVector: unknown
-          tags: string[] | null
-          title: string
-          updatedAt: string | null
-        }
-        Insert: {
-          createdAt?: string
-          description?: string | null
-          entityId: string
-          entityType: string
-          id?: number
-          link: string
-          metadata?: Json | null
-          searchVector?: unknown
-          tags?: string[] | null
-          title: string
-          updatedAt?: string | null
-        }
-        Update: {
-          createdAt?: string
-          description?: string | null
-          entityId?: string
-          entityType?: string
-          id?: number
-          link?: string
-          metadata?: Json | null
-          searchVector?: unknown
-          tags?: string[] | null
-          title?: string
-          updatedAt?: string | null
-        }
-        Relationships: []
-      }
-      searchIndex_TzPMV5bvte7aRhGwLwmjs9: {
-        Row: {
-          createdAt: string
-          description: string | null
-          entityId: string
-          entityType: string
-          id: number
-          link: string
-          metadata: Json | null
-          searchVector: unknown
-          tags: string[] | null
-          title: string
-          updatedAt: string | null
-        }
-        Insert: {
-          createdAt?: string
-          description?: string | null
-          entityId: string
-          entityType: string
-          id?: number
-          link: string
-          metadata?: Json | null
-          searchVector?: unknown
-          tags?: string[] | null
-          title: string
-          updatedAt?: string | null
-        }
-        Update: {
-          createdAt?: string
-          description?: string | null
-          entityId?: string
-          entityType?: string
-          id?: number
-          link?: string
-          metadata?: Json | null
-          searchVector?: unknown
-          tags?: string[] | null
-          title?: string
-          updatedAt?: string | null
-        }
-        Relationships: []
       }
       searchIndexRegistry: {
         Row: {
@@ -42916,7 +42784,6 @@ export type Database = {
       }
       jobMaterialWithMakeMethodId: {
         Row: {
-          bomId: string | null
           companyId: string | null
           createdAt: string | null
           createdBy: string | null
@@ -42943,6 +42810,7 @@ export type Database = {
           requiresSerialTracking: boolean | null
           scrapQuantity: number | null
           shelfId: string | null
+          shelfName: string | null
           unitCost: number | null
           unitOfMeasureCode: string | null
           updatedAt: string | null
@@ -43814,6 +43682,7 @@ export type Database = {
         Row: {
           active: boolean | null
           actualTime: number | null
+          assemblyMetadata: Json | null
           assignee: string | null
           autodeskUrn: string | null
           companyId: string | null
@@ -43844,6 +43713,10 @@ export type Database = {
           modelUploadId: string | null
           name: string | null
           notes: Json | null
+          parsedAt: string | null
+          parsingError: string | null
+          parsingStatus: string | null
+          priority: number | null
           productionQuantity: number | null
           quantity: number | null
           quantityComplete: number | null
@@ -45548,14 +45421,14 @@ export type Database = {
           },
           {
             foreignKeyName: "partner_id_fkey"
-            columns: ["id"]
+            columns: ["supplierLocationId"]
             isOneToOne: false
             referencedRelation: "supplierLocation"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "partner_id_fkey"
-            columns: ["supplierLocationId"]
+            columns: ["id"]
             isOneToOne: false
             referencedRelation: "supplierLocation"
             referencedColumns: ["id"]
@@ -45600,6 +45473,7 @@ export type Database = {
       parts: {
         Row: {
           active: boolean | null
+          assemblyMetadata: Json | null
           assignee: string | null
           companyId: string | null
           createdAt: string | null
@@ -45608,7 +45482,6 @@ export type Database = {
           defaultMethodType: Database["public"]["Enums"]["methodType"] | null
           description: string | null
           id: string | null
-          itemPostingGroupId: string | null
           itemTrackingType:
             | Database["public"]["Enums"]["itemTrackingType"]
             | null
@@ -45617,6 +45490,9 @@ export type Database = {
           modelSize: number | null
           name: string | null
           notes: Json | null
+          parsedAt: string | null
+          parsingError: string | null
+          parsingStatus: string | null
           readableId: string | null
           readableIdWithRevision: string | null
           replenishmentSystem:
@@ -45772,13 +45648,6 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
-          },
-          {
-            foreignKeyName: "itemCost_itemPostingGroupId_fkey"
-            columns: ["itemPostingGroupId"]
-            isOneToOne: false
-            referencedRelation: "itemPostingGroup"
-            referencedColumns: ["id"]
           },
         ]
       }
@@ -48154,7 +48023,6 @@ export type Database = {
       }
       quoteMaterialWithMakeMethodId: {
         Row: {
-          bomId: string | null
           companyId: string | null
           createdAt: string | null
           createdBy: string | null
@@ -50163,14 +50031,14 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["customerCountryCode"]
+            columns: ["paymentCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
           },
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["paymentCountryCode"]
+            columns: ["customerCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
@@ -53373,7 +53241,6 @@ export type Database = {
       get_job_method: {
         Args: { jid: string }
         Returns: {
-          bomId: string
           description: string
           isRoot: boolean
           itemId: string
@@ -53397,7 +53264,6 @@ export type Database = {
       get_job_methods_by_method_id: {
         Args: { mid: string }
         Returns: {
-          bomId: string
           description: string
           isRoot: boolean
           itemId: string
@@ -53695,7 +53561,6 @@ export type Database = {
       get_method_tree: {
         Args: { uid: string }
         Returns: {
-          bomId: string
           description: string
           externalId: Json
           isRoot: boolean
@@ -53757,6 +53622,7 @@ export type Database = {
         Args: { item_id: string }
         Returns: {
           active: boolean
+          assemblyMetadata: Json
           assignee: string
           companyId: string
           createdAt: string
@@ -53773,6 +53639,9 @@ export type Database = {
           modelSize: number
           name: string
           notes: Json
+          parsedAt: string
+          parsingError: string
+          parsingStatus: string
           readableId: string
           readableIdWithRevision: string
           replenishmentSystem: Database["public"]["Enums"]["itemReplenishmentSystem"]
@@ -54033,7 +53902,6 @@ export type Database = {
       get_quote_methods: {
         Args: { qid: string }
         Returns: {
-          bomId: string
           description: string
           externalId: Json
           isRoot: boolean
@@ -54059,7 +53927,6 @@ export type Database = {
       get_quote_methods_by_method_id: {
         Args: { mid: string }
         Returns: {
-          bomId: string
           description: string
           externalId: Json
           isRoot: boolean
@@ -54412,6 +54279,10 @@ export type Database = {
         Returns: string
       }
       populate_company_search_index: {
+        Args: { p_company_id: string }
+        Returns: undefined
+      }
+      populate_sales_search_results: {
         Args: { p_company_id: string }
         Returns: undefined
       }

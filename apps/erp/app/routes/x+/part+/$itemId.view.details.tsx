@@ -7,7 +7,7 @@ import { Spinner, VStack } from "@carbon/react";
 import { Suspense } from "react";
 import type { ActionFunctionArgs } from "react-router";
 import { Await, redirect, useParams } from "react-router";
-import { CadModel } from "~/components";
+import { AssemblyMetadata, CadModel } from "~/components";
 import { usePermissions, useRouteData } from "~/hooks";
 import type { ItemFile, PartSummary } from "~/modules/items";
 import { partValidator, upsertPart } from "~/modules/items";
@@ -100,7 +100,24 @@ export default function PartDetailsRoute() {
             metadata={{ itemId }}
             modelPath={partData?.partSummary?.modelPath ?? null}
             title="CAD Model"
+            colorByPart={
+              partData?.partSummary?.parsingStatus === "completed" &&
+              !!(partData?.partSummary?.assemblyMetadata as any)?.isAssembly
+            }
           />
+          {partData?.partSummary?.parsingStatus && (
+            <AssemblyMetadata
+              parsingStatus={
+                partData.partSummary.parsingStatus as
+                  | "pending"
+                  | "processing"
+                  | "completed"
+                  | "failed"
+              }
+              assemblyMetadata={partData.partSummary.assemblyMetadata as any}
+              parsingError={partData.partSummary.parsingError}
+            />
+          )}
           <ItemRiskRegister itemId={itemId} />
         </>
       )}
