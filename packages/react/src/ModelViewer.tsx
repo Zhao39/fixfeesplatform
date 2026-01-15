@@ -21,7 +21,11 @@ export function ModelViewer({
   className,
   withProperties = true,
   onDataUrl,
-  resetZoomButton = true
+  resetZoomButton = true,
+  preserveColors = false,
+  enableSelection = false,
+  highlightColor = "#8ec9f0",
+  onPartSelected
 }: {
   file: File | null;
   url: string | null;
@@ -31,6 +35,14 @@ export function ModelViewer({
   onDataUrl?: (dataUrl: string) => void;
   resetZoomButton?: boolean;
   className?: string;
+  /** When true, preserves original colors from the model file (e.g., STEP colors) */
+  preserveColors?: boolean;
+  /** When true, enables click-to-select parts with highlighting */
+  enableSelection?: boolean;
+  /** Color used to highlight selected parts (default: light blue) */
+  highlightColor?: `#${string}`;
+  /** Callback when a part is selected or deselected */
+  onPartSelected?: (partId: string | null, partName: string | null) => void;
 }) {
   const parentDiv = useRef<HTMLDivElement>(null);
   const viewerRef = useRef<OV.EmbeddedViewer | null>(null);
@@ -45,6 +57,7 @@ export function ModelViewer({
     volume: number;
     dimensions: { x: number; y: number; z: number };
   } | null>(null);
+  const [selectedMeshId, setSelectedMeshId] = useState<string | null>(null);
 
   useMount(() => {
     if (file || url) {
@@ -61,12 +74,18 @@ export function ModelViewer({
           backgroundColor: isDarkMode
             ? new OV.RGBAColor(20, 22, 25, 0)
             : new OV.RGBAColor(255, 255, 255, 0),
-          defaultColor: new OV.RGBColor(0, 125, 125),
+          // Only set defaultColor when not preserving colors - this allows model colors to show
+          ...(preserveColors
+            ? {}
+            : { defaultColor: new OV.RGBColor(151, 151, 165) }),
           onModelLoaded: () => {
             try {
               if (viewerRef.current) {
                 const viewer3D = viewerRef.current.GetViewer();
-                updateColor(color ?? (isDarkMode ? darkColor : lightColor));
+                // Only override colors if not preserving original colors
+                if (!preserveColors) {
+                  updateColor(color ?? (isDarkMode ? darkColor : lightColor));
+                }
 
                 viewer3D.Resize(
                   parentDiv.current?.clientWidth,
@@ -132,6 +151,38 @@ export function ModelViewer({
                     volume,
                     dimensions
                   });
+                }
+
+                // Set up click handler for part selection
+                if (enableSelection) {
+                  viewer3D.SetMouseClickHandler(
+                    (
+                      button: number,
+                      mouseCoordinates: { x: number; y: number }
+                    ) => {
+                      if (button !== 1) return; // Left click only
+
+                      const meshUserData = viewer3D.GetMeshUserDataUnderMouse(
+                        OV.IntersectionMode.MeshAndLine,
+                        mouseCoordinates
+                      );
+
+                      if (meshUserData === null) {
+                        // Clicked on empty space - deselect
+                        setSelectedMeshId(null);
+                        onPartSelected?.(null, null);
+                      } else {
+                        const meshId =
+                          meshUserData.originalMeshInstance?.id?.GetKey?.() ??
+                          null;
+                        const meshName =
+                          meshUserData.originalMeshInstance?.GetName?.() ??
+                          null;
+                        setSelectedMeshId(meshId);
+                        onPartSelected?.(meshId, meshName);
+                      }
+                    }
+                  );
                 }
               }
 
@@ -422,10 +473,11 @@ export function ModelViewer({
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
-    if (color) {
+    // Only apply explicit color prop when not preserving colors
+    if (color && !preserveColors) {
       updateColor(color);
     }
-  }, [color]);
+  }, [color, preserveColors]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   useEffect(() => {
@@ -452,11 +504,35 @@ export function ModelViewer({
           : new OV.RGBAColor(255, 255, 255, 255)
       );
 
-      if (!color) {
+      // Only update colors if not preserving original colors
+      if (!preserveColors && !color) {
         updateColor(isDarkMode ? darkColor : lightColor);
       }
     }
-  }, [isDarkMode, color]);
+  }, [isDarkMode, color, preserveColors]);
+
+  // Highlight selected mesh when selection changes
+  // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
+  useEffect(() => {
+    if (!enableSelection || !viewerRef.current || isLoading) return;
+
+    const viewer3D = viewerRef.current.GetViewer();
+    if (!viewer3D) return;
+
+    // Parse highlight color to RGB components
+    const hex = highlightColor.replace("#", "");
+    const r = parseInt(hex.substring(0, 2), 16);
+    const g = parseInt(hex.substring(2, 4), 16);
+    const b = parseInt(hex.substring(4, 6), 16);
+    const ovHighlightColor = new OV.RGBColor(r, g, b);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    viewer3D.SetMeshesHighlight(ovHighlightColor, (meshUserData: any) => {
+      if (selectedMeshId === null) return false;
+      const meshId = meshUserData?.originalMeshInstance?.id?.GetKey?.();
+      return meshId === selectedMeshId;
+    });
+  }, [selectedMeshId, enableSelection, highlightColor, isLoading]);
 
   const { locale } = useLocale();
 
