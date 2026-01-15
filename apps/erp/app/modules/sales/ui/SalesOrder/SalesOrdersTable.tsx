@@ -21,6 +21,7 @@ import {
   today
 } from "@internationalized/date";
 import type { ColumnDef } from "@tanstack/react-table";
+import type { ReactNode } from "react";
 import { memo, useMemo, useState } from "react";
 import {
   LuBookMarked,
@@ -69,6 +70,23 @@ type SalesOrdersTableProps = {
   data: SalesOrder[];
   count: number;
 };
+
+const IconWithTooltip = ({
+  icon,
+  tooltip
+}: {
+  icon: ReactNode;
+  tooltip: string;
+}) => (
+  <Tooltip>
+    <TooltipTrigger asChild>
+      <span className="inline-flex">{icon}</span>
+    </TooltipTrigger>
+    <TooltipContent>
+      <p>{tooltip}</p>
+    </TooltipContent>
+  </Tooltip>
+);
 
 const SalesOrdersTable = memo(({ data, count }: SalesOrdersTableProps) => {
   const permissions = usePermissions();
@@ -214,11 +232,20 @@ const SalesOrdersTable = memo(({ data, count }: SalesOrdersTableProps) => {
           });
 
           const statusIcon = everyMadeLineIsCompleted ? (
-            <LuCheck className="w-3 h-3 mr-2 text-emerald-500" />
+            <IconWithTooltip
+              icon={<LuCheck className="w-3 h-3 mr-2 text-emerald-500" />}
+              tooltip="All jobs completed"
+            />
           ) : everyMadeLineHasSufficientJobs ? (
-            <LuLoader className="w-3 h-3 mr-2 text-orange-500" />
+            <IconWithTooltip
+              icon={<LuLoader className="w-3 h-3 mr-2 text-orange-500" />}
+              tooltip="Jobs in progress"
+            />
           ) : (
-            <LuTriangleAlert className="w-3 h-3 mr-2 text-red-500" />
+            <IconWithTooltip
+              icon={<LuTriangleAlert className="w-3 h-3 mr-2 text-red-500" />}
+              tooltip="Not enough jobs to cover quantity"
+            />
           );
 
           return (
@@ -232,8 +259,10 @@ const SalesOrdersTable = memo(({ data, count }: SalesOrdersTableProps) => {
             >
               {!everyMadeLineHasSufficientJobs && jobs.length === 0 && (
                 <Tooltip>
-                  <TooltipTrigger>
-                    <LuTriangleAlert className="w-3 h-3 mr-2 text-red-500" />
+                  <TooltipTrigger asChild>
+                    <span className="inline-flex">
+                      <LuTriangleAlert className="w-3 h-3 mr-2 text-red-500" />
+                    </span>
                   </TooltipTrigger>
                   <TooltipContent side="left">
                     <p>Not enough jobs to cover quantity</p>

@@ -17,7 +17,26 @@ type SalesOrderStatusProps = {
   }>;
 };
 
+const STATUS_COLOR_MAP: Record<
+  Database["public"]["Enums"]["salesOrderStatus"],
+  "gray" | "yellow" | "orange" | "blue" | "green" | "red"
+> = {
+  Draft: "gray",
+  Cancelled: "red",
+  Closed: "red",
+  "To Ship and Invoice": "orange",
+  "To Ship": "orange",
+  "To Invoice": "blue",
+  Confirmed: "blue",
+  "Needs Approval": "yellow",
+  "In Progress": "yellow",
+  Invoiced: "green",
+  Completed: "green"
+} as const;
+
 const SalesStatus = ({ status, jobs, lines }: SalesOrderStatusProps) => {
+  if (!status) return null;
+
   // Check if the order has incomplete jobs
   const isManufacturing =
     jobs !== undefined &&
@@ -32,27 +51,10 @@ const SalesStatus = ({ status, jobs, lines }: SalesOrderStatusProps) => {
     );
   }
 
-  switch (status) {
-    case "Draft":
-      return <Status color="gray">{status}</Status>;
-    case "Cancelled":
-    case "Closed":
-      return <Status color="red">{status}</Status>;
-    case "To Ship and Invoice":
-    case "To Ship":
-      return <Status color="orange">{status}</Status>;
-    case "To Invoice":
-    case "Confirmed":
-      return <Status color="blue">{status}</Status>;
-    case "Needs Approval":
-    case "In Progress":
-      return <Status color="yellow">{status}</Status>;
-    case "Invoiced":
-    case "Completed":
-      return <Status color="green">{status}</Status>;
-    default:
-      return null;
-  }
+  const color = STATUS_COLOR_MAP[status];
+  if (!color) return null;
+
+  return <Status color={color}>{status}</Status>;
 };
 
 export default SalesStatus;
