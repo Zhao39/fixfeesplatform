@@ -42,10 +42,10 @@ CREATE TABLE IF NOT EXISTS "demoSeedRun" (
 
 -- Seed industries and modules
 INSERT INTO "industry" ("id", "name", "description") VALUES
-  ('robotics_oem', 'Robotics OEM', 'Original Equipment Manufacturer building humanoid robots'),
-  ('cnc_aerospace', 'CNC Aerospace', 'CNC machine shop fabricating metal and composite parts for aerospace'),
-  ('metal_fabrication', 'Metal Fabrication', 'Fabrication shop crafting structural metal components and assemblies'),
-  ('automotive_precision', 'Automotive Precision', 'Manufacturer producing precision parts and assemblies for high-performance vehicles')
+  ('robotics_oem', 'Robotics OEM', 'Original Equipment Manufacturer building robots and automation systems'),
+  ('cnc_aerospace', 'CNC Manufacturing', 'CNC machine shop fabricating precision metal and composite parts'),
+  ('metal_fabrication', 'Sheet Metal Fabrication', 'Fabrication shop crafting sheet metal components and assemblies'),
+  ('automotive_precision', 'Motor Assembly', 'Manufacturer producing precision motor assemblies and components')
 ON CONFLICT ("id") DO NOTHING;
 
 INSERT INTO "demoModule" ("id", "name", "description") VALUES

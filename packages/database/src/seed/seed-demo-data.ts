@@ -29,23 +29,24 @@ export const industryInfo: Record<
   { name: string; description: string }
 > = {
   robotics_oem: {
-    name: "HumanoTech Robotics",
-    description: "Original Equipment Manufacturer building humanoid robots"
+    name: "Robotics OEM",
+    description:
+      "Original Equipment Manufacturer building robots and automation systems"
   },
   cnc_aerospace: {
-    name: "SkyLine Precision Parts",
+    name: "CNC Manufacturing",
     description:
-      "CNC machine shop fabricating metal and composite parts for aerospace"
+      "CNC machine shop fabricating precision metal and composite parts"
   },
   metal_fabrication: {
-    name: "TitanFab Industries",
+    name: "Sheet Metal Fabrication",
     description:
-      "Fabrication shop crafting structural metal components and assemblies"
+      "Fabrication shop crafting sheet metal components and assemblies"
   },
   automotive_precision: {
-    name: "Apex Motors Engineering",
+    name: "Motor Assembly",
     description:
-      "Manufacturer producing precision parts and assemblies for high-performance vehicles"
+      "Manufacturer producing precision motor assemblies and components"
   }
 };
 

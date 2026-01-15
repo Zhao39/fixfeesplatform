@@ -4,22 +4,22 @@
 
 -- Template Sets (all industries × all modules)
 INSERT INTO "templateSet" ("id", "industryId", "moduleId", "version", "key", "name", "description", "isSystem") VALUES
-  ('robotics_oem_sales_v1', 'robotics_oem', 'Sales', 1, 'robotics_oem.sales.v1', 'HumanoTech Robotics Sales Demo', 'Demo data for humanoid robot manufacturing sales', TRUE),
-  ('robotics_oem_parts_v1', 'robotics_oem', 'Parts', 1, 'robotics_oem.parts.v1', 'HumanoTech Robotics Parts Demo', 'Demo data for humanoid robotics parts', TRUE),
-  ('robotics_oem_inventory_v1', 'robotics_oem', 'Inventory', 1, 'robotics_oem.inventory.v1', 'HumanoTech Robotics Inventory Demo', 'Demo data for humanoid robotics inventory', TRUE),
-  ('robotics_oem_purchasing_v1', 'robotics_oem', 'Purchasing', 1, 'robotics_oem.purchasing.v1', 'HumanoTech Robotics Purchasing Demo', 'Demo data for humanoid robot purchasing', TRUE),
-  ('cnc_aerospace_sales_v1', 'cnc_aerospace', 'Sales', 1, 'cnc_aerospace.sales.v1', 'SkyLine Precision Parts Sales Demo', 'Demo data for aerospace CNC sales', TRUE),
-  ('cnc_aerospace_parts_v1', 'cnc_aerospace', 'Parts', 1, 'cnc_aerospace.parts.v1', 'SkyLine Precision Parts Demo', 'Demo data for aerospace CNC parts', TRUE),
-  ('cnc_aerospace_inventory_v1', 'cnc_aerospace', 'Inventory', 1, 'cnc_aerospace.inventory.v1', 'SkyLine Precision Inventory Demo', 'Demo data for aerospace CNC inventory', TRUE),
-  ('cnc_aerospace_purchasing_v1', 'cnc_aerospace', 'Purchasing', 1, 'cnc_aerospace.purchasing.v1', 'SkyLine Precision Purchasing Demo', 'Demo data for aerospace CNC purchasing', TRUE),
-  ('metal_fabrication_sales_v1', 'metal_fabrication', 'Sales', 1, 'metal_fabrication.sales.v1', 'TitanFab Industries Sales Demo', 'Demo data for metal fabrication sales', TRUE),
-  ('metal_fabrication_parts_v1', 'metal_fabrication', 'Parts', 1, 'metal_fabrication.parts.v1', 'TitanFab Industries Parts Demo', 'Demo data for metal fabrication parts', TRUE),
-  ('metal_fabrication_inventory_v1', 'metal_fabrication', 'Inventory', 1, 'metal_fabrication.inventory.v1', 'TitanFab Industries Inventory Demo', 'Demo data for metal fabrication inventory', TRUE),
-  ('metal_fabrication_purchasing_v1', 'metal_fabrication', 'Purchasing', 1, 'metal_fabrication.purchasing.v1', 'TitanFab Industries Purchasing Demo', 'Demo data for metal fabrication purchasing', TRUE),
-  ('automotive_precision_sales_v1', 'automotive_precision', 'Sales', 1, 'automotive_precision.sales.v1', 'Apex Motors Engineering Sales Demo', 'Demo data for automotive precision sales', TRUE),
-  ('automotive_precision_parts_v1', 'automotive_precision', 'Parts', 1, 'automotive_precision.parts.v1', 'Apex Motors Engineering Parts Demo', 'Demo data for automotive precision parts', TRUE),
-  ('automotive_precision_inventory_v1', 'automotive_precision', 'Inventory', 1, 'automotive_precision.inventory.v1', 'Apex Motors Engineering Inventory Demo', 'Demo data for automotive precision inventory', TRUE),
-  ('automotive_precision_purchasing_v1', 'automotive_precision', 'Purchasing', 1, 'automotive_precision.purchasing.v1', 'Apex Motors Engineering Purchasing Demo', 'Demo data for automotive precision purchasing', TRUE)
+  ('robotics_oem_sales_v1', 'robotics_oem', 'Sales', 1, 'robotics_oem.sales.v1', 'Robotics OEM Sales Demo', 'Demo data for robotics manufacturing sales', TRUE),
+  ('robotics_oem_parts_v1', 'robotics_oem', 'Parts', 1, 'robotics_oem.parts.v1', 'Robotics OEM Parts Demo', 'Demo data for robotics parts', TRUE),
+  ('robotics_oem_inventory_v1', 'robotics_oem', 'Inventory', 1, 'robotics_oem.inventory.v1', 'Robotics OEM Inventory Demo', 'Demo data for robotics inventory', TRUE),
+  ('robotics_oem_purchasing_v1', 'robotics_oem', 'Purchasing', 1, 'robotics_oem.purchasing.v1', 'Robotics OEM Purchasing Demo', 'Demo data for robotics purchasing', TRUE),
+  ('cnc_aerospace_sales_v1', 'cnc_aerospace', 'Sales', 1, 'cnc_aerospace.sales.v1', 'CNC Manufacturing Sales Demo', 'Demo data for CNC manufacturing sales', TRUE),
+  ('cnc_aerospace_parts_v1', 'cnc_aerospace', 'Parts', 1, 'cnc_aerospace.parts.v1', 'CNC Manufacturing Parts Demo', 'Demo data for CNC manufacturing parts', TRUE),
+  ('cnc_aerospace_inventory_v1', 'cnc_aerospace', 'Inventory', 1, 'cnc_aerospace.inventory.v1', 'CNC Manufacturing Inventory Demo', 'Demo data for CNC manufacturing inventory', TRUE),
+  ('cnc_aerospace_purchasing_v1', 'cnc_aerospace', 'Purchasing', 1, 'cnc_aerospace.purchasing.v1', 'CNC Manufacturing Purchasing Demo', 'Demo data for CNC manufacturing purchasing', TRUE),
+  ('metal_fabrication_sales_v1', 'metal_fabrication', 'Sales', 1, 'metal_fabrication.sales.v1', 'Sheet Metal Fabrication Sales Demo', 'Demo data for sheet metal fabrication sales', TRUE),
+  ('metal_fabrication_parts_v1', 'metal_fabrication', 'Parts', 1, 'metal_fabrication.parts.v1', 'Sheet Metal Fabrication Parts Demo', 'Demo data for sheet metal fabrication parts', TRUE),
+  ('metal_fabrication_inventory_v1', 'metal_fabrication', 'Inventory', 1, 'metal_fabrication.inventory.v1', 'Sheet Metal Fabrication Inventory Demo', 'Demo data for sheet metal fabrication inventory', TRUE),
+  ('metal_fabrication_purchasing_v1', 'metal_fabrication', 'Purchasing', 1, 'metal_fabrication.purchasing.v1', 'Sheet Metal Fabrication Purchasing Demo', 'Demo data for sheet metal fabrication purchasing', TRUE),
+  ('automotive_precision_sales_v1', 'automotive_precision', 'Sales', 1, 'automotive_precision.sales.v1', 'Motor Assembly Sales Demo', 'Demo data for motor assembly sales', TRUE),
+  ('automotive_precision_parts_v1', 'automotive_precision', 'Parts', 1, 'automotive_precision.parts.v1', 'Motor Assembly Parts Demo', 'Demo data for motor assembly parts', TRUE),
+  ('automotive_precision_inventory_v1', 'automotive_precision', 'Inventory', 1, 'automotive_precision.inventory.v1', 'Motor Assembly Inventory Demo', 'Demo data for motor assembly inventory', TRUE),
+  ('automotive_precision_purchasing_v1', 'automotive_precision', 'Purchasing', 1, 'automotive_precision.purchasing.v1', 'Motor Assembly Purchasing Demo', 'Demo data for motor assembly purchasing', TRUE)
 ON CONFLICT ("key") DO NOTHING;
 
 -- SALES MODULE: Customers
