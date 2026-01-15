@@ -26,8 +26,7 @@ import {
   FormErrorMessage,
   HStack,
   RadioGroup,
-  RadioGroupItem,
-  VStack
+  RadioGroupItem
 } from "@carbon/react";
 import { Edition } from "@carbon/utils";
 import { getLocalTimeZone } from "@internationalized/date";
@@ -35,7 +34,6 @@ import { tasks } from "@trigger.dev/sdk";
 import { useId, useState } from "react";
 import {
   LuBot,
-  LuCircleHelp,
   LuCog,
   LuDatabase,
   LuFactory,
@@ -50,7 +48,7 @@ import {
 } from "react-router";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
-import { Hidden, Submit, TextArea } from "~/components/Form";
+import { Hidden, Submit } from "~/components/Form";
 import { useOnboarding } from "~/hooks";
 import { insertEmployeeJob } from "~/modules/people";
 import { getLocationsList, upsertLocation } from "~/modules/resources";
@@ -314,8 +312,7 @@ const industryIcons: Record<string, React.ReactNode> = {
   robotics_oem: <LuBot className="h-5 w-5" />,
   cnc_aerospace: <LuCog className="h-5 w-5" />,
   metal_fabrication: <LuFactory className="h-5 w-5" />,
-  automotive_precision: <LuWrench className="h-5 w-5" />,
-  custom: <LuCircleHelp className="h-5 w-5" />
+  automotive_precision: <LuWrench className="h-5 w-5" />
 };
 
 // Demo data option icons
@@ -527,20 +524,14 @@ export default function OnboardingIndustry() {
       value: id,
       label: industryInfo[id].name,
       description: industryInfo[id].description
-    })),
-    {
-      value: "custom",
-      label: "Other",
-      description: "Describe your organization type"
-    }
+    }))
   ];
 
   const validIndustryIds = [
     "robotics_oem",
     "cnc_aerospace",
     "metal_fabrication",
-    "automotive_precision",
-    "custom"
+    "automotive_precision"
   ];
 
   const initialValues = {
@@ -650,22 +641,11 @@ export default function OnboardingIndustry() {
             <CardContent className="pt-6">
               <Hidden name="next" value={next} />
               <Hidden name="seedDemoData" value="on" />
-              <VStack spacing={4}>
-                <IndustryCardSelector
-                  name="industryId"
-                  options={industryOptions}
-                  onSelect={setSelectedIndustryId}
-                />
-
-                {selectedIndustryId === "custom" && (
-                  <TextArea
-                    name="customIndustryDescription"
-                    label="Describe your organization type"
-                    placeholder="e.g., Medical device manufacturing, Food processing, Chemical manufacturing, etc."
-                    rows={3}
-                  />
-                )}
-              </VStack>
+              <IndustryCardSelector
+                name="industryId"
+                options={industryOptions}
+                onSelect={setSelectedIndustryId}
+              />
             </CardContent>
 
             <CardFooter className="pt-4">

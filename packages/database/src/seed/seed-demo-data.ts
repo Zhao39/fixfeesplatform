@@ -827,6 +827,31 @@ export class DemoSeeder {
       );
     }
 
+    // Seed makeMethod records for items so that the quoteLine trigger can find versions
+    const templateItems = await templates
+      .selectFrom("item")
+      .select(["templateRowId"])
+      .where("templateSetId", "=", templateSetId)
+      .execute();
+
+    if (templateItems.length > 0) {
+      await trx
+        .insertInto("makeMethod")
+        .values(
+          templateItems.map((tpl) => ({
+            id: generateDemoId(companyId, `mm_${tpl.templateRowId}`),
+            itemId: generateDemoId(companyId, tpl.templateRowId),
+            companyId,
+            isDemo: true,
+            status: sql`'Active'::"makeMethodStatus"`,
+            version: 1,
+            createdBy: userId
+          }))
+        )
+        .onConflict((oc) => oc.column("id").doNothing())
+        .execute();
+    }
+
     // Seed quotes
     const templateQuotes = await templates
       .selectFrom("quote")
@@ -883,7 +908,7 @@ export class DemoSeeder {
         .execute();
     }
 
-    // Seed quote lines
+    // Seed quote lines (trigger will now find makeMethod records)
     const templateQuoteLines = await templates
       .selectFrom("quoteLine as ql")
       .innerJoin("item as it", (join) =>
