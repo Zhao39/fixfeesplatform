@@ -224,25 +224,12 @@ const JobBoMExplorer = ({ method }: JobBoMExplorerProps) => {
                     <div
                       key={node.id}
                       className={cn(
-                        "flex h-8 items-center overflow-hidden rounded-sm pr-2 gap-1",
-                        node.data.methodType !== "Pick" &&
-                          node.data.methodType !== "Buy" &&
-                          "cursor-pointer",
+                        "flex h-8 cursor-pointer items-center overflow-hidden rounded-sm pr-2 gap-1",
                         state.selected
                           ? "bg-muted hover:bg-muted/90"
-                          : node.data.methodType !== "Pick" &&
-                              node.data.methodType !== "Buy"
-                            ? "bg-transparent hover:bg-muted/90"
-                            : "bg-transparent"
+                          : "bg-transparent hover:bg-muted/90"
                       )}
-                      onClick={() => {
-                        // Buy and Pick items are not clickable
-                        if (
-                          node.data.methodType === "Buy" ||
-                          node.data.methodType === "Pick"
-                        ) {
-                          return;
-                        }
+                      onClick={(e) => {
                         selectNode(node.id);
                         setSelectedMaterialId(node.data.methodMaterialId);
                         if (location.pathname !== getNodePath(node)) {
@@ -260,10 +247,7 @@ const JobBoMExplorer = ({ method }: JobBoMExplorerProps) => {
                         <div
                           className={cn(
                             "flex h-8 w-4 items-center",
-                            node.hasChildren &&
-                              node.data.methodType !== "Pick" &&
-                              node.data.methodType !== "Buy" &&
-                              "hover:bg-accent"
+                            node.hasChildren && "hover:bg-accent"
                           )}
                           onClick={(e) => {
                             e.stopPropagation();
@@ -279,9 +263,7 @@ const JobBoMExplorer = ({ method }: JobBoMExplorerProps) => {
                             scrollToNode(node.id);
                           }}
                         >
-                          {node.hasChildren &&
-                          node.data.methodType !== "Pick" &&
-                          node.data.methodType !== "Buy" ? (
+                          {node.hasChildren ? (
                             state.expanded ? (
                               <LuChevronDown className="h-4 w-4 text-gray-400 flex-shrink-0 ml-1" />
                             ) : (
