@@ -6570,6 +6570,77 @@ export type Database = {
           },
         ]
       }
+      eventSystemSubscription: {
+        Row: {
+          active: boolean | null
+          batchSize: number | null
+          companyId: string
+          config: Json
+          createdAt: string | null
+          filter: Json | null
+          handlerType: string
+          id: string
+          name: string
+          operations: string[]
+          table: string
+        }
+        Insert: {
+          active?: boolean | null
+          batchSize?: number | null
+          companyId: string
+          config?: Json
+          createdAt?: string | null
+          filter?: Json | null
+          handlerType: string
+          id?: string
+          name: string
+          operations: string[]
+          table: string
+        }
+        Update: {
+          active?: boolean | null
+          batchSize?: number | null
+          companyId?: string
+          config?: Json
+          createdAt?: string | null
+          filter?: Json | null
+          handlerType?: string
+          id?: string
+          name?: string
+          operations?: string[]
+          table?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "eventSystemSubscription_companyId_fkey"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "eventSystemSubscription_companyId_fkey"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "eventSystemSubscription_companyId_fkey"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "eventSystemSubscription_companyId_fkey"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+        ]
+      }
       externalLink: {
         Row: {
           companyId: string
@@ -41911,6 +41982,30 @@ export type Database = {
           },
         ]
       }
+      eventSystemTrigger: {
+        Row: {
+          attachedFunctions: string | null
+          status: string | null
+          systemTriggerName: unknown
+          tableName: string | null
+          type: string | null
+        }
+        Insert: {
+          attachedFunctions?: never
+          status?: never
+          systemTriggerName?: unknown
+          tableName?: never
+          type?: never
+        }
+        Update: {
+          attachedFunctions?: never
+          status?: never
+          systemTriggerName?: unknown
+          tableName?: never
+          type?: never
+        }
+        Relationships: []
+      }
       gaugeCalibrationRecords: {
         Row: {
           approvedBy: string | null
@@ -45376,14 +45471,14 @@ export type Database = {
           },
           {
             foreignKeyName: "partner_id_fkey"
-            columns: ["supplierLocationId"]
+            columns: ["id"]
             isOneToOne: false
             referencedRelation: "supplierLocation"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "partner_id_fkey"
-            columns: ["id"]
+            columns: ["supplierLocationId"]
             isOneToOne: false
             referencedRelation: "supplierLocation"
             referencedColumns: ["id"]
@@ -46756,14 +46851,14 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["supplierCountryCode"]
+            columns: ["customerCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
           },
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["customerCountryCode"]
+            columns: ["supplierCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
@@ -49447,14 +49542,14 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["customerCountryCode"]
+            columns: ["invoiceCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
           },
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["invoiceCountryCode"]
+            columns: ["customerCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
@@ -49990,14 +50085,14 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["paymentCountryCode"]
+            columns: ["customerCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
           },
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["customerCountryCode"]
+            columns: ["paymentCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
@@ -52797,6 +52892,10 @@ export type Database = {
     }
     Functions: {
       _xid_machine_id: { Args: never; Returns: number }
+      attach_event_trigger: {
+        Args: { sync_functions?: string[]; table_name_text: string }
+        Returns: undefined
+      }
       check_operation_dependencies: {
         Args: { operation_id: string }
         Returns: boolean

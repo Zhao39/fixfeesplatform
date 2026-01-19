@@ -3918,6 +3918,141 @@ export default {
         tags: ["companyUsage"],
       },
     },
+    "/eventSystemTrigger": {
+      get: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.eventSystemTrigger.tableName",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemTrigger.type",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemTrigger.attachedFunctions",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemTrigger.status",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemTrigger.systemTriggerName",
+          },
+          {
+            $ref: "#/parameters/select",
+          },
+          {
+            $ref: "#/parameters/order",
+          },
+          {
+            $ref: "#/parameters/range",
+          },
+          {
+            $ref: "#/parameters/rangeUnit",
+          },
+          {
+            $ref: "#/parameters/offset",
+          },
+          {
+            $ref: "#/parameters/limit",
+          },
+          {
+            $ref: "#/parameters/preferCount",
+          },
+        ],
+        responses: {
+          "200": {
+            description: "OK",
+            schema: {
+              items: {
+                $ref: "#/definitions/eventSystemTrigger",
+              },
+              type: "array",
+            },
+          },
+          "206": {
+            description: "Partial Content",
+          },
+        },
+        tags: ["eventSystemTrigger"],
+      },
+      post: {
+        parameters: [
+          {
+            $ref: "#/parameters/body.eventSystemTrigger",
+          },
+          {
+            $ref: "#/parameters/select",
+          },
+          {
+            $ref: "#/parameters/preferPost",
+          },
+        ],
+        responses: {
+          "201": {
+            description: "Created",
+          },
+        },
+        tags: ["eventSystemTrigger"],
+      },
+      delete: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.eventSystemTrigger.tableName",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemTrigger.type",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemTrigger.attachedFunctions",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemTrigger.status",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemTrigger.systemTriggerName",
+          },
+          {
+            $ref: "#/parameters/preferReturn",
+          },
+        ],
+        responses: {
+          "204": {
+            description: "No Content",
+          },
+        },
+        tags: ["eventSystemTrigger"],
+      },
+      patch: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.eventSystemTrigger.tableName",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemTrigger.type",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemTrigger.attachedFunctions",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemTrigger.status",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemTrigger.systemTriggerName",
+          },
+          {
+            $ref: "#/parameters/body.eventSystemTrigger",
+          },
+          {
+            $ref: "#/parameters/preferReturn",
+          },
+        ],
+        responses: {
+          "204": {
+            description: "No Content",
+          },
+        },
+        tags: ["eventSystemTrigger"],
+      },
+    },
     "/jobOperationsWithDependencies": {
       get: {
         parameters: [
@@ -22621,6 +22756,195 @@ export default {
           },
         },
         tags: ["purchaseOrderStatusHistory"],
+      },
+    },
+    "/eventSystemSubscription": {
+      get: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.name",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.companyId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.table",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.operations",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.filter",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.handlerType",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.config",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.batchSize",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.active",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.createdAt",
+          },
+          {
+            $ref: "#/parameters/select",
+          },
+          {
+            $ref: "#/parameters/order",
+          },
+          {
+            $ref: "#/parameters/range",
+          },
+          {
+            $ref: "#/parameters/rangeUnit",
+          },
+          {
+            $ref: "#/parameters/offset",
+          },
+          {
+            $ref: "#/parameters/limit",
+          },
+          {
+            $ref: "#/parameters/preferCount",
+          },
+        ],
+        responses: {
+          "200": {
+            description: "OK",
+            schema: {
+              items: {
+                $ref: "#/definitions/eventSystemSubscription",
+              },
+              type: "array",
+            },
+          },
+          "206": {
+            description: "Partial Content",
+          },
+        },
+        tags: ["eventSystemSubscription"],
+      },
+      post: {
+        parameters: [
+          {
+            $ref: "#/parameters/body.eventSystemSubscription",
+          },
+          {
+            $ref: "#/parameters/select",
+          },
+          {
+            $ref: "#/parameters/preferPost",
+          },
+        ],
+        responses: {
+          "201": {
+            description: "Created",
+          },
+        },
+        tags: ["eventSystemSubscription"],
+      },
+      delete: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.name",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.companyId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.table",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.operations",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.filter",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.handlerType",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.config",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.batchSize",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.active",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.createdAt",
+          },
+          {
+            $ref: "#/parameters/preferReturn",
+          },
+        ],
+        responses: {
+          "204": {
+            description: "No Content",
+          },
+        },
+        tags: ["eventSystemSubscription"],
+      },
+      patch: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.name",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.companyId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.table",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.operations",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.filter",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.handlerType",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.config",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.batchSize",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.active",
+          },
+          {
+            $ref: "#/parameters/rowFilter.eventSystemSubscription.createdAt",
+          },
+          {
+            $ref: "#/parameters/body.eventSystemSubscription",
+          },
+          {
+            $ref: "#/parameters/preferReturn",
+          },
+        ],
+        responses: {
+          "204": {
+            description: "No Content",
+          },
+        },
+        tags: ["eventSystemSubscription"],
       },
     },
     "/nonConformanceWorkflow": {
@@ -58684,6 +59008,9 @@ export default {
             $ref: "#/parameters/rowFilter.quote.customerEngineeringContactId",
           },
           {
+            $ref: "#/parameters/rowFilter.quote.externalId",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -58845,6 +59172,9 @@ export default {
             $ref: "#/parameters/rowFilter.quote.customerEngineeringContactId",
           },
           {
+            $ref: "#/parameters/rowFilter.quote.externalId",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -58958,6 +59288,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.quote.customerEngineeringContactId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.quote.externalId",
           },
           {
             $ref: "#/parameters/body.quote",
@@ -63288,6 +63621,48 @@ export default {
         tags: ["(rpc) get_supplier_ids_with_supplier_permission"],
       },
     },
+    "/rpc/attach_event_trigger": {
+      post: {
+        parameters: [
+          {
+            in: "body",
+            name: "args",
+            required: true,
+            schema: {
+              properties: {
+                sync_functions: {
+                  format: "text[]",
+                  items: {
+                    type: "string",
+                  },
+                  type: "array",
+                },
+                table_name_text: {
+                  format: "text",
+                  type: "string",
+                },
+              },
+              required: ["table_name_text"],
+              type: "object",
+            },
+          },
+          {
+            $ref: "#/parameters/preferParams",
+          },
+        ],
+        produces: [
+          "application/json",
+          "application/vnd.pgrst.object+json;nulls=stripped",
+          "application/vnd.pgrst.object+json",
+        ],
+        responses: {
+          "200": {
+            description: "OK",
+          },
+        },
+        tags: ["(rpc) attach_event_trigger"],
+      },
+    },
     "/rpc/get_job_operation_by_id": {
       post: {
         parameters: [
@@ -66429,6 +66804,31 @@ export default {
       },
       type: "object",
     },
+    eventSystemTrigger: {
+      properties: {
+        tableName: {
+          format: "text",
+          type: "string",
+        },
+        type: {
+          format: "text",
+          type: "string",
+        },
+        attachedFunctions: {
+          format: "text",
+          type: "string",
+        },
+        status: {
+          format: "text",
+          type: "string",
+        },
+        systemTriggerName: {
+          format: "name",
+          type: "string",
+        },
+      },
+      type: "object",
+    },
     jobOperationsWithDependencies: {
       properties: {
         id: {
@@ -68378,7 +68778,7 @@ export default {
       properties: {
         id: {
           description:
-            "Note:\nThis is a Foreign Key to `supplierLocation.id`.<fk table='supplierLocation' column='id'/>",
+            "Note:\nThis is a Primary Key.<pk/>\nThis is a Foreign Key to `supplierLocation.id`.<fk table='supplierLocation' column='id'/>",
           format: "text",
           type: "string",
         },
@@ -68427,7 +68827,7 @@ export default {
         },
         supplierLocationId: {
           description:
-            "Note:\nThis is a Primary Key.<pk/>\nThis is a Foreign Key to `supplierLocation.id`.<fk table='supplierLocation' column='id'/>",
+            "Note:\nThis is a Foreign Key to `supplierLocation.id`.<fk table='supplierLocation' column='id'/>",
           format: "text",
           type: "string",
         },
@@ -75241,6 +75641,72 @@ export default {
           description:
             "Note:\nThis is a Foreign Key to `user.id`.<fk table='user' column='id'/>",
           format: "text",
+          type: "string",
+        },
+      },
+      type: "object",
+    },
+    eventSystemSubscription: {
+      required: [
+        "id",
+        "name",
+        "companyId",
+        "table",
+        "operations",
+        "handlerType",
+        "config",
+      ],
+      properties: {
+        id: {
+          default: "public.id()",
+          description: "Note:\nThis is a Primary Key.<pk/>",
+          format: "text",
+          type: "string",
+        },
+        name: {
+          format: "text",
+          type: "string",
+        },
+        companyId: {
+          description:
+            "Note:\nThis is a Foreign Key to `company.id`.<fk table='company' column='id'/>",
+          format: "text",
+          type: "string",
+        },
+        table: {
+          format: "text",
+          type: "string",
+        },
+        operations: {
+          format: "text[]",
+          items: {
+            type: "string",
+          },
+          type: "array",
+        },
+        filter: {
+          format: "jsonb",
+        },
+        handlerType: {
+          format: "text",
+          type: "string",
+        },
+        config: {
+          format: "jsonb",
+        },
+        batchSize: {
+          default: 50,
+          format: "integer",
+          type: "integer",
+        },
+        active: {
+          default: true,
+          format: "boolean",
+          type: "boolean",
+        },
+        createdAt: {
+          default: "now()",
+          format: "timestamp with time zone",
           type: "string",
         },
       },
@@ -92849,6 +93315,9 @@ export default {
           format: "text",
           type: "string",
         },
+        externalId: {
+          format: "jsonb",
+        },
       },
       type: "object",
     },
@@ -95599,6 +96068,45 @@ export default {
     },
     "rowFilter.companyUsage.updatedAt": {
       name: "updatedAt",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "body.eventSystemTrigger": {
+      name: "eventSystemTrigger",
+      description: "eventSystemTrigger",
+      required: false,
+      in: "body",
+      schema: {
+        $ref: "#/definitions/eventSystemTrigger",
+      },
+    },
+    "rowFilter.eventSystemTrigger.tableName": {
+      name: "tableName",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.eventSystemTrigger.type": {
+      name: "type",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.eventSystemTrigger.attachedFunctions": {
+      name: "attachedFunctions",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.eventSystemTrigger.status": {
+      name: "status",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.eventSystemTrigger.systemTriggerName": {
+      name: "systemTriggerName",
       required: false,
       in: "query",
       type: "string",
@@ -105491,6 +105999,81 @@ export default {
     },
     "rowFilter.purchaseOrderStatusHistory.createdBy": {
       name: "createdBy",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "body.eventSystemSubscription": {
+      name: "eventSystemSubscription",
+      description: "eventSystemSubscription",
+      required: false,
+      in: "body",
+      schema: {
+        $ref: "#/definitions/eventSystemSubscription",
+      },
+    },
+    "rowFilter.eventSystemSubscription.id": {
+      name: "id",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.eventSystemSubscription.name": {
+      name: "name",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.eventSystemSubscription.companyId": {
+      name: "companyId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.eventSystemSubscription.table": {
+      name: "table",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.eventSystemSubscription.operations": {
+      name: "operations",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.eventSystemSubscription.filter": {
+      name: "filter",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.eventSystemSubscription.handlerType": {
+      name: "handlerType",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.eventSystemSubscription.config": {
+      name: "config",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.eventSystemSubscription.batchSize": {
+      name: "batchSize",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.eventSystemSubscription.active": {
+      name: "active",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.eventSystemSubscription.createdAt": {
+      name: "createdAt",
       required: false,
       in: "query",
       type: "string",
@@ -125316,6 +125899,12 @@ export default {
     },
     "rowFilter.quote.customerEngineeringContactId": {
       name: "customerEngineeringContactId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.quote.externalId": {
+      name: "externalId",
       required: false,
       in: "query",
       type: "string",
