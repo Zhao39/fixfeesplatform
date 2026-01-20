@@ -186,7 +186,7 @@ export async function action({ request }: ActionFunctionArgs) {
               const scrapPercentage = manufacturing.data?.scrapPercentage ?? 0;
               const scrapQuantity =
                 scrapPercentage > 0
-                  ? Math.ceil(order.quantity * (scrapPercentage / 100))
+                  ? Math.ceil(order.quantity * scrapPercentage)
                   : 0;
 
               const createJob = await upsertJob(

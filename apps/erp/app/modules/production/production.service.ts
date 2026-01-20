@@ -166,9 +166,7 @@ export async function convertSalesOrderLinesToJobs(
         // Calculate scrap quantity based on item's scrap percentage
         const scrapPercentage = manufacturing.data?.scrapPercentage ?? 0;
         const scrapQuantity =
-          scrapPercentage > 0
-            ? Math.ceil(jobQuantity * (scrapPercentage / 100))
-            : 0;
+          scrapPercentage > 0 ? Math.ceil(jobQuantity * scrapPercentage) : 0;
 
         const data = {
           customerId: salesOrder.data?.customerId ?? undefined,

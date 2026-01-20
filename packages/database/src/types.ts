@@ -52947,6 +52947,7 @@ export type Database = {
           setupTime: number
           setupUnit: Database["public"]["Enums"]["factor"]
           tags: string[]
+          targetQuantity: number
           thumbnailPath: string
           workCenterId: string
         }[]
@@ -53023,6 +53024,7 @@ export type Database = {
           setupTime: number
           setupUnit: Database["public"]["Enums"]["factor"]
           tags: string[]
+          targetQuantity: number
           thumbnailPath: string
           workCenterId: string
         }[]
@@ -54034,6 +54036,7 @@ export type Database = {
           setupTime: number
           setupUnit: Database["public"]["Enums"]["factor"]
           tags: string[]
+          targetQuantity: number
           thumbnailPath: string
           workCenterId: string
         }[]

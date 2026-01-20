@@ -171,7 +171,7 @@ const JobForm = ({ initialValues }: JobFormProps) => {
       scrapPercentage: manufacturing?.data?.scrapPercentage ?? 0,
       scrapQuantity: Math.ceil(
         (manufacturing?.data?.lotSize ?? 0) *
-          ((manufacturing?.data?.scrapPercentage ?? 0) / 100)
+          (manufacturing?.data?.scrapPercentage ?? 0)
       )
     }));
 

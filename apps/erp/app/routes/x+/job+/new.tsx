@@ -76,7 +76,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const scrapPercentage = manufacturing.data?.scrapPercentage ?? 0;
   const calculatedScrapQuantity =
     scrapPercentage > 0
-      ? Math.ceil(validation.data.quantity * (scrapPercentage / 100))
+      ? Math.ceil(validation.data.quantity * scrapPercentage)
       : 0;
   // Use the form value if set, otherwise use calculated value
   const scrapQuantity =
