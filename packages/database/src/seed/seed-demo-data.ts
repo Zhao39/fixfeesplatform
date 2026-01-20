@@ -80,6 +80,7 @@ interface DemoTemplatesSchema {
     type: string;
     itemTrackingType: string;
     replenishmentSystem: string;
+    defaultMethodType: string;
     unitOfMeasureCode: string | null;
     revision: string | null;
     active: boolean;
@@ -171,6 +172,7 @@ interface DemoTemplatesSchema {
     tplItemId: string;
     methodType: string;
     tplMaterialMakeMethodId: string | null;
+    itemType: string;
     quantity: number;
     unitOfMeasureCode: string;
   };
@@ -396,6 +398,7 @@ export class DemoSeeder {
           type: sql`${tpl.type}::"itemType"`,
           itemTrackingType: sql`${tpl.itemTrackingType}::"itemTrackingType"`,
           replenishmentSystem: sql`${tpl.replenishmentSystem}::"itemReplenishmentSystem"`,
+          defaultMethodType: sql`${tpl.defaultMethodType}::"methodType"`,
           unitOfMeasureCode: tpl.unitOfMeasureCode,
           revision: tpl.revision,
           active: tpl.active,
@@ -717,6 +720,7 @@ export class DemoSeeder {
           materialMakeMethodId: tpl.tplMaterialMakeMethodId
             ? (makeMethodIdMap.get(tpl.tplMaterialMakeMethodId) ?? null)
             : null,
+          itemType: tpl.itemType,
           quantity: tpl.quantity,
           unitOfMeasureCode: tpl.unitOfMeasureCode,
           isDemo: true,
