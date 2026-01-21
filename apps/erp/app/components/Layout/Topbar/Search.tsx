@@ -21,7 +21,7 @@ import {
 } from "@carbon/react";
 import idb from "localforage";
 import { nanoid } from "nanoid";
-import { memo, useCallback, useEffect, useState } from "react";
+import { Fragment, memo, useCallback, useEffect, useState } from "react";
 import {
   LuFileCheck,
   LuHardHat,
@@ -202,8 +202,8 @@ const SearchModal = () => {
               </>
             )}
             {Object.entries(staticResults).map(([module, submodules]) => (
-              <>
-                <CommandGroup heading={module} key={`static-${module}`}>
+              <Fragment key={`static-${module}`}>
+                <CommandGroup heading={module}>
                   {submodules.map((submodule, index) => (
                     <CommandItem
                       key={`${submodule.to}-${submodule.name}-${index}`}
@@ -218,7 +218,7 @@ const SearchModal = () => {
                   ))}
                 </CommandGroup>
                 <CommandSeparator />
-              </>
+              </Fragment>
             ))}
             {searchResults.length > 0 && (
               <CommandGroup heading="Search Results" key="search">
