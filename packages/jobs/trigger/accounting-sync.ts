@@ -3,14 +3,10 @@ import type { Database } from "@carbon/database";
 import {
   AccountingEntity,
   AccountingProvider,
-  ProviderCredentialsSchema,
-  ProviderID,
   AccountingSyncSchema,
   ProviderCredentials,
-  type ProviderConfig,
+  ProviderCredentialsSchema
 } from "@carbon/ee/accounting";
-import { QuickBooksProvider } from "@carbon/ee/quickbooks";
-import { XeroProvider } from "@carbon/ee/accounting";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { task } from "@trigger.dev/sdk/v3";
@@ -124,39 +120,39 @@ async function initializeProvider(
     }
   };
 
-  switch (provider) {
-    case "quickbooks": {
-      const environment = process.env.QUICKBOOKS_ENVIRONMENT as
-        | "production"
-        | "sandbox";
+  // switch (provider) {
+  //   case "quickbooks": {
+  //     const environment = process.env.QUICKBOOKS_ENVIRONMENT as
+  //       | "production"
+  //       | "sandbox";
 
-      return new QuickBooksProvider({
-        companyId,
-        tenantId,
-        environment: environment || "sandbox",
-        clientId: process.env.QUICKBOOKS_CLIENT_ID!,
-        clientSecret: process.env.QUICKBOOKS_CLIENT_SECRET!,
-        redirectUri: process.env.QUICKBOOKS_REDIRECT_URI,
-        onTokenRefresh,
-      });
-    }
-    case "xero":
-      return new XeroProvider({
-        companyId,
-        tenantId,
-        accessToken,
-        refreshToken,
-        clientId: process.env.XERO_CLIENT_ID!,
-        clientSecret: process.env.XERO_CLIENT_SECRET!,
-        redirectUri: process.env.XERO_REDIRECT_URI,
-        onTokenRefresh,
-      });
-    // Add other providers as needed
-    // case "sage":
-    //   return new SageProvider(config);
-    default:
-      throw new Error(`Unsupported provider: ${provider}`);
-  }
+  //     return new QuickBooksProvider({
+  //       companyId,
+  //       tenantId,
+  //       environment: environment || "sandbox",
+  //       clientId: process.env.QUICKBOOKS_CLIENT_ID!,
+  //       clientSecret: process.env.QUICKBOOKS_CLIENT_SECRET!,
+  //       redirectUri: process.env.QUICKBOOKS_REDIRECT_URI,
+  //       onTokenRefresh,
+  //     });
+  //   }
+  //   case "xero":
+  //     return new XeroProvider({
+  //       companyId,
+  //       tenantId,
+  //       accessToken,
+  //       refreshToken,
+  //       clientId: process.env.XERO_CLIENT_ID!,
+  //       clientSecret: process.env.XERO_CLIENT_SECRET!,
+  //       redirectUri: process.env.XERO_REDIRECT_URI,
+  //       onTokenRefresh,
+  //     });
+  //   // Add other providers as needed
+  //   // case "sage":
+  //   //   return new SageProvider(config);
+  //   default:
+  //     throw new Error(`Unsupported provider: ${provider}`);
+  // }
 }
 
 async function processEntity(

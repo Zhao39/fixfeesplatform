@@ -47,7 +47,7 @@ export const eventQueueTask = schedules.task({
 
     if (jobs.length === 0) return { processed: 0 };
 
-    const total: number[] = [];
+    let total: number[] = [];
 
     // Arrays for batching
     const grouped: Record<HandlerType, QueueJob[]> = {
@@ -134,7 +134,7 @@ export const eventQueueTask = schedules.task({
       },
     });
 
-    total.concat(webhooks, workflows, syncs);
+    total = total.concat(webhooks, workflows, syncs);
 
     // 5. Delete from PGMQ
     // We delete immediately because we have successfully offloaded

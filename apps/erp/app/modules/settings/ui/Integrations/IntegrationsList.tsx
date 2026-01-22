@@ -10,7 +10,8 @@ import {
 import { useUrlParams } from "@carbon/remix";
 import { useMemo, useState } from "react";
 import { SearchFilter } from "~/components";
-import { IntegrationCard, IntegrationHealth } from "./IntegrationCard";
+import type { IntegrationHealth } from "./IntegrationCard";
+import { IntegrationCard, } from "./IntegrationCard";
 
 type IntegrationsListProps = {
   availableIntegrations: IntegrationConfig[];

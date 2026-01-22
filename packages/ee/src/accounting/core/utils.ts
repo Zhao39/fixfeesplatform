@@ -1,5 +1,31 @@
-import { ProviderCredentials } from "./models";
-import { AuthProvider } from "./provider";
+import type { Kysely, KyselyDatabase, KyselyTx } from "@carbon/database/client";
+import { sql } from "kysely";
+import type {
+  AuthProvider,
+  OAuthClientOptions,
+  ProviderCredentials
+} from "./types";
+
+/**
+ * Execute a database operation with sync triggers disabled.
+ * This prevents circular trigger loops when syncing from external systems.
+ *
+ * Uses PostgreSQL session variable `app.sync_in_progress` which is checked
+ * by the `dispatch_event_batch` trigger function.
+ *
+ * @param db - The Kysely database instance
+ * @param operation - A callback that receives the transaction and performs DB operations
+ */
+export async function withSyncDisabled<T>(
+  db: Kysely<KyselyDatabase>,
+  operation: (tx: KyselyTx) => Promise<T>
+): Promise<T> {
+  return db.transaction().execute(async (tx) => {
+    // Set the session variable to disable event triggers for this transaction
+    await sql`SET LOCAL "app.sync_in_progress" = 'true'`.execute(tx);
+    return await operation(tx);
+  });
+}
 
 export class HTTPClient {
   constructor(private baseUrl?: string) {}
@@ -69,6 +95,9 @@ export class HTTPClient {
   }
 }
 
+// /********************************************************\
+// *                     Custom Errors Start                *
+// \********************************************************/
 export class NotImplementedError extends Error {
   constructor(name: string) {
     super(`Method ${name} is not implemented.`);
@@ -86,17 +115,9 @@ export class RatelimitError extends Error {
     this.response = response;
   }
 }
-
-export interface OAuthClientOptions {
-  clientId: string;
-  clientSecret: string;
-  tokenUrl: string;
-  accessToken?: string;
-  refreshToken?: string;
-  redirectUri?: string;
-  getAuthUrl: (scopes: string[], redirectUri: string) => string;
-  onTokenRefresh?: (creds: ProviderCredentials) => Promise<void>;
-}
+// /********************************************************\
+// *                     Custom Errors End                  *
+// \********************************************************/
 
 export function createOAuthClient({
   clientId,

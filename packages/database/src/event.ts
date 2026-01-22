@@ -1,6 +1,6 @@
-import { Kysely, sql } from "kysely";
+import type { Kysely } from "kysely";
 import { z } from "zod";
-import { KyselyDatabase } from "./client.ts";
+import type { KyselyDatabase } from "./client.ts";
 
 export const OperationSchema = z.enum([
   "INSERT",
@@ -36,7 +36,12 @@ export type QueueMessage = z.infer<typeof QueueMessageSchema>;
 export const CreateSubscriptionSchema = z.object({
   name: z.string().min(1, "Name is required"),
   // The table name in your database
-  table: z.string().min(1, "Table name is required"),
+  table: z.custom<
+    keyof Pick<KyselyDatabase, "contact" | "customer" | "supplier" | "address">
+  >((val) => typeof val === "string", {
+    message: "Table name must be a string"
+  }),
+  // The company this subscription belongs to
   companyId: z.string().min(1, "Company ID is required"),
   // Must provide at least one operation (e.g. ['INSERT'])
   operations: z
@@ -55,7 +60,7 @@ export const CreateSubscriptionSchema = z.object({
   active: z.boolean().default(true)
 });
 
-export type CreateSubscriptionParams = z.infer<typeof CreateSubscriptionSchema>;
+export type CreateSubscriptionParams = z.input<typeof CreateSubscriptionSchema>;
 
 export async function createEventSystemSubscription(
   client: Kysely<KyselyDatabase>,
@@ -67,41 +72,41 @@ export async function createEventSystemSubscription(
 
   // 2. Database Insert
   // Note: We cast arrays/objects to ensure Postgres driver handles them correctly
-  const result = await sql`
-    INSERT INTO "eventSystemSubscription" (
-      "name", 
-      "table", 
-      "companyId",
-      "operations", 
-      "filter", 
-      "type", 
-      "config", 
-      "batchSize",
-      "active"
+  const result = await client
+    .insertInto("eventSystemSubscription")
+    .values({
+      name: params.name,
+      table: params.table,
+      companyId: params.companyId,
+      operations: params.operations,
+      filter: params.filter,
+      handlerType: params.type,
+      config: params.config,
+      batchSize: params.batchSize,
+      active: params.active
+    })
+    .onConflict((oc) =>
+      oc.constraint("unique_subscription_name_per_company").doUpdateSet({
+        operations: params.operations,
+        filter: params.filter,
+        handlerType: params.type,
+        config: params.config,
+        batchSize: params.batchSize,
+        active: params.active
+      })
     )
-    VALUES (
-      ${params.name}, 
-      ${params.table}, 
-      ${params.companyId},
-      ${params.operations},
-      ${params.filter}, 
-      ${params.type}, 
-      ${params.config}, 
-      ${params.batchSize},
-      ${params.active}
-    )
-    RETURNING "id"
-  `.execute(client);
+    .returning(["id", "name", "handlerType", "table"])
+    .executeTakeFirst();
 
-  return result[0];
+  return result;
 }
 
 export async function deleteEventSystemSubscription(
   client: Kysely<KyselyDatabase>,
   subscriptionId: string
 ) {
-  await sql`
-    DELETE FROM "eventSystemSubscription"
-    WHERE "id" = ${subscriptionId}
-  `.execute(client);
+  await client
+    .deleteFrom("eventSystemSubscription")
+    .where("id", "=", subscriptionId)
+    .execute();
 }

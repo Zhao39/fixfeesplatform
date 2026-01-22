@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { Accounting } from "../../core/types";
 
 export namespace Xero {
   export const AddressSchema = z.object({
@@ -90,53 +91,77 @@ export namespace Xero {
   export type Contact = z.infer<typeof ContactSchema>;
 }
 
-export namespace QuickBooks {
-  export const BillAddrSchema = z.object({
-    City: z.string(),
-    Line1: z.string(),
-    PostalCode: z.string(),
-    Lat: z.string(),
-    Long: z.string(),
-    CountrySubDivisionCode: z.string(),
-    Id: z.string()
-  });
+export const parseDotnetDate = (date: Date | string) => {
+  if (typeof date === "string") {
+    const value = date.replace(/\/Date\((\d+)([-+]\d+)?\)\//, "$1");
+    return new Date(parseInt(value));
+  }
 
-  export const MetaDataSchema = z.object({
-    CreateTime: z.coerce.date(),
-    LastUpdatedTime: z.coerce.date()
-  });
+  return date;
+};
 
-  export const PrimaryEmailAddrSchema = z.object({
-    Address: z.string()
-  });
+export const transformXeroPhones = (
+  contact: Xero.Contact
+): Pick<
+  Accounting.Contact,
+  "homePhone" | "workPhone" | "mobilePhone" | "fax"
+> => {
+  const phones = contact.Phones ?? [];
 
-  export const PrimaryPhoneSchema = z.object({
-    FreeFormNumber: z.string()
-  });
+  const homePhone = phones.find((p) => p.PhoneType === "DDI" && p.PhoneNumber);
 
-  export const CustomerSchema = z.object({
-    PrimaryEmailAddr: PrimaryEmailAddrSchema,
-    SyncToken: z.string(),
-    domain: z.string(),
-    GivenName: z.string(),
-    DisplayName: z.string(),
-    BillWithParent: z.boolean(),
-    FullyQualifiedName: z.string(),
-    CompanyName: z.string(),
-    FamilyName: z.string(),
-    sparse: z.boolean(),
-    PrimaryPhone: PrimaryPhoneSchema,
-    Active: z.boolean(),
-    Job: z.boolean(),
-    BalanceWithJobs: z.number(),
-    BillAddr: BillAddrSchema,
-    PreferredDeliveryMethod: z.string(),
-    Taxable: z.boolean(),
-    PrintOnCheckName: z.string(),
-    Balance: z.number(),
-    Id: z.string(),
-    MetaData: MetaDataSchema
-  });
+  const workPhone = phones.find(
+    (p) => p.PhoneType === "DEFAULT" && p.PhoneNumber
+  );
+  const mobilePhone = phones.find(
+    (p) => p.PhoneType === "MOBILE" && p.PhoneNumber
+  );
+  const fax = phones.find((p) => p.PhoneType === "FAX" && p.PhoneNumber);
 
-  export type Customer = z.infer<typeof CustomerSchema>;
-}
+  return {
+    workPhone: workPhone?.PhoneNumber,
+    mobilePhone: mobilePhone?.PhoneNumber,
+    homePhone: homePhone?.PhoneNumber,
+    fax: fax?.PhoneNumber
+  };
+};
+
+export const transformXeroContact = (
+  contact: Xero.Contact,
+  companyId: string
+): Accounting.Contact => {
+  const firstName = contact.FirstName || "";
+  const lastName = contact.LastName || "";
+
+  const addresses = contact.Addresses ?? [];
+
+  const { workPhone, mobilePhone, homePhone } = transformXeroPhones(contact);
+
+  return {
+    id: contact.ContactID,
+    name: contact.Name,
+    firstName,
+    lastName,
+    companyId,
+    website: contact.Website,
+    currencyCode: contact.DefaultCurrency ?? "USD",
+    taxId: contact.TaxNumber,
+    email: contact.EmailAddress,
+    isCustomer: contact.IsCustomer,
+    isVendor: contact.IsSupplier,
+    addresses: addresses.map((a) => ({
+      label: a.AttentionTo,
+      line1: a.AddressLine1,
+      line2: a.AddressLine2,
+      city: a.City,
+      region: a.Region,
+      country: a.Country,
+      postalCode: a.PostalCode
+    })),
+    workPhone,
+    mobilePhone,
+    homePhone,
+    updatedAt: parseDotnetDate(contact.UpdatedDateUTC).toISOString(),
+    raw: contact
+  };
+};

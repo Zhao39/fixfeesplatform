@@ -20,17 +20,20 @@
  */
 
 import { getCarbonServiceRole, XERO_WEBHOOK_SECRET } from "@carbon/auth";
-import {
+import type {
   AccountingEntity,
-  AccountingSyncPayload,
+  AccountingProvider,
+  AccountingSyncPayload
+} from "@carbon/ee/accounting";
+import {
+  getAccountingIntegration,
   getProviderIntegration,
-  ProviderCredentials,
-  ProviderID,
-  XeroProvider
+  ProviderID
 } from "@carbon/ee/accounting";
 import { tasks } from "@trigger.dev/sdk/v3";
 import crypto from "crypto";
-import { type ActionFunctionArgs, data } from "react-router";
+import type { ActionFunctionArgs } from "react-router";
+import { data } from "react-router";
 import { z } from "zod";
 
 export const config = {
@@ -64,76 +67,6 @@ function verifySignature(payload: string, header: string) {
     .digest("base64");
 
   return crypto.timingSafeEqual(Buffer.from(hmac), Buffer.from(header));
-}
-
-async function fetchContactAndDetermineType(
-  companyId: string,
-  tenantId: string,
-  contactId: string,
-  serviceRole: any
-): Promise<{
-  entityType: "customer" | "vendor" | "both";
-  isCustomer: boolean;
-  isSupplier: boolean;
-}> {
-  try {
-    // Get the Xero integration credentials
-    const integration = await serviceRole
-      .from("companyIntegration")
-      .select("*")
-      .eq("companyId", companyId)
-      .eq("id", XeroProvider.id)
-      .single();
-
-    if (integration.error || !integration.data) {
-      throw new Error("Xero integration not found");
-    }
-
-    const metadata = integration.data.metadata || {};
-
-    const { accessToken, refreshToken } = metadata;
-
-    if (!accessToken) {
-      throw new Error("No access token available for Xero integration");
-    }
-
-    const creds: ProviderCredentials = {
-      type: "oauth2",
-      accessToken,
-      refreshToken,
-      tenantId
-    };
-
-    const provider = getProviderIntegration(
-      serviceRole,
-      companyId,
-      XeroProvider.id,
-      creds
-    );
-
-    const contact = await provider.contacts.get(contactId);
-
-    const isCustomer = contact.isCustomer;
-    const isSupplier = contact.isVendor;
-
-    // Determine entity type based on flags
-    let entityType: "customer" | "vendor" | "both";
-
-    if (isCustomer && isSupplier) {
-      entityType = "both";
-    } else if (isSupplier) {
-      entityType = "vendor";
-    } else {
-      // Default to customer if only customer or neither flag is set
-      entityType = "customer";
-    }
-
-    return { entityType, isCustomer, isSupplier };
-  } catch (error) {
-    console.error(`Error fetching contact ${contactId}:`, error);
-    // Default to customer if we can't fetch the contact
-    return { entityType: "customer", isCustomer: true, isSupplier: false };
-  }
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -203,7 +136,7 @@ export async function action({ request }: ActionFunctionArgs) {
     "events"
   );
 
-  const serviceRole = await getCarbonServiceRole();
+  const serviceRole = getCarbonServiceRole();
   const events = parsed.data.events;
   const syncJobs = [];
   const errors = [];
@@ -223,27 +156,13 @@ export async function action({ request }: ActionFunctionArgs) {
   // Process events for each tenant
   for (const [tenantId, tenantEvents] of Object.entries(eventsByTenant)) {
     try {
-      // Find the company integration for this Xero tenant by checking metadata
-      const { data: integrations } = await serviceRole
-        .from("companyIntegration")
-        .select("*")
-        .eq("id", "xero" as any);
-
-      if (!integrations || integrations.length === 0) {
-        console.error(`No Xero integration found for tenant ${tenantId}`);
-        errors.push({
-          tenantId,
-          error: "Integration not found"
-        });
-        continue;
-      }
-
-      // Find the integration that matches this tenant ID
-      const found = integrations.find(
-        (integration: any) => integration.metadata?.tenantId === tenantId
+      const integration = await getAccountingIntegration(
+        serviceRole,
+        tenantId,
+        ProviderID.XERO
       );
 
-      if (!found) {
+      if (!integration) {
         console.error(`No Xero integration found for tenant ${tenantId}`);
         errors.push({
           tenantId,
@@ -252,7 +171,14 @@ export async function action({ request }: ActionFunctionArgs) {
         continue;
       }
 
-      const companyId = found.companyId;
+      const companyId = integration.companyId;
+
+      const provider = getProviderIntegration(
+        serviceRole,
+        companyId,
+        ProviderID.XERO,
+        integration.metadata
+      );
 
       // Group entities by type for efficient batch processing
       const entities: Array<AccountingEntity> = [];
@@ -271,39 +197,24 @@ export async function action({ request }: ActionFunctionArgs) {
 
         switch (eventCategory) {
           case "CONTACT":
-            {
-              // Fetch the contact from Xero to determine if it's a customer or vendor
-              const contactInfo = await fetchContactAndDetermineType(
-                companyId,
-                tenantId,
-                resourceId,
-                serviceRole
-              );
+            const contactType = await fetchContactType(provider, resourceId);
 
-              // If the contact is both customer and supplier, sync to both tables
-              if (contactInfo.entityType === "both") {
-                // Add as customer
-                entities.push({
-                  operation,
-                  entityType: "customer",
-                  entityId: resourceId
-                });
-
-                // Add as vendor
-                entities.push({
-                  operation,
-                  entityType: "vendor",
-                  entityId: resourceId
-                });
-              } else {
-                // Add as either customer or vendor based on the determination
-                entities.push({
-                  operation,
-                  entityType: contactInfo.entityType,
-                  entityId: resourceId
-                });
-              }
+            if (contactType === "customer" || contactType === "both") {
+              entities.push({
+                entityType: "customer",
+                entityId: resourceId,
+                operation: operation
+              });
             }
+
+            if (contactType === "supplier" || contactType === "both") {
+              entities.push({
+                entityType: "vendor",
+                entityId: resourceId,
+                operation: operation
+              });
+            }
+
             break;
         }
       }
@@ -316,7 +227,7 @@ export async function action({ request }: ActionFunctionArgs) {
             companyId,
             provider: ProviderID.XERO,
             syncType: "webhook",
-            syncDirection: "from-accounting",
+            syncDirection: "pull-from-accounting",
             entities,
             metadata: {
               tenantId: tenantId,
@@ -327,10 +238,14 @@ export async function action({ request }: ActionFunctionArgs) {
           console.dir(payload, { depth: null });
 
           // Trigger the background job using Trigger.dev
-          const handle = await tasks.trigger("from-accounting-sync", payload, {
-            tags: [ProviderID.XERO, payload.syncType],
-            concurrencyKey: `from-accounting-sync:${companyId}`
-          });
+          const handle = await tasks.trigger(
+            "sync-external-accounting",
+            payload,
+            {
+              tags: [ProviderID.XERO, payload.syncType],
+              concurrencyKey: `sync-external-accounting:${companyId}`
+            }
+          );
 
           console.log(
             `Triggered accounting sync job ${handle.id} for ${entities.length} entities`
@@ -360,6 +275,8 @@ export async function action({ request }: ActionFunctionArgs) {
     }
   }
 
+  console.log(`Processed Xero webhook: ${syncJobs.length} sync jobs triggered`);
+
   // Return detailed response
   return {
     success: errors.length === 0,
@@ -369,3 +286,26 @@ export async function action({ request }: ActionFunctionArgs) {
     timestamp: new Date().toISOString()
   };
 }
+
+const fetchContactType = async (
+  provider: AccountingProvider,
+  resourceId: string
+) => {
+  const res = await provider.request<{
+    Contacts: { IsSupplier: boolean; IsCustomer: boolean }[];
+  }>("GET", `/Contacts/${resourceId}`);
+
+  if (res.error || !res.data || res.data.Contacts.length === 0) {
+    throw new Error(`Failed to fetch contact ${resourceId}: ${res.message}`);
+  }
+
+  const contact = res.data.Contacts[0];
+
+  if (contact.IsSupplier && contact.IsCustomer) {
+    return "both";
+  } else if (contact.IsSupplier) {
+    return "supplier";
+  }
+
+  return "customer";
+};

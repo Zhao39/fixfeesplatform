@@ -78,12 +78,15 @@ import type {
 } from "~/components/SortableList";
 import { SortableList, SortableListItem } from "~/components/SortableList";
 import { usePermissions, useUser } from "~/hooks";
+import type {
+  MethodItemType,
+  MethodType,
+} from "~/modules/shared";
 import {
-  type MethodItemType,
-  type MethodType,
   methodType
 } from "~/modules/shared";
-import { type Item as ItemType, useBom, useItems } from "~/stores";
+import type { Item as ItemType, } from "~/stores";
+import { useBom, useItems } from "~/stores";
 import { path } from "~/utils/path";
 import type { methodOperationValidator } from "../../items.models";
 import { methodMaterialValidator } from "../../items.models";

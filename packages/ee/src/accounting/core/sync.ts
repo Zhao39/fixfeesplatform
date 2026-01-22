@@ -1,51 +1,40 @@
-import { Database } from "@carbon/database";
-import { getPostgresClient } from "@carbon/database/client";
-import { SupabaseClient } from "@supabase/supabase-js";
-import z from "zod";
-import { AccountingEntityType } from "../entities";
-import { AccountingProvider } from "../providers";
-import { ProviderID } from "./models";
+import { ContactSyncer } from "../providers/xero/entities/contact";
+import type { AccountingEntityType, IEntitySyncer, SyncContext } from "./types";
 
-export const AccountingSyncSchema = z.object({
-  companyId: z.string(),
-  provider: z.nativeEnum(ProviderID),
-  syncType: z.enum(["webhook", "scheduled", "trigger"]),
-  syncDirection: z.enum(["from-accounting", "to-accounting", "bi-directional"]),
-  entities: z.array(z.custom<AccountingEntity>()),
-  metadata: z.record(z.any()).optional()
-});
+export const SyncFactory = {
+  /**
+   * Instantiates the correct Syncer class based on the Entity Type.
+   * * @param type - The entity type string (e.g., 'customer', 'invoice')
+   * @param context - The execution context (DB connection, Provider, Config)
+   */
+  getSyncer(type: AccountingEntityType, context: SyncContext): IEntitySyncer {
+    switch (type) {
+      case "vendor":
+      case "customer":
+        return new ContactSyncer(context);
+      //   case "item":
+      //     return new ItemSyncer(context);
+      //   case "employee":
+      //     return new EmployeeSyncer(context);
 
-export type AccountingSyncPayload = z.infer<typeof AccountingSyncSchema>;
+      //   // Transaction Data
+      //   case "invoice":
+      //     return new InvoiceSyncer(context);
+      //   case "bill":
+      //     return new BillSyncer(context);
+      //   case "payment":
+      //     return new PaymentSyncer(context);
+      //   case "purchaseOrder":
+      //     return new PurchaseOrderSyncer(context);
+      //   case "salesOrder":
+      //     return new SalesOrderSyncer(context);
+      //   case "inventoryAdjustment":
+      //     return new InventoryAdjustmentSyncer(context);
 
-export type SyncFn = (input: {
-  client: SupabaseClient<Database>;
-  kysely: ReturnType<typeof getPostgresClient>;
-  entity: AccountingEntity;
-  provider: AccountingProvider;
-  payload: AccountingSyncPayload;
-}) => Promise<any> | any;
-
-/**
- *  {
-  companyId: string;
-  provider: AccountingProvider;
-  syncType: "webhook" | "scheduled" | "trigger";
-  syncDirection: "from-accounting" | "to-accounting" | "bi-directional";
-  entities: AccountingEntity[];
-  metadata?: {
-    tenantId?: string;
-    webhookId?: string;
-    userId?: string;
-    [key: string]: any;
-  };
-
- */
-
-export interface AccountingEntity<
-  T extends AccountingEntityType = AccountingEntityType
-> {
-  entityType: T;
-  entityId: string;
-  operation: "create" | "update" | "delete" | "sync";
-  lastSyncedAt?: string;
-}
+      default:
+        throw new Error(
+          `No Syncer implementation found for entity type: ${type}`
+        );
+    }
+  }
+};

@@ -28,9 +28,11 @@ import {
 } from "@internationalized/date";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { LuCirclePlus, LuSettings2, LuTriangleAlert } from "react-icons/lu";
+import type {
+  LoaderFunctionArgs,
+} from "react-router";
 import {
   Link,
-  type LoaderFunctionArgs,
   redirect,
   useLoaderData
 } from "react-router";

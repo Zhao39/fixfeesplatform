@@ -1,6 +1,7 @@
 import type { Database } from "@carbon/database";
 import { supportedModelTypes } from "@carbon/utils";
-import { FunctionRegion, type SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import { FunctionRegion, } from "@supabase/supabase-js";
 import type { GenericQueryFilters } from "~/utils/query";
 import { setGenericQueryFilters } from "~/utils/query";
 import type { documentTypes } from "./shared.models";

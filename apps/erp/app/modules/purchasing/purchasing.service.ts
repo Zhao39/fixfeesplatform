@@ -1,10 +1,13 @@
-import { type Database, fetchAllFromTable, type Json } from "@carbon/database";
+import type { Database, Json } from "@carbon/database";
+import { fetchAllFromTable, } from "@carbon/database";
 import { getPurchaseOrderStatus } from "@carbon/utils";
 import { getLocalTimeZone, today } from "@internationalized/date";
+import type {
+  PostgrestSingleResponse,
+  SupabaseClient
+} from "@supabase/supabase-js";
 import {
   FunctionRegion,
-  type PostgrestSingleResponse,
-  type SupabaseClient
 } from "@supabase/supabase-js";
 import type { z } from "zod";
 import { getEmployeeJob } from "~/modules/people";

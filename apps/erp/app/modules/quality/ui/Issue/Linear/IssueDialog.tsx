@@ -1,4 +1,5 @@
-import { type LinearIssue, LinearIssueSchema } from "@carbon/ee/linear";
+import type { LinearIssue, } from "@carbon/ee/linear";
+import { LinearIssueSchema } from "@carbon/ee/linear";
 import {
   Badge,
   Button,

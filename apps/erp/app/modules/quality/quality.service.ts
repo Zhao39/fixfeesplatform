@@ -1,4 +1,5 @@
-import { type Database, fetchAllFromTable, type Json } from "@carbon/database";
+import type { Database, Json } from "@carbon/database";
+import { fetchAllFromTable, } from "@carbon/database";
 import type { JSONContent } from "@carbon/react";
 import { parseDate } from "@internationalized/date";
 import type { SupabaseClient } from "@supabase/supabase-js";

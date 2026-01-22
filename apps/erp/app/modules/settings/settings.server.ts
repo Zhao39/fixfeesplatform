@@ -1,9 +1,9 @@
 import type { Database, Json } from "@carbon/database";
-import { integrations } from "@carbon/ee";
+import { getIntegrationConfigById } from "@carbon/ee";
 import { redis } from "@carbon/kv";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { z } from "zod";
-import { Integration } from "~/modules/settings/types";
+import type { Integration } from "~/modules/settings/types";
 import { sanitize } from "~/utils/supabase";
 import type { customFieldValidator } from "./settings.models";
 
@@ -351,9 +351,9 @@ export async function getIntegrationHealth(
     };
   }
 
-  const check = integrations.find((i) => i.id === integration.id);
+  const check = getIntegrationConfigById(integration.id!);
 
-  if (!check || !check.healthcheck) {
+  if (!check || !check.onHealthcheck) {
     return {
       ...integration,
       health: "healthy"
@@ -372,7 +372,7 @@ export async function getIntegrationHealth(
     };
   }
 
-  const status = await check.healthcheck(
+  const status = await check.onHealthcheck(
     companyId,
     integration.metadata as Record<string, any>
   );

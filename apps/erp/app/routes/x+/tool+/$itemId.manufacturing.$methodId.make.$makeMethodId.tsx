@@ -19,11 +19,13 @@ import {
   BillOfProcess,
   MakeMethodTools
 } from "~/modules/items/ui/Item";
+import type {
+  MethodItemType,
+  MethodType
+} from "~/modules/shared";
 import {
   getModelByItemId,
   getTagsList,
-  type MethodItemType,
-  type MethodType
 } from "~/modules/shared";
 import { path } from "~/utils/path";
 

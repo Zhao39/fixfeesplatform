@@ -1,14 +1,26 @@
 import { getCarbonServiceRole, NODE_ENV, XERO_CLIENT_ID } from "@carbon/auth";
-import type { ComponentProps } from "react";
-import { z } from "zod";
+import type { CreateSubscriptionParams } from "@carbon/database/event";
+import { createEventSystemSubscription } from "@carbon/database/event";
 import {
   getProviderIntegration,
-  ProviderCredentials,
-  ProviderID
-} from "../accounting";
-import type { IntegrationConfig } from "../types";
+  ProviderID,
+  type ProviderIntegrationMetadata
+} from "@carbon/ee/accounting";
+import { PostgresDriver } from "kysely";
+import type { ComponentProps } from "react";
+import { z } from "zod";
+import { defineIntegration } from "../fns";
 
-export const Xero: IntegrationConfig = {
+const XeroSettingsSchema = z.object({
+  backfillCustomers: z.boolean().optional().default(true),
+  backfillVendors: z.boolean().optional().default(true),
+  conflictResolution: z
+    .enum(["skip", "overwrite", "merge"])
+    .optional()
+    .default("merge")
+});
+
+export const Xero = defineIntegration({
   name: "Xero",
   id: "xero",
   active: NODE_ENV !== "production",
@@ -19,8 +31,56 @@ export const Xero: IntegrationConfig = {
   shortDescription:
     "Automatically post transactions from sales and purchase invoices.",
   images: [],
-  settings: [],
-  schema: z.object({}),
+  settings: [
+    {
+      name: "backfillCustomers",
+      label: "Import Customers",
+      description:
+        "Automatically import all customers from Xero during initial sync",
+      group: "Import Settings",
+      type: "switch" as const,
+      required: false,
+      value: true
+    },
+    {
+      name: "backfillVendors",
+      label: "Import Vendors",
+      description:
+        "Automatically import all vendors/suppliers from Xero during initial sync",
+      group: "Import Settings",
+      type: "switch" as const,
+      required: false,
+      value: true
+    },
+    {
+      name: "conflictResolution",
+      label: "Conflict Resolution",
+      description:
+        "Determines how to handle records that exist in both systems",
+      group: "Sync Settings",
+      type: "options" as const,
+      listOptions: [
+        {
+          value: "skip",
+          label: "Skip",
+          description: "Keep existing Carbon data unchanged"
+        },
+        {
+          value: "overwrite",
+          label: "Overwrite",
+          description: "Replace Carbon data with Xero data"
+        },
+        {
+          value: "merge",
+          label: "Merge",
+          description: "Combine data from both systems"
+        }
+      ],
+      required: false,
+      value: "merge"
+    }
+  ],
+  schema: XeroSettingsSchema,
   oauth: {
     authUrl: "https://login.xero.com/identity/connect/authorize",
     clientId: XERO_CLIENT_ID!,
@@ -33,17 +93,50 @@ export const Xero: IntegrationConfig = {
     ],
     tokenUrl: "https://login.xero.com/identity/connect/token"
   },
-  async healthcheck(companyId, metadata) {
+  actions: [
+    {
+      id: "import-contacts",
+      label: "Import Contacts",
+      description:
+        "Import all contacts from Xero as customers and suppliers in Carbon",
+      endpoint: "/api/integrations/xero/backfill"
+    }
+  ],
+  async onHealthcheck(companyId, metadata) {
     const provider = getProviderIntegration(
       getCarbonServiceRole(),
       companyId,
       ProviderID.XERO,
-      metadata as ProviderCredentials
+      metadata as ProviderIntegrationMetadata
     );
 
     return await provider.validate();
+  },
+  async onInstall(companyId) {
+    const { getPostgresClient, getPostgresConnectionPool } = await import(
+      "@carbon/database/client"
+    );
+
+    const pg = getPostgresClient(getPostgresConnectionPool(1), PostgresDriver);
+
+    const tables: CreateSubscriptionParams["table"][] = [
+      "address",
+      "contact",
+      "customer",
+      "supplier"
+    ];
+
+    for (const table of tables) {
+      await createEventSystemSubscription(pg, {
+        table,
+        companyId,
+        name: "xero-sync",
+        operations: ["INSERT", "UPDATE", "DELETE"],
+        type: "SYNC"
+      });
+    }
   }
-};
+});
 
 function Logo(props: ComponentProps<"svg">) {
   return (

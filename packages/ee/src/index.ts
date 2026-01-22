@@ -7,11 +7,17 @@ import { QuickBooks } from "./quickbooks/config";
 import { Resend } from "./resend/config";
 import { Sage } from "./sage/config";
 import { Slack } from "./slack/config";
+import type { IntegrationOptions } from "./types";
 import { Xero } from "./xero/config";
 import { Zapier } from "./zapier/config";
 
 export { Resend } from "./resend/config";
-export type { IntegrationConfig } from "./types";
+export type {
+  IntegrationAction,
+  IntegrationConfig,
+  IntegrationSetting,
+  IntegrationSettingOption
+} from "./types";
 
 export const integrations = [
   ExchangeRates,
@@ -27,10 +33,16 @@ export const integrations = [
   Zapier
 ];
 
-export { Logo as OnshapeLogo, Onshape } from "./onshape/config";
+export { Onshape, Logo as OnshapeLogo } from "./onshape/config";
 // TODO: export as @carbon/ee/paperless
 export { PaperlessPartsClient } from "./paperless-parts/lib/client";
 export { QuickBooks } from "./quickbooks/config";
 export { Slack } from "./slack/config";
 export * from "./slack/lib/messages";
 export { Xero } from "./xero/config";
+
+export const getIntegrationConfigById = (
+  id: string
+): IntegrationOptions | undefined => {
+  return integrations.find((integration) => integration.id === id);
+};

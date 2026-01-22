@@ -10,12 +10,14 @@ import { Await, redirect, useLoaderData, useParams } from "react-router";
 import type { z } from "zod";
 import CadModel from "~/components/CadModel";
 import { usePermissions, useRouteData } from "~/hooks";
+import type {
+  MakeMethod,
+  Material,
+  MethodOperation,
+  ToolSummary,
+} from "~/modules/items";
 import {
   itemManufacturingValidator,
-  type MakeMethod,
-  type Material,
-  type MethodOperation,
-  type ToolSummary,
   upsertItemManufacturing
 } from "~/modules/items";
 import {

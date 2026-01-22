@@ -36,7 +36,7 @@ CREATE TABLE "eventSystemSubscription" (
     "createdAt" TIMESTAMPTZ DEFAULT NOW(),
 
     -- Constraints: Unique name per company
-    CONSTRAINT "unique_subscription_name_per_company" UNIQUE ("companyId", "name")
+    CONSTRAINT "unique_subscription_name_per_company" UNIQUE ("companyId", "name", "table")
 );
 
 -- OPTIMIZATION: Partial Index for High-Performance Dispatch
@@ -105,12 +105,22 @@ DECLARE
   rec_company_id TEXT;
   has_subs BOOLEAN;
 BEGIN
+  -- Guard: Skip if we're in a sync operation (prevents circular triggers)
+  -- Set this via: SET LOCAL "app.sync_in_progress" = 'true';
+  IF current_setting('app.sync_in_progress', true) = 'true' THEN
+    RETURN NULL;
+  END IF;
+
   -- A. Extract Company ID (Partition Key)
   -- We need this to efficiently filter subscriptions.
+  -- NOTE: For STATEMENT-level triggers, OLD/NEW are not available.
+  -- We must query the transition tables (batched_new/batched_old) instead.
   IF TG_OP = 'DELETE' THEN
-    rec_company_id := (row_to_json(OLD)::jsonb)->>'companyId';
-  ELSE
-    rec_company_id := (row_to_json(NEW)::jsonb)->>'companyId';
+    SELECT t."companyId" INTO rec_company_id FROM batched_old t LIMIT 1;
+  ELSIF TG_OP = 'INSERT' THEN
+    SELECT t."companyId" INTO rec_company_id FROM batched_new t LIMIT 1;
+  ELSE -- UPDATE
+    SELECT t."companyId" INTO rec_company_id FROM batched_new t LIMIT 1;
   END IF;
 
   -- Performance Guard: If record has no companyId, we can't match any subscriptions.

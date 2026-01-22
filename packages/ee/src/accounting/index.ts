@@ -1,3 +1,5 @@
-export * from "./core";
-export * from "./entities";
+export * from "./core/models";
+export * from "./core/service";
+export * from "./core/sync";
+export * from "./core/types";
 export * from "./providers";

@@ -2,10 +2,11 @@ import { Copy, Input, InputGroup, InputRightElement } from "@carbon/react";
 import { isBrowser } from "@carbon/utils";
 import type { SVGProps } from "react";
 import { z } from "zod";
+import { defineIntegration } from "../fns";
 import type { IntegrationConfig } from "../types";
 import { getLinearClient } from "./lib";
 
-export const Linear: IntegrationConfig = {
+export const Linear: IntegrationConfig = defineIntegration({
   name: "Linear",
   id: "linear",
   active: true,
@@ -25,7 +26,7 @@ export const Linear: IntegrationConfig = {
       value: ""
     }
   ],
-  healthcheck,
+  onHealthcheck: healthcheck,
   schema: z.object({
     apiKey: z
       .string()
@@ -34,7 +35,7 @@ export const Linear: IntegrationConfig = {
         message: "Linear API Key must start with 'lin_api'"
       })
   })
-};
+});
 
 function SetupInstructions({ companyId }: { companyId: string }) {
   const webhookUrl = isBrowser

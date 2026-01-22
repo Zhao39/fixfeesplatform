@@ -1,45 +1,63 @@
 import type { Database } from "@carbon/database";
-import type { KyselyTx } from "@carbon/database/client";
+import type { KyselyDatabase, KyselyTx } from "@carbon/database/client";
 import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Kysely } from "kysely";
 import { sql } from "kysely";
-import { Accounting, TablesWithExternalId } from "../entities";
-import { XeroProvider } from "../providers";
+import { XeroProvider } from "../providers/xero";
+import type { ProviderID } from "./models";
 import {
+  DEFAULT_SYNC_CONFIG,
   ExternalIdSchema,
-  ProviderCredentials,
-  ProviderCredentialsSchema,
-  ProviderID
+  ProviderIntegrationMetadataSchema
 } from "./models";
-import { AccountingSyncPayload } from "./sync";
+import type {
+  Accounting,
+  AccountingSyncPayload,
+  ProviderCredentials,
+  ProviderIntegrationMetadata
+} from "./types";
 
 export const getAccountingIntegration = async <T extends ProviderID>(
   client: SupabaseClient<Database>,
-  companyId: string,
+  companyOrTenantId: string,
   provider: T
 ) => {
   const integration = await client
     .from("companyIntegration")
     .select("*")
-    .eq("companyId", companyId)
     .eq("id", provider)
+    .or(
+      `companyId.eq.${companyOrTenantId},metadata->credentials->>tenantId.eq.${companyOrTenantId}`
+    )
     .single();
+
+  console.log(
+    "Fetched integration for",
+    provider,
+    "and ID",
+    companyOrTenantId,
+    integration
+  );
 
   if (integration.error || !integration.data) {
     throw new Error(
-      `No ${provider} integration found for company ${companyId}`
+      `No ${provider} integration found for company or tenant ${companyOrTenantId}`
     );
   }
 
-  const config = ProviderCredentialsSchema.safeParse(integration.data.metadata);
+  const config = ProviderIntegrationMetadataSchema.safeParse(
+    integration.data.metadata
+  );
 
   if (!config.success) {
-    console.error(integration.error);
+    console.dir(config.error, { depth: null });
     throw new Error("Invalid provider config");
   }
 
   return {
+    ...integration.data,
     id: provider as T,
-    config: config.data
+    metadata: config.data
   } as const;
 };
 
@@ -47,9 +65,11 @@ export const getProviderIntegration = (
   client: SupabaseClient<Database>,
   companyId: string,
   provider: ProviderID,
-  config?: ProviderCredentials
+  config?: ProviderIntegrationMetadata
 ) => {
-  const { accessToken, refreshToken, tenantId } = config ?? {};
+  const { accessToken, refreshToken, tenantId } = config?.credentials || {};
+
+  const syncConfig = config?.syncConfig ?? DEFAULT_SYNC_CONFIG;
 
   // Create a callback function to update the integration metadata when tokens are refreshed
   const onTokenRefresh = async (auth: ProviderCredentials) => {
@@ -64,7 +84,7 @@ export const getProviderIntegration = (
 
       await client
         .from("companyIntegration")
-        .update({ metadata: update })
+        .update({ metadata: { ...config, credentials: update } })
         .eq("companyId", companyId)
         .eq("id", provider);
     } catch (error) {
@@ -99,6 +119,7 @@ export const getProviderIntegration = (
         clientId: process.env.XERO_CLIENT_ID!,
         clientSecret: process.env.XERO_CLIENT_SECRET!,
         redirectUri: process.env.XERO_REDIRECT_URI,
+        syncConfig,
         onTokenRefresh
       });
     // Add other providers as needed
@@ -141,13 +162,59 @@ export const getContactFromExternalId = async (
   };
 };
 
-export const getEntityWithExternalId = async <T extends TablesWithExternalId>(
+type TablesWithExternalId = {
+  [K in keyof Database["public"]["Tables"]]: Database["public"]["Tables"][K]["Row"] extends {
+    externalId: unknown;
+  }
+    ? K
+    : never;
+}[keyof Database["public"]["Tables"]];
+
+type EntityWithParsedExternalId<T extends TablesWithExternalId> = Omit<
+  Database["public"]["Tables"][T]["Row"],
+  "externalId"
+> & {
+  externalId: typeof ExternalIdSchema._type;
+};
+
+// Overload for Supabase client
+export async function getAccountingEntity<T extends TablesWithExternalId>(
   client: SupabaseClient<Database>,
   table: T,
   companyId: string,
   provider: ProviderID,
   select: { externalId: string } | { id: string }
-) => {
+): Promise<EntityWithParsedExternalId<T> | null>;
+
+// Overload for Kysely client
+export async function getAccountingEntity<T extends TablesWithExternalId>(
+  client: Kysely<KyselyDatabase> | KyselyTx,
+  table: T,
+  companyId: string,
+  provider: ProviderID,
+  select: { externalId: string } | { id: string }
+): Promise<EntityWithParsedExternalId<T> | null>;
+
+// Implementation
+export async function getAccountingEntity<T extends TablesWithExternalId>(
+  client: SupabaseClient<Database> | Kysely<KyselyDatabase> | KyselyTx,
+  table: T,
+  companyId: string,
+  provider: ProviderID,
+  select: { externalId: string } | { id: string }
+): Promise<EntityWithParsedExternalId<T> | null> {
+  // Check if client is a Kysely instance
+  if (!("realtime" in client)) {
+    return getAccountingEntityKysely(
+      client,
+      table,
+      companyId,
+      provider,
+      select
+    );
+  }
+
+  // Supabase client path
   let query = client
     .from(table as any) // Supabase typing issue
     .select("*")
@@ -174,7 +241,7 @@ export const getEntityWithExternalId = async <T extends TablesWithExternalId>(
   );
 
   if (!externalId.success) {
-    throw new Error("Invalid external ID format");
+    return null;
   }
 
   return {
@@ -184,7 +251,105 @@ export const getEntityWithExternalId = async <T extends TablesWithExternalId>(
     >),
     externalId: externalId.data
   };
-};
+}
+
+// Internal helper for Kysely implementation
+async function getAccountingEntityKysely<T extends TablesWithExternalId>(
+  client: Kysely<KyselyDatabase> | KyselyTx,
+  table: T,
+  companyId: string,
+  provider: ProviderID,
+  select: { externalId: string } | { id: string }
+): Promise<EntityWithParsedExternalId<T> | null> {
+  let query = client
+    .selectFrom(table as keyof KyselyDatabase)
+    .selectAll()
+    .where("companyId", "=", companyId)
+    .where(sql`"externalId"->${provider}->>'provider'`, "=", provider);
+
+  if ("id" in select) {
+    query = query.where("id", "=", select.id);
+  }
+
+  if ("externalId" in select) {
+    query = query.where(
+      sql`"externalId"->${provider}->>'id'`,
+      "=",
+      select.externalId
+    );
+  }
+
+  const entry = await query.executeTakeFirst();
+
+  if (!entry) {
+    return null;
+  }
+
+  const externalId = await ExternalIdSchema.safeParseAsync(
+    (entry as any).externalId
+  );
+
+  if (!externalId.success) {
+    throw new Error("Invalid external ID format");
+  }
+
+  return {
+    ...(entry as unknown as Omit<
+      Database["public"]["Tables"][T]["Row"],
+      "externalId"
+    >),
+    externalId: externalId.data
+  };
+}
+
+/**
+ * Updates the externalId JSONB field for an entity, merging with existing data
+ */
+export async function updateAccountingEntityExternalId<
+  T extends TablesWithExternalId
+>(
+  client: Kysely<KyselyDatabase> | KyselyTx,
+  table: T,
+  entityId: string,
+  provider: ProviderID,
+  remoteId: string,
+  metadata?: Record<string, unknown>
+): Promise<void> {
+  await client
+    .updateTable(table as keyof KyselyDatabase)
+    .set({
+      externalId: sql`COALESCE("externalId", '{}'::jsonb) || ${JSON.stringify({
+        [provider]: {
+          id: remoteId,
+          provider,
+          lastSyncedAt: new Date().toISOString(),
+          ...(metadata ?? {})
+        }
+      })}::jsonb`
+    })
+    .where("id", "=", entityId)
+    .execute();
+}
+
+/**
+ * Removes the external ID link for a specific provider from an entity
+ */
+export async function unlinkAccountingEntityExternalId<
+  T extends TablesWithExternalId
+>(
+  client: Kysely<KyselyDatabase> | KyselyTx,
+  table: T,
+  entityId: string,
+  provider: ProviderID
+): Promise<void> {
+  await client
+    .updateTable(table as keyof KyselyDatabase)
+    .set({
+      externalId: sql`"externalId" - ${provider}`
+    })
+    .where("id", "=", entityId)
+    .execute();
+}
 
 export const upsertAccountingCustomer = async (
   tx: KyselyTx,
@@ -213,7 +378,9 @@ export const upsertAccountingCustomer = async (
         firstName: remote.firstName ?? null,
         lastName: remote.lastName ?? null,
         isCustomer: remote.isCustomer,
-        externalId: sql`jsonb_set("externalId", '{${payload.provider}}', ${sql.raw(
+        externalId: sql`jsonb_set("externalId", '{${
+          payload.provider
+        }}', ${sql.raw(
           JSON.stringify({
             id: remote.id,
             lastSyncedAt: new Date().toISOString(),
@@ -230,9 +397,6 @@ export const upsertAccountingCustomer = async (
       .execute();
   }
 
-  const workPhone = remote.phones.find((p) => p.type === "DEFAULT");
-  const mobilePhone = remote.phones.find((p) => p.type === "MOBILE");
-
   const inserted = await tx
     .insertInto("contact")
     .values({
@@ -240,8 +404,8 @@ export const upsertAccountingCustomer = async (
       email: remote.email ?? null,
       firstName: remote.firstName ?? null,
       lastName: remote.lastName ?? null,
-      workPhone: workPhone ? workPhone.phone : null,
-      mobilePhone: mobilePhone ? mobilePhone.phone : null,
+      workPhone: remote.homePhone ? remote.homePhone : null,
+      mobilePhone: remote.mobilePhone ? remote.mobilePhone : null,
       isCustomer: remote.isCustomer,
       externalId: {
         [payload.provider]: {
@@ -264,9 +428,15 @@ export const upsertCustomerFromAccounting = async (
   tx: KyselyTx,
   remote: Accounting.Contact,
   payload: AccountingSyncPayload,
-  id?: string
+  id?: string,
+  conflictResolution: "skip" | "overwrite" | "merge" = "merge"
 ): Promise<string> => {
   if (id) {
+    // Skip strategy: don't update existing customer
+    if (conflictResolution === "skip") {
+      return id;
+    }
+
     const result = await tx
       .updateTable("customer")
       .set({
@@ -321,29 +491,38 @@ export const upsertContactAndLinkToCustomer = async (
   tx: KyselyTx,
   remote: Accounting.Contact,
   customerId: string,
-  payload: AccountingSyncPayload
+  payload: AccountingSyncPayload,
+  conflictResolution: "skip" | "overwrite" | "merge" = "merge"
 ): Promise<void> => {
-  const contact = await tx
-    .insertInto("contact")
-    .values({
-      companyId: payload.companyId,
-      email: remote.email ?? null,
-      firstName: remote.firstName ?? null,
-      lastName: remote.lastName ?? null,
-      workPhone: remote.workPhone ?? null,
-      mobilePhone: remote.mobilePhone ?? null,
-      homePhone: remote.homePhone ?? null,
-      fax: remote.fax ?? null,
-      isCustomer: true,
-      externalId: {
-        [payload.provider]: {
-          id: remote.id,
-          lastSyncedAt: new Date().toISOString(),
-          provider: payload.provider
-        }
+  let insertQuery = tx.insertInto("contact").values({
+    companyId: payload.companyId,
+    email: remote.email ?? null,
+    firstName: remote.firstName ?? null,
+    lastName: remote.lastName ?? null,
+    workPhone: remote.workPhone ?? null,
+    mobilePhone: remote.mobilePhone ?? null,
+    homePhone: remote.homePhone ?? null,
+    fax: remote.fax ?? null,
+    isCustomer: true,
+    externalId: {
+      [payload.provider]: {
+        id: remote.id,
+        lastSyncedAt: new Date().toISOString(),
+        provider: payload.provider
       }
-    })
-    .onConflict((oc) =>
+    }
+  });
+
+  // Apply conflict resolution strategy
+  if (conflictResolution === "skip") {
+    insertQuery = insertQuery.onConflict((oc) =>
+      oc
+        .columns(["companyId", "isCustomer", "email"])
+        .where((eq) => eq("email", "is not", null))
+        .doNothing()
+    );
+  } else if (conflictResolution === "overwrite") {
+    insertQuery = insertQuery.onConflict((oc) =>
       oc
         .columns(["companyId", "isCustomer", "email"])
         .where((eq) => eq("email", "is not", null))
@@ -354,11 +533,28 @@ export const upsertContactAndLinkToCustomer = async (
           mobilePhone: sql`EXCLUDED."mobilePhone"`,
           homePhone: sql`EXCLUDED."homePhone"`,
           fax: sql`EXCLUDED."fax"`,
+          externalId: sql`EXCLUDED."externalId"`
+        })
+    );
+  } else {
+    // merge strategy (default)
+    insertQuery = insertQuery.onConflict((oc) =>
+      oc
+        .columns(["companyId", "isCustomer", "email"])
+        .where((eq) => eq("email", "is not", null))
+        .doUpdateSet({
+          firstName: sql`COALESCE(EXCLUDED."firstName", contact."firstName")`,
+          lastName: sql`COALESCE(EXCLUDED."lastName", contact."lastName")`,
+          workPhone: sql`COALESCE(EXCLUDED."workPhone", contact."workPhone")`,
+          mobilePhone: sql`COALESCE(EXCLUDED."mobilePhone", contact."mobilePhone")`,
+          homePhone: sql`COALESCE(EXCLUDED."homePhone", contact."homePhone")`,
+          fax: sql`COALESCE(EXCLUDED."fax", contact."fax")`,
           externalId: sql`contact."externalId" || EXCLUDED."externalId"`
         })
-    )
-    .returningAll()
-    .executeTakeFirst();
+    );
+  }
+
+  const contact = await insertQuery.returningAll().executeTakeFirst();
 
   if (!contact?.id) {
     throw new Error("Failed to upsert contact");
@@ -388,9 +584,15 @@ export const upsertSupplierFromAccounting = async (
   tx: KyselyTx,
   remote: Accounting.Contact,
   payload: AccountingSyncPayload,
-  id?: string
+  id?: string,
+  conflictResolution: "skip" | "overwrite" | "merge" = "merge"
 ): Promise<string> => {
   if (id) {
+    // Skip strategy: don't update existing supplier
+    if (conflictResolution === "skip") {
+      return id;
+    }
+
     const result = await tx
       .updateTable("supplier")
       .set({
@@ -445,31 +647,39 @@ export const upsertContactAndLinkToSupplier = async (
   tx: KyselyTx,
   remote: Accounting.Contact,
   supplierId: string,
-  payload: AccountingSyncPayload
+  payload: AccountingSyncPayload,
+  conflictResolution: "skip" | "overwrite" | "merge" = "merge"
 ): Promise<void> => {
-  const contact = await tx
-    .insertInto("contact")
-    .values({
-      companyId: payload.companyId,
-      email: remote.email ?? null,
-      firstName: remote.firstName ?? null,
-      lastName: remote.lastName ?? null,
-      workPhone: remote.workPhone ?? null,
-      mobilePhone: remote.mobilePhone ?? null,
-      homePhone: remote.homePhone ?? null,
-      fax: remote.fax ?? null,
-      isSupplier: true,
-      externalId: {
-        [payload.provider]: {
-          id: remote.id,
-          lastSyncedAt: new Date().toISOString(),
-          provider: payload.provider
-        }
+  let insertQuery = tx.insertInto("contact").values({
+    companyId: payload.companyId,
+    email: remote.email ?? null,
+    firstName: remote.firstName ?? null,
+    lastName: remote.lastName ?? null,
+    workPhone: remote.workPhone ?? null,
+    mobilePhone: remote.mobilePhone ?? null,
+    homePhone: remote.homePhone ?? null,
+    fax: remote.fax ?? null,
+    externalId: {
+      [payload.provider]: {
+        id: remote.id,
+        lastSyncedAt: new Date().toISOString(),
+        provider: payload.provider
       }
-    })
-    .onConflict((oc) =>
+    }
+  });
+
+  // Apply conflict resolution strategy
+  if (conflictResolution === "skip") {
+    insertQuery = insertQuery.onConflict((oc) =>
       oc
-        .columns(["companyId", "isSupplier", "email"])
+        .columns(["companyId", "email"])
+        .where((eq) => eq("email", "is not", null))
+        .doNothing()
+    );
+  } else if (conflictResolution === "overwrite") {
+    insertQuery = insertQuery.onConflict((oc) =>
+      oc
+        .columns(["companyId", "email"])
         .where((eq) => eq("email", "is not", null))
         .doUpdateSet({
           firstName: sql`EXCLUDED."firstName"`,
@@ -478,11 +688,28 @@ export const upsertContactAndLinkToSupplier = async (
           mobilePhone: sql`EXCLUDED."mobilePhone"`,
           homePhone: sql`EXCLUDED."homePhone"`,
           fax: sql`EXCLUDED."fax"`,
+          externalId: sql`EXCLUDED."externalId"`
+        })
+    );
+  } else {
+    // merge strategy (default)
+    insertQuery = insertQuery.onConflict((oc) =>
+      oc
+        .columns(["companyId", "email"])
+        .where((eq) => eq("email", "is not", null))
+        .doUpdateSet({
+          firstName: sql`COALESCE(EXCLUDED."firstName", contact."firstName")`,
+          lastName: sql`COALESCE(EXCLUDED."lastName", contact."lastName")`,
+          workPhone: sql`COALESCE(EXCLUDED."workPhone", contact."workPhone")`,
+          mobilePhone: sql`COALESCE(EXCLUDED."mobilePhone", contact."mobilePhone")`,
+          homePhone: sql`COALESCE(EXCLUDED."homePhone", contact."homePhone")`,
+          fax: sql`COALESCE(EXCLUDED."fax", contact."fax")`,
           externalId: sql`contact."externalId" || EXCLUDED."externalId"`
         })
-    )
-    .returningAll()
-    .executeTakeFirst();
+    );
+  }
+
+  const contact = await insertQuery.returningAll().executeTakeFirst();
 
   if (!contact?.id) {
     throw new Error("Failed to upsert contact");

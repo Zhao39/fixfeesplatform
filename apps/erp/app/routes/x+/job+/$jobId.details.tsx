@@ -44,7 +44,7 @@ import PurchasingStatus from "~/modules/purchasing/ui/PurchaseOrder/PurchasingSt
 import { useItems } from "~/stores";
 import type { StorageItem } from "~/types";
 import { setCustomFields } from "~/utils/form";
-import { Handle } from "~/utils/handle";
+import type { Handle } from "~/utils/handle";
 import { path } from "~/utils/path";
 
 export const handle: Handle = {
