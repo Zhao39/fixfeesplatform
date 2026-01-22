@@ -27,6 +27,7 @@ import {
   LuLoaderCircle,
   LuPanelLeft,
   LuPanelRight,
+  LuSend,
   LuTrash,
   LuTruck
 } from "react-icons/lu";
@@ -187,6 +188,31 @@ const PurchaseOrderHeader = () => {
             >
               Finalize
             </SplitButton>
+            <statusFetcher.Form
+              method="post"
+              action={path.to.purchaseOrderSubmitForApproval(orderId)}
+            >
+              <Button
+                type="submit"
+                isLoading={
+                  statusFetcher.state !== "idle" &&
+                  statusFetcher.formAction?.includes("submit-for-approval")
+                }
+                isDisabled={
+                  !["Planned"].includes(
+                    routeData?.purchaseOrder?.status ?? ""
+                  ) || !permissions.can("update", "purchasing")
+                }
+                leftIcon={<LuSend />}
+                variant={
+                  ["Planned"].includes(routeData?.purchaseOrder?.status ?? "")
+                    ? "primary"
+                    : "secondary"
+                }
+              >
+                Submit for Approval
+              </Button>
+            </statusFetcher.Form>
             {routeData?.purchaseOrder?.purchaseOrderType ===
               "Outside Processing" &&
               (shipments.length > 0 ? (
