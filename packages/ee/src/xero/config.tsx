@@ -14,6 +14,7 @@ import { defineIntegration } from "../fns";
 const XeroSettingsSchema = z.object({
   backfillCustomers: z.boolean().optional().default(true),
   backfillVendors: z.boolean().optional().default(true),
+  backfillItems: z.boolean().optional().default(true),
   conflictResolution: z
     .enum(["skip", "overwrite", "merge"])
     .optional()
@@ -34,20 +35,27 @@ export const Xero = defineIntegration({
   settings: [
     {
       name: "backfillCustomers",
-      label: "Import Customers",
-      description:
-        "Automatically import all customers from Xero during initial sync",
-      group: "Import Settings",
+      label: "Customers",
+      description: "Include customers in sync",
+      group: "Entities to Sync",
       type: "switch" as const,
       required: false,
       value: true
     },
     {
       name: "backfillVendors",
-      label: "Import Vendors",
-      description:
-        "Automatically import all vendors/suppliers from Xero during initial sync",
-      group: "Import Settings",
+      label: "Vendors",
+      description: "Include vendors/suppliers in sync",
+      group: "Entities to Sync",
+      type: "switch" as const,
+      required: false,
+      value: true
+    },
+    {
+      name: "backfillItems",
+      label: "Items",
+      description: "Include items/products in sync",
+      group: "Entities to Sync",
       type: "switch" as const,
       required: false,
       value: true
@@ -95,10 +103,9 @@ export const Xero = defineIntegration({
   },
   actions: [
     {
-      id: "import-contacts",
-      label: "Import Contacts",
-      description:
-        "Import all contacts from Xero as customers and suppliers in Carbon",
+      id: "sync-data",
+      label: "Run Initial Sync",
+      description: "Runs the initial backfill for the selected entities above",
       endpoint: "/api/integrations/xero/backfill"
     }
   ],
@@ -123,7 +130,10 @@ export const Xero = defineIntegration({
       "address",
       "contact",
       "customer",
-      "supplier"
+      "supplier",
+      "item",
+      "salesInvoice",
+      "purchaseInvoice"
     ];
 
     for (const table of tables) {

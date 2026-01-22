@@ -5,12 +5,18 @@ import type z from "zod";
 import type { AccountingProvider } from "../providers";
 import type {
   AccountingSyncSchema,
+  BillLineSchema,
+  BillSchema,
   ContactSchema,
   EmployeeSchema,
   ItemSchema,
   ProviderCredentialsSchema,
   ProviderID,
   ProviderIntegrationMetadataSchema,
+  PurchaseOrderLineSchema,
+  PurchaseOrderSchema,
+  SalesInvoiceLineSchema,
+  SalesInvoiceSchema,
   SyncDirectionSchema
 } from "./models";
 import { withSyncDisabled } from "./utils";
@@ -321,7 +327,7 @@ export abstract class BaseEntitySyncer<
         status: "error",
         action: "none",
         localId: entityId,
-        error: err
+        error: err instanceof Error ? err.message : String(err)
       };
     }
   }
@@ -394,7 +400,7 @@ export abstract class BaseEntitySyncer<
         status: "error",
         action: "none",
         remoteId,
-        error: err
+        error: err instanceof Error ? err.message : String(err)
       };
     }
   }
@@ -448,7 +454,7 @@ export abstract class BaseEntitySyncer<
             status: "error",
             action: "none",
             localId,
-            error: err
+            error: err instanceof Error ? err.message : String(err)
           });
         }
       }
@@ -490,7 +496,7 @@ export abstract class BaseEntitySyncer<
             status: "error",
             action: "none",
             localId: id,
-            error: err
+            error: err instanceof Error ? err.message : String(err)
           });
         }
       }
@@ -571,7 +577,7 @@ export abstract class BaseEntitySyncer<
             status: "error",
             action: "none",
             remoteId,
-            error: err
+            error: err instanceof Error ? err.message : String(err)
           });
         }
       }
@@ -583,7 +589,7 @@ export abstract class BaseEntitySyncer<
             status: "error",
             action: "none",
             remoteId: id,
-            error: err
+            error: err instanceof Error ? err.message : String(err)
           });
         }
       }
@@ -618,15 +624,26 @@ export abstract class BaseEntitySyncer<
     // 1. Instantiate the dependency's Syncer
     // Dynamic import to avoid circular dependency
     const { SyncFactory } = await import("./sync");
+
+    // Get sync config for the dependency, with a fallback to enabled by default
+    const dependencyConfig = this.context.provider.getSyncConfig(type) ?? {
+      enabled: true,
+      direction: "two-way" as const,
+      owner: "carbon" as const
+    };
+
     const syncer = SyncFactory.getSyncer(type, {
       ...this.context,
-      config: this.context.provider.getSyncConfig(type)
+      config: dependencyConfig
     });
 
     // 2. Check if it's already synced (using the dependency's own logic)
     // Note: This requires getRemoteId to be exposed on the syncer instance
     const existingRemoteId = await (syncer as any).getRemoteId(localId);
     if (existingRemoteId) {
+      console.log(
+        `[BaseSyncer] Dependency ${type} ${localId} already synced: ${existingRemoteId}`
+      );
       return existingRemoteId;
     }
 
@@ -637,12 +654,25 @@ export abstract class BaseEntitySyncer<
     // 3. Force a Push
     const result = await syncer.pushToAccounting(localId);
 
-    if (result.status === "error" || !result.remoteId) {
+    if (result.status === "skipped") {
       throw new Error(
-        `Dependency failed: Could not sync ${type} ${localId}. Error: ${result.error}`
+        `Dependency sync skipped for ${type} ${localId}: ${
+          result.error ?? "Sync disabled in config"
+        }`
       );
     }
 
+    if (result.status === "error" || !result.remoteId) {
+      throw new Error(
+        `Dependency failed: Could not sync ${type} ${localId}. Error: ${
+          result.error ?? "No remote ID returned"
+        }`
+      );
+    }
+
+    console.log(
+      `[BaseSyncer] Dependency ${type} ${localId} synced successfully: ${result.remoteId}`
+    );
     return result.remoteId;
   }
 
@@ -679,6 +709,12 @@ export namespace Accounting {
   export type Contact = z.infer<typeof ContactSchema>;
   export type Employee = z.infer<typeof EmployeeSchema>;
   export type Item = z.infer<typeof ItemSchema>;
+  export type Bill = z.infer<typeof BillSchema>;
+  export type BillLine = z.infer<typeof BillLineSchema>;
+  export type SalesInvoice = z.infer<typeof SalesInvoiceSchema>;
+  export type SalesInvoiceLine = z.infer<typeof SalesInvoiceLineSchema>;
+  export type PurchaseOrder = z.infer<typeof PurchaseOrderSchema>;
+  export type PurchaseOrderLine = z.infer<typeof PurchaseOrderLineSchema>;
 }
 
 export interface RequestContext {

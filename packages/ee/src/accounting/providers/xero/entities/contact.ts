@@ -464,7 +464,9 @@ export class ContactSyncer extends BaseEntitySyncer<
           fax: data.fax,
           currencyCode: data.currencyCode,
           updatedAt: new Date().toISOString(),
-          externalId: sql`COALESCE("externalId", '{}'::jsonb) || ${JSON.stringify(externalIdData)}::jsonb`
+          externalId: sql`COALESCE("externalId", '{}'::jsonb) || ${JSON.stringify(
+            externalIdData
+          )}::jsonb`
         })
         .where("id", "=", existingId)
         .execute();
@@ -528,7 +530,9 @@ export class ContactSyncer extends BaseEntitySyncer<
           mobilePhone: data.mobilePhone ?? null,
           homePhone: data.homePhone ?? null,
           fax: data.fax ?? null,
-          externalId: sql`COALESCE("externalId", '{}'::jsonb) || ${JSON.stringify(externalIdData)}::jsonb`
+          externalId: sql`COALESCE("externalId", '{}'::jsonb) || ${JSON.stringify(
+            externalIdData
+          )}::jsonb`
         })
         .where("id", "=", existingContact.id)
         .execute();
@@ -596,7 +600,10 @@ export class ContactSyncer extends BaseEntitySyncer<
 
     if (result.error || !result.data?.Contacts?.[0]?.ContactID) {
       throw new Error(
-        `Failed to ${existingRemoteId ? "update" : "create"} contact in Xero: ${result.error}`
+        `Failed to ${existingRemoteId ? "update" : "create"} contact in Xero: ${
+          // @ts-expect-error
+          result.message ?? result.data ?? "Unknown error"
+        }`
       );
     }
 

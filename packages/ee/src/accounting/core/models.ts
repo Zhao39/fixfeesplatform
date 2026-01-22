@@ -145,22 +145,22 @@ export const DEFAULT_SYNC_CONFIG: GlobalSyncConfig = {
     vendor: { enabled: true, direction: "two-way", owner: "accounting" },
     item: { enabled: true, direction: "push-to-accounting", owner: "carbon" },
     employee: {
-      enabled: true,
+      enabled: false, // https://developer.xero.com/documentation/api/accounting/employees
       direction: "two-way",
-      owner: "accounting"
+      owner: "carbon"
     },
     purchaseOrder: {
       enabled: false,
       direction: "two-way",
       owner: "accounting"
     },
-    bill: { enabled: false, direction: "two-way", owner: "accounting" },
+    bill: { enabled: true, direction: "two-way", owner: "accounting" },
     salesOrder: {
       enabled: false,
       direction: "two-way",
       owner: "accounting"
     },
-    invoice: { enabled: false, direction: "two-way", owner: "accounting" },
+    invoice: { enabled: true, direction: "two-way", owner: "accounting" },
     payment: {
       enabled: false,
       direction: "pull-from-accounting",
@@ -324,4 +324,145 @@ export const ItemSchema = z.object({
   isTrackedAsInventory: z.boolean(),
   updatedAt: z.string().datetime(),
   raw: z.record(z.any())
+});
+
+// Sales Invoice schemas
+export const SalesInvoiceLineSchema = z.object({
+  id: z.string(),
+  invoiceLineType: z.string(),
+  itemId: withNullable(z.string()),
+  itemCode: withNullable(z.string()), // readableIdWithRevision
+  description: withNullable(z.string()),
+  quantity: z.number(),
+  unitPrice: z.number(),
+  taxPercent: z.number(),
+  lineAmount: z.number()
+});
+
+export const SalesInvoiceSchema = z.object({
+  id: z.string(),
+  invoiceId: z.string(), // readable ID like "INV-0001"
+  companyId: z.string(),
+  customerId: z.string(),
+  customerExternalId: withNullable(z.string()), // Xero ContactID for the customer
+  status: z.enum([
+    "Draft",
+    "Pending",
+    "Submitted",
+    "Partially Paid",
+    "Paid",
+    "Overdue",
+    "Voided",
+    "Credit Note Issued",
+    "Return"
+  ]),
+  currencyCode: z.string(),
+  exchangeRate: z.number(),
+  dateIssued: withNullable(z.string()),
+  dateDue: withNullable(z.string()),
+  datePaid: withNullable(z.string()),
+  customerReference: withNullable(z.string()),
+  subtotal: z.number(),
+  totalTax: z.number(),
+  totalDiscount: z.number(),
+  totalAmount: z.number(),
+  balance: z.number(),
+  lines: z.array(SalesInvoiceLineSchema),
+  updatedAt: z.string().datetime(),
+  raw: z.record(z.any()).optional()
+});
+
+// Bill (Purchase Invoice) schemas
+export const BillLineSchema = z.object({
+  id: z.string(),
+  description: withNullable(z.string()),
+  quantity: z.number(),
+  unitPrice: z.number(),
+  itemId: withNullable(z.string()),
+  itemCode: withNullable(z.string()),
+  accountNumber: withNullable(z.string()),
+  taxPercent: withNullable(z.number()),
+  taxAmount: withNullable(z.number()),
+  totalAmount: z.number()
+});
+
+export const BillSchema = z.object({
+  id: z.string(),
+  companyId: z.string(),
+  invoiceId: z.string(), // Human-readable invoice number
+  supplierId: withNullable(z.string()),
+  supplierExternalId: withNullable(z.string()), // Xero ContactID for the supplier
+  status: z.enum([
+    "Draft",
+    "Pending",
+    "Submitted",
+    "Return",
+    "Debit Note Issued",
+    "Paid",
+    "Partially Paid",
+    "Overdue",
+    "Voided"
+  ]),
+  dateIssued: withNullable(z.string()),
+  dateDue: withNullable(z.string()),
+  datePaid: withNullable(z.string()),
+  currencyCode: z.string(),
+  exchangeRate: z.number(),
+  subtotal: z.number(),
+  totalTax: z.number(),
+  totalDiscount: z.number(),
+  totalAmount: z.number(),
+  balance: z.number(),
+  supplierReference: withNullable(z.string()),
+  lines: z.array(BillLineSchema),
+  updatedAt: z.string().datetime(),
+  raw: z.record(z.any()).optional()
+});
+
+// Purchase Order schemas
+export const PurchaseOrderLineSchema = z.object({
+  id: z.string(),
+  description: withNullable(z.string()),
+  quantity: z.number(),
+  unitPrice: z.number(),
+  itemId: withNullable(z.string()),
+  itemCode: withNullable(z.string()),
+  accountNumber: withNullable(z.string()),
+  taxPercent: withNullable(z.number()),
+  taxAmount: withNullable(z.number()),
+  totalAmount: z.number(),
+  quantityReceived: withNullable(z.number()),
+  quantityInvoiced: withNullable(z.number())
+});
+
+export const PurchaseOrderSchema = z.object({
+  id: z.string(),
+  companyId: z.string(),
+  purchaseOrderId: z.string(), // Human-readable PO number
+  supplierId: z.string(),
+  supplierExternalId: withNullable(z.string()), // Xero ContactID for the supplier
+  status: z.enum([
+    "Draft",
+    "To Review",
+    "Rejected",
+    "To Receive",
+    "To Receive and Invoice",
+    "To Invoice",
+    "Completed",
+    "Closed",
+    "Planned"
+  ]),
+  orderDate: withNullable(z.string()),
+  deliveryDate: withNullable(z.string()),
+  deliveryAddress: withNullable(z.string()),
+  deliveryInstructions: withNullable(z.string()),
+  currencyCode: withNullable(z.string()),
+  exchangeRate: withNullable(z.number()),
+  subtotal: z.number(),
+  totalTax: z.number(),
+  totalAmount: z.number(),
+  supplierReference: withNullable(z.string()),
+  lines: z.array(PurchaseOrderLineSchema),
+  updatedAt: z.string().datetime(),
+  raw: z.record(z.any()).optional()
 });

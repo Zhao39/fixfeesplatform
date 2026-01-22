@@ -3,9 +3,7 @@ import type {
   IntegrationSetting,
   IntegrationSettingOption
 } from "@carbon/ee";
-import {
-  integrations as availableIntegrations,
-} from "@carbon/ee";
+import { integrations as availableIntegrations } from "@carbon/ee";
 import {
   // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
   Array,
@@ -78,20 +76,22 @@ function IntegrationActionButton({
   }, [action]);
 
   return (
-    <div className="flex items-center justify-between p-3 border rounded-lg">
-      <div className="flex-1">
+    <div className="flex items-center justify-between gap-4 p-3 border rounded-lg w-full">
+      <div className="flex flex-col flex-1 min-w-0">
         <p className="text-sm font-medium">{action.label}</p>
         <p className="text-xs text-muted-foreground">{action.description}</p>
       </div>
-      <Button
-        variant="secondary"
-        size="sm"
-        onClick={handleClick}
-        isLoading={isLoading}
-        isDisabled={isDisabled || status === "running"}
-      >
-        {status === "completed" ? "Started" : "Run"}
-      </Button>
+      <div className="shrink-0">
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={handleClick}
+          isLoading={isLoading}
+          isDisabled={isDisabled || status === "running"}
+        >
+          {status === "completed" ? "Started" : "Run"}
+        </Button>
+      </div>
     </div>
   );
 }
@@ -133,11 +133,19 @@ function SettingField({ setting }: { setting: IntegrationSetting }) {
 
     case "switch":
       return (
-        <Boolean
-          name={setting.name}
-          label={setting.label}
-          description={setting.description ?? setting.label}
-        />
+        <div className="flex items-center justify-between gap-4 w-full py-2">
+          <div className="flex flex-col flex-1">
+            <span className="text-sm font-medium">{setting.label}</span>
+            {setting.description && (
+              <span className="text-xs text-muted-foreground">
+                {setting.description}
+              </span>
+            )}
+          </div>
+          <div className="shrink-0">
+            <Boolean name={setting.name} />
+          </div>
+        </div>
       );
 
     case "processes":
@@ -179,21 +187,17 @@ function SettingField({ setting }: { setting: IntegrationSetting }) {
             icon = <TrackingTypeIcon type={normalized.value} />;
           }
 
-          // If option has description, show label + description
-          const label = normalized.description ? (
-            <div className="flex flex-col gap-0.5">
-              <span className="flex items-center gap-2">
-                {icon}
-                <Badge variant="secondary">{normalized.label}</Badge>
-              </span>
-              <span className="text-xs text-muted-foreground pl-0.5">
-                {normalized.description}
-              </span>
-            </div>
-          ) : (
-            <Badge variant="secondary" className="flex items-center gap-2">
-              {icon} {normalized.label}
-            </Badge>
+          // Build a simpler label that works well with Radix Select
+          const label = (
+            <span className="flex items-center gap-2">
+              {icon}
+              <span className="font-medium">{normalized.label}</span>
+              {normalized.description && (
+                <span className="text-muted-foreground text-xs">
+                  — {normalized.description}
+                </span>
+              )}
+            </span>
           );
 
           return {

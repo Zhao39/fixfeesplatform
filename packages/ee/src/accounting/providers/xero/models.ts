@@ -142,6 +142,108 @@ export namespace Xero {
   export type PurchaseDetails = z.infer<typeof PurchaseDetailsSchema>;
   export type SalesDetails = z.infer<typeof SalesDetailsSchema>;
   export type Item = z.infer<typeof ItemSchema>;
+
+  // Invoice/Bill schemas for Xero Accounting API
+  // Type: ACCPAY = Accounts Payable (Bill/Purchase Invoice)
+  // Type: ACCREC = Accounts Receivable (Sales Invoice)
+  export const InvoiceLineItemSchema = z.object({
+    LineItemID: z.string().uuid().optional(),
+    Description: z.string().optional(),
+    Quantity: z.number().optional(),
+    UnitAmount: z.number().optional(),
+    ItemCode: z.string().optional(),
+    AccountCode: z.string().optional(),
+    TaxType: z.string().optional(),
+    TaxAmount: z.number().optional(),
+    LineAmount: z.number().optional(),
+    DiscountRate: z.number().optional(),
+    Tracking: z.array(z.unknown()).optional()
+  });
+
+  export const InvoiceContactSchema = z.object({
+    ContactID: z.string().uuid(),
+    Name: z.string().optional()
+  });
+
+  export const InvoiceSchema = z.object({
+    InvoiceID: z.string().uuid(),
+    Type: z.enum(["ACCPAY", "ACCREC"]), // ACCPAY = Bill, ACCREC = Sales Invoice
+    InvoiceNumber: z.string().optional(),
+    Reference: z.string().optional(),
+    Contact: InvoiceContactSchema,
+    Date: z.string().optional(), // YYYY-MM-DD
+    DueDate: z.string().optional(),
+    Status: z.enum([
+      "DRAFT",
+      "SUBMITTED",
+      "AUTHORISED",
+      "PAID",
+      "VOIDED",
+      "DELETED"
+    ]),
+    LineAmountTypes: z.enum(["Exclusive", "Inclusive", "NoTax"]).optional(),
+    LineItems: z.array(InvoiceLineItemSchema),
+    SubTotal: z.number().optional(),
+    TotalTax: z.number().optional(),
+    Total: z.number().optional(),
+    AmountDue: z.number().optional(),
+    AmountPaid: z.number().optional(),
+    CurrencyCode: z.string().optional(),
+    CurrencyRate: z.number().optional(),
+    UpdatedDateUTC: z.string()
+  });
+
+  export type Invoice = z.infer<typeof InvoiceSchema>;
+  export type InvoiceLineItem = z.infer<typeof InvoiceLineItemSchema>;
+  export type InvoiceContact = z.infer<typeof InvoiceContactSchema>;
+
+  // Purchase Order schemas for Xero Accounting API
+  export const PurchaseOrderLineItemSchema = z.object({
+    LineItemID: z.string().uuid().optional(),
+    Description: z.string().optional(),
+    Quantity: z.number().optional(),
+    UnitAmount: z.number().optional(),
+    ItemCode: z.string().optional(),
+    AccountCode: z.string().optional(),
+    TaxType: z.string().optional(),
+    TaxAmount: z.number().optional(),
+    LineAmount: z.number().optional(),
+    DiscountRate: z.number().optional(),
+    Tracking: z.array(z.unknown()).optional()
+  });
+
+  export const PurchaseOrderContactSchema = z.object({
+    ContactID: z.string().uuid(),
+    Name: z.string().optional()
+  });
+
+  export const PurchaseOrderSchema = z.object({
+    PurchaseOrderID: z.string().uuid(),
+    PurchaseOrderNumber: z.string().optional(),
+    Reference: z.string().optional(),
+    Contact: PurchaseOrderContactSchema,
+    Date: z.string().optional(), // YYYY-MM-DD
+    DeliveryDate: z.string().optional(),
+    DeliveryAddress: z.string().optional(),
+    AttentionTo: z.string().optional(),
+    Telephone: z.string().optional(),
+    DeliveryInstructions: z.string().optional(),
+    Status: z.enum(["DRAFT", "SUBMITTED", "AUTHORISED", "BILLED", "DELETED"]),
+    LineAmountTypes: z.enum(["Exclusive", "Inclusive", "NoTax"]).optional(),
+    LineItems: z.array(PurchaseOrderLineItemSchema),
+    SubTotal: z.number().optional(),
+    TotalTax: z.number().optional(),
+    Total: z.number().optional(),
+    CurrencyCode: z.string().optional(),
+    CurrencyRate: z.number().optional(),
+    UpdatedDateUTC: z.string()
+  });
+
+  export type PurchaseOrder = z.infer<typeof PurchaseOrderSchema>;
+  export type PurchaseOrderLineItem = z.infer<
+    typeof PurchaseOrderLineItemSchema
+  >;
+  export type PurchaseOrderContact = z.infer<typeof PurchaseOrderContactSchema>;
 }
 
 export const parseDotnetDate = (date: Date | string) => {

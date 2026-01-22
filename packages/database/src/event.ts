@@ -55,11 +55,12 @@ export type QueueMessage = z.infer<typeof QueueMessageSchema>;
 export const CreateSubscriptionSchema = z.object({
   name: z.string().min(1, "Name is required"),
   // The table name in your database
-  table: z.custom<
-    keyof Pick<KyselyDatabase, "contact" | "customer" | "supplier" | "address">
-  >((val) => typeof val === "string", {
-    message: "Table name must be a string"
-  }),
+  table: z.custom<keyof Pick<KyselyDatabase, keyof KyselyDatabase>>(
+    (val) => typeof val === "string",
+    {
+      message: "Table name must be a string"
+    }
+  ),
   // The company this subscription belongs to
   companyId: z.string().min(1, "Company ID is required"),
   // Must provide at least one operation (e.g. ['INSERT'])

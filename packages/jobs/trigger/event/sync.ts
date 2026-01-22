@@ -35,7 +35,10 @@ export type SyncPayload = z.infer<typeof SyncPayloadSchema>;
 const TABLE_TO_ENTITY_MAP: Partial<Record<string, AccountingEntityType>> = {
   customer: "customer",
   supplier: "vendor",
-  item: "item"
+  item: "item",
+  purchaseOrder: "purchaseOrder",
+  purchaseInvoice: "bill",
+  salesInvoice: "invoice",
 };
 
 function getEntityTypeFromTable(table: string): AccountingEntityType | null {
@@ -86,14 +89,14 @@ export const syncTask = task({
           const integration = await getAccountingIntegration(
             client,
             companyId,
-            provider as ProviderID,
+            provider as ProviderID
           );
 
           const providerInstance = getProviderIntegration(
             client,
             companyId,
             provider as ProviderID,
-            integration.metadata,
+            integration.metadata
           );
 
           // Group by entity type
@@ -103,7 +106,7 @@ export const syncTask = task({
           });
 
           for (const [entityType, entityRecords] of Object.entries(
-            byEntityType,
+            byEntityType
           )) {
             if (entityType === "unknown") {
               for (const r of entityRecords) {
@@ -117,13 +120,13 @@ export const syncTask = task({
 
             // Separate by operation
             const inserts = entityRecords.filter(
-              (r) => r.event.operation === "INSERT",
+              (r) => r.event.operation === "INSERT"
             );
             const updates = entityRecords.filter(
-              (r) => r.event.operation === "UPDATE",
+              (r) => r.event.operation === "UPDATE"
             );
             const deletes = entityRecords.filter(
-              (r) => r.event.operation === "DELETE",
+              (r) => r.event.operation === "DELETE"
             );
 
             const syncer = SyncFactory.getSyncer(
@@ -133,9 +136,9 @@ export const syncTask = task({
                 companyId,
                 provider: providerInstance,
                 config: providerInstance.getSyncConfig(
-                  entityType as AccountingEntityType,
+                  entityType as AccountingEntityType
                 ),
-              },
+              }
             );
 
             // Process INSERTs and UPDATEs (push to accounting)
@@ -144,7 +147,7 @@ export const syncTask = task({
               const entityIds = toSync.map((r) => r.event.recordId);
 
               logger.info(
-                `Pushing ${entityIds.length} ${entityType} entities to accounting`,
+                `Pushing ${entityIds.length} ${entityType} entities to accounting`
               );
 
               const result = await syncer.pushBatchToAccounting(entityIds);

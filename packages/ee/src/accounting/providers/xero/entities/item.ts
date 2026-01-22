@@ -313,7 +313,7 @@ export class ItemSyncer extends BaseEntitySyncer<
     if (result.error || !result.data?.Items?.[0]?.ItemID) {
       throw new Error(
         `Failed to ${existingRemoteId ? "update" : "create"} item in Xero: ${
-          result.error
+          (result as any).message ?? "Unknown error"
         }`
       );
     }
@@ -350,7 +350,9 @@ export class ItemSyncer extends BaseEntitySyncer<
     );
 
     if (response.error || !response.data?.Items) {
-      throw new Error(`Batch upsert failed: ${response.error}`);
+      throw new Error(
+        `Batch upsert failed: ${(response as any).message ?? "Unknown error"}`
+      );
     }
 
     for (let i = 0; i < response.data.Items.length; i++) {
