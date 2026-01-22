@@ -1,18 +1,14 @@
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { ProviderID } from "@carbon/ee/accounting";
 import { runs, tasks } from "@trigger.dev/sdk/v3";
-import type {
-  ActionFunctionArgs,
-  LoaderFunctionArgs
-} from "react-router";
-import {
-  data,
-} from "react-router";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
+import { data } from "react-router";
 import { z } from "zod";
 
 const BackfillSettingsSchema = z.object({
   backfillCustomers: z.boolean().optional().default(true),
   backfillVendors: z.boolean().optional().default(true),
+  backfillItems: z.boolean().optional().default(true),
   conflictResolution: z
     .enum(["skip", "overwrite", "merge"])
     .optional()
@@ -25,7 +21,7 @@ export const config = {
 
 // GET: Check backfill status
 export async function loader({ request }: LoaderFunctionArgs) {
-  const { client, companyId } = await requirePermissions(request, {
+  await requirePermissions(request, {
     update: "settings"
   });
 
@@ -40,7 +36,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
         metadata: run.metadata,
         output: run.output
       });
-    } catch (error) {
+    } catch {
       return data({ error: "Failed to retrieve run status" }, { status: 500 });
     }
   }
@@ -50,7 +46,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 // POST: Start backfill
 export async function action({ request }: ActionFunctionArgs) {
-  const { client, companyId, userId } = await requirePermissions(request, {
+  const { client, companyId } = await requirePermissions(request, {
     update: "settings"
   });
 
@@ -85,7 +81,8 @@ export async function action({ request }: ActionFunctionArgs) {
         pageSize: 100,
         entityTypes: {
           customers: settings.backfillCustomers,
-          vendors: settings.backfillVendors
+          vendors: settings.backfillVendors,
+          items: settings.backfillItems
         },
         conflictResolution: settings.conflictResolution
       },

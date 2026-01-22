@@ -2,6 +2,7 @@ import { z } from "zod";
 import type { Accounting } from "../../core/types";
 
 export namespace Xero {
+  // Shared address schema for contacts and employees
   export const AddressSchema = z.object({
     AddressType: z.enum(["POBOX", "STREET", "DELIVERY"]),
     AddressLine1: z.string().optional(),
@@ -89,6 +90,58 @@ export namespace Xero {
   });
 
   export type Contact = z.infer<typeof ContactSchema>;
+
+  // Employee schema for Xero Accounting API Employees endpoint
+  // Note: This is from the deprecated Accounting API endpoint, not PayrollAU/UK/NZ
+  export const EmployeeSchema = z.object({
+    EmployeeID: z.string().uuid(),
+    Status: z.enum(["ACTIVE", "DELETED"]).optional(),
+    FirstName: z.string(),
+    LastName: z.string(),
+    ExternalLink: z
+      .object({
+        Url: z.string().url().optional(),
+        Description: z.string().optional()
+      })
+      .optional(),
+    UpdatedDateUTC: z.string() // serialized /Date(...)/
+  });
+
+  export type Employee = z.infer<typeof EmployeeSchema>;
+
+  // Item schemas for Xero Accounting API Items endpoint
+  export const PurchaseDetailsSchema = z.object({
+    UnitPrice: z.number().optional(),
+    AccountCode: z.string().optional(),
+    COGSAccountCode: z.string().optional(),
+    TaxType: z.string().optional()
+  });
+
+  export const SalesDetailsSchema = z.object({
+    UnitPrice: z.number().optional(),
+    AccountCode: z.string().optional(),
+    TaxType: z.string().optional()
+  });
+
+  export const ItemSchema = z.object({
+    ItemID: z.string().uuid(),
+    Code: z.string(),
+    Name: z.string().optional(),
+    Description: z.string().optional(),
+    PurchaseDescription: z.string().optional(),
+    PurchaseDetails: PurchaseDetailsSchema.optional(),
+    SalesDetails: SalesDetailsSchema.optional(),
+    IsTrackedAsInventory: z.boolean().optional(),
+    IsSold: z.boolean().optional(),
+    IsPurchased: z.boolean().optional(),
+    QuantityOnHand: z.number().optional(),
+    TotalCostPool: z.number().optional(),
+    UpdatedDateUTC: z.string()
+  });
+
+  export type PurchaseDetails = z.infer<typeof PurchaseDetailsSchema>;
+  export type SalesDetails = z.infer<typeof SalesDetailsSchema>;
+  export type Item = z.infer<typeof ItemSchema>;
 }
 
 export const parseDotnetDate = (date: Date | string) => {

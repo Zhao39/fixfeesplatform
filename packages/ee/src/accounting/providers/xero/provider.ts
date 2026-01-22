@@ -22,6 +22,17 @@ export interface ListContactsResponse {
   page: number;
 }
 
+export interface ListItemsOptions {
+  page?: number;
+  modifiedSince?: Date;
+}
+
+export interface ListItemsResponse {
+  items: Xero.Item[];
+  hasMore: boolean;
+  page: number;
+}
+
 type XeroProviderConfig = ProviderConfig<{
   clientId: string;
   clientSecret: string;
@@ -171,5 +182,36 @@ export class XeroProvider implements BaseProvider {
     const hasMore = contacts.length === 100;
 
     return { contacts, hasMore, page };
+  }
+
+  /**
+   * List all items from Xero with pagination support.
+   * Xero returns 100 items per page by default.
+   */
+  async listItems(options?: ListItemsOptions): Promise<ListItemsResponse> {
+    const page = options?.page ?? 1;
+    const params = new URLSearchParams();
+    params.set("page", String(page));
+
+    const headers: Record<string, string> = {};
+    if (options?.modifiedSince) {
+      headers["If-Modified-Since"] = options.modifiedSince.toUTCString();
+    }
+
+    const response = await this.request<{ Items: Xero.Item[] }>(
+      "GET",
+      `/Items?${params.toString()}`,
+      { headers }
+    );
+
+    if (response.error || !response.data?.Items) {
+      return { items: [], hasMore: false, page };
+    }
+
+    const items = response.data.Items;
+    // Xero returns 100 items per page - if we get exactly 100, there may be more
+    const hasMore = items.length === 100;
+
+    return { items, hasMore, page };
   }
 }

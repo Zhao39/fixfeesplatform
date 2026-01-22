@@ -1,4 +1,5 @@
 import { ContactSyncer } from "../providers/xero/entities/contact";
+import { ItemSyncer } from "../providers/xero/entities/item";
 import type { AccountingEntityType, IEntitySyncer, SyncContext } from "./types";
 
 export const SyncFactory = {
@@ -12,8 +13,8 @@ export const SyncFactory = {
       case "vendor":
       case "customer":
         return new ContactSyncer(context);
-      //   case "item":
-      //     return new ItemSyncer(context);
+      case "item":
+        return new ItemSyncer(context);
       //   case "employee":
       //     return new EmployeeSyncer(context);
 

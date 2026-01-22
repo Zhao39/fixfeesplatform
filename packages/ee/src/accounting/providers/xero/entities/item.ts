@@ -1,0 +1,366 @@
+import type { KyselyTx } from "@carbon/database/client";
+import { sql } from "kysely";
+import {
+  getAccountingEntity,
+  updateAccountingEntityExternalId
+} from "../../../core/service";
+import { type Accounting, BaseEntitySyncer } from "../../../core/types";
+import { parseDotnetDate, type Xero } from "../models";
+
+// Type for rows returned from item queries with cost/price joins
+type ItemRow = {
+  id: string;
+  readableId: string;
+  readableIdWithRevision: string | null;
+  name: string;
+  description: string | null;
+  companyId: string | null;
+  type: "Part" | "Material" | "Tool" | "Consumable" | "Fixture";
+  unitOfMeasureCode: string | null;
+  replenishmentSystem: "Buy" | "Make" | "Buy and Make";
+  itemTrackingType: string;
+  updatedAt: string | null;
+  unitCost: number | null;
+  unitSalePrice: number | null;
+};
+
+export class ItemSyncer extends BaseEntitySyncer<
+  Accounting.Item,
+  Xero.Item,
+  "UpdatedDateUTC"
+> {
+  // =================================================================
+  // 1. ID MAPPING
+  // =================================================================
+
+  async getRemoteId(localId: string): Promise<string | null> {
+    const itemLink = await getAccountingEntity(
+      this.database,
+      "item",
+      this.companyId,
+      this.provider.id,
+      { id: localId }
+    );
+    return itemLink?.externalId?.xero?.id ?? null;
+  }
+
+  async getLocalId(remoteId: string): Promise<string | null> {
+    const itemLink = await getAccountingEntity(
+      this.database,
+      "item",
+      this.companyId,
+      this.provider.id,
+      { externalId: remoteId }
+    );
+    return itemLink?.id ?? null;
+  }
+
+  protected async linkEntities(
+    tx: KyselyTx,
+    localId: string,
+    remoteId: string
+  ): Promise<void> {
+    await updateAccountingEntityExternalId(
+      tx,
+      "item",
+      localId,
+      this.provider.id,
+      remoteId
+    );
+  }
+
+  // =================================================================
+  // 2. TIMESTAMP EXTRACTION
+  // =================================================================
+
+  protected getRemoteUpdatedAt(remote: Xero.Item): Date | null {
+    if (!remote.UpdatedDateUTC) return null;
+    return parseDotnetDate(remote.UpdatedDateUTC);
+  }
+
+  // =================================================================
+  // 3. LOCAL FETCH (Single + Batch)
+  // =================================================================
+
+  async fetchLocal(id: string): Promise<Accounting.Item | null> {
+    const items = await this.fetchItemsByIds([id]);
+    return items.get(id) ?? null;
+  }
+
+  protected async fetchLocalBatch(
+    ids: string[]
+  ): Promise<Map<string, Accounting.Item>> {
+    return this.fetchItemsByIds(ids);
+  }
+
+  private async fetchItemsByIds(
+    ids: string[]
+  ): Promise<Map<string, Accounting.Item>> {
+    if (ids.length === 0) return new Map();
+
+    const rows = await this.database
+      .selectFrom("item")
+      .leftJoin("itemCost", "itemCost.itemId", "item.id")
+      .leftJoin("itemUnitSalePrice", "itemUnitSalePrice.itemId", "item.id")
+      .select([
+        "item.id",
+        "item.readableId",
+        "item.readableIdWithRevision",
+        "item.name",
+        "item.description",
+        "item.companyId",
+        "item.type",
+        "item.unitOfMeasureCode",
+        "item.replenishmentSystem",
+        "item.itemTrackingType",
+        "item.updatedAt",
+        "itemCost.unitCost",
+        "itemUnitSalePrice.unitSalePrice"
+      ])
+      .where("item.id", "in", ids)
+      .where("item.companyId", "=", this.companyId)
+      .execute();
+
+    return this.transformRows(rows as ItemRow[]);
+  }
+
+  private transformRows(rows: ItemRow[]): Map<string, Accounting.Item> {
+    const result = new Map<string, Accounting.Item>();
+
+    for (const row of rows) {
+      const isPurchased =
+        row.replenishmentSystem === "Buy" ||
+        row.replenishmentSystem === "Buy and Make";
+      const isSold = true; // Assume all items can be sold
+      const isTrackedAsInventory = row.itemTrackingType !== "None";
+
+      result.set(row.id, {
+        id: row.id,
+        code: row.readableIdWithRevision ?? row.readableId,
+        name: row.name,
+        description: row.description,
+        companyId: row.companyId!,
+        type: row.type,
+        unitOfMeasureCode: row.unitOfMeasureCode,
+        unitCost: row.unitCost ?? 0,
+        unitSalePrice: row.unitSalePrice ?? 0,
+        isPurchased,
+        isSold,
+        isTrackedAsInventory,
+        updatedAt: row.updatedAt ?? new Date().toISOString(),
+        raw: row
+      });
+    }
+
+    return result;
+  }
+
+  // =================================================================
+  // 4. REMOTE FETCH (Single + Batch) - API calls within syncer
+  // =================================================================
+
+  async fetchRemote(id: string): Promise<Xero.Item | null> {
+    const result = await this.provider.request<{ Items: Xero.Item[] }>(
+      "GET",
+      `/Items/${id}`
+    );
+    return result.error ? null : (result.data?.Items?.[0] ?? null);
+  }
+
+  protected async fetchRemoteBatch(
+    ids: string[]
+  ): Promise<Map<string, Xero.Item>> {
+    const result = new Map<string, Xero.Item>();
+    if (ids.length === 0) return result;
+
+    const response = await this.provider.request<{ Items: Xero.Item[] }>(
+      "GET",
+      `/Items?IDs=${ids.join(",")}`
+    );
+
+    if (!response.error && response.data?.Items) {
+      for (const item of response.data.Items) {
+        result.set(item.ItemID, item);
+      }
+    }
+
+    return result;
+  }
+
+  // =================================================================
+  // 5. TRANSFORMATION (Carbon -> Xero)
+  // =================================================================
+
+  protected async mapToRemote(
+    local: Accounting.Item
+  ): Promise<Omit<Xero.Item, "UpdatedDateUTC">> {
+    const existingRemoteId = await this.getRemoteId(local.id);
+
+    return {
+      ItemID: existingRemoteId!,
+      Code: local.code,
+      Name: local.name,
+      Description: local.description ?? undefined,
+      IsPurchased: local.isPurchased,
+      IsSold: local.isSold,
+      IsTrackedAsInventory: local.isTrackedAsInventory,
+      PurchaseDetails: local.isPurchased
+        ? { UnitPrice: local.unitCost }
+        : undefined,
+      SalesDetails: local.isSold
+        ? { UnitPrice: local.unitSalePrice }
+        : undefined
+    };
+  }
+
+  // =================================================================
+  // 6. TRANSFORMATION (Xero -> Carbon) - Update only
+  // =================================================================
+
+  protected async mapToLocal(
+    remote: Xero.Item
+  ): Promise<Partial<Accounting.Item>> {
+    return {
+      name: remote.Name ?? "",
+      description: remote.Description ?? null,
+      unitCost: remote.PurchaseDetails?.UnitPrice ?? 0,
+      unitSalePrice: remote.SalesDetails?.UnitPrice ?? 0,
+      isPurchased: remote.IsPurchased ?? false,
+      isSold: remote.IsSold ?? false,
+      isTrackedAsInventory: remote.IsTrackedAsInventory ?? false
+    };
+  }
+
+  // =================================================================
+  // 7. UPSERT LOCAL (Update existing only - Carbon is source of truth)
+  // =================================================================
+
+  protected async upsertLocal(
+    tx: KyselyTx,
+    data: Partial<Accounting.Item>,
+    remoteId: string
+  ): Promise<string> {
+    const existingLocalId = await this.getLocalId(remoteId);
+
+    if (!existingLocalId) {
+      throw new Error(
+        `Cannot create new items from Xero. Item with remote ID ${remoteId} not found locally.`
+      );
+    }
+
+    const externalIdData = {
+      [this.provider.id]: {
+        id: remoteId,
+        provider: this.provider.id,
+        lastSyncedAt: new Date().toISOString()
+      }
+    };
+
+    // Update item table
+    await tx
+      .updateTable("item")
+      .set({
+        name: data.name,
+        description: data.description,
+        updatedAt: new Date().toISOString(),
+        externalId: sql`COALESCE("externalId", '{}'::jsonb) || ${JSON.stringify(
+          externalIdData
+        )}::jsonb`
+      })
+      .where("id", "=", existingLocalId)
+      .execute();
+
+    // Update itemCost if unitCost changed
+    if (data.unitCost !== undefined) {
+      await tx
+        .updateTable("itemCost")
+        .set({ unitCost: data.unitCost })
+        .where("itemId", "=", existingLocalId)
+        .execute();
+    }
+
+    // Update itemUnitSalePrice if unitSalePrice changed
+    if (data.unitSalePrice !== undefined) {
+      await tx
+        .updateTable("itemUnitSalePrice")
+        .set({ unitSalePrice: data.unitSalePrice })
+        .where("itemId", "=", existingLocalId)
+        .execute();
+    }
+
+    return existingLocalId;
+  }
+
+  // =================================================================
+  // 8. UPSERT REMOTE (Single + Batch) - API calls within syncer
+  // =================================================================
+
+  protected async upsertRemote(
+    data: Omit<Xero.Item, "UpdatedDateUTC">,
+    localId: string
+  ): Promise<string> {
+    const existingRemoteId = await this.getRemoteId(localId);
+    const items = existingRemoteId
+      ? [{ ...data, ItemID: existingRemoteId }]
+      : [data];
+
+    const result = await this.provider.request<{ Items: Xero.Item[] }>(
+      "POST",
+      "/Items",
+      { body: JSON.stringify({ Items: items }) }
+    );
+
+    if (result.error || !result.data?.Items?.[0]?.ItemID) {
+      throw new Error(
+        `Failed to ${existingRemoteId ? "update" : "create"} item in Xero: ${
+          result.error
+        }`
+      );
+    }
+
+    return result.data.Items[0].ItemID;
+  }
+
+  protected async upsertRemoteBatch(
+    data: Array<{
+      localId: string;
+      payload: Omit<Xero.Item, "UpdatedDateUTC">;
+    }>
+  ): Promise<Map<string, string>> {
+    const result = new Map<string, string>();
+    if (data.length === 0) return result;
+
+    const items: Xero.Item[] = [];
+    const localIdOrder: string[] = [];
+
+    for (const { localId, payload } of data) {
+      const existingRemoteId = await this.getRemoteId(localId);
+      items.push(
+        existingRemoteId
+          ? ({ ...payload, ItemID: existingRemoteId } as Xero.Item)
+          : (payload as Xero.Item)
+      );
+      localIdOrder.push(localId);
+    }
+
+    const response = await this.provider.request<{ Items: Xero.Item[] }>(
+      "POST",
+      "/Items",
+      { body: JSON.stringify({ Items: items }) }
+    );
+
+    if (response.error || !response.data?.Items) {
+      throw new Error(`Batch upsert failed: ${response.error}`);
+    }
+
+    for (let i = 0; i < response.data.Items.length; i++) {
+      const returnedItem = response.data.Items[i];
+      const localId = localIdOrder[i];
+      if (returnedItem?.ItemID && localId) {
+        result.set(localId, returnedItem.ItemID);
+      }
+    }
+
+    return result;
+  }
+}

@@ -143,9 +143,9 @@ export const DEFAULT_SYNC_CONFIG: GlobalSyncConfig = {
       owner: "accounting"
     },
     vendor: { enabled: true, direction: "two-way", owner: "accounting" },
-    item: { enabled: true, direction: "two-way", owner: "carbon" },
+    item: { enabled: true, direction: "push-to-accounting", owner: "carbon" },
     employee: {
-      enabled: false,
+      enabled: true,
       direction: "two-way",
       owner: "accounting"
     },
@@ -281,5 +281,47 @@ export const ContactSchema = z.object({
       postalCode: z.string().nullish()
     })
   ),
+  raw: z.record(z.any())
+});
+
+export const EmployeeSchema = z.object({
+  id: z.string(),
+  companyId: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
+  fullName: withNullable(z.string()),
+  email: withNullable(z.string().email()),
+  active: z.boolean().default(true),
+  // Job-related fields from employeeJob
+  title: withNullable(z.string()),
+  departmentId: withNullable(z.string()),
+  locationId: withNullable(z.string()),
+  managerId: withNullable(z.string()),
+  startDate: withNullable(z.string()),
+  // External link (used by Xero)
+  externalLink: z
+    .object({
+      url: withNullable(z.string().url()),
+      description: withNullable(z.string())
+    })
+    .optional(),
+  updatedAt: z.string().datetime(),
+  raw: z.record(z.any()).optional()
+});
+
+export const ItemSchema = z.object({
+  id: z.string(),
+  code: z.string(), // readableIdWithRevision
+  name: z.string(),
+  description: withNullable(z.string()),
+  companyId: z.string(),
+  type: z.enum(["Part", "Material", "Tool", "Consumable", "Fixture"]),
+  unitOfMeasureCode: withNullable(z.string()),
+  unitCost: z.number().default(0),
+  unitSalePrice: z.number().default(0),
+  isPurchased: z.boolean(),
+  isSold: z.boolean(),
+  isTrackedAsInventory: z.boolean(),
+  updatedAt: z.string().datetime(),
   raw: z.record(z.any())
 });

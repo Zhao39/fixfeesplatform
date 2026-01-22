@@ -6,12 +6,13 @@ import type { AccountingProvider } from "../providers";
 import type {
   AccountingSyncSchema,
   ContactSchema,
+  EmployeeSchema,
+  ItemSchema,
   ProviderCredentialsSchema,
   ProviderID,
   ProviderIntegrationMetadataSchema,
   SyncDirectionSchema
 } from "./models";
-import { SyncFactory } from "./sync";
 import { withSyncDisabled } from "./utils";
 
 // /********************************************************\
@@ -615,8 +616,8 @@ export abstract class BaseEntitySyncer<
     console.log(`[BaseSyncer] Resolving dependency: ${type} ${localId}`);
 
     // 1. Instantiate the dependency's Syncer
-    // We assume SyncFactory returns an IEntitySyncer (which includes getRemoteId)
-    // You may need to cast it to BaseEntitySyncer internally if IEntitySyncer doesn't strictly have getRemoteId
+    // Dynamic import to avoid circular dependency
+    const { SyncFactory } = await import("./sync");
     const syncer = SyncFactory.getSyncer(type, {
       ...this.context,
       config: this.context.provider.getSyncConfig(type)
@@ -676,6 +677,8 @@ export abstract class BaseEntitySyncer<
 
 export namespace Accounting {
   export type Contact = z.infer<typeof ContactSchema>;
+  export type Employee = z.infer<typeof EmployeeSchema>;
+  export type Item = z.infer<typeof ItemSchema>;
 }
 
 export interface RequestContext {

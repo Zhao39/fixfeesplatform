@@ -35,6 +35,7 @@ export type SyncPayload = z.infer<typeof SyncPayloadSchema>;
 const TABLE_TO_ENTITY_MAP: Partial<Record<string, AccountingEntityType>> = {
   customer: "customer",
   supplier: "vendor",
+  item: "item"
 };
 
 function getEntityTypeFromTable(table: string): AccountingEntityType | null {
