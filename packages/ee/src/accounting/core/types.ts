@@ -184,7 +184,7 @@ export abstract class BaseEntitySyncer<
   TOmit extends string | symbol | number // Fields to omit from mapping
 > implements IEntitySyncer
 {
-  protected database: SyncContext["database"];
+  protected database: Kysely<KyselyDatabase>;
   protected companyId: string;
   protected provider: AccountingProvider;
   protected config: EntityConfig;
@@ -227,6 +227,12 @@ export abstract class BaseEntitySyncer<
   protected abstract mapToRemote(local: TLocal): Promise<Omit<TRemote, TOmit>>;
 
   protected abstract mapToLocal(remote: TRemote): Promise<Partial<TLocal>>;
+
+  /**
+   * Extract the last updated timestamp from a remote entity.
+   * Used to compare with local entity to avoid unnecessary updates.
+   */
+  protected abstract getRemoteUpdatedAt(remote: TRemote): Date | null;
 
   protected abstract upsertLocal(
     tx: KyselyTx,
@@ -342,16 +348,25 @@ export abstract class BaseEntitySyncer<
         };
       }
 
-      // Check system of record logic
-      // const localId = await this.getLocalId(remoteId);
+      // Check if local entity exists and is already up to date
+      const existingLocalId = await this.getLocalId(remoteId);
+      if (existingLocalId) {
+        const localEntity = await this.fetchLocal(existingLocalId);
+        const remoteUpdatedAt = this.getRemoteUpdatedAt(remoteEntity);
 
-      // if (localId && this.config.owner === "carbon") {
-      //   return {
-      //     status: "skipped",
-      //     action: "none",
-      //     error: "Carbon is System of Record"
-      //   };
-      // }
+        if (localEntity && remoteUpdatedAt) {
+          const localUpdatedAt = new Date((localEntity as any).updatedAt);
+          if (localUpdatedAt >= remoteUpdatedAt) {
+            return {
+              status: "skipped",
+              action: "none",
+              localId: existingLocalId,
+              remoteId,
+              error: "Local entity is up to date"
+            };
+          }
+        }
+      }
 
       const localPayload = await this.mapToLocal(remoteEntity);
 
@@ -360,6 +375,7 @@ export abstract class BaseEntitySyncer<
       const newLocalId = await withSyncDisabled(this.database, async (tx) => {
         const id = await this.upsertLocal(tx, localPayload, remoteId);
         await this.linkEntities(tx, id, remoteId);
+
         return id;
       });
 
@@ -367,7 +383,7 @@ export abstract class BaseEntitySyncer<
 
       return {
         status: "success",
-        action: "updated",
+        action: existingLocalId ? "updated" : "created",
         localId: newLocalId,
         remoteId
       };
@@ -520,17 +536,17 @@ export abstract class BaseEntitySyncer<
       for (const [remoteId, entity] of remoteEntities) {
         try {
           // Check system of record
-          // const existingLocalId = await this.getLocalId(remoteId);
-          // if (existingLocalId && this.config.owner === "carbon") {
-          //   results.push({
-          //     status: "skipped",
-          //     action: "none",
-          //     remoteId,
-          //     localId: existingLocalId,
-          //     error: "Carbon is System of Record"
-          //   });
-          //   continue;
-          // }
+          const existingLocalId = await this.getLocalId(remoteId);
+          if (existingLocalId && this.config.owner === "carbon") {
+            results.push({
+              status: "skipped",
+              action: "none",
+              remoteId,
+              localId: existingLocalId,
+              error: "Carbon is System of Record"
+            });
+            continue;
+          }
 
           // Map and upsert locally
           const localPayload = await this.mapToLocal(entity);

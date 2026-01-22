@@ -11,20 +11,39 @@ export const OperationSchema = z.enum([
 
 const HandlerTypeSchema = z.enum(["WEBHOOK", "WORKFLOW", "SYNC"]);
 
-export const EventSchema = z.object({
-  table: z.string(),
-  operation: z.enum(["INSERT", "UPDATE", "DELETE", "TRUNCATE"]),
-  recordId: z.string(),
-  data: z.record(z.any()),
-  oldData: z.record(z.any()).nullable(),
-  timestamp: z.string()
-});
+export const EventSchema = z.discriminatedUnion("operation", [
+  z.object({
+    table: z.string(),
+    operation: z.enum(["UPDATE"]),
+    recordId: z.string(),
+    new: z.record(z.any()),
+    old: z.record(z.any()),
+    timestamp: z.string()
+  }),
+  z.object({
+    table: z.string(),
+    operation: z.enum(["INSERT"]),
+    recordId: z.string(),
+    new: z.record(z.any()),
+    old: z.null(),
+    timestamp: z.string()
+  }),
+  z.object({
+    table: z.string(),
+    operation: z.enum(["DELETE", "TRUNCATE"]),
+    recordId: z.string(),
+    new: z.null(),
+    old: z.record(z.any()),
+    timestamp: z.string()
+  })
+]);
 
 export const QueueMessageSchema = z.object({
   subscriptionId: z.string(),
   triggerType: z.enum(["ROW", "STATEMENT"]),
   handlerType: HandlerTypeSchema,
   handlerConfig: z.record(z.any()),
+  companyId: z.string(),
   event: EventSchema
 });
 

@@ -140,27 +140,27 @@ export const DEFAULT_SYNC_CONFIG: GlobalSyncConfig = {
     customer: {
       enabled: true,
       direction: "two-way",
-      owner: "carbon"
+      owner: "accounting"
     },
-    vendor: { enabled: true, direction: "two-way", owner: "carbon" },
-    item: { enabled: false, direction: "two-way", owner: "carbon" },
+    vendor: { enabled: true, direction: "two-way", owner: "accounting" },
+    item: { enabled: true, direction: "two-way", owner: "carbon" },
     employee: {
       enabled: false,
-      direction: "push-to-accounting",
-      owner: "carbon"
+      direction: "two-way",
+      owner: "accounting"
     },
     purchaseOrder: {
       enabled: false,
-      direction: "push-to-accounting",
-      owner: "carbon"
+      direction: "two-way",
+      owner: "accounting"
     },
-    bill: { enabled: false, direction: "two-way", owner: "carbon" },
+    bill: { enabled: false, direction: "two-way", owner: "accounting" },
     salesOrder: {
       enabled: false,
-      direction: "push-to-accounting",
-      owner: "carbon"
+      direction: "two-way",
+      owner: "accounting"
     },
-    invoice: { enabled: false, direction: "two-way", owner: "carbon" },
+    invoice: { enabled: false, direction: "two-way", owner: "accounting" },
     payment: {
       enabled: false,
       direction: "pull-from-accounting",

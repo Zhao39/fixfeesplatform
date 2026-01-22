@@ -14,6 +14,8 @@ import type { Database as SupabaseDatabase } from "../../../../src/types.ts";
 
 export type KyselyDatabase = KyselifyDatabase<SupabaseDatabase>;
 export type KyselyTx = Transaction<KyselyDatabase>;
+export type KyselyDbTx = KyselyDatabase | KyselyTx;
+
 export type { Kysely } from "kysely";
 
 export function getRuntime() {

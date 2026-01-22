@@ -47,8 +47,7 @@ export const syncExternalAccountingTask = task({
       integration.metadata,
     );
 
-    // Create kysely instance inside task to avoid module-level initialization issues
-    const pool = getPostgresConnectionPool(1);
+    const pool = getPostgresConnectionPool(10);
     const kysely = getPostgresClient(pool, PostgresDriver);
 
     const results = {
@@ -87,9 +86,8 @@ export const syncExternalAccountingTask = task({
             logger.info("Sync result:", { entityType, result });
 
             results.success.push(result);
-            continue;
           }
-
+          
           if (input.syncDirection === "pull-from-accounting") {
             const result = await syncer.pullBatchFromAccounting(
               entities.map((e) => e.entityId),
@@ -98,7 +96,6 @@ export const syncExternalAccountingTask = task({
             logger.info("Sync result:", { entityType, result });
 
             results.success.push(result);
-            continue;
           }
         } catch (error) {
           console.error(`Failed to process ${entityType} entities:`, error);
@@ -111,7 +108,9 @@ export const syncExternalAccountingTask = task({
       }
     } catch (error) {
       logger.error("Sync task failed:", error);
-    } 
+    } finally {
+      await pool.end();
+    }
 
     return results;
   },

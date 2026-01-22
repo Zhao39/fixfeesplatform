@@ -132,7 +132,10 @@ export const Xero = defineIntegration({
         companyId,
         name: "xero-sync",
         operations: ["INSERT", "UPDATE", "DELETE"],
-        type: "SYNC"
+        type: "SYNC",
+        config: {
+          provider: ProviderID.XERO
+        }
       });
     }
   }

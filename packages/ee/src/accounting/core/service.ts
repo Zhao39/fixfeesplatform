@@ -69,7 +69,7 @@ export const getProviderIntegration = (
 ) => {
   const { accessToken, refreshToken, tenantId } = config?.credentials || {};
 
-  const syncConfig = config?.syncConfig ?? DEFAULT_SYNC_CONFIG;
+  const syncConfig = DEFAULT_SYNC_CONFIG; // TODO use config?.syncConfig to make it configurable
 
   // Create a callback function to update the integration metadata when tokens are refreshed
   const onTokenRefresh = async (auth: ProviderCredentials) => {
@@ -177,84 +177,8 @@ type EntityWithParsedExternalId<T extends TablesWithExternalId> = Omit<
   externalId: typeof ExternalIdSchema._type;
 };
 
-// Overload for Supabase client
-export async function getAccountingEntity<T extends TablesWithExternalId>(
-  client: SupabaseClient<Database>,
-  table: T,
-  companyId: string,
-  provider: ProviderID,
-  select: { externalId: string } | { id: string }
-): Promise<EntityWithParsedExternalId<T> | null>;
-
-// Overload for Kysely client
-export async function getAccountingEntity<T extends TablesWithExternalId>(
-  client: Kysely<KyselyDatabase> | KyselyTx,
-  table: T,
-  companyId: string,
-  provider: ProviderID,
-  select: { externalId: string } | { id: string }
-): Promise<EntityWithParsedExternalId<T> | null>;
-
-// Implementation
-export async function getAccountingEntity<T extends TablesWithExternalId>(
-  client: SupabaseClient<Database> | Kysely<KyselyDatabase> | KyselyTx,
-  table: T,
-  companyId: string,
-  provider: ProviderID,
-  select: { externalId: string } | { id: string }
-): Promise<EntityWithParsedExternalId<T> | null> {
-  // Check if client is a Kysely instance
-  if (!("realtime" in client)) {
-    return getAccountingEntityKysely(
-      client,
-      table,
-      companyId,
-      provider,
-      select
-    );
-  }
-
-  // Supabase client path
-  let query = client
-    .from(table as any) // Supabase typing issue
-    .select("*")
-    .eq("companyId", companyId)
-    .eq(`externalId->${provider}->>provider`, provider);
-
-  if ("id" in select) {
-    query = query.eq("id", select.id);
-  }
-
-  if ("externalId" in select) {
-    query = query.eq(`externalId->${provider}->>id`, select.externalId);
-  }
-
-  const entry = await query.maybeSingle();
-
-  if (!entry.data) {
-    return null;
-  }
-
-  const externalId = await ExternalIdSchema.safeParseAsync(
-    // @ts-expect-error Supabase typing issue
-    entry.data.externalId
-  );
-
-  if (!externalId.success) {
-    return null;
-  }
-
-  return {
-    ...(entry.data as unknown as Omit<
-      Database["public"]["Tables"][T]["Row"],
-      "externalId"
-    >),
-    externalId: externalId.data
-  };
-}
-
 // Internal helper for Kysely implementation
-async function getAccountingEntityKysely<T extends TablesWithExternalId>(
+export async function getAccountingEntity<T extends TablesWithExternalId>(
   client: Kysely<KyselyDatabase> | KyselyTx,
   table: T,
   companyId: string,

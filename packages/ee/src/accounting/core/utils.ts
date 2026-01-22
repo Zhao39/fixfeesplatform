@@ -64,9 +64,8 @@ export class HTTPClient {
   }
 
   private async parseResponse<T>(response: Response) {
-    const hasBody =
-      response.headers.get("content-length") !== "0" &&
-      response.headers.get("content-type")?.includes("application/json");
+    const contentType = response.headers.get("content-type");
+    const isJson = contentType?.includes("application/json");
 
     if (!response.ok) {
       return {
@@ -77,13 +76,31 @@ export class HTTPClient {
       } as const;
     }
 
-    if (hasBody) {
-      return {
-        error: false,
-        message: response.statusText,
-        code: response.status,
-        data: (await response.json()) as T
-      } as const;
+    if (isJson) {
+      try {
+        const text = await response.text();
+        if (!text || text.trim() === "") {
+          return {
+            error: false,
+            message: response.statusText,
+            code: response.status,
+            data: null
+          } as const;
+        }
+        return {
+          error: false,
+          message: response.statusText,
+          code: response.status,
+          data: JSON.parse(text) as T
+        } as const;
+      } catch {
+        return {
+          error: true,
+          message: "Invalid JSON response",
+          code: response.status,
+          data: null
+        } as const;
+      }
     }
 
     return {

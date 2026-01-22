@@ -158,6 +158,7 @@ BEGIN
                 'triggerType', TG_LEVEL,
                 'handlerType', sub."handlerType",
                 'handlerConfig', sub."config",
+                'companyId', rec_company_id,
                 'event', jsonb_build_object(
                     'table', TG_TABLE_NAME, 
                     'operation', TG_OP, 
@@ -179,6 +180,7 @@ BEGIN
                 'triggerType', TG_LEVEL,
                 'handlerType', sub."handlerType",
                 'handlerConfig', sub."config",
+                'companyId', rec_company_id,
                 'event', jsonb_build_object(
                     'table', TG_TABLE_NAME, 
                     'operation', TG_OP, 
@@ -200,6 +202,7 @@ BEGIN
                 'triggerType', TG_LEVEL,
                 'handlerType', sub."handlerType",
                 'handlerConfig', sub."config",
+                'companyId', rec_company_id,
                 'event', jsonb_build_object(
                     'table', TG_TABLE_NAME, 
                     'operation', TG_OP, 

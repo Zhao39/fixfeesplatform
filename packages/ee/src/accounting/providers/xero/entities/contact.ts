@@ -1,10 +1,11 @@
 import type { KyselyTx } from "@carbon/database/client";
+import { sql } from "kysely";
 import {
   getAccountingEntity,
   updateAccountingEntityExternalId
 } from "../../../core/service";
 import { type Accounting, BaseEntitySyncer } from "../../../core/types";
-import type { Xero } from "../models";
+import { parseDotnetDate, type Xero } from "../models";
 
 // Type for rows returned from customer/supplier queries with address joins
 type EntityRow = {
@@ -103,7 +104,16 @@ export class ContactSyncer extends BaseEntitySyncer<
   }
 
   // =================================================================
-  // 2. LOCAL FETCH (Single + Batch)
+  // 2. TIMESTAMP EXTRACTION
+  // =================================================================
+
+  protected getRemoteUpdatedAt(remote: Xero.Contact): Date | null {
+    if (!remote.UpdatedDateUTC) return null;
+    return parseDotnetDate(remote.UpdatedDateUTC);
+  }
+
+  // =================================================================
+  // 3. LOCAL FETCH (Single + Batch)
   // =================================================================
 
   async fetchLocal(id: string): Promise<Accounting.Contact | null> {
@@ -402,10 +412,48 @@ export class ContactSyncer extends BaseEntitySyncer<
     remoteId: string
   ): Promise<string> {
     const existingLocalId = await this.getLocalId(remoteId);
-    const isVendor = data.isVendor && !data.isCustomer;
+    const isVendor = data.isVendor && !data.isCustomer ? true : false;
+
+    const externalIdData = {
+      [this.provider.id]: {
+        id: remoteId,
+        provider: this.provider.id,
+        lastSyncedAt: new Date().toISOString()
+      }
+    };
+
+    // 1. Upsert customer/supplier
+    const entityId = await this.upsertEntity(
+      tx,
+      data,
+      existingLocalId,
+      isVendor,
+      externalIdData
+    );
+
+    // 2. Upsert contact and link
+    await this.upsertContactAndLink(
+      tx,
+      data,
+      remoteId,
+      entityId,
+      isVendor,
+      externalIdData
+    );
+
+    return entityId;
+  }
+
+  private async upsertEntity(
+    tx: KyselyTx,
+    data: Partial<Accounting.Contact>,
+    existingId: string | null,
+    isVendor: boolean,
+    externalIdData: Record<string, unknown>
+  ): Promise<string> {
     const table = isVendor ? "supplier" : "customer";
 
-    if (existingLocalId) {
+    if (existingId) {
       await tx
         .updateTable(table)
         .set({
@@ -415,12 +463,12 @@ export class ContactSyncer extends BaseEntitySyncer<
           phone: data.workPhone,
           fax: data.fax,
           currencyCode: data.currencyCode,
-          updatedAt: new Date().toISOString()
+          updatedAt: new Date().toISOString(),
+          externalId: sql`COALESCE("externalId", '{}'::jsonb) || ${JSON.stringify(externalIdData)}::jsonb`
         })
-        .where("id", "=", existingLocalId)
+        .where("id", "=", existingId)
         .execute();
-
-      return existingLocalId;
+      return existingId;
     }
 
     const result = await tx
@@ -434,12 +482,97 @@ export class ContactSyncer extends BaseEntitySyncer<
         fax: data.fax,
         currencyCode: data.currencyCode,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
+        externalId: externalIdData as any
       })
       .returning("id")
       .executeTakeFirstOrThrow();
 
     return result.id;
+  }
+
+  private async upsertContactAndLink(
+    tx: KyselyTx,
+    data: Partial<Accounting.Contact>,
+    remoteId: string,
+    entityId: string,
+    isVendor: boolean,
+    externalIdData: Record<string, unknown>
+  ): Promise<void> {
+    const junctionTable = isVendor ? "supplierContact" : "customerContact";
+    const fkColumn = isVendor ? "supplierId" : "customerId";
+
+    // Try to find existing contact by externalId
+    const existingContact = await tx
+      .selectFrom("contact")
+      .select("id")
+      .where("companyId", "=", this.companyId)
+      .where(
+        sql.raw(`"externalId"->'${this.provider.id}'->>'id'`),
+        "=",
+        remoteId
+      )
+      .executeTakeFirst();
+
+    let contactId: string;
+
+    if (existingContact) {
+      // Update existing contact
+      await tx
+        .updateTable("contact")
+        .set({
+          email: data.email ?? null,
+          firstName: data.firstName ?? "",
+          lastName: data.lastName ?? "",
+          workPhone: data.workPhone ?? null,
+          mobilePhone: data.mobilePhone ?? null,
+          homePhone: data.homePhone ?? null,
+          fax: data.fax ?? null,
+          externalId: sql`COALESCE("externalId", '{}'::jsonb) || ${JSON.stringify(externalIdData)}::jsonb`
+        })
+        .where("id", "=", existingContact.id)
+        .execute();
+      contactId = existingContact.id;
+    } else {
+      // Insert new contact
+      const result = await tx
+        .insertInto("contact")
+        .values({
+          companyId: this.companyId,
+          email: data.email ?? null,
+          firstName: data.firstName ?? "",
+          lastName: data.lastName ?? "",
+          workPhone: data.workPhone ?? null,
+          mobilePhone: data.mobilePhone ?? null,
+          homePhone: data.homePhone ?? null,
+          fax: data.fax ?? null,
+          isCustomer: !isVendor,
+          externalId: externalIdData as any
+        })
+        .returning("id")
+        .executeTakeFirstOrThrow();
+      contactId = result.id;
+    }
+
+    // Link contact to entity (upsert junction)
+    const existingLink = await tx
+      .selectFrom(junctionTable)
+      .select("id")
+      .where(fkColumn as any, "=", entityId)
+      .executeTakeFirst();
+
+    if (existingLink) {
+      await tx
+        .updateTable(junctionTable)
+        .set({ contactId })
+        .where(fkColumn as any, "=", entityId)
+        .execute();
+    } else {
+      await tx
+        .insertInto(junctionTable)
+        .values({ [fkColumn]: entityId, contactId } as any)
+        .execute();
+    }
   }
 
   // =================================================================

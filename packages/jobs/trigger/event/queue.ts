@@ -123,7 +123,11 @@ export const eventQueueTask = schedules.task({
         const records = grouped.SYNC.map((job) => {
           queue.push(job.msg_id);
 
-          return job.message.event;
+          return {
+            event: job.message.event,
+            companyId: job.message.companyId,
+            handlerConfig: job.message.handlerConfig,
+          };
         });
 
         await syncTask.trigger({
