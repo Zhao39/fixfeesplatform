@@ -163,12 +163,13 @@ export async function getLatestApprovalForDocument(
 
 export async function createApprovalRequest(
   client: SupabaseClient<Database>,
-  request: CreateApprovalRequestInput
+  request: CreateApprovalRequestInput & { amount?: number }
 ) {
-  const config = await getApprovalConfiguration(
+  const config = await getApprovalConfigurationByAmount(
     client,
     request.documentType,
-    request.companyId
+    request.companyId,
+    request.amount
   );
 
   const approverGroupIds =
@@ -322,17 +323,31 @@ export async function getApprovalRequestsByDocument(
     .order("requestedAt", { ascending: false });
 }
 
-export async function getApprovalConfiguration(
+export async function getApprovalConfigurationByAmount(
   client: SupabaseClient<Database>,
   documentType: (typeof approvalDocumentType)[number],
-  companyId: string
+  companyId: string,
+  amount?: number
 ) {
-  return client
+  let query = client
     .from("approvalConfiguration")
     .select("*")
     .eq("documentType", documentType)
     .eq("companyId", companyId)
-    .single();
+    .eq("enabled", true);
+
+  if (amount !== undefined && amount !== null) {
+    query = query
+      .lte("lowerBoundAmount", amount)
+      .or(`upperBoundAmount.is.null,upperBoundAmount.gt.${amount}`);
+  } else {
+    query = query.is("upperBoundAmount", null).eq("lowerBoundAmount", 0);
+  }
+
+  return query
+    .order("lowerBoundAmount", { ascending: false })
+    .limit(1)
+    .maybeSingle();
 }
 
 export async function getApprovalConfigurations(
@@ -370,18 +385,15 @@ export async function isApprovalRequired(
   companyId: string,
   amount?: number
 ): Promise<boolean> {
-  const config = await getApprovalConfiguration(
+  const config = await getApprovalConfigurationByAmount(
     client,
     documentType,
-    companyId
+    companyId,
+    amount
   );
 
-  if (!config.data?.enabled) {
+  if (!config.data) {
     return false;
-  }
-
-  if (documentType === "purchaseOrder" && config.data.thresholdAmount) {
-    return amount !== undefined && amount >= config.data.thresholdAmount;
   }
 
   return config.data.enabled;
