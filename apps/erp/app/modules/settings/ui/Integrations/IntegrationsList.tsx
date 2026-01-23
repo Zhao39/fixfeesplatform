@@ -1,4 +1,4 @@
-import type { IntegrationConfig } from "@carbon/ee";
+import type { Integration } from "@carbon/ee";
 
 import {
   Select,
@@ -11,10 +11,10 @@ import { useUrlParams } from "@carbon/remix";
 import { useMemo, useState } from "react";
 import { SearchFilter } from "~/components";
 import type { IntegrationHealth } from "./IntegrationCard";
-import { IntegrationCard, } from "./IntegrationCard";
+import { IntegrationCard } from "./IntegrationCard";
 
 type IntegrationsListProps = {
-  availableIntegrations: IntegrationConfig[];
+  availableIntegrations: Integration[];
   integrations: Array<IntegrationHealth>;
 };
 

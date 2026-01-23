@@ -7,16 +7,22 @@ import { QuickBooks } from "./quickbooks/config";
 import { Resend } from "./resend/config";
 import { Sage } from "./sage/config";
 import { Slack } from "./slack/config";
-import type { IntegrationOptions } from "./types";
+
 import { Xero } from "./xero/config";
 import { Zapier } from "./zapier/config";
 
+export { defineIntegration } from "./fns";
 export { Resend } from "./resend/config";
 export type {
+  Integration,
   IntegrationAction,
+  IntegrationClientHooks,
   IntegrationConfig,
+  IntegrationOptions,
+  IntegrationServerHooks,
   IntegrationSetting,
-  IntegrationSettingOption
+  IntegrationSettingOption,
+  OAuthConfig
 } from "./types";
 
 export const integrations = [
@@ -33,7 +39,7 @@ export const integrations = [
   Zapier
 ];
 
-export { Onshape, Logo as OnshapeLogo } from "./onshape/config";
+export { Logo as OnshapeLogo, Onshape } from "./onshape/config";
 // TODO: export as @carbon/ee/paperless
 export { PaperlessPartsClient } from "./paperless-parts/lib/client";
 export { QuickBooks } from "./quickbooks/config";
@@ -41,8 +47,11 @@ export { Slack } from "./slack/config";
 export * from "./slack/lib/messages";
 export { Xero } from "./xero/config";
 
-export const getIntegrationConfigById = (
-  id: string
-): IntegrationOptions | undefined => {
+/**
+ * Retrieves an integration configuration by its unique ID.
+ * @param id - The unique identifier of the integration
+ * @returns The integration configuration if found, undefined otherwise
+ */
+export const getIntegrationConfigById = (id: string) => {
   return integrations.find((integration) => integration.id === id);
 };

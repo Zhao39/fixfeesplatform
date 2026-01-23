@@ -3,10 +3,9 @@ import { isBrowser } from "@carbon/utils";
 import type { SVGProps } from "react";
 import { z } from "zod";
 import { defineIntegration } from "../fns";
-import type { IntegrationConfig } from "../types";
 import { getLinearClient } from "./lib";
 
-export const Linear: IntegrationConfig = defineIntegration({
+export const Linear = defineIntegration({
   name: "Linear",
   id: "linear",
   active: true,

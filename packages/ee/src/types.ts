@@ -41,41 +41,113 @@ export type IntegrationSetting = {
   value: unknown;
 };
 
-export type IntegrationConfig = {
-  name: string;
-  id: string;
-  active: boolean;
-  category: string;
-  logo: React.FC<React.ComponentProps<"svg">>;
-  shortDescription: string;
-  description: string;
-  setupInstructions?: React.FC<{ companyId: string }>;
-  images: string[];
-  settings: IntegrationSetting[];
-  schema: ZodType;
-  oauth?: {
-    authUrl: string;
-    clientId: string;
-    redirectUri: string;
-    scopes: string[];
-    tokenUrl: string;
-  };
-  actions?: IntegrationAction[];
+/**
+ * OAuth configuration for integrations that require OAuth authentication.
+ * All fields are required to ensure proper OAuth flow.
+ */
+export type OAuthConfig = {
+  /** The OAuth authorization URL */
+  authUrl: string;
+  /** The OAuth client ID (must be defined, not undefined) */
+  clientId: string;
+  /** The redirect URI path (relative to the app origin) */
+  redirectUri: string;
+  /** The OAuth scopes required by the integration */
+  scopes: string[];
+  /** The OAuth token exchange URL */
+  tokenUrl: string;
 };
 
-export interface IntegrationOptions extends IntegrationConfig {
+/**
+ * Client-side lifecycle hooks.
+ * These run in the browser when the user interacts with integration install/uninstall.
+ */
+export type IntegrationClientHooks = {
   /**
-   * Lifecycle hooks
+   * Called on the client when user clicks Install button (before any server action).
+   * Use this for OAuth popup flows, custom UI, or client-side initialization.
    */
-  // Client only hooks
   onClientInstall?: () => void | Promise<void>;
+  /**
+   * Called on the client when user clicks Uninstall button (before server action).
+   * Use this for client-side cleanup or confirmation flows.
+   */
   onClientUninstall?: () => void | Promise<void>;
+};
 
-  // Server only hooks
+/**
+ * Server-side lifecycle hooks.
+ * These run only on the server and are protected from browser execution.
+ */
+export type IntegrationServerHooks = {
+  /**
+   * Server-side hook called after the integration is activated/installed.
+   * Use this for creating database subscriptions, webhooks, or other server setup.
+   */
+  onInstall?: (companyId: string) => void | Promise<void>;
+  /**
+   * Server-side hook called after the integration is deactivated/uninstalled.
+   * Use this for cleaning up server resources, webhooks, etc.
+   */
+  onUninstall?: (companyId: string) => void | Promise<void>;
+  /**
+   * Server-side validation hook to check integration health/credentials.
+   * Returns true if the integration is healthy, false otherwise.
+   */
   onHealthcheck?: (
     companyId: string,
     metadata: Record<string, unknown>
   ) => Promise<boolean>;
-  onInstall?: (companyId: string) => void | Promise<void>;
-  onUninstall?: (companyId: string) => void | Promise<void>;
-}
+};
+
+/**
+ * Base configuration for an integration (UI and metadata only).
+ */
+export type IntegrationConfig = {
+  /** Display name of the integration */
+  name: string;
+  /** Unique identifier used in database and URLs */
+  id: string;
+  /** Whether the integration is available for use */
+  active: boolean;
+  /** Category for grouping in the UI (e.g., "Accounting", "CAD", "Email") */
+  category: string;
+  /** Logo component for the integration */
+  logo: React.FC<React.ComponentProps<"svg">>;
+  /** Brief one-liner description */
+  shortDescription: string;
+  /** Full description explaining the integration */
+  description: string;
+  /** Optional component rendering setup instructions */
+  setupInstructions?: React.FC<{ companyId: string }>;
+  /** Marketing/preview images */
+  images: string[];
+  /** Configurable settings fields */
+  settings: IntegrationSetting[];
+  /** Zod schema for validating settings */
+  schema: ZodType;
+  /** OAuth configuration (if the integration uses OAuth) */
+  oauth?: OAuthConfig;
+  /** Available actions that can be triggered on an installed integration */
+  actions?: IntegrationAction[];
+};
+
+/**
+ * Full integration options including all hooks.
+ * This is what you pass to defineIntegration().
+ */
+export interface IntegrationOptions
+  extends IntegrationConfig,
+    IntegrationClientHooks,
+    IntegrationServerHooks {}
+
+/**
+ * The return type of defineIntegration().
+ * Server hooks are wrapped with getters that enforce server-only execution.
+ */
+export type Integration<T extends IntegrationOptions = IntegrationOptions> =
+  Omit<T, keyof IntegrationServerHooks> & {
+    readonly onInstall: T["onInstall"];
+    readonly onUninstall: T["onUninstall"];
+    readonly onHealthcheck: T["onHealthcheck"];
+  };
