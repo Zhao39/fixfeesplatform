@@ -485,7 +485,8 @@ export const quoteOperationValidator = z
 export const quoteFinalizeValidator = z
   .object({
     notification: z.enum(["Email", "None"]).optional(),
-    customerContact: zfd.text(z.string().optional())
+    customerContact: zfd.text(z.string().optional()),
+    cc: z.array(z.string()).optional()
   })
   .refine(
     (data) => (data.notification === "Email" ? data.customerContact : true),

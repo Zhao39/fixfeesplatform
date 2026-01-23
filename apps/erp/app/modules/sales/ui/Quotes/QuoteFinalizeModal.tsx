@@ -19,7 +19,7 @@ import { useState } from "react";
 import { LuTriangleAlert } from "react-icons/lu";
 import type { FetcherWithComponents } from "react-router";
 import { useParams } from "react-router";
-import { CustomerContact, SelectControlled } from "~/components/Form";
+import { CustomerContact, SelectControlled, Users } from "~/components/Form";
 import { useIntegrations } from "~/hooks/useIntegrations";
 import { path } from "~/utils/path";
 import { quoteFinalizeValidator } from "../../sales.models";
@@ -136,7 +136,8 @@ const QuotationFinalizeModal = ({
           onSubmit={onClose}
           defaultValues={{
             notification: notificationType as "Email" | "None",
-            customerContact: quote?.customerContactId ?? undefined
+            customerContact: quote?.customerContactId ?? undefined,
+            cc: []
           }}
           fetcher={fetcher}
         >
@@ -194,10 +195,19 @@ const QuotationFinalizeModal = ({
                 />
               )}
               {notificationType === "Email" && (
-                <CustomerContact
-                  name="customerContact"
-                  customer={quote?.customerId ?? undefined}
-                />
+                <>
+                  <CustomerContact
+                    name="customerContact"
+                    customer={quote?.customerId ?? undefined}
+                  />
+                  <Users
+                    name="cc"
+                    label="CC"
+                    type="employee"
+                    verbose
+                    helperText="Select users or groups to CC"
+                  />
+                </>
               )}
             </VStack>
           </ModalBody>

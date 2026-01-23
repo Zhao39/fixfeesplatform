@@ -19,6 +19,7 @@ import {
 import { getCompany, getCompanySettings } from "~/modules/settings";
 import { upsertExternalLink } from "~/modules/shared";
 import { getUser } from "~/modules/users/users.server";
+import { getGroupEmails, getUserEmails } from "~/modules/users/users.service";
 import { loader as pdfLoader } from "~/routes/file+/quote+/$id[.]pdf";
 import { path } from "~/utils/path";
 import { stripSpecialCharacters } from "~/utils/string";
@@ -142,7 +143,11 @@ export async function action(args: ActionFunctionArgs) {
     return validationError(validation.error);
   }
 
-  const { notification, customerContact: customerContactId } = validation.data;
+  const {
+    notification,
+    customerContact: customerContactId,
+    cc: ccSelections
+  } = validation.data;
 
   switch (notification) {
     case "Email":
@@ -186,8 +191,28 @@ export async function action(args: ActionFunctionArgs) {
         const html = await renderAsync(emailTemplate);
         const text = await renderAsync(emailTemplate, { plainText: true });
 
+        const userIds =
+          ccSelections
+            ?.filter((id) => id.startsWith("user_"))
+            .map((id) => id.slice(5)) ?? [];
+        const groupIds =
+          ccSelections
+            ?.filter((id) => id.startsWith("group_"))
+            .map((id) => id.slice(6)) ?? [];
+
+        const [userEmails, groupEmails] = await Promise.all([
+          getUserEmails(client, userIds),
+          getGroupEmails(client, groupIds)
+        ]);
+
+        const ccEmails =
+          userEmails.length || groupEmails.length
+            ? [...new Set([...userEmails, ...groupEmails])]
+            : undefined;
+
         await tasks.trigger<typeof sendEmailResendTask>("send-email-resend", {
           to: [user.data.email, customerContact.data.contact!.email!],
+          cc: ccEmails,
           from: user.data.email,
           subject: `Quote ${quote.data.quoteId}`,
           html,

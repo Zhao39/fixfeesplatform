@@ -19,7 +19,7 @@ import {
 } from "@carbon/react";
 import { useState } from "react";
 import type { FetcherWithComponents } from "react-router";
-import { SelectControlled, SupplierContact } from "~/components/Form";
+import { SelectControlled, SupplierContact, Users } from "~/components/Form";
 import { useIntegrations } from "~/hooks/useIntegrations";
 import { path } from "~/utils/path";
 import { supplierQuoteFinalizeValidator } from "../../purchasing.models";
@@ -106,7 +106,8 @@ const SupplierQuoteSendModal = ({
           defaultValues={{
             notification: notificationType as "Email" | "Share",
             supplierContact: quote?.supplierContactId ?? undefined,
-            sendAttachments: sendAttachments
+            sendAttachments: sendAttachments,
+            cc: []
           }}
           fetcher={fetcher}
         >
@@ -162,6 +163,13 @@ const SupplierQuoteSendModal = ({
                   <SupplierContact
                     name="supplierContact"
                     supplier={quote?.supplierId ?? undefined}
+                  />
+                  <Users
+                    name="cc"
+                    label="CC"
+                    type="employee"
+                    verbose
+                    helperText="Select users or groups to CC"
                   />
                   <HStack spacing={2}>
                     <Checkbox
