@@ -3,7 +3,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { VStack } from "@carbon/react";
 import type { LoaderFunctionArgs } from "react-router";
-import { redirect, useLoaderData } from "react-router";
+import { Outlet, redirect, useLoaderData } from "react-router";
 import {
   type ApprovalDocumentType,
   type ApprovalStatus,
@@ -15,8 +15,8 @@ import { path } from "~/utils/path";
 import { getGenericQueryFilters } from "~/utils/query";
 
 export const handle: Handle = {
-  breadcrumb: "Inbox",
-  to: path.to.approvals
+  breadcrumb: "Requests",
+  to: path.to.approvalRequests
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -60,12 +60,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
   };
 }
 
-export default function ApprovalsInboxRoute() {
+export default function ApprovalRequestsRoute() {
   const { approvals, count } = useLoaderData<typeof loader>();
 
   return (
     <VStack spacing={0} className="h-full">
       <ApprovalsTable data={approvals} count={count} />
+      <Outlet />
     </VStack>
   );
 }

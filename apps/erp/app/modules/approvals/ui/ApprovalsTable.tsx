@@ -254,7 +254,7 @@ const ApprovalsTable = memo(({ data, count }: ApprovalsTableProps) => {
           decisionByName: false
         }}
         renderContextMenu={renderContextMenu}
-        title="Approvals"
+        title="Approvals Requests"
         table="approvalRequest"
         withSavedView
       />
