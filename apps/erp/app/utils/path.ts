@@ -362,10 +362,22 @@ export const path = {
     },
     authenticatedRoot: x,
     acknowledge: `${x}/acknowledge`,
-    approvals: `${x}/approvals`,
-    approval: (id: string) => generatePath(`${x}/approvals/${id}`),
-    approvalDecision: `${x}/approvals/decision`,
+    approvalRequests: `${x}/settings/approvals/requests`,
+    approvalDecision: (id: string) =>
+      generatePath(`${x}/settings/approvals/requests/${id}`),
+    approvalDecisionWithType: (id: string, decision: "approve" | "reject") =>
+      generatePath(
+        `${x}/settings/approvals/requests/${id}?decision=${decision}`
+      ),
     approvalSettings: `${x}/settings/approvals`,
+    approvalRule: (id: string) =>
+      generatePath(`${x}/settings/approvals/rules/${id}`),
+    newApprovalRule: (documentType: string) =>
+      generatePath(
+        `${x}/settings/approvals/rules/new?documentType=${documentType}`
+      ),
+    deleteApprovalRule: (id: string) =>
+      generatePath(`${x}/settings/approvals/rules/${id}/delete`),
     abilities: `${x}/resources/abilities`,
     ability: (id: string) => generatePath(`${x}/resources/ability/${id}`),
     account: `${x}/account`,
@@ -1267,8 +1279,6 @@ export const path = {
     purchaseOrderRoot: `${x}/purchase-order`,
     purchaseOrderStatus: (id: string) =>
       generatePath(`${x}/purchase-order/${id}/status`),
-    purchaseOrderSubmitForApproval: (id: string) =>
-      generatePath(`${x}/purchase-order/${id}/submit-for-approval`),
     purchaseOrders: `${x}/purchasing/orders`,
     purchasing: `${x}/purchasing`,
     purchasingPlanning: `${x}/purchasing/planning`,
@@ -1282,8 +1292,6 @@ export const path = {
       generatePath(`${x}/quality-document/${id}/steps/${attributeId}`),
     qualityDocumentStepOrder: (id: string) =>
       generatePath(`${x}/quality-document/${id}/steps/order`),
-    qualityDocumentSubmitForApproval: (id: string) =>
-      generatePath(`${x}/quality-document/${id}/submit-for-approval`),
     qualitySettings: `${x}/settings/quality`,
     quote: (id: string) => generatePath(`${x}/quote/${id}`),
     quoteAssembly: (quoteId: string, lineId: string, assemblyId: string) =>

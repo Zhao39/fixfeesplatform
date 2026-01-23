@@ -1,6 +1,5 @@
 import {
   LuBox,
-  LuCircleCheck,
   LuCrown,
   LuFactory,
   LuFiles,
@@ -63,12 +62,6 @@ export function useModules() {
       name: "Quality",
       to: path.to.quality,
       icon: LuFolderCheck
-    },
-    {
-      name: "Approvals",
-      to: path.to.approvals,
-      icon: LuCircleCheck,
-      role: "employee"
     },
     {
       permission: "accounting",
