@@ -99,8 +99,6 @@ export default function PurchasingRFQLine() {
     ...line,
     id: line.id ?? undefined,
     purchasingRfqId: line.purchasingRfqId ?? "",
-    partNumber: line.partNumber ?? "",
-    partRevision: line.partRevision ?? "",
     description: line.description ?? "",
     itemId: line.itemId ?? "",
     quantity: line.quantity ?? [1],
@@ -115,7 +113,7 @@ export default function PurchasingRFQLine() {
         id={line.id}
         table="purchasingRfqLine"
         title="Notes"
-        subTitle={line.partNumber ?? ""}
+        subTitle={line.itemReadableId ?? ""}
         internalNotes={line.internalNotes as JSONContent}
         externalNotes={line.externalNotes as JSONContent}
       />

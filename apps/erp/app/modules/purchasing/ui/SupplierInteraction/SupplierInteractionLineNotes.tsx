@@ -111,7 +111,7 @@ const SupplierInteractionLineNotes = ({
             <CardHeader>
               <CardTitle>{title}</CardTitle>
               <CardDescription>
-                {subTitle} -{" "}
+                {subTitle ? `${subTitle} - ` : ""}
                 {tab === "internal" ? "Internal Notes" : "External Notes"}
               </CardDescription>
             </CardHeader>

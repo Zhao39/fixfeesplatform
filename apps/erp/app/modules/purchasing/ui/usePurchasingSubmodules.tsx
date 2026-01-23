@@ -26,13 +26,13 @@ const purchasingRoutes: AuthenticatedRouteGroup[] = [
       {
         name: "RFQs",
         to: path.to.purchasingRfqs,
-        icon: <LuFileText />,
+        icon: <LuPackageSearch />,
         table: "purchasingRfq"
       },
       {
         name: "Quotes",
         to: path.to.supplierQuotes,
-        icon: <LuPackageSearch />,
+        icon: <LuFileText />,
         table: "supplierQuote"
       },
       {

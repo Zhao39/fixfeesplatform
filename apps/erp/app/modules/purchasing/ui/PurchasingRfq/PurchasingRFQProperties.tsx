@@ -1,6 +1,10 @@
 import type { Json } from "@carbon/database";
 import { CreatableMultiSelect, DatePicker, ValidatedForm } from "@carbon/form";
 import {
+  Avatar,
+  AvatarGroup,
+  AvatarGroupList,
+  AvatarOverflowIndicator,
   Button,
   HStack,
   Tooltip,
@@ -209,6 +213,7 @@ const PurchasingRFQProperties = () => {
           label="Suppliers"
           options={supplierOptions}
           value={currentSupplierIds}
+          inline={SuppliersInlinePreview}
           isReadOnly={isDisabled}
           disabled={isDisabled}
           onChange={(selected) => {
@@ -325,6 +330,27 @@ const PurchasingRFQProperties = () => {
         isDisabled={isDisabled}
       />
     </VStack>
+  );
+};
+
+const SuppliersInlinePreview = (
+  value: string[],
+  options: { value: string; label: string; helper?: string }[],
+  maxPreview = 5
+) => {
+  const [suppliers] = useSuppliers();
+  return (
+    <AvatarGroup limit={maxPreview} className="relative z-10">
+      <AvatarGroupList>
+        {value.map((supplier, index: number) => (
+          <Avatar
+            key={index}
+            name={suppliers.find((s) => s.id === supplier)?.name ?? supplier}
+          />
+        ))}
+      </AvatarGroupList>
+      <AvatarOverflowIndicator />
+    </AvatarGroup>
   );
 };
 
