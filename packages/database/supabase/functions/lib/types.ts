@@ -2441,6 +2441,7 @@ export type Database = {
           key: string
           label: string
           listOptions: string[] | null
+          materialFormFilterId: string | null
           sortOrder: number
           updatedAt: string | null
           updatedBy: string | null
@@ -2456,6 +2457,7 @@ export type Database = {
           key: string
           label: string
           listOptions?: string[] | null
+          materialFormFilterId?: string | null
           sortOrder?: number
           updatedAt?: string | null
           updatedBy?: string | null
@@ -2471,6 +2473,7 @@ export type Database = {
           key?: string
           label?: string
           listOptions?: string[] | null
+          materialFormFilterId?: string | null
           sortOrder?: number
           updatedAt?: string | null
           updatedBy?: string | null
@@ -2579,6 +2582,13 @@ export type Database = {
             columns: ["itemId"]
             isOneToOne: false
             referencedRelation: "tools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "configurationParameter_materialFormFilterId_fkey"
+            columns: ["materialFormFilterId"]
+            isOneToOne: false
+            referencedRelation: "materialForm"
             referencedColumns: ["id"]
           },
           {
@@ -10110,6 +10120,7 @@ export type Database = {
           customFields: Json | null
           id: string
           itemId: string
+          itemScrapPercentage: number
           jobId: string
           parentMaterialId: string | null
           quantityPerParent: number
@@ -10127,6 +10138,7 @@ export type Database = {
           customFields?: Json | null
           id?: string
           itemId: string
+          itemScrapPercentage?: number
           jobId: string
           parentMaterialId?: string | null
           quantityPerParent?: number
@@ -10144,6 +10156,7 @@ export type Database = {
           customFields?: Json | null
           id?: string
           itemId?: string
+          itemScrapPercentage?: number
           jobId?: string
           parentMaterialId?: string | null
           quantityPerParent?: number
@@ -10350,6 +10363,7 @@ export type Database = {
           estimatedQuantity: number | null
           id: string
           itemId: string
+          itemScrapPercentage: number
           itemType: string
           jobId: string
           jobMakeMethodId: string
@@ -10379,6 +10393,7 @@ export type Database = {
           estimatedQuantity?: number | null
           id?: string
           itemId: string
+          itemScrapPercentage?: number
           itemType?: string
           jobId: string
           jobMakeMethodId: string
@@ -10408,6 +10423,7 @@ export type Database = {
           estimatedQuantity?: number | null
           id?: string
           itemId?: string
+          itemScrapPercentage?: number
           itemType?: string
           jobId?: string
           jobMakeMethodId?: string
@@ -10680,6 +10696,7 @@ export type Database = {
           startDate: string | null
           status: Database["public"]["Enums"]["jobOperationStatus"]
           tags: string[] | null
+          targetQuantity: number | null
           updatedAt: string | null
           updatedBy: string | null
           workCenterId: string | null
@@ -10724,6 +10741,7 @@ export type Database = {
           startDate?: string | null
           status?: Database["public"]["Enums"]["jobOperationStatus"]
           tags?: string[] | null
+          targetQuantity?: number | null
           updatedAt?: string | null
           updatedBy?: string | null
           workCenterId?: string | null
@@ -10768,6 +10786,7 @@ export type Database = {
           startDate?: string | null
           status?: Database["public"]["Enums"]["jobOperationStatus"]
           tags?: string[] | null
+          targetQuantity?: number | null
           updatedAt?: string | null
           updatedBy?: string | null
           workCenterId?: string | null
@@ -31386,63 +31405,90 @@ export type Database = {
           },
         ]
       }
-      search: {
+      searchIndex_7XFgHYBbyiscTuvDxncdhj: {
         Row: {
-          companyId: string | null
+          createdAt: string
           description: string | null
-          entity: Database["public"]["Enums"]["searchEntity"] | null
-          fts: unknown
+          entityId: string
+          entityType: string
           id: number
           link: string
-          name: string
-          uuid: string | null
+          metadata: Json | null
+          searchVector: unknown
+          tags: string[] | null
+          title: string
+          updatedAt: string | null
         }
         Insert: {
-          companyId?: string | null
+          createdAt?: string
           description?: string | null
-          entity?: Database["public"]["Enums"]["searchEntity"] | null
-          fts?: unknown
+          entityId: string
+          entityType: string
           id?: number
           link: string
-          name: string
-          uuid?: string | null
+          metadata?: Json | null
+          searchVector?: unknown
+          tags?: string[] | null
+          title: string
+          updatedAt?: string | null
         }
         Update: {
-          companyId?: string | null
+          createdAt?: string
           description?: string | null
-          entity?: Database["public"]["Enums"]["searchEntity"] | null
-          fts?: unknown
+          entityId?: string
+          entityType?: string
           id?: number
           link?: string
-          name?: string
-          uuid?: string | null
+          metadata?: Json | null
+          searchVector?: unknown
+          tags?: string[] | null
+          title?: string
+          updatedAt?: string | null
+        }
+        Relationships: []
+      }
+      searchIndexRegistry: {
+        Row: {
+          companyId: string
+          createdAt: string
+          lastRebuiltAt: string | null
+        }
+        Insert: {
+          companyId: string
+          createdAt?: string
+          lastRebuiltAt?: string | null
+        }
+        Update: {
+          companyId?: string
+          createdAt?: string
+          lastRebuiltAt?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "search_companyid_fkey"
+            foreignKeyName: "searchIndexRegistry_companyId_fkey"
             columns: ["companyId"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "companies"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "search_companyid_fkey"
+            foreignKeyName: "searchIndexRegistry_companyId_fkey"
             columns: ["companyId"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "company"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "search_companyid_fkey"
+            foreignKeyName: "searchIndexRegistry_companyId_fkey"
             columns: ["companyId"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "customFieldTables"
             referencedColumns: ["companyId"]
           },
           {
-            foreignKeyName: "search_companyid_fkey"
+            foreignKeyName: "searchIndexRegistry_companyId_fkey"
             columns: ["companyId"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "integrations"
             referencedColumns: ["companyId"]
           },
@@ -52900,6 +52946,10 @@ export type Database = {
         Args: { operation_id: string }
         Returns: boolean
       }
+      create_company_search_index: {
+        Args: { p_company_id: string }
+        Returns: undefined
+      }
       create_rfq_from_model_v1: {
         Args: {
           company_id: string
@@ -52941,6 +52991,10 @@ export type Database = {
           rfq_line_ids: string[]
           rfq_readable_id: string
         }[]
+      }
+      drop_company_search_index: {
+        Args: { p_company_id: string }
+        Returns: undefined
       }
       employee_requires_period: {
         Args: { employee_start_date: string; period: string }
@@ -52992,6 +53046,7 @@ export type Database = {
           setupTime: number
           setupUnit: Database["public"]["Enums"]["factor"]
           tags: string[]
+          targetQuantity: number
           thumbnailPath: string
           workCenterId: string
         }[]
@@ -53031,6 +53086,7 @@ export type Database = {
           setupTime: number
           setupUnit: Database["public"]["Enums"]["factor"]
           tags: string[]
+          targetQuantity: number
           thumbnailPath: string
           workCenterId: string
         }[]
@@ -53067,6 +53123,7 @@ export type Database = {
           setupTime: number
           setupUnit: Database["public"]["Enums"]["factor"]
           tags: string[]
+          targetQuantity: number
           thumbnailPath: string
           workCenterId: string
         }[]
@@ -53232,6 +53289,7 @@ export type Database = {
           reorderPoint: number
           reorderQuantity: number
           replenishmentSystem: Database["public"]["Enums"]["itemReplenishmentSystem"]
+          tags: string[]
           thumbnailPath: string
           type: Database["public"]["Enums"]["itemType"]
           unitOfMeasureCode: string
@@ -53367,6 +53425,7 @@ export type Database = {
           quantityScrapped: number
           setupTime: number
           setupUnit: Database["public"]["Enums"]["factor"]
+          targetQuantity: number
           workCenterId: string
           workInstruction: Json
         }[]
@@ -53422,6 +53481,7 @@ export type Database = {
           quantityScrapped: number
           setupTime: number
           setupUnit: Database["public"]["Enums"]["factor"]
+          targetQuantity: number
           workCenterId: string
         }[]
       }
@@ -54075,6 +54135,7 @@ export type Database = {
           setupTime: number
           setupUnit: Database["public"]["Enums"]["factor"]
           tags: string[]
+          targetQuantity: number
           thumbnailPath: string
           workCenterId: string
         }[]
@@ -54323,6 +54384,32 @@ export type Database = {
       nanoid_optimized: {
         Args: { alphabet: string; mask: number; size: number; step: number }
         Returns: string
+      }
+      populate_company_search_index: {
+        Args: { p_company_id: string }
+        Returns: undefined
+      }
+      populate_sales_search_results: {
+        Args: { p_company_id: string }
+        Returns: undefined
+      }
+      search_company_index: {
+        Args: {
+          p_company_id: string
+          p_entity_types: string[]
+          p_limit?: number
+          p_query: string
+        }
+        Returns: {
+          description: string
+          entityId: string
+          entityType: string
+          id: number
+          link: string
+          metadata: Json
+          tags: string[]
+          title: string
+        }[]
       }
       suppliers_search: {
         Args: {
@@ -54789,28 +54876,6 @@ export type Database = {
         | "Reject"
         | "Request Approval"
       salesRfqStatus: "Draft" | "Ready for Quote" | "Closed" | "Quoted"
-      searchEntity:
-        | "Resource"
-        | "Person"
-        | "Customer"
-        | "Supplier"
-        | "Job"
-        | "Part"
-        | "Purchase Order"
-        | "Lead"
-        | "Opportunity"
-        | "Quotation"
-        | "Sales Order"
-        | "Request for Quotation"
-        | "Sales Invoice"
-        | "Purchase Invoice"
-        | "Document"
-        | "Sales RFQ"
-        | "Service"
-        | "Tool"
-        | "Consumable"
-        | "Material"
-        | "Fixture"
       serviceType: "Internal" | "External"
       shipmentSourceDocument:
         | "Sales Order"
@@ -55958,29 +56023,6 @@ export const Constants = {
         "Request Approval",
       ],
       salesRfqStatus: ["Draft", "Ready for Quote", "Closed", "Quoted"],
-      searchEntity: [
-        "Resource",
-        "Person",
-        "Customer",
-        "Supplier",
-        "Job",
-        "Part",
-        "Purchase Order",
-        "Lead",
-        "Opportunity",
-        "Quotation",
-        "Sales Order",
-        "Request for Quotation",
-        "Sales Invoice",
-        "Purchase Invoice",
-        "Document",
-        "Sales RFQ",
-        "Service",
-        "Tool",
-        "Consumable",
-        "Material",
-        "Fixture",
-      ],
       serviceType: ["Internal", "External"],
       shipmentSourceDocument: [
         "Sales Order",

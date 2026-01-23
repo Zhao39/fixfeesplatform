@@ -2,7 +2,7 @@ import { error, getCarbonServiceRole, success } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { FunctionRegion } from "@supabase/supabase-js";
-import type { LoaderFunctionArgs, } from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
 import { redirect } from "react-router";
 import {
   finishJobOperation,
@@ -90,7 +90,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const willBeFinished =
     quantityToComplete + currentQuantity >=
-    (jobOperation.data.operationQuantity ?? 0);
+    (jobOperation.data.targetQuantity ??
+      jobOperation.data.operationQuantity ??
+      0);
 
   const isTrackedEntity =
     jobMakeMethod.data.requiresSerialTracking ||

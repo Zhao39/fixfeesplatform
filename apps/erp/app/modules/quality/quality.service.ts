@@ -1,5 +1,5 @@
 import type { Database, Json } from "@carbon/database";
-import { fetchAllFromTable, } from "@carbon/database";
+import { fetchAllFromTable } from "@carbon/database";
 import type { JSONContent } from "@carbon/react";
 import { parseDate } from "@internationalized/date";
 import type { SupabaseClient } from "@supabase/supabase-js";
@@ -446,6 +446,7 @@ export async function getIssueAssociations(
   const [
     items,
     jobOperations,
+    jobsFromSteps,
     purchaseOrderLines,
     salesOrderLines,
     shipmentLines,
@@ -489,6 +490,30 @@ export async function getIssueAssociations(
       `
       )
       .eq("nonConformanceId", nonConformanceId)
+      .eq("companyId", companyId),
+
+    client
+      .from("jobOperationStep")
+      .select(
+        `
+        id,
+        nonConformanceActionTask!inner (
+          nonConformanceId
+        ),
+        jobOperation!inner (
+          id,
+          jobId,
+          job!inner (
+            id,
+            jobId
+          ),
+          process (
+            name
+          )
+        )
+      `
+      )
+      .eq("nonConformanceActionTask.nonConformanceId", nonConformanceId)
       .eq("companyId", companyId),
 
     // Purchase Order Lines
@@ -608,8 +633,9 @@ export async function getIssueAssociations(
         quantity: item.quantity,
         createdAt: item.createdAt
       })) || [],
-    jobOperations:
-      jobOperations.data?.map((item) => ({
+    jobOperations: [
+      // Manually-associated job operations
+      ...(jobOperations.data?.map((item) => ({
         type: "jobOperations",
         id: item.id,
         documentId: item.jobId ?? "",
@@ -617,7 +643,18 @@ export async function getIssueAssociations(
         documentReadableId: `${item.jobReadableId || ""} - ${
           item.jobOperation?.process?.name || ""
         }`
-      })) || [],
+      })) || []),
+      // Jobs from inspection steps
+      ...(jobsFromSteps.data?.map((step) => ({
+        type: "jobOperationsInspection",
+        id: step.id,
+        documentId: step.jobOperation?.job?.id ?? "",
+        documentLineId: step.jobOperation?.id ?? "",
+        documentReadableId: `${step.jobOperation?.job?.jobId || ""} - ${
+          step.jobOperation?.process?.name || ""
+        }`
+      })) || [])
+    ],
     purchaseOrderLines:
       purchaseOrderLines.data?.map((item) => ({
         id: item.id,

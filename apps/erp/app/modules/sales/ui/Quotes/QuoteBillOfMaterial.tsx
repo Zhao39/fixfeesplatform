@@ -66,11 +66,11 @@ import type {
   SortableItemRenderProps
 } from "~/components/SortableList";
 import { SortableList, SortableListItem } from "~/components/SortableList";
-import { usePermissions, useRouteData, useUser } from "~/hooks";
+import { usePermissions, useRouteData, useUrlParams, useUser } from "~/hooks";
 import { getLinkToItemDetails } from "~/modules/items/ui/Item/ItemForm";
 import type { MethodItemType, MethodType } from "~/modules/shared";
-import type { Item as ItemType, } from "~/stores";
-import { useBom, useItems } from "~/stores";
+import type { Item as ItemType } from "~/stores";
+import { useItems } from "~/stores";
 import { path } from "~/utils/path";
 import type { quoteOperationValidator } from "../../sales.models";
 import { quoteMaterialValidator } from "../../sales.models";
@@ -324,7 +324,7 @@ const QuoteBillOfMaterial = ({
     if (!permissions.can("update", "sales") || isDisabled) return;
     const materialId = nanoid();
     setSelectedItemId(materialId);
-    setSelectedMaterialId(materialId);
+    setSearchParams({ materialId: materialId });
 
     let newOrder = 1;
     if (items.length) {
@@ -428,9 +428,10 @@ const QuoteBillOfMaterial = ({
     });
   }, [items]);
 
-  const [selectedMaterialId, setSelectedMaterialId] = useBom();
+  const [searchParams, setSearchParams] = useUrlParams();
+  const selectedMaterialId = searchParams.get("materialId");
   const onSelectItem = (id: string | null) => {
-    setSelectedMaterialId(id);
+    setSearchParams({ materialId: id });
     setSelectedItemId(id);
   };
 

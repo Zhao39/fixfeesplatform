@@ -2,7 +2,7 @@ import type { Database, Json } from "@carbon/database";
 import { fetchAllFromTable } from "@carbon/database";
 import { getLocalTimeZone, today } from "@internationalized/date";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { FunctionRegion, } from "@supabase/supabase-js";
+import { FunctionRegion } from "@supabase/supabase-js";
 import { nanoid } from "nanoid";
 import type { z } from "zod";
 import type { GenericQueryFilters } from "~/utils/query";
@@ -211,16 +211,7 @@ export async function deleteConfigurationParameterGroup(
 }
 
 export async function deleteItem(client: SupabaseClient<Database>, id: string) {
-  const [itemDelete, searchDelete] = await Promise.all([
-    client.from("item").delete().eq("id", id),
-    client.from("search").delete().eq("uuid", id)
-  ]);
-
-  if (searchDelete.error) {
-    return searchDelete;
-  }
-
-  return itemDelete;
+  return client.from("item").delete().eq("id", id);
 }
 
 export async function deleteItemPostingGroup(
@@ -2037,25 +2028,15 @@ export async function upsertConsumable(
         .from("itemCost")
         .update(
           sanitize({
-            itemPostingGroupId: consumable.postingGroupId
+            itemPostingGroupId: consumable.postingGroupId,
+            unitCost: consumable.unitCost
           })
         )
         .eq("itemId", itemId)
     ]);
 
     if (consumableInsert.error) return consumableInsert;
-    if (itemCostUpdate.error) {
-      console.error(itemCostUpdate.error);
-    }
-
-    const costUpdate = await client
-      .from("itemCost")
-      .update({ unitCost: consumable.unitCost })
-      .eq("itemId", itemId)
-      .select("*")
-      .single();
-
-    if (costUpdate.error) return costUpdate;
+    if (itemCostUpdate.error) return itemCostUpdate;
 
     const newConsumable = await client
       .from("consumables")
@@ -2149,7 +2130,9 @@ export async function upsertPart(
         .from("itemCost")
         .update(
           sanitize({
-            itemPostingGroupId: part.postingGroupId
+            itemPostingGroupId: part.postingGroupId,
+            unitCost:
+              part.replenishmentSystem !== "Make" ? part.unitCost : undefined
           })
         )
         .eq("itemId", itemId)
@@ -2158,15 +2141,6 @@ export async function upsertPart(
     if (partInsert.error) return partInsert;
     if (itemCostUpdate.error) {
       console.error(itemCostUpdate.error);
-    }
-
-    if (part.replenishmentSystem !== "Make") {
-      const costUpdate = await client
-        .from("itemCost")
-        .update({ unitCost: part.unitCost })
-        .eq("itemId", itemId);
-
-      if (costUpdate.error) return costUpdate;
     }
 
     if (part.replenishmentSystem !== "Buy") {
@@ -2691,7 +2665,8 @@ export async function upsertMaterial(
             .from("itemCost")
             .update(
               sanitize({
-                itemPostingGroupId: material.postingGroupId
+                itemPostingGroupId: material.postingGroupId,
+                unitCost: material.unitCost
               })
             )
             .eq("itemId", insert.data?.id ?? "")
@@ -2723,7 +2698,8 @@ export async function upsertMaterial(
         .from("itemCost")
         .update(
           sanitize({
-            itemPostingGroupId: material.postingGroupId
+            itemPostingGroupId: material.postingGroupId,
+            unitCost: material.unitCost
           })
         )
         .eq("itemId", itemId);
@@ -2767,7 +2743,6 @@ export async function upsertMaterial(
     defaultMethodType: material.defaultMethodType,
     itemTrackingType: material.itemTrackingType,
     unitOfMeasureCode: material.unitOfMeasureCode,
-    unitCost: material.unitCost,
     active: true
   };
 
@@ -3210,25 +3185,15 @@ export async function upsertTool(
         .from("itemCost")
         .update(
           sanitize({
-            itemPostingGroupId: tool.postingGroupId
+            itemPostingGroupId: tool.postingGroupId,
+            unitCost: tool.unitCost
           })
         )
         .eq("itemId", itemId)
     ]);
 
     if (toolInsert.error) return toolInsert;
-    if (itemCostUpdate.error) {
-      console.error(itemCostUpdate.error);
-    }
-
-    const costUpdate = await client
-      .from("itemCost")
-      .update({ unitCost: tool.unitCost })
-      .eq("itemId", itemId)
-      .select("*")
-      .single();
-
-    if (costUpdate.error) return costUpdate;
+    if (itemCostUpdate.error) return itemCostUpdate;
 
     const newTool = await client
       .from("tools")

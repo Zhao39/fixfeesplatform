@@ -4,15 +4,17 @@ import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
 import type { sendEmailResendTask } from "@carbon/jobs/trigger/send-email-resend";
 import { tasks } from "@trigger.dev/sdk";
-import type { ActionFunctionArgs, } from "react-router";
+import type { ActionFunctionArgs } from "react-router";
 import { redirect } from "react-router";
 import {
   getSupplierContact,
+  getSupplierInteractionLineDocuments,
   getSupplierQuote,
+  getSupplierQuoteLines,
   sendSupplierQuote,
   supplierQuoteFinalizeValidator
 } from "~/modules/purchasing";
-import { getCompany, getCompanySettings } from "~/modules/settings";
+import { getCompany } from "~/modules/settings";
 import { upsertExternalLink } from "~/modules/shared";
 import { getUser } from "~/modules/users/users.server";
 import { path } from "~/utils/path";
@@ -83,30 +85,66 @@ export async function action(args: ActionFunctionArgs) {
     return validationError(validation.error);
   }
 
-  const { notification, supplierContact: supplierContactId } = validation.data;
+  const {
+    notification,
+    supplierContact: supplierContactId,
+    sendAttachments
+  } = validation.data;
 
   switch (notification) {
     case "Email":
       try {
         if (!supplierContactId) throw new Error("Supplier contact is required");
 
-        const [company, companySettings, supplierContact, supplierQuote, user] =
+        const [company, supplierContact, supplierQuote, user] =
           await Promise.all([
             getCompany(client, companyId),
-            getCompanySettings(client, companyId),
             getSupplierContact(client, supplierContactId),
             getSupplierQuote(client, id),
             getUser(client, userId)
           ]);
 
         if (!company.data) throw new Error("Failed to get company");
-        if (!companySettings.data)
-          throw new Error("Failed to get company settings");
         if (!supplierContact?.data?.contact)
           throw new Error("Failed to get supplier contact");
         if (!supplierQuote.data)
           throw new Error("Failed to get supplier quote");
         if (!user.data) throw new Error("Failed to get user");
+
+        // Fetch all line items and their attached documents if sendAttachments is enabled
+        const attachments: Array<{ filename: string; content: string }> = [];
+
+        if (sendAttachments) {
+          const lines = await getSupplierQuoteLines(client, id);
+
+          if (lines.data) {
+            for (const line of lines.data) {
+              const docs = await getSupplierInteractionLineDocuments(
+                client,
+                companyId,
+                line.id ?? ""
+              );
+
+              for (const doc of docs) {
+                const { data: fileData } = await client.storage
+                  .from("private")
+                  .download(
+                    `${companyId}/supplier-interaction-line/${line.id}/${doc.name}`
+                  );
+
+                if (fileData) {
+                  const arrayBuffer = await fileData.arrayBuffer();
+                  const base64 = Buffer.from(arrayBuffer).toString("base64");
+
+                  attachments.push({
+                    filename: doc.name,
+                    content: base64
+                  });
+                }
+              }
+            }
+          }
+        }
 
         const requestUrl = new URL(request.url);
         const baseUrl = `${requestUrl.protocol}//${requestUrl.host}`;
@@ -116,11 +154,11 @@ export async function action(args: ActionFunctionArgs) {
 
         const emailSubject = `Supplier Quote ${supplierQuote.data.supplierQuoteId} from ${company.data.name}`;
 
-        const emailBody = `Hey ${supplierContact.data.contact.firstName},\n\nPlease provide pricing and lead time(s) for the linked quote:`;
+        const emailBody = `Hey ${supplierContact.data.contact.firstName || "there"},\n\nPlease provide pricing and lead time(s) for the linked quote:`;
         const emailSignature = `Thanks,\n${user.data.firstName} ${user.data.lastName}\n${company.data.name}`;
 
         await tasks.trigger<typeof sendEmailResendTask>("send-email-resend", {
-          to: [user.data.email, supplierContact.data.contact.email],
+          to: [user.data.email, supplierContact.data.contact?.email ?? ""],
           from: user.data.email,
           subject: emailSubject,
           html: `${emailBody.replace(
@@ -131,6 +169,7 @@ export async function action(args: ActionFunctionArgs) {
             "<br>"
           )}`,
           text: `${emailBody}\n\n${externalQuoteUrl}\n\n${emailSignature}`,
+          attachments,
           companyId
         });
       } catch (err) {
@@ -142,7 +181,7 @@ export async function action(args: ActionFunctionArgs) {
 
       break;
     case undefined:
-    case "None":
+    case "Share":
       break;
     default:
       throw new Error("Invalid notification type");

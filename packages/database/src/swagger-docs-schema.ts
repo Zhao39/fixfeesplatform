@@ -13354,6 +13354,9 @@ export default {
             $ref: "#/parameters/rowFilter.configurationParameter.updatedBy",
           },
           {
+            $ref: "#/parameters/rowFilter.configurationParameter.materialFormFilterId",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -13452,6 +13455,9 @@ export default {
             $ref: "#/parameters/rowFilter.configurationParameter.updatedBy",
           },
           {
+            $ref: "#/parameters/rowFilter.configurationParameter.materialFormFilterId",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -13502,6 +13508,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.configurationParameter.updatedBy",
+          },
+          {
+            $ref: "#/parameters/rowFilter.configurationParameter.materialFormFilterId",
           },
           {
             $ref: "#/parameters/body.configurationParameter",
@@ -29233,6 +29242,123 @@ export default {
           },
         },
         tags: ["trackedActivity"],
+      },
+    },
+    "/searchIndexRegistry": {
+      get: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.searchIndexRegistry.companyId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.searchIndexRegistry.createdAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.searchIndexRegistry.lastRebuiltAt",
+          },
+          {
+            $ref: "#/parameters/select",
+          },
+          {
+            $ref: "#/parameters/order",
+          },
+          {
+            $ref: "#/parameters/range",
+          },
+          {
+            $ref: "#/parameters/rangeUnit",
+          },
+          {
+            $ref: "#/parameters/offset",
+          },
+          {
+            $ref: "#/parameters/limit",
+          },
+          {
+            $ref: "#/parameters/preferCount",
+          },
+        ],
+        responses: {
+          "200": {
+            description: "OK",
+            schema: {
+              items: {
+                $ref: "#/definitions/searchIndexRegistry",
+              },
+              type: "array",
+            },
+          },
+          "206": {
+            description: "Partial Content",
+          },
+        },
+        tags: ["searchIndexRegistry"],
+      },
+      post: {
+        parameters: [
+          {
+            $ref: "#/parameters/body.searchIndexRegistry",
+          },
+          {
+            $ref: "#/parameters/select",
+          },
+          {
+            $ref: "#/parameters/preferPost",
+          },
+        ],
+        responses: {
+          "201": {
+            description: "Created",
+          },
+        },
+        tags: ["searchIndexRegistry"],
+      },
+      delete: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.searchIndexRegistry.companyId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.searchIndexRegistry.createdAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.searchIndexRegistry.lastRebuiltAt",
+          },
+          {
+            $ref: "#/parameters/preferReturn",
+          },
+        ],
+        responses: {
+          "204": {
+            description: "No Content",
+          },
+        },
+        tags: ["searchIndexRegistry"],
+      },
+      patch: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.searchIndexRegistry.companyId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.searchIndexRegistry.createdAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.searchIndexRegistry.lastRebuiltAt",
+          },
+          {
+            $ref: "#/parameters/body.searchIndexRegistry",
+          },
+          {
+            $ref: "#/parameters/preferReturn",
+          },
+        ],
+        responses: {
+          "204": {
+            description: "No Content",
+          },
+        },
+        tags: ["searchIndexRegistry"],
       },
     },
     "/suppliers": {
@@ -49410,168 +49536,6 @@ export default {
         tags: ["challengeAttempt"],
       },
     },
-    "/search": {
-      get: {
-        parameters: [
-          {
-            $ref: "#/parameters/rowFilter.search.id",
-          },
-          {
-            $ref: "#/parameters/rowFilter.search.name",
-          },
-          {
-            $ref: "#/parameters/rowFilter.search.description",
-          },
-          {
-            $ref: "#/parameters/rowFilter.search.entity",
-          },
-          {
-            $ref: "#/parameters/rowFilter.search.uuid",
-          },
-          {
-            $ref: "#/parameters/rowFilter.search.link",
-          },
-          {
-            $ref: "#/parameters/rowFilter.search.companyId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.search.fts",
-          },
-          {
-            $ref: "#/parameters/select",
-          },
-          {
-            $ref: "#/parameters/order",
-          },
-          {
-            $ref: "#/parameters/range",
-          },
-          {
-            $ref: "#/parameters/rangeUnit",
-          },
-          {
-            $ref: "#/parameters/offset",
-          },
-          {
-            $ref: "#/parameters/limit",
-          },
-          {
-            $ref: "#/parameters/preferCount",
-          },
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-            schema: {
-              items: {
-                $ref: "#/definitions/search",
-              },
-              type: "array",
-            },
-          },
-          "206": {
-            description: "Partial Content",
-          },
-        },
-        tags: ["search"],
-      },
-      post: {
-        parameters: [
-          {
-            $ref: "#/parameters/body.search",
-          },
-          {
-            $ref: "#/parameters/select",
-          },
-          {
-            $ref: "#/parameters/preferPost",
-          },
-        ],
-        responses: {
-          "201": {
-            description: "Created",
-          },
-        },
-        tags: ["search"],
-      },
-      delete: {
-        parameters: [
-          {
-            $ref: "#/parameters/rowFilter.search.id",
-          },
-          {
-            $ref: "#/parameters/rowFilter.search.name",
-          },
-          {
-            $ref: "#/parameters/rowFilter.search.description",
-          },
-          {
-            $ref: "#/parameters/rowFilter.search.entity",
-          },
-          {
-            $ref: "#/parameters/rowFilter.search.uuid",
-          },
-          {
-            $ref: "#/parameters/rowFilter.search.link",
-          },
-          {
-            $ref: "#/parameters/rowFilter.search.companyId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.search.fts",
-          },
-          {
-            $ref: "#/parameters/preferReturn",
-          },
-        ],
-        responses: {
-          "204": {
-            description: "No Content",
-          },
-        },
-        tags: ["search"],
-      },
-      patch: {
-        parameters: [
-          {
-            $ref: "#/parameters/rowFilter.search.id",
-          },
-          {
-            $ref: "#/parameters/rowFilter.search.name",
-          },
-          {
-            $ref: "#/parameters/rowFilter.search.description",
-          },
-          {
-            $ref: "#/parameters/rowFilter.search.entity",
-          },
-          {
-            $ref: "#/parameters/rowFilter.search.uuid",
-          },
-          {
-            $ref: "#/parameters/rowFilter.search.link",
-          },
-          {
-            $ref: "#/parameters/rowFilter.search.companyId",
-          },
-          {
-            $ref: "#/parameters/rowFilter.search.fts",
-          },
-          {
-            $ref: "#/parameters/body.search",
-          },
-          {
-            $ref: "#/parameters/preferReturn",
-          },
-        ],
-        responses: {
-          "204": {
-            description: "No Content",
-          },
-        },
-        tags: ["search"],
-      },
-    },
     "/nonConformanceSupplier": {
       get: {
         parameters: [
@@ -62834,6 +62798,41 @@ export default {
         tags: ["(rpc) get_active_job_operations_by_location"],
       },
     },
+    "/rpc/populate_company_search_index": {
+      post: {
+        parameters: [
+          {
+            in: "body",
+            name: "args",
+            required: true,
+            schema: {
+              properties: {
+                p_company_id: {
+                  format: "text",
+                  type: "string",
+                },
+              },
+              required: ["p_company_id"],
+              type: "object",
+            },
+          },
+          {
+            $ref: "#/parameters/preferParams",
+          },
+        ],
+        produces: [
+          "application/json",
+          "application/vnd.pgrst.object+json;nulls=stripped",
+          "application/vnd.pgrst.object+json",
+        ],
+        responses: {
+          "200": {
+            description: "OK",
+          },
+        },
+        tags: ["(rpc) populate_company_search_index"],
+      },
+    },
     "/rpc/get_next_numeric_sequence": {
       post: {
         parameters: [
@@ -63398,6 +63397,41 @@ export default {
           },
         },
         tags: ["(rpc) xid_encode"],
+      },
+    },
+    "/rpc/populate_sales_search_results": {
+      post: {
+        parameters: [
+          {
+            in: "body",
+            name: "args",
+            required: true,
+            schema: {
+              properties: {
+                p_company_id: {
+                  format: "text",
+                  type: "string",
+                },
+              },
+              required: ["p_company_id"],
+              type: "object",
+            },
+          },
+          {
+            $ref: "#/parameters/preferParams",
+          },
+        ],
+        produces: [
+          "application/json",
+          "application/vnd.pgrst.object+json;nulls=stripped",
+          "application/vnd.pgrst.object+json",
+        ],
+        responses: {
+          "200": {
+            description: "OK",
+          },
+        },
+        tags: ["(rpc) populate_sales_search_results"],
       },
     },
     "/rpc/get_direct_descendants_of_tracked_entity": {
@@ -64360,6 +64394,56 @@ export default {
         tags: ["(rpc) has_valid_api_key_for_company"],
       },
     },
+    "/rpc/search_company_index": {
+      post: {
+        parameters: [
+          {
+            in: "body",
+            name: "args",
+            required: true,
+            schema: {
+              properties: {
+                p_company_id: {
+                  format: "text",
+                  type: "string",
+                },
+                p_entity_types: {
+                  format: "text[]",
+                  items: {
+                    type: "string",
+                  },
+                  type: "array",
+                },
+                p_limit: {
+                  format: "integer",
+                  type: "integer",
+                },
+                p_query: {
+                  format: "text",
+                  type: "string",
+                },
+              },
+              required: ["p_company_id", "p_query", "p_entity_types"],
+              type: "object",
+            },
+          },
+          {
+            $ref: "#/parameters/preferParams",
+          },
+        ],
+        produces: [
+          "application/json",
+          "application/vnd.pgrst.object+json;nulls=stripped",
+          "application/vnd.pgrst.object+json",
+        ],
+        responses: {
+          "200": {
+            description: "OK",
+          },
+        },
+        tags: ["(rpc) search_company_index"],
+      },
+    },
     "/rpc/get_job_methods_by_method_id": {
       get: {
         parameters: [
@@ -64576,6 +64660,41 @@ export default {
         tags: ["(rpc) get_active_job_operations_by_employee"],
       },
     },
+    "/rpc/create_company_search_index": {
+      post: {
+        parameters: [
+          {
+            in: "body",
+            name: "args",
+            required: true,
+            schema: {
+              properties: {
+                p_company_id: {
+                  format: "text",
+                  type: "string",
+                },
+              },
+              required: ["p_company_id"],
+              type: "object",
+            },
+          },
+          {
+            $ref: "#/parameters/preferParams",
+          },
+        ],
+        produces: [
+          "application/json",
+          "application/vnd.pgrst.object+json;nulls=stripped",
+          "application/vnd.pgrst.object+json",
+        ],
+        responses: {
+          "200": {
+            description: "OK",
+          },
+        },
+        tags: ["(rpc) create_company_search_index"],
+      },
+    },
     "/rpc/get_material_details": {
       get: {
         parameters: [
@@ -64712,6 +64831,41 @@ export default {
           },
         },
         tags: ["(rpc) get_production_planning"],
+      },
+    },
+    "/rpc/drop_company_search_index": {
+      post: {
+        parameters: [
+          {
+            in: "body",
+            name: "args",
+            required: true,
+            schema: {
+              properties: {
+                p_company_id: {
+                  format: "text",
+                  type: "string",
+                },
+              },
+              required: ["p_company_id"],
+              type: "object",
+            },
+          },
+          {
+            $ref: "#/parameters/preferParams",
+          },
+        ],
+        produces: [
+          "application/json",
+          "application/vnd.pgrst.object+json;nulls=stripped",
+          "application/vnd.pgrst.object+json",
+        ],
+        responses: {
+          "200": {
+            description: "OK",
+          },
+        },
+        tags: ["(rpc) drop_company_search_index"],
       },
     },
     "/rpc/update_receipt_line_batch_tracking": {
@@ -71545,6 +71699,12 @@ export default {
         updatedBy: {
           description:
             "Note:\nThis is a Foreign Key to `user.id`.<fk table='user' column='id'/>",
+          format: "text",
+          type: "string",
+        },
+        materialFormFilterId: {
+          description:
+            "Note:\nThis is a Foreign Key to `materialForm.id`.<fk table='materialForm' column='id'/>",
           format: "text",
           type: "string",
         },
@@ -78622,6 +78782,27 @@ export default {
           description:
             "Note:\nThis is a Foreign Key to `user.id`.<fk table='user' column='id'/>",
           format: "text",
+          type: "string",
+        },
+      },
+      type: "object",
+    },
+    searchIndexRegistry: {
+      required: ["companyId", "createdAt"],
+      properties: {
+        companyId: {
+          description:
+            "Note:\nThis is a Primary Key.<pk/>\nThis is a Foreign Key to `company.id`.<fk table='company' column='id'/>",
+          format: "text",
+          type: "string",
+        },
+        createdAt: {
+          default: "now()",
+          format: "timestamp with time zone",
+          type: "string",
+        },
+        lastRebuiltAt: {
+          format: "timestamp with time zone",
           type: "string",
         },
       },
@@ -88290,71 +88471,6 @@ export default {
         createdAt: {
           default: "now()",
           format: "timestamp with time zone",
-          type: "string",
-        },
-      },
-      type: "object",
-    },
-    search: {
-      required: ["id", "name", "link"],
-      properties: {
-        id: {
-          description: "Note:\nThis is a Primary Key.<pk/>",
-          format: "bigint",
-          type: "integer",
-        },
-        name: {
-          format: "text",
-          type: "string",
-        },
-        description: {
-          default: "",
-          format: "text",
-          type: "string",
-        },
-        entity: {
-          enum: [
-            "Resource",
-            "Person",
-            "Customer",
-            "Supplier",
-            "Job",
-            "Part",
-            "Purchase Order",
-            "Lead",
-            "Opportunity",
-            "Quotation",
-            "Sales Order",
-            "Request for Quotation",
-            "Sales Invoice",
-            "Purchase Invoice",
-            "Document",
-            "Sales RFQ",
-            "Service",
-            "Tool",
-            "Consumable",
-            "Material",
-            "Fixture",
-          ],
-          format: 'public."searchEntity"',
-          type: "string",
-        },
-        uuid: {
-          format: "text",
-          type: "string",
-        },
-        link: {
-          format: "text",
-          type: "string",
-        },
-        companyId: {
-          description:
-            "Note:\nThis is a Foreign Key to `company.id`.<fk table='company' column='id'/>",
-          format: "text",
-          type: "string",
-        },
-        fts: {
-          format: "tsvector",
           type: "string",
         },
       },
@@ -101421,6 +101537,12 @@ export default {
       in: "query",
       type: "string",
     },
+    "rowFilter.configurationParameter.materialFormFilterId": {
+      name: "materialFormFilterId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
     "body.nonConformanceReceiptLine": {
       name: "nonConformanceReceiptLine",
       description: "nonConformanceReceiptLine",
@@ -109272,6 +109394,33 @@ export default {
     },
     "rowFilter.trackedActivity.createdBy": {
       name: "createdBy",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "body.searchIndexRegistry": {
+      name: "searchIndexRegistry",
+      description: "searchIndexRegistry",
+      required: false,
+      in: "body",
+      schema: {
+        $ref: "#/definitions/searchIndexRegistry",
+      },
+    },
+    "rowFilter.searchIndexRegistry.companyId": {
+      name: "companyId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.searchIndexRegistry.createdAt": {
+      name: "createdAt",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.searchIndexRegistry.lastRebuiltAt": {
+      name: "lastRebuiltAt",
       required: false,
       in: "query",
       type: "string",
@@ -120235,63 +120384,6 @@ export default {
     },
     "rowFilter.challengeAttempt.createdAt": {
       name: "createdAt",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "body.search": {
-      name: "search",
-      description: "search",
-      required: false,
-      in: "body",
-      schema: {
-        $ref: "#/definitions/search",
-      },
-    },
-    "rowFilter.search.id": {
-      name: "id",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.search.name": {
-      name: "name",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.search.description": {
-      name: "description",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.search.entity": {
-      name: "entity",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.search.uuid": {
-      name: "uuid",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.search.link": {
-      name: "link",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.search.companyId": {
-      name: "companyId",
-      required: false,
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.search.fts": {
-      name: "fts",
       required: false,
       in: "query",
       type: "string",

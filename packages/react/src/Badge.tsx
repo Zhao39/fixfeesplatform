@@ -1,5 +1,5 @@
 import type { VariantProps } from "class-variance-authority";
-import { cva, } from "class-variance-authority";
+import { cva } from "class-variance-authority";
 import type {
   ComponentPropsWithoutRef,
   ElementRef,
@@ -45,14 +45,18 @@ export interface BadgeProps
   extends HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof badgeVariants> {}
 
-function Badge({ className, variant, ...props }: BadgeProps) {
-  return (
-    <div
-      className={cn(badgeVariants({ variant }), "min-w-0", className)}
-      {...props}
-    />
-  );
-}
+const Badge = forwardRef<HTMLDivElement, BadgeProps>(
+  ({ className, variant, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={cn(badgeVariants({ variant }), "min-w-0", className)}
+        {...props}
+      />
+    );
+  }
+);
+Badge.displayName = "Badge";
 
 const BadgeCloseButton = forwardRef<
   ElementRef<"button">,

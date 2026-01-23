@@ -83,6 +83,10 @@ export const path = {
       materialFinishes: (substanceId: string) =>
         generatePath(`${api}/items/finishes/${substanceId}`),
       materialForms: `${api}/items/forms`,
+      materials: (materialFormId?: string) =>
+        generatePath(
+          `${api}/items/materials${materialFormId ? `?materialFormId=${materialFormId}` : ""}`
+        ),
       materialGrades: (substanceId: string) =>
         generatePath(`${api}/items/grades/${substanceId}`),
       materialTypes: (substanceId: string, formId: string) =>
@@ -143,6 +147,7 @@ export const path = {
       salesKpi: (key: string) => generatePath(`${api}/sales/kpi/${key}`),
       salesOrders: `${api}/sales/orders`,
       scrapReasons: `${api}/production/scrap-reasons`,
+      search: `${api}/search`,
       seedQualityDocuments: `${api}/quality/documents/seed`,
       sequences: (table: string) => `${api}/settings/sequences?table=${table}`,
       serialNumbers: (itemId: string, isReadOnly: boolean) =>
@@ -842,6 +847,8 @@ export const path = {
     jobComplete: (id: string) => generatePath(`${x}/job/${id}/complete`),
     jobConfigure: (id: string) => generatePath(`${x}/job/${id}/configure`),
     jobDetails: (id: string) => generatePath(`${x}/job/${id}/details`),
+    jobInspectionSteps: (id: string) =>
+      generatePath(`${x}/job/${id}/steps?filter=type:eq:Inspection`),
     jobMaterial: (jobId: string, id: string) =>
       generatePath(`${x}/job/methods/${jobId}/material/${id}`),
     jobMaterials: (id: string) => generatePath(`${x}/job/${id}/materials`),

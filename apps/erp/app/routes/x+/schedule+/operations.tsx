@@ -28,14 +28,8 @@ import {
 } from "@internationalized/date";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { LuCirclePlus, LuSettings2, LuTriangleAlert } from "react-icons/lu";
-import type {
-  LoaderFunctionArgs,
-} from "react-router";
-import {
-  Link,
-  redirect,
-  useLoaderData
-} from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
+import { Link, redirect, useLoaderData } from "react-router";
 import { SearchFilter } from "~/components";
 import { Enumerable } from "~/components/Enumerable";
 import { useLocations } from "~/components/Form/Location";
@@ -269,6 +263,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
         progress: 0,
         deadlineType: op.jobDeadlineType,
         customerId: op.jobCustomerId,
+        targetQuantity: op.targetQuantity,
         quantity: op.operationQuantity,
         quantityCompleted: op.quantityComplete,
         quantityScrapped: op.quantityScrapped,

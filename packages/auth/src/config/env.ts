@@ -131,7 +131,10 @@ export const NOVU_APPLICATION_ID = getEnv("NOVU_APPLICATION_ID", {
   isRequired: false,
   isSecret: false
 });
-export const NOVU_SECRET_KEY = getEnv("NOVU_SECRET_KEY");
+export const NOVU_SECRET_KEY = getEnv("NOVU_SECRET_KEY", {
+  isRequired: false,
+  isSecret: true
+});
 
 export const QUICKBOOKS_CLIENT_ID = getEnv("QUICKBOOKS_CLIENT_ID", {
   isRequired: false
