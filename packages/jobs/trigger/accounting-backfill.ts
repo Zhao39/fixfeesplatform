@@ -54,7 +54,6 @@ interface BackfillResult {
  */
 async function getUnsyncedEntityIds(
   // Using any to avoid CJS/ESM Kysely type conflicts
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   kysely: any,
   table: "customer" | "supplier" | "item",
   companyId: string,

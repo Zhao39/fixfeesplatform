@@ -43,7 +43,6 @@ const SupplierLocation = (props: SupplierLocationSelectProps) => {
         path.to.api.supplierLocations(props.supplier)
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.supplier]);
 
   const options = useMemo(
