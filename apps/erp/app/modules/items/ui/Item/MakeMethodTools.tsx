@@ -1,3 +1,4 @@
+import { useCarbon } from "@carbon/auth";
 // biome-ignore lint/suspicious/noShadowRestrictedNames: suppressed due to migration
 import { Number, Submit, ValidatedForm } from "@carbon/form";
 import {
@@ -29,6 +30,7 @@ import {
   ModalTitle,
   toast,
   useDisclosure,
+  useMount,
   VStack
 } from "@carbon/react";
 import { useEffect, useState } from "react";
@@ -49,7 +51,7 @@ import {
 import { Link, useFetcher, useParams } from "react-router";
 import { Hidden, Item } from "~/components/Form";
 import { Confirm } from "~/components/Modals";
-import { usePermissions } from "~/hooks";
+import { usePermissions, useUser } from "~/hooks";
 import type { MethodItemType } from "~/modules/shared";
 import { path } from "~/utils/path";
 import {
@@ -89,6 +91,34 @@ const MakeMethodTools = ({
   }, [fetcher.data?.error]);
 
   const [includeInactive, setIncludeInactive] = useState<boolean>(true);
+  const [configurableItemIds, setConfigurableItemIds] = useState<string[]>([]);
+
+  const { carbon } = useCarbon();
+  const {
+    company: { id: companyId }
+  } = useUser();
+
+  const getConfigurableItems = async () => {
+    if (carbon) {
+      // TODO: cache these in client loader called through fetcher
+      const { data, error } = await carbon
+        .from("itemReplenishment")
+        .select("itemId")
+        .eq("requiresConfiguration", true)
+        .eq("companyId", companyId);
+
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      setConfigurableItemIds(data?.map((d) => d.itemId) ?? []);
+    }
+  };
+
+  useMount(() => {
+    getConfigurableItems();
+  });
 
   const getMethodModal = useDisclosure();
   const saveMethodModal = useDisclosure();
@@ -277,6 +307,7 @@ const MakeMethodTools = ({
                     name="sourceId"
                     label="Source Method"
                     type={type}
+                    blacklist={configurableItemIds}
                     includeInactive={includeInactive}
                     replenishmentSystem="Make"
                   />
@@ -346,7 +377,7 @@ const MakeMethodTools = ({
                     label="Target Method"
                     type={type}
                     includeInactive={includeInactive}
-                    disabledItems={[itemId]}
+                    blacklist={[itemId, ...configurableItemIds]}
                     replenishmentSystem="Make"
                   />
                   <div className="flex items-center space-x-2">

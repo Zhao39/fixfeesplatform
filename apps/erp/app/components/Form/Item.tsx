@@ -37,7 +37,7 @@ import { useItems } from "~/stores";
 import { MethodItemTypeIcon } from "../Icons";
 
 type ItemSelectProps = Omit<ComboboxProps, "options" | "type" | "inline"> & {
-  disabledItems?: string[];
+  blacklist?: string[];
   includeInactive?: boolean;
   inline?: boolean;
   isConfigured?: boolean;
@@ -45,6 +45,7 @@ type ItemSelectProps = Omit<ComboboxProps, "options" | "type" | "inline"> & {
   type: MethodItemType | "Item";
   typeFieldName?: string;
   validItemTypes?: MethodItemType[];
+  whitelist?: string[];
   onConfigure?: () => void;
   onTypeChange?: (type: MethodItemType | "Item") => void;
 };
@@ -75,7 +76,7 @@ const Item = ({
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration
   const options = useMemo(() => {
-    const results = items
+    let results = items
       .filter((item) => {
         // Filter by type
         // @ts-ignore
@@ -105,18 +106,21 @@ const Item = ({
         helper: item.name
       }));
 
-    if (props.disabledItems) {
-      return results.filter(
-        (item) => !props.disabledItems?.includes(item.value)
-      );
+    if (props.whitelist) {
+      results = results.filter((item) => props.whitelist?.includes(item.value));
+    }
+
+    if (props.blacklist) {
+      return results.filter((item) => !props.blacklist?.includes(item.value));
     }
 
     return results;
   }, [
     items,
     props?.includeInactive,
-    props.disabledItems,
+    props.blacklist,
     props.replenishmentSystem,
+    props.whitelist,
     type
   ]);
 
