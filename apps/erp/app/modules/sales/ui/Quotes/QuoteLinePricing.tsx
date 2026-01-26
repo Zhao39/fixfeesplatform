@@ -417,7 +417,7 @@ const QuoteLinePricing = ({
                           path.to.quoteLineRecalculatePrice(quoteId, lineId))
                     }
                   >
-                    Markup Percentage
+                    Markup %
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
