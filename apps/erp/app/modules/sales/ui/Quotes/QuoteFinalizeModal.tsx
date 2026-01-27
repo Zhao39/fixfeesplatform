@@ -19,7 +19,11 @@ import { useState } from "react";
 import { LuTriangleAlert } from "react-icons/lu";
 import type { FetcherWithComponents } from "react-router";
 import { useParams } from "react-router";
-import { CustomerContact, SelectControlled, Users } from "~/components/Form";
+import {
+  CustomerContact,
+  EmailRecipients,
+  SelectControlled
+} from "~/components/Form";
 import { useIntegrations } from "~/hooks/useIntegrations";
 import { path } from "~/utils/path";
 import { quoteFinalizeValidator } from "../../sales.models";
@@ -41,6 +45,7 @@ type QuotationFinalizeModalProps = {
   pricing: QuotationPrice[];
   shipment: QuotationShipment | null;
   fetcher: FetcherWithComponents<{}>;
+  defaultCc?: string[];
 };
 
 const QuotationFinalizeModal = ({
@@ -48,6 +53,7 @@ const QuotationFinalizeModal = ({
   onClose,
   fetcher,
   shipment,
+  defaultCc = [],
   pricing
 }: QuotationFinalizeModalProps) => {
   const { quoteId } = useParams();
@@ -137,7 +143,7 @@ const QuotationFinalizeModal = ({
           defaultValues={{
             notification: notificationType as "Email" | "None",
             customerContact: quote?.customerContactId ?? undefined,
-            cc: []
+            cc: defaultCc
           }}
           fetcher={fetcher}
         >
@@ -200,13 +206,7 @@ const QuotationFinalizeModal = ({
                     name="customerContact"
                     customer={quote?.customerId ?? undefined}
                   />
-                  <Users
-                    name="cc"
-                    label="CC"
-                    type="employee"
-                    verbose
-                    helperText="Select users or groups to CC"
-                  />
+                  <EmailRecipients name="cc" label="CC" type="employee" />
                 </>
               )}
             </VStack>

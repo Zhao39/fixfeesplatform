@@ -2250,6 +2250,8 @@ export type Database = {
       }
       companySettings: {
         Row: {
+          defaultCustomerCc: string[] | null
+          defaultSupplierCc: string[] | null
           digitalQuoteEnabled: boolean
           digitalQuoteIncludesPurchaseOrders: boolean
           digitalQuoteNotificationGroup: string[]
@@ -2273,6 +2275,8 @@ export type Database = {
           useMetric: boolean
         }
         Insert: {
+          defaultCustomerCc?: string[] | null
+          defaultSupplierCc?: string[] | null
           digitalQuoteEnabled?: boolean
           digitalQuoteIncludesPurchaseOrders?: boolean
           digitalQuoteNotificationGroup?: string[]
@@ -2296,6 +2300,8 @@ export type Database = {
           useMetric?: boolean
         }
         Update: {
+          defaultCustomerCc?: string[] | null
+          defaultSupplierCc?: string[] | null
           digitalQuoteEnabled?: boolean
           digitalQuoteIncludesPurchaseOrders?: boolean
           digitalQuoteNotificationGroup?: string[]
@@ -3611,6 +3617,7 @@ export type Database = {
           customerStatusId: string | null
           customerTypeId: string | null
           customFields: Json | null
+          defaultCc: string[] | null
           embedding: unknown
           externalId: Json | null
           fax: string | null
@@ -3637,6 +3644,7 @@ export type Database = {
           customerStatusId?: string | null
           customerTypeId?: string | null
           customFields?: Json | null
+          defaultCc?: string[] | null
           embedding?: unknown
           externalId?: Json | null
           fax?: string | null
@@ -3663,6 +3671,7 @@ export type Database = {
           customerStatusId?: string | null
           customerTypeId?: string | null
           customFields?: Json | null
+          defaultCc?: string[] | null
           embedding?: unknown
           externalId?: Json | null
           fax?: string | null
@@ -31334,48 +31343,6 @@ export type Database = {
           },
         ]
       }
-      searchIndex_7XFgHYBbyiscTuvDxncdhj: {
-        Row: {
-          createdAt: string
-          description: string | null
-          entityId: string
-          entityType: string
-          id: number
-          link: string
-          metadata: Json | null
-          searchVector: unknown
-          tags: string[] | null
-          title: string
-          updatedAt: string | null
-        }
-        Insert: {
-          createdAt?: string
-          description?: string | null
-          entityId: string
-          entityType: string
-          id?: number
-          link: string
-          metadata?: Json | null
-          searchVector?: unknown
-          tags?: string[] | null
-          title: string
-          updatedAt?: string | null
-        }
-        Update: {
-          createdAt?: string
-          description?: string | null
-          entityId?: string
-          entityType?: string
-          id?: number
-          link?: string
-          metadata?: Json | null
-          searchVector?: unknown
-          tags?: string[] | null
-          title?: string
-          updatedAt?: string | null
-        }
-        Relationships: []
-      }
       searchIndexRegistry: {
         Row: {
           companyId: string
@@ -33633,6 +33600,7 @@ export type Database = {
           createdBy: string | null
           currencyCode: string | null
           customFields: Json | null
+          defaultCc: string[] | null
           embedding: unknown
           externalId: Json | null
           fax: string | null
@@ -33659,6 +33627,7 @@ export type Database = {
           createdBy?: string | null
           currencyCode?: string | null
           customFields?: Json | null
+          defaultCc?: string[] | null
           embedding?: unknown
           externalId?: Json | null
           fax?: string | null
@@ -33685,6 +33654,7 @@ export type Database = {
           createdBy?: string | null
           currencyCode?: string | null
           customFields?: Json | null
+          defaultCc?: string[] | null
           embedding?: unknown
           externalId?: Json | null
           fax?: string | null
@@ -45422,14 +45392,14 @@ export type Database = {
           },
           {
             foreignKeyName: "partner_id_fkey"
-            columns: ["supplierLocationId"]
+            columns: ["id"]
             isOneToOne: false
             referencedRelation: "supplierLocation"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "partner_id_fkey"
-            columns: ["id"]
+            columns: ["supplierLocationId"]
             isOneToOne: false
             referencedRelation: "supplierLocation"
             referencedColumns: ["id"]
@@ -49493,14 +49463,14 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["invoiceCountryCode"]
+            columns: ["customerCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
           },
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["customerCountryCode"]
+            columns: ["invoiceCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
@@ -53382,7 +53352,6 @@ export type Database = {
           quantityScrapped: number
           setupTime: number
           setupUnit: Database["public"]["Enums"]["factor"]
-          targetQuantity: number
           workCenterId: string
         }[]
       }

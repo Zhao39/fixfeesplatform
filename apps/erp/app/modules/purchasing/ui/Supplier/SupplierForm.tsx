@@ -19,6 +19,7 @@ import type { z } from "zod";
 import {
   Currency,
   CustomFormFields,
+  EmailRecipients,
   Employee,
   Hidden,
   Input,
@@ -131,6 +132,13 @@ const SupplierForm = ({
                         name="invoicingContactId"
                         label="Invoicing Contact"
                       />
+                      <div className="lg:col-span-3">
+                        <EmailRecipients
+                          name="defaultCc"
+                          label="Default CC"
+                          helperText="These emails will be CC'd on all emails to this supplier"
+                        />
+                      </div>
                     </>
                   )}
 

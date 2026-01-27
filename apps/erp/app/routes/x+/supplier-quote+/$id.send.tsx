@@ -16,7 +16,6 @@ import {
 import { getCompany } from "~/modules/settings";
 import { upsertExternalLink } from "~/modules/shared";
 import { getUser } from "~/modules/users/users.server";
-import { getGroupEmails, getUserEmails } from "~/modules/users/users.service";
 import { path } from "~/utils/path";
 
 export async function action(args: ActionFunctionArgs) {
@@ -160,28 +159,9 @@ export async function action(args: ActionFunctionArgs) {
         },\n\nPlease provide pricing and lead time(s) for the linked quote:`;
         const emailSignature = `Thanks,\n${user.data.firstName} ${user.data.lastName}\n${company.data.name}`;
 
-        const userIds =
-          ccSelections
-            ?.filter((id) => id.startsWith("user_"))
-            .map((id) => id.slice(5)) ?? [];
-        const groupIds =
-          ccSelections
-            ?.filter((id) => id.startsWith("group_"))
-            .map((id) => id.slice(6)) ?? [];
-
-        const [userEmails, groupEmails] = await Promise.all([
-          getUserEmails(client, userIds),
-          getGroupEmails(client, groupIds)
-        ]);
-
-        const ccEmails =
-          userEmails.length || groupEmails.length
-            ? [...new Set([...userEmails, ...groupEmails])]
-            : undefined;
-
         await tasks.trigger<typeof sendEmailResendTask>("send-email-resend", {
           to: [user.data.email, supplierContact.data.contact?.email ?? ""],
-          cc: ccEmails,
+          cc: ccSelections?.length ? ccSelections : undefined,
           from: user.data.email,
           subject: emailSubject,
           html: `${emailBody.replace(

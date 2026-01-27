@@ -17803,6 +17803,9 @@ export default {
             $ref: "#/parameters/rowFilter.jobMakeMethod.version",
           },
           {
+            $ref: "#/parameters/rowFilter.jobMakeMethod.itemScrapPercentage",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -17907,6 +17910,9 @@ export default {
             $ref: "#/parameters/rowFilter.jobMakeMethod.version",
           },
           {
+            $ref: "#/parameters/rowFilter.jobMakeMethod.itemScrapPercentage",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -17963,6 +17969,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.jobMakeMethod.version",
+          },
+          {
+            $ref: "#/parameters/rowFilter.jobMakeMethod.itemScrapPercentage",
           },
           {
             $ref: "#/parameters/body.jobMakeMethod",
@@ -28222,6 +28231,9 @@ export default {
             $ref: "#/parameters/rowFilter.jobOperation.conflictReason",
           },
           {
+            $ref: "#/parameters/rowFilter.jobOperation.targetQuantity",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -28407,6 +28419,9 @@ export default {
             $ref: "#/parameters/rowFilter.jobOperation.conflictReason",
           },
           {
+            $ref: "#/parameters/rowFilter.jobOperation.targetQuantity",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -28544,6 +28559,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.jobOperation.conflictReason",
+          },
+          {
+            $ref: "#/parameters/rowFilter.jobOperation.targetQuantity",
           },
           {
             $ref: "#/parameters/body.jobOperation",
@@ -37252,6 +37270,9 @@ export default {
             $ref: "#/parameters/rowFilter.customer.invoicingContactId",
           },
           {
+            $ref: "#/parameters/rowFilter.customer.defaultCc",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -37383,6 +37404,9 @@ export default {
             $ref: "#/parameters/rowFilter.customer.invoicingContactId",
           },
           {
+            $ref: "#/parameters/rowFilter.customer.defaultCc",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -37466,6 +37490,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.customer.invoicingContactId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.customer.defaultCc",
           },
           {
             $ref: "#/parameters/body.customer",
@@ -43885,6 +43912,9 @@ export default {
             $ref: "#/parameters/rowFilter.jobMaterial.kit",
           },
           {
+            $ref: "#/parameters/rowFilter.jobMaterial.itemScrapPercentage",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -44025,6 +44055,9 @@ export default {
             $ref: "#/parameters/rowFilter.jobMaterial.kit",
           },
           {
+            $ref: "#/parameters/rowFilter.jobMaterial.itemScrapPercentage",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -44117,6 +44150,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.jobMaterial.kit",
+          },
+          {
+            $ref: "#/parameters/rowFilter.jobMaterial.itemScrapPercentage",
           },
           {
             $ref: "#/parameters/body.jobMaterial",
@@ -53023,6 +53059,9 @@ export default {
             $ref: "#/parameters/rowFilter.supplier.invoicingContactId",
           },
           {
+            $ref: "#/parameters/rowFilter.supplier.defaultCc",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -53154,6 +53193,9 @@ export default {
             $ref: "#/parameters/rowFilter.supplier.invoicingContactId",
           },
           {
+            $ref: "#/parameters/rowFilter.supplier.defaultCc",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -53237,6 +53279,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.supplier.invoicingContactId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplier.defaultCc",
           },
           {
             $ref: "#/parameters/body.supplier",
@@ -59593,6 +59638,12 @@ export default {
             $ref: "#/parameters/rowFilter.companySettings.otherDispatchNotificationGroup",
           },
           {
+            $ref: "#/parameters/rowFilter.companySettings.defaultSupplierCc",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companySettings.defaultCustomerCc",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -59715,6 +59766,12 @@ export default {
             $ref: "#/parameters/rowFilter.companySettings.otherDispatchNotificationGroup",
           },
           {
+            $ref: "#/parameters/rowFilter.companySettings.defaultSupplierCc",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companySettings.defaultCustomerCc",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -59789,6 +59846,12 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.companySettings.otherDispatchNotificationGroup",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companySettings.defaultSupplierCc",
+          },
+          {
+            $ref: "#/parameters/rowFilter.companySettings.defaultCustomerCc",
           },
           {
             $ref: "#/parameters/body.companySettings",
@@ -68541,7 +68604,7 @@ export default {
       properties: {
         id: {
           description:
-            "Note:\nThis is a Foreign Key to `supplierLocation.id`.<fk table='supplierLocation' column='id'/>",
+            "Note:\nThis is a Primary Key.<pk/>\nThis is a Foreign Key to `supplierLocation.id`.<fk table='supplierLocation' column='id'/>",
           format: "text",
           type: "string",
         },
@@ -68590,7 +68653,7 @@ export default {
         },
         supplierLocationId: {
           description:
-            "Note:\nThis is a Primary Key.<pk/>\nThis is a Foreign Key to `supplierLocation.id`.<fk table='supplierLocation' column='id'/>",
+            "Note:\nThis is a Foreign Key to `supplierLocation.id`.<fk table='supplierLocation' column='id'/>",
           format: "text",
           type: "string",
         },
@@ -73384,6 +73447,7 @@ export default {
         "requiresSerialTracking",
         "requiresBatchTracking",
         "version",
+        "itemScrapPercentage",
       ],
       properties: {
         id: {
@@ -73463,6 +73527,13 @@ export default {
         },
         version: {
           default: 1,
+          format: "numeric",
+          type: "number",
+        },
+        itemScrapPercentage: {
+          default: 0,
+          description:
+            "Scrap percentage from itemReplenishment at time of job creation",
           format: "numeric",
           type: "number",
         },
@@ -78210,6 +78281,13 @@ export default {
           format: "text",
           type: "string",
         },
+        targetQuantity: {
+          default: 0,
+          description:
+            "The target quantity to produce before accounting for scrap (parent.estimatedQuantity * quantityPerParent)",
+          format: "numeric",
+          type: "number",
+        },
       },
       type: "object",
     },
@@ -82219,6 +82297,13 @@ export default {
           format: "text",
           type: "string",
         },
+        defaultCc: {
+          format: "text[]",
+          items: {
+            type: "string",
+          },
+          type: "array",
+        },
       },
       type: "object",
     },
@@ -85550,6 +85635,7 @@ export default {
         "requiresSerialTracking",
         "requiresBatchTracking",
         "kit",
+        "itemScrapPercentage",
       ],
       properties: {
         id: {
@@ -85690,6 +85776,13 @@ export default {
           default: false,
           format: "boolean",
           type: "boolean",
+        },
+        itemScrapPercentage: {
+          default: 0,
+          description:
+            "Scrap percentage from itemReplenishment at time of job creation",
+          format: "numeric",
+          type: "number",
         },
       },
       type: "object",
@@ -90111,6 +90204,13 @@ export default {
           format: "text",
           type: "string",
         },
+        defaultCc: {
+          format: "text[]",
+          items: {
+            type: "string",
+          },
+          type: "array",
+        },
       },
       type: "object",
     },
@@ -93394,6 +93494,20 @@ export default {
           type: "array",
         },
         otherDispatchNotificationGroup: {
+          format: "text[]",
+          items: {
+            type: "string",
+          },
+          type: "array",
+        },
+        defaultSupplierCc: {
+          format: "text[]",
+          items: {
+            type: "string",
+          },
+          type: "array",
+        },
+        defaultCustomerCc: {
           format: "text[]",
           items: {
             type: "string",
@@ -103402,6 +103516,14 @@ export default {
       in: "query",
       type: "string",
     },
+    "rowFilter.jobMakeMethod.itemScrapPercentage": {
+      name: "itemScrapPercentage",
+      description:
+        "Scrap percentage from itemReplenishment at time of job creation",
+      required: false,
+      in: "query",
+      type: "string",
+    },
     "body.salesRfqLine": {
       name: "salesRfqLine",
       description: "salesRfqLine",
@@ -108689,6 +108811,14 @@ export default {
       in: "query",
       type: "string",
     },
+    "rowFilter.jobOperation.targetQuantity": {
+      name: "targetQuantity",
+      description:
+        "The target quantity to produce before accounting for scrap (parent.estimatedQuantity * quantityPerParent)",
+      required: false,
+      in: "query",
+      type: "string",
+    },
     "body.userAttributeCategory": {
       name: "userAttributeCategory",
       description: "userAttributeCategory",
@@ -113253,6 +113383,12 @@ export default {
       in: "query",
       type: "string",
     },
+    "rowFilter.customer.defaultCc": {
+      name: "defaultCc",
+      required: false,
+      in: "query",
+      type: "string",
+    },
     "body.purchaseOrder": {
       name: "purchaseOrder",
       description: "purchaseOrder",
@@ -117233,6 +117369,14 @@ export default {
     },
     "rowFilter.jobMaterial.kit": {
       name: "kit",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.jobMaterial.itemScrapPercentage": {
+      name: "itemScrapPercentage",
+      description:
+        "Scrap percentage from itemReplenishment at time of job creation",
       required: false,
       in: "query",
       type: "string",
@@ -122241,6 +122385,12 @@ export default {
       in: "query",
       type: "string",
     },
+    "rowFilter.supplier.defaultCc": {
+      name: "defaultCc",
+      required: false,
+      in: "query",
+      type: "string",
+    },
     "body.stockTransfer": {
       name: "stockTransfer",
       description: "stockTransfer",
@@ -125846,6 +125996,18 @@ export default {
     },
     "rowFilter.companySettings.otherDispatchNotificationGroup": {
       name: "otherDispatchNotificationGroup",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.companySettings.defaultSupplierCc": {
+      name: "defaultSupplierCc",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.companySettings.defaultCustomerCc": {
+      name: "defaultCustomerCc",
       required: false,
       in: "query",
       type: "string",
