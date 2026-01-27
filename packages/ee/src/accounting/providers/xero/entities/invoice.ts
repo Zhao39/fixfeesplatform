@@ -1,6 +1,10 @@
 import type { KyselyTx } from "@carbon/database/client";
 import { createMappingService } from "../../../core/external-mapping";
-import { type Accounting, BaseEntitySyncer } from "../../../core/types";
+import {
+  type Accounting,
+  BaseEntitySyncer,
+  type ShouldSyncContext
+} from "../../../core/types";
 import { throwXeroApiError } from "../../../core/utils";
 import { parseDotnetDate, type Xero } from "../models";
 
@@ -80,9 +84,8 @@ const XERO_TO_CARBON_STATUS: Record<
   DELETED: "Voided"
 };
 
-// Syncable statuses (we only push these to Xero)
+// Syncable statuses (we only push posted invoices to Xero, not drafts)
 const SYNCABLE_STATUSES: Accounting.SalesInvoice["status"][] = [
-  "Draft",
   "Pending",
   "Submitted",
   "Partially Paid",
@@ -517,13 +520,23 @@ export class SalesInvoiceSyncer extends BaseEntitySyncer<
   }
 
   // =================================================================
-  // 9. HELPER: Check if invoice is syncable
+  // 9. SHOULD SYNC: Business logic for sync eligibility
   // =================================================================
 
   /**
-   * Check if an invoice status is syncable to Xero
+   * Determine if an invoice should be synced based on its status.
+   * Only invoices with syncable statuses (not Draft or Cancelled) are synced.
    */
-  isSyncableStatus(status: Accounting.SalesInvoice["status"]): boolean {
-    return SYNCABLE_STATUSES.includes(status);
+  protected shouldSync(
+    context: ShouldSyncContext<Accounting.SalesInvoice, Xero.Invoice>
+  ): boolean | string {
+    // For push operations, check the local entity status
+    if (context.direction === "push" && context.localEntity) {
+      if (!SYNCABLE_STATUSES.includes(context.localEntity.status)) {
+        return `Invoice must be posted before syncing (current status: ${context.localEntity.status})`;
+      }
+    }
+
+    return true;
   }
 }

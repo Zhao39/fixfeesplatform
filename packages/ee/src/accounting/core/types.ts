@@ -180,6 +180,27 @@ export interface BatchSyncResult {
   skippedCount: number;
 }
 
+/**
+ * Context passed to the optional shouldSync method to determine
+ * if an entity should be synced.
+ */
+export interface ShouldSyncContext<TLocal, TRemote> {
+  /** Direction of the sync operation */
+  direction: "push" | "pull";
+
+  /** The local entity (available for push, and after mapping for pull) */
+  localEntity?: TLocal;
+
+  /** The remote entity (available for pull, before mapping) */
+  remoteEntity?: TRemote;
+
+  /** Whether this is a first-time sync (no existing mapping) */
+  isFirstSync: boolean;
+
+  /** The entity ID (local for push, remote for pull) */
+  entityId: string;
+}
+
 export interface IEntitySyncer {
   // Single-item methods
   pushToAccounting(entityId: string): Promise<SyncResult>;
@@ -320,6 +341,20 @@ export abstract class BaseEntitySyncer<
     data: Array<{ localId: string; payload: Omit<TRemote, TOmit> }>
   ): Promise<Map<string, string>>;
 
+  /**
+   * Optional method to determine if an entity should be synced.
+   * Override this in subclasses to implement business logic like
+   * "only sync posted invoices" or "don't sync archived items".
+   *
+   * @param context - Context about the sync operation including direction,
+   *                  the entity being synced, and whether it's a first sync
+   * @returns true to proceed with sync, false to skip silently,
+   *          or a string with a reason to skip
+   */
+  protected shouldSync?(
+    context: ShouldSyncContext<TLocal, TRemote>
+  ): boolean | string | Promise<boolean | string>;
+
   // =================================================================
   // 3. PUSH WORKFLOW (Carbon -> Accounting)
   // =================================================================
@@ -351,9 +386,31 @@ export abstract class BaseEntitySyncer<
         };
       }
 
+      // 3. Check if entity should be synced (optional business logic)
+      if (this.shouldSync) {
+        const shouldSyncResult = await this.shouldSync({
+          direction: "push",
+          localEntity,
+          isFirstSync: !existingMapping,
+          entityId
+        });
+
+        if (shouldSyncResult !== true) {
+          return {
+            status: "skipped",
+            action: "none",
+            localId: entityId,
+            error:
+              typeof shouldSyncResult === "string"
+                ? shouldSyncResult
+                : "Entity not eligible for sync"
+          };
+        }
+      }
+
       const localUpdatedAt = new Date((localEntity as any).updatedAt);
 
-      // 3. FAST BAILOUT: If already synced and local hasn't changed
+      // 4. FAST BAILOUT: If already synced and local hasn't changed
       if (existingMapping?.lastSyncedAt) {
         if (localUpdatedAt <= new Date(existingMapping.lastSyncedAt)) {
           return {
@@ -366,11 +423,11 @@ export abstract class BaseEntitySyncer<
         }
       }
 
-      // 4. Map and push
+      // 5. Map and push
       const remotePayload = await this.mapToRemote(localEntity);
       const id = await this.upsertRemote(remotePayload, entityId);
 
-      // 5. Update mapping
+      // 6. Update mapping
       const remoteId = await withTriggersDisabled(this.database, async (tx) => {
         await this.linkEntities(tx, entityId, id);
         return id;
@@ -426,9 +483,31 @@ export abstract class BaseEntitySyncer<
         };
       }
 
+      // 3. Check if entity should be synced (optional business logic)
+      if (this.shouldSync) {
+        const shouldSyncResult = await this.shouldSync({
+          direction: "pull",
+          remoteEntity,
+          isFirstSync: !existingMapping,
+          entityId: remoteId
+        });
+
+        if (shouldSyncResult !== true) {
+          return {
+            status: "skipped",
+            action: "none",
+            remoteId,
+            error:
+              typeof shouldSyncResult === "string"
+                ? shouldSyncResult
+                : "Entity not eligible for sync"
+          };
+        }
+      }
+
       const remoteUpdatedAt = this.getRemoteUpdatedAt(remoteEntity);
 
-      // 3. FAST BAILOUT: Compare timestamps without fetching local entity
+      // 4. FAST BAILOUT: Compare timestamps without fetching local entity
       if (existingMapping?.remoteUpdatedAt && remoteUpdatedAt) {
         if (new Date(existingMapping.remoteUpdatedAt) >= remoteUpdatedAt) {
           return {
@@ -441,7 +520,7 @@ export abstract class BaseEntitySyncer<
         }
       }
 
-      // 4. Map and upsert (only if needed)
+      // 5. Map and upsert (only if needed)
       const localPayload = await this.mapToLocal(remoteEntity);
 
       // Wrap DB writes in withTriggersDisabled to prevent circular triggers
@@ -514,7 +593,7 @@ export abstract class BaseEntitySyncer<
         });
       }
 
-      // 2. Map all found entities to remote payloads
+      // 2. Check shouldSync and map all found entities to remote payloads
       const batchPayloads: Array<{
         localId: string;
         payload: Omit<TRemote, TOmit>;
@@ -522,6 +601,29 @@ export abstract class BaseEntitySyncer<
 
       for (const [localId, entity] of localEntities) {
         try {
+          // Check if entity should be synced (optional business logic)
+          if (this.shouldSync) {
+            const shouldSyncResult = await this.shouldSync({
+              direction: "push",
+              localEntity: entity,
+              isFirstSync: true, // Batch doesn't check existing mappings for perf
+              entityId: localId
+            });
+
+            if (shouldSyncResult !== true) {
+              results.push({
+                status: "skipped",
+                action: "none",
+                localId,
+                error:
+                  typeof shouldSyncResult === "string"
+                    ? shouldSyncResult
+                    : "Entity not eligible for sync"
+              });
+              continue;
+            }
+          }
+
           const payload = await this.mapToRemote(entity);
           batchPayloads.push({ localId, payload });
         } catch (err) {
@@ -645,6 +747,29 @@ export abstract class BaseEntitySyncer<
               error: "Carbon is System of Record"
             });
             continue;
+          }
+
+          // Check if entity should be synced (optional business logic)
+          if (this.shouldSync) {
+            const shouldSyncResult = await this.shouldSync({
+              direction: "pull",
+              remoteEntity: entity,
+              isFirstSync: !existingLocalId,
+              entityId: remoteId
+            });
+
+            if (shouldSyncResult !== true) {
+              results.push({
+                status: "skipped",
+                action: "none",
+                remoteId,
+                error:
+                  typeof shouldSyncResult === "string"
+                    ? shouldSyncResult
+                    : "Entity not eligible for sync"
+              });
+              continue;
+            }
           }
 
           // Map and upsert locally
