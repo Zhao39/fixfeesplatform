@@ -1,6 +1,5 @@
 export * from "./entities/bill";
 export * from "./entities/contact";
-export * from "./entities/employee";
 export * from "./entities/invoice";
 export * from "./entities/item";
 export * from "./entities/purchase-order";

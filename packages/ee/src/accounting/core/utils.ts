@@ -16,7 +16,7 @@ import type {
  * @param db - The Kysely database instance
  * @param operation - A callback that receives the transaction and performs DB operations
  */
-export async function withSyncDisabled<T>(
+export async function withTriggersDisabled<T>(
   db: Kysely<KyselyDatabase>,
   operation: (tx: KyselyTx) => Promise<T>
 ): Promise<T> {
@@ -68,11 +68,23 @@ export class HTTPClient {
     const isJson = contentType?.includes("application/json");
 
     if (!response.ok) {
+      const text = await response.text();
+      let parsedData: unknown = text;
+
+      // Try to parse JSON error responses for better error details
+      if (isJson && text) {
+        try {
+          parsedData = JSON.parse(text);
+        } catch {
+          // Keep as raw string if parsing fails
+        }
+      }
+
       return {
         error: true,
         message: response.statusText,
         code: response.status,
-        data: await response.text()
+        data: parsedData
       } as const;
     }
 
@@ -132,8 +144,216 @@ export class RatelimitError extends Error {
     this.response = response;
   }
 }
+
+/** Structured details from an accounting provider API error */
+export interface ApiErrorDetails {
+  /** HTTP status code (e.g., 400, 401, 500) */
+  statusCode: number;
+  /** HTTP status text (e.g., "Bad Request") */
+  statusText: string;
+  /** Provider-specific error code if available */
+  providerErrorCode?: string | number;
+  /** Provider-specific error type (e.g., "ValidationException") */
+  providerErrorType?: string;
+  /** Human-readable error message from the provider */
+  providerMessage?: string;
+  /** Validation errors for specific fields/elements */
+  validationErrors?: Array<{
+    field?: string;
+    message: string;
+  }>;
+  /** Raw response body for debugging (only logged in development) */
+  rawResponse?: unknown;
+}
+
+/**
+ * Structured error class for accounting provider API errors.
+ * Captures detailed error information for debugging and user display.
+ */
+export class AccountingApiError extends Error {
+  public readonly details: ApiErrorDetails;
+  public readonly provider: string;
+  public readonly operation: string;
+
+  constructor(provider: string, operation: string, details: ApiErrorDetails) {
+    // Build a human-readable message
+    const messages: string[] = [`${details.statusCode} ${details.statusText}`];
+
+    if (details.providerMessage) {
+      messages.push(details.providerMessage);
+    }
+
+    if (details.validationErrors?.length) {
+      messages.push(details.validationErrors.map((e) => e.message).join("; "));
+    }
+
+    super(`[${provider}] ${operation} failed: ${messages.join(" - ")}`);
+
+    this.name = "AccountingApiError";
+    this.provider = provider;
+    this.operation = operation;
+    this.details = details;
+  }
+
+  /** Get a concise error message suitable for user display */
+  getUserMessage(): string {
+    if (this.details.validationErrors?.length) {
+      return this.details.validationErrors.map((e) => e.message).join("; ");
+    }
+    return this.details.providerMessage || this.details.statusText;
+  }
+}
 // /********************************************************\
 // *                     Custom Errors End                  *
+// \********************************************************/
+
+// /********************************************************\
+// *              Xero Error Parsing Start                  *
+// \********************************************************/
+
+/**
+ * Parses Xero API error responses into structured ApiErrorDetails.
+ *
+ * Xero returns errors in several formats:
+ *
+ * 1. ValidationException with Elements:
+ * {
+ *   "ErrorNumber": 10,
+ *   "Type": "ValidationException",
+ *   "Message": "A validation exception occurred",
+ *   "Elements": [{
+ *     "ValidationErrors": [{ "Message": "Code must be unique" }]
+ *   }]
+ * }
+ *
+ * 2. Simple error:
+ * { "Message": "Something went wrong" }
+ *
+ * 3. OAuth error:
+ * { "error": "invalid_grant", "error_description": "Token expired" }
+ *
+ * 4. RFC 7807 problem+json:
+ * { "type": "...", "title": "...", "detail": "..." }
+ */
+export function extractXeroErrorDetails(
+  statusCode: number,
+  statusText: string,
+  responseData: unknown
+): ApiErrorDetails {
+  const details: ApiErrorDetails = {
+    statusCode,
+    statusText,
+    rawResponse: responseData
+  };
+
+  // Try to parse if it's a string
+  let data: unknown = responseData;
+  if (typeof responseData === "string") {
+    try {
+      data = JSON.parse(responseData);
+    } catch {
+      // Not JSON, use raw string as message if short enough
+      if (responseData.length < 500) {
+        details.providerMessage = responseData;
+      }
+      return details;
+    }
+  }
+
+  if (typeof data !== "object" || data === null) {
+    return details;
+  }
+
+  const obj = data as Record<string, unknown>;
+
+  // Extract error type and code
+  if (typeof obj.Type === "string") {
+    details.providerErrorType = obj.Type;
+  }
+  if (obj.ErrorNumber !== undefined) {
+    details.providerErrorCode = obj.ErrorNumber as number;
+  }
+
+  // Extract main message (try multiple common formats)
+  if (typeof obj.Message === "string") {
+    details.providerMessage = obj.Message;
+  } else if (typeof obj.message === "string") {
+    details.providerMessage = obj.message;
+  } else if (typeof obj.detail === "string") {
+    // RFC 7807 format
+    details.providerMessage = obj.detail;
+  } else if (typeof obj.error_description === "string") {
+    // OAuth format
+    details.providerMessage = obj.error_description;
+    details.providerErrorType = obj.error as string;
+  }
+
+  // Extract validation errors from Elements array
+  if (Array.isArray(obj.Elements)) {
+    const validationErrors: Array<{ field?: string; message: string }> = [];
+
+    for (const element of obj.Elements) {
+      if (element && Array.isArray(element.ValidationErrors)) {
+        for (const err of element.ValidationErrors) {
+          if (err && typeof err.Message === "string") {
+            validationErrors.push({ message: err.Message });
+          }
+        }
+      }
+    }
+
+    if (validationErrors.length > 0) {
+      details.validationErrors = validationErrors;
+    }
+  }
+
+  return details;
+}
+
+const isDevelopment = process.env.NODE_ENV !== "production";
+
+/**
+ * Creates and logs an AccountingApiError from an HTTP response, then throws it.
+ * Logs full error details to console for debugging.
+ *
+ * @param operation - Description of the operation that failed (e.g., "create item", "batch upsert contacts")
+ * @param response - The HTTP response object from HTTPClient
+ * @throws AccountingApiError
+ */
+export function throwXeroApiError(
+  operation: string,
+  response: { error: boolean; message: string; code: number; data: unknown }
+): never {
+  const details = extractXeroErrorDetails(
+    response.code,
+    response.message,
+    response.data
+  );
+
+  const error = new AccountingApiError("xero", operation, details);
+
+  // Log full error details for debugging
+  const logDetails: Record<string, unknown> = {
+    statusCode: details.statusCode,
+    statusText: details.statusText,
+    providerErrorType: details.providerErrorType,
+    providerErrorCode: details.providerErrorCode,
+    providerMessage: details.providerMessage,
+    validationErrors: details.validationErrors
+  };
+
+  // Only include raw response in development to avoid log bloat
+  if (isDevelopment) {
+    logDetails.rawResponse = details.rawResponse;
+  }
+
+  console.error(`[Xero API Error] ${operation}`, logDetails);
+
+  throw error;
+}
+
+// /********************************************************\
+// *              Xero Error Parsing End                    *
 // \********************************************************/
 
 export function createOAuthClient({

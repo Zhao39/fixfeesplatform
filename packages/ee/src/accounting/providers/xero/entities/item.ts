@@ -1,10 +1,6 @@
 import type { KyselyTx } from "@carbon/database/client";
-import { sql } from "kysely";
-import {
-  getAccountingEntity,
-  updateAccountingEntityExternalId
-} from "../../../core/service";
 import { type Accounting, BaseEntitySyncer } from "../../../core/types";
+import { throwXeroApiError } from "../../../core/utils";
 import { parseDotnetDate, type Xero } from "../models";
 
 // Type for rows returned from item queries with cost/price joins
@@ -30,44 +26,8 @@ export class ItemSyncer extends BaseEntitySyncer<
   "UpdatedDateUTC"
 > {
   // =================================================================
-  // 1. ID MAPPING
+  // 1. ID MAPPING - Uses default implementation from BaseEntitySyncer
   // =================================================================
-
-  async getRemoteId(localId: string): Promise<string | null> {
-    const itemLink = await getAccountingEntity(
-      this.database,
-      "item",
-      this.companyId,
-      this.provider.id,
-      { id: localId }
-    );
-    return itemLink?.externalId?.xero?.id ?? null;
-  }
-
-  async getLocalId(remoteId: string): Promise<string | null> {
-    const itemLink = await getAccountingEntity(
-      this.database,
-      "item",
-      this.companyId,
-      this.provider.id,
-      { externalId: remoteId }
-    );
-    return itemLink?.id ?? null;
-  }
-
-  protected async linkEntities(
-    tx: KyselyTx,
-    localId: string,
-    remoteId: string
-  ): Promise<void> {
-    await updateAccountingEntityExternalId(
-      tx,
-      "item",
-      localId,
-      this.provider.id,
-      remoteId
-    );
-  }
 
   // =================================================================
   // 2. TIMESTAMP EXTRACTION
@@ -248,24 +208,13 @@ export class ItemSyncer extends BaseEntitySyncer<
       );
     }
 
-    const externalIdData = {
-      [this.provider.id]: {
-        id: remoteId,
-        provider: this.provider.id,
-        lastSyncedAt: new Date().toISOString()
-      }
-    };
-
-    // Update item table
+    // Update item table (mapping is handled by linkEntities in base class)
     await tx
       .updateTable("item")
       .set({
         name: data.name,
         description: data.description,
-        updatedAt: new Date().toISOString(),
-        externalId: sql`COALESCE("externalId", '{}'::jsonb) || ${JSON.stringify(
-          externalIdData
-        )}::jsonb`
+        updatedAt: new Date().toISOString()
       })
       .where("id", "=", existingLocalId)
       .execute();
@@ -310,12 +259,15 @@ export class ItemSyncer extends BaseEntitySyncer<
       { body: JSON.stringify({ Items: items }) }
     );
 
-    if (result.error || !result.data?.Items?.[0]?.ItemID) {
-      throw new Error(
-        `Failed to ${existingRemoteId ? "update" : "create"} item in Xero: ${
-          (result as any).message ?? "Unknown error"
-        }`
+    if (result.error) {
+      throwXeroApiError(
+        existingRemoteId ? "update item" : "create item",
+        result
       );
+    }
+
+    if (!result.data?.Items?.[0]?.ItemID) {
+      throw new Error("Xero API returned success but no ItemID was returned");
     }
 
     return result.data.Items[0].ItemID;
@@ -349,9 +301,13 @@ export class ItemSyncer extends BaseEntitySyncer<
       { body: JSON.stringify({ Items: items }) }
     );
 
-    if (response.error || !response.data?.Items) {
+    if (response.error) {
+      throwXeroApiError("batch upsert items", response);
+    }
+
+    if (!response.data?.Items) {
       throw new Error(
-        `Batch upsert failed: ${(response as any).message ?? "Unknown error"}`
+        "Xero API returned success but no Items array was returned"
       );
     }
 

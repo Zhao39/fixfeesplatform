@@ -129,17 +129,15 @@ export const syncTask = task({
               (r) => r.event.operation === "DELETE"
             );
 
-            const syncer = SyncFactory.getSyncer(
-              entityType as AccountingEntityType,
-              {
-                database: kysely,
-                companyId,
-                provider: providerInstance,
-                config: providerInstance.getSyncConfig(
-                  entityType as AccountingEntityType
-                ),
-              }
-            );
+            const syncer = SyncFactory.getSyncer({
+              database: kysely,
+              companyId,
+              provider: providerInstance,
+              config: providerInstance.getSyncConfig(
+                entityType as AccountingEntityType
+              ),
+              entityType: entityType as AccountingEntityType,
+            });
 
             // Process INSERTs and UPDATEs (push to accounting)
             const toSync = [...inserts, ...updates];

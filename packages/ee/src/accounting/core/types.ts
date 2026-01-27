@@ -3,6 +3,10 @@ import type { Kysely, KyselyDatabase, KyselyTx } from "@carbon/database/client";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type z from "zod";
 import type { AccountingProvider } from "../providers";
+import {
+  createMappingService,
+  type ExternalIntegrationMappingService
+} from "./external-mapping";
 import type {
   AccountingSyncSchema,
   BillLineSchema,
@@ -19,7 +23,7 @@ import type {
   SalesInvoiceSchema,
   SyncDirectionSchema
 } from "./models";
-import { withSyncDisabled } from "./utils";
+import { AccountingApiError, withTriggersDisabled } from "./utils";
 
 // /********************************************************\
 // *                  Provider Types Start                  *
@@ -158,6 +162,7 @@ export interface SyncContext {
   companyId: string;
   provider: AccountingProvider;
   config: EntityConfig;
+  entityType: AccountingEntityType;
 }
 
 export interface SyncResult {
@@ -195,37 +200,72 @@ export abstract class BaseEntitySyncer<
   protected companyId: string;
   protected provider: AccountingProvider;
   protected config: EntityConfig;
+  protected entityType: AccountingEntityType;
+  protected mappingService: ExternalIntegrationMappingService;
 
   constructor(protected context: SyncContext) {
     this.database = context.database;
     this.companyId = context.companyId;
     this.provider = context.provider;
     this.config = context.config;
+    this.entityType = context.entityType;
+    this.mappingService = createMappingService(
+      context.database,
+      context.companyId
+    );
   }
 
   // =================================================================
-  // 1. ABSTRACT ID MAPPING (Implemented by Subclasses)
+  // 1. ID MAPPING (Default implementations using mapping service)
   // =================================================================
 
   /**
    * Look up the Remote ID (e.g. Xero ID) for a given Local ID (Carbon ID).
-   * Must be implemented by the resource to query its specific table/column.
+   * Default implementation uses the external integration mapping table.
+   * Can be overridden by subclasses for custom behavior.
    */
-  public abstract getRemoteId(localId: string): Promise<string | null>;
+  public async getRemoteId(localId: string): Promise<string | null> {
+    return this.mappingService.getExternalId(
+      this.entityType,
+      localId,
+      this.provider.id
+    );
+  }
 
   /**
    * Look up the Local ID (Carbon ID) for a given Remote ID (e.g. Xero ID).
+   * Default implementation uses the external integration mapping table.
+   * Can be overridden by subclasses for custom behavior.
    */
-  public abstract getLocalId(remoteId: string): Promise<string | null>;
+  public async getLocalId(remoteId: string): Promise<string | null> {
+    return this.mappingService.getEntityId(
+      this.provider.id,
+      remoteId,
+      this.entityType
+    );
+  }
 
   /**
    * Save the link between a Carbon ID and a Remote ID.
+   * Default implementation uses the external integration mapping table.
+   * Can be overridden by subclasses for custom behavior.
    */
-  protected abstract linkEntities(
+  protected async linkEntities(
     tx: KyselyTx,
     localId: string,
-    remoteId: string
-  ): Promise<void>;
+    remoteId: string,
+    remoteUpdatedAt?: Date
+  ): Promise<void> {
+    // Create a mapping service with the transaction
+    const txMappingService = createMappingService(tx, this.companyId);
+    await txMappingService.link(
+      this.entityType,
+      localId,
+      this.provider.id,
+      remoteId,
+      { remoteUpdatedAt }
+    );
+  }
 
   protected abstract fetchLocal(id: string): Promise<TLocal | null>;
 
@@ -281,7 +321,7 @@ export abstract class BaseEntitySyncer<
   ): Promise<Map<string, string>>;
 
   // =================================================================
-  // 3. PUSH WORKFLOW (Carbon ->upsertRemoteBatch Accounting)
+  // 3. PUSH WORKFLOW (Carbon -> Accounting)
   // =================================================================
 
   async pushToAccounting(entityId: string): Promise<SyncResult> {
@@ -294,6 +334,14 @@ export abstract class BaseEntitySyncer<
     }
 
     try {
+      // 1. Check if already linked
+      const existingMapping = await this.mappingService.getByEntity(
+        this.entityType,
+        entityId,
+        this.provider.id
+      );
+
+      // 2. Fetch local entity
       const localEntity = await this.fetchLocal(entityId);
       if (!localEntity) {
         return {
@@ -303,13 +351,28 @@ export abstract class BaseEntitySyncer<
         };
       }
 
-      const remotePayload = await this.mapToRemote(localEntity);
+      const localUpdatedAt = new Date((localEntity as any).updatedAt);
 
+      // 3. FAST BAILOUT: If already synced and local hasn't changed
+      if (existingMapping?.lastSyncedAt) {
+        if (localUpdatedAt <= new Date(existingMapping.lastSyncedAt)) {
+          return {
+            status: "skipped",
+            action: "none",
+            localId: entityId,
+            remoteId: existingMapping.externalId,
+            error: "Already synced - local unchanged"
+          };
+        }
+      }
+
+      // 4. Map and push
+      const remotePayload = await this.mapToRemote(localEntity);
       const id = await this.upsertRemote(remotePayload, entityId);
 
-      const remoteId = await withSyncDisabled(this.database, async (tx) => {
+      // 5. Update mapping
+      const remoteId = await withTriggersDisabled(this.database, async (tx) => {
         await this.linkEntities(tx, entityId, id);
-
         return id;
       });
 
@@ -317,7 +380,7 @@ export abstract class BaseEntitySyncer<
 
       return {
         status: "success",
-        action: "updated",
+        action: existingMapping ? "updated" : "created",
         localId: entityId,
         remoteId
       };
@@ -346,6 +409,14 @@ export abstract class BaseEntitySyncer<
     }
 
     try {
+      // 1. Check mapping table FIRST (fast, indexed lookup)
+      const existingMapping = await this.mappingService.getByExternalId(
+        this.provider.id,
+        remoteId,
+        this.entityType
+      );
+
+      // 2. Fetch remote entity
       const remoteEntity = await this.fetchRemote(remoteId);
       if (!remoteEntity) {
         return {
@@ -355,42 +426,46 @@ export abstract class BaseEntitySyncer<
         };
       }
 
-      // Check if local entity exists and is already up to date
-      const existingLocalId = await this.getLocalId(remoteId);
-      if (existingLocalId) {
-        const localEntity = await this.fetchLocal(existingLocalId);
-        const remoteUpdatedAt = this.getRemoteUpdatedAt(remoteEntity);
+      const remoteUpdatedAt = this.getRemoteUpdatedAt(remoteEntity);
 
-        if (localEntity && remoteUpdatedAt) {
-          const localUpdatedAt = new Date((localEntity as any).updatedAt);
-          if (localUpdatedAt >= remoteUpdatedAt) {
-            return {
-              status: "skipped",
-              action: "none",
-              localId: existingLocalId,
-              remoteId,
-              error: "Local entity is up to date"
-            };
-          }
+      // 3. FAST BAILOUT: Compare timestamps without fetching local entity
+      if (existingMapping?.remoteUpdatedAt && remoteUpdatedAt) {
+        if (new Date(existingMapping.remoteUpdatedAt) >= remoteUpdatedAt) {
+          return {
+            status: "skipped",
+            action: "none",
+            localId: existingMapping.entityId,
+            remoteId,
+            error: "Already synced - remote unchanged"
+          };
         }
       }
 
+      // 4. Map and upsert (only if needed)
       const localPayload = await this.mapToLocal(remoteEntity);
 
-      // Wrap DB writes in withSyncDisabled to prevent circular triggers
+      // Wrap DB writes in withTriggersDisabled to prevent circular triggers
       // (external sync -> DB write -> trigger -> sync back to external)
-      const newLocalId = await withSyncDisabled(this.database, async (tx) => {
-        const id = await this.upsertLocal(tx, localPayload, remoteId);
-        await this.linkEntities(tx, id, remoteId);
+      const newLocalId = await withTriggersDisabled(
+        this.database,
+        async (tx) => {
+          const id = await this.upsertLocal(tx, localPayload, remoteId);
+          await this.linkEntities(
+            tx,
+            id,
+            remoteId,
+            remoteUpdatedAt ?? undefined
+          );
 
-        return id;
-      });
+          return id;
+        }
+      );
 
       await this.logSyncOperation("pull", newLocalId, remoteId, "success");
 
       return {
         status: "success",
-        action: existingLocalId ? "updated" : "created",
+        action: existingMapping ? "updated" : "created",
         localId: newLocalId,
         remoteId
       };
@@ -466,28 +541,45 @@ export abstract class BaseEntitySyncer<
       // 3. Upsert all in a single batch call
       const remoteIdMap = await this.upsertRemoteBatch(batchPayloads);
 
-      await withSyncDisabled(this.database, async (tx) => {
-        // 4. Link entities and record results
-        for (const { localId } of batchPayloads) {
-          const remoteId = remoteIdMap.get(localId);
-          if (remoteId) {
-            await this.linkEntities(tx, localId, remoteId);
-            results.push({
-              status: "success",
-              action: "updated",
-              localId,
-              remoteId
-            });
-          } else {
-            results.push({
-              status: "error",
-              action: "none",
-              localId,
-              error: "Remote upsert did not return ID"
-            });
-          }
+      // 4. Link entities using batch operation
+      const mappingsToLink: Array<{
+        entityType: string;
+        entityId: string;
+        integration: string;
+        externalId: string;
+      }> = [];
+
+      for (const { localId } of batchPayloads) {
+        const remoteId = remoteIdMap.get(localId);
+        if (remoteId) {
+          mappingsToLink.push({
+            entityType: this.entityType,
+            entityId: localId,
+            integration: this.provider.id,
+            externalId: remoteId
+          });
+          results.push({
+            status: "success",
+            action: "updated",
+            localId,
+            remoteId
+          });
+        } else {
+          results.push({
+            status: "error",
+            action: "none",
+            localId,
+            error: "Remote upsert did not return ID"
+          });
         }
-      });
+      }
+
+      if (mappingsToLink.length > 0) {
+        await withTriggersDisabled(this.database, async (tx) => {
+          const txMappingService = createMappingService(tx, this.companyId);
+          await txMappingService.linkBatch(mappingsToLink);
+        });
+      }
     } catch (err: any) {
       // If the whole batch fails, mark all as errors
       for (const id of entityIds) {
@@ -558,13 +650,16 @@ export abstract class BaseEntitySyncer<
           // Map and upsert locally
           const localPayload = await this.mapToLocal(entity);
 
-          const localId = await withSyncDisabled(this.database, async (tx) => {
-            const id = await this.upsertLocal(tx, localPayload, remoteId);
+          const localId = await withTriggersDisabled(
+            this.database,
+            async (tx) => {
+              const id = await this.upsertLocal(tx, localPayload, remoteId);
 
-            await this.linkEntities(tx, id, remoteId);
+              await this.linkEntities(tx, id, remoteId);
 
-            return id;
-          });
+              return id;
+            }
+          );
 
           results.push({
             status: "success",
@@ -632,9 +727,10 @@ export abstract class BaseEntitySyncer<
       owner: "carbon" as const
     };
 
-    const syncer = SyncFactory.getSyncer(type, {
+    const syncer = SyncFactory.getSyncer({
       ...this.context,
-      config: dependencyConfig
+      config: dependencyConfig,
+      entityType: type
     });
 
     // 2. Check if it's already synced (using the dependency's own logic)
@@ -687,12 +783,42 @@ export abstract class BaseEntitySyncer<
     status: "success" | "error",
     error?: unknown
   ) {
-    console.log(
-      `[SyncLog] ${direction.toUpperCase()} | Entity: ${this.getEntityTypeName()} | LocalID: ${localId} | RemoteID: ${remoteId} | Status: ${status} `
-    );
+    const logEntry = {
+      direction: direction.toUpperCase(),
+      entity: this.getEntityTypeName(),
+      localId,
+      remoteId,
+      status
+    };
 
-    if (error) {
-      console.error(error);
+    if (status === "success") {
+      console.log("[SyncLog]", logEntry);
+    } else {
+      // Enhanced error logging with structured details
+      const errorDetails: Record<string, unknown> = { ...logEntry };
+
+      if (error instanceof AccountingApiError) {
+        errorDetails.errorType = error.name;
+        errorDetails.provider = error.provider;
+        errorDetails.operation = error.operation;
+        errorDetails.apiDetails = {
+          statusCode: error.details.statusCode,
+          statusText: error.details.statusText,
+          providerErrorType: error.details.providerErrorType,
+          providerErrorCode: error.details.providerErrorCode,
+          providerMessage: error.details.providerMessage,
+          validationErrors: error.details.validationErrors
+        };
+        errorDetails.userMessage = error.getUserMessage();
+      } else if (error instanceof Error) {
+        errorDetails.errorType = error.name;
+        errorDetails.errorMessage = error.message;
+        errorDetails.stack = error.stack;
+      } else {
+        errorDetails.error = error;
+      }
+
+      console.error("[SyncLog] ERROR", errorDetails);
     }
   }
 

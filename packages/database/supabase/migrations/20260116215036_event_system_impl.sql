@@ -51,7 +51,7 @@ WHERE "active" = TRUE;
 ALTER TABLE "eventSystemSubscription" ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "manage_subscriptions" ON "eventSystemSubscription"
-FOR ALL USING ( auth.role() = 'authenticated' );
+FOR ALL USING ( auth.role() = 'authenticated' ); 
 
 
 -- 4. Sync Triggers

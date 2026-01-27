@@ -1,7 +1,11 @@
 import type { KyselyTx } from "@carbon/database/client";
-import { sql } from "kysely";
+import { createMappingService } from "../../../core/external-mapping";
 import { type Accounting, BaseEntitySyncer } from "../../../core/types";
+import { throwXeroApiError } from "../../../core/utils";
 import { parseDotnetDate, type Xero } from "../models";
+
+// Note: This syncer uses the default ID mapping from BaseEntitySyncer
+// which uses the externalIntegrationMapping table with entityType "invoice"
 
 // Type for rows returned from sales invoice queries with line joins
 type InvoiceRow = {
@@ -92,62 +96,33 @@ export class SalesInvoiceSyncer extends BaseEntitySyncer<
   "UpdatedDateUTC"
 > {
   // =================================================================
-  // 1. ID MAPPING
-  // Note: Using direct queries since salesInvoice.externalId was just added
-  // via migration and types may not be regenerated yet
+  // 1. ID MAPPING - Uses default implementation from BaseEntitySyncer
+  // The entityType "invoice" maps to the salesInvoice table
   // =================================================================
-
-  async getRemoteId(localId: string): Promise<string | null> {
-    const result = await this.database
-      .selectFrom("salesInvoice")
-      .select(sql<Record<string, unknown>>`"externalId"`.as("externalId"))
-      .where("id", "=", localId)
-      .where("companyId", "=", this.companyId)
-      .executeTakeFirst();
-
-    if (!result?.externalId) return null;
-
-    const externalId = result.externalId as Record<
-      string,
-      { id?: string; provider?: string }
-    >;
-    return externalId?.[this.provider.id]?.id ?? null;
-  }
-
-  async getLocalId(remoteId: string): Promise<string | null> {
-    const result = await this.database
-      .selectFrom("salesInvoice")
-      .select("id")
-      .where("companyId", "=", this.companyId)
-      .where(sql`"externalId"->${this.provider.id}->>'id'`, "=", remoteId)
-      .executeTakeFirst();
-
-    return result?.id ?? null;
-  }
 
   protected async linkEntities(
     tx: KyselyTx,
     localId: string,
-    remoteId: string
+    remoteId: string,
+    remoteUpdatedAt?: Date
   ): Promise<void> {
-    const externalIdData = {
-      [this.provider.id]: {
-        id: remoteId,
-        provider: this.provider.id,
-        lastSyncedAt: new Date().toISOString()
+    // Use the mapping service to link invoice -> salesInvoice
+    const txMappingService = createMappingService(tx, this.companyId);
+    await txMappingService.link(
+      "invoice",
+      localId,
+      this.provider.id,
+      remoteId,
+      {
+        remoteUpdatedAt
       }
-    };
+    );
 
+    // Also update updatedAt on salesInvoice
     await tx
       .updateTable("salesInvoice")
       .set({
-        updatedAt: new Date().toISOString(),
-        // Use raw SQL to merge externalId JSONB
-        ...({
-          externalId: sql`COALESCE("externalId", '{}'::jsonb) || ${JSON.stringify(
-            externalIdData
-          )}::jsonb`
-        } as any)
+        updatedAt: new Date().toISOString()
       })
       .where("id", "=", localId)
       .execute();
@@ -432,15 +407,7 @@ export class SalesInvoiceSyncer extends BaseEntitySyncer<
       );
     }
 
-    const externalIdData = {
-      [this.provider.id]: {
-        id: remoteId,
-        provider: this.provider.id,
-        lastSyncedAt: new Date().toISOString()
-      }
-    };
-
-    // Update invoice header using raw SQL for externalId
+    // Update invoice header (mapping is handled by linkEntities in base class)
     await tx
       .updateTable("salesInvoice")
       .set({
@@ -454,13 +421,7 @@ export class SalesInvoiceSyncer extends BaseEntitySyncer<
         balance: data.balance,
         currencyCode: data.currencyCode,
         exchangeRate: data.exchangeRate,
-        updatedAt: new Date().toISOString(),
-        // Use type assertion for externalId until types are regenerated
-        ...({
-          externalId: sql`COALESCE("externalId", '{}'::jsonb) || ${JSON.stringify(
-            externalIdData
-          )}::jsonb`
-        } as any)
+        updatedAt: new Date().toISOString()
       })
       .where("id", "=", existingLocalId)
       .execute();
@@ -490,11 +451,16 @@ export class SalesInvoiceSyncer extends BaseEntitySyncer<
       { body: JSON.stringify({ Invoices: invoices }) }
     );
 
-    if (result.error || !result.data?.Invoices?.[0]?.InvoiceID) {
+    if (result.error) {
+      throwXeroApiError(
+        existingRemoteId ? "update invoice" : "create invoice",
+        result
+      );
+    }
+
+    if (!result.data?.Invoices?.[0]?.InvoiceID) {
       throw new Error(
-        `Failed to ${existingRemoteId ? "update" : "create"} invoice in Xero: ${
-          (result as any).message ?? "Unknown error"
-        }`
+        "Xero API returned success but no InvoiceID was returned"
       );
     }
 
@@ -529,8 +495,14 @@ export class SalesInvoiceSyncer extends BaseEntitySyncer<
       { body: JSON.stringify({ Invoices: invoices }) }
     );
 
-    if (response.error || !response.data?.Invoices) {
-      throw new Error(`Batch upsert failed: ${response.error}`);
+    if (response.error) {
+      throwXeroApiError("batch upsert invoices", response);
+    }
+
+    if (!response.data?.Invoices) {
+      throw new Error(
+        "Xero API returned success but no Invoices array was returned"
+      );
     }
 
     for (let i = 0; i < response.data.Invoices.length; i++) {

@@ -1,8 +1,11 @@
 import type { KyselyTx } from "@carbon/database/client";
-import { sql } from "kysely";
-import { getAccountingEntity } from "../../../core/service";
+import { createMappingService } from "../../../core/external-mapping";
 import { type Accounting, BaseEntitySyncer } from "../../../core/types";
+import { throwXeroApiError } from "../../../core/utils";
 import { parseDotnetDate, type Xero } from "../models";
+
+// Note: This syncer uses the default ID mapping from BaseEntitySyncer
+// which uses the externalIntegrationMapping table with entityType "purchaseOrder"
 
 // Type for rows returned from purchaseOrder queries
 type PurchaseOrderRow = {
@@ -78,68 +81,9 @@ export class PurchaseOrderSyncer extends BaseEntitySyncer<
   "UpdatedDateUTC"
 > {
   // =================================================================
-  // 1. ID MAPPING
+  // 1. ID MAPPING - Uses default implementation from BaseEntitySyncer
+  // The entityType "purchaseOrder" maps to the purchaseOrder table
   // =================================================================
-
-  /**
-   * Get the Xero PurchaseOrderID for a local purchaseOrder.
-   * purchaseOrder table has an externalId JSONB column.
-   */
-  async getRemoteId(localId: string): Promise<string | null> {
-    const po = await this.database
-      .selectFrom("purchaseOrder")
-      .select(["id", "externalId"])
-      .where("id", "=", localId)
-      .where("companyId", "=", this.companyId)
-      .executeTakeFirst();
-
-    if (!po?.externalId) return null;
-
-    const externalId = po.externalId as Record<string, { id?: string }>;
-    return externalId?.[this.provider.id]?.id ?? null;
-  }
-
-  /**
-   * Get the local purchaseOrder ID for a Xero PurchaseOrderID.
-   */
-  async getLocalId(remoteId: string): Promise<string | null> {
-    const po = await this.database
-      .selectFrom("purchaseOrder")
-      .select("id")
-      .where("companyId", "=", this.companyId)
-      .where(sql`"externalId"->${this.provider.id}->>'id'`, "=", remoteId)
-      .executeTakeFirst();
-
-    return po?.id ?? null;
-  }
-
-  /**
-   * Link a local purchaseOrder to a Xero PurchaseOrder.
-   */
-  protected async linkEntities(
-    tx: KyselyTx,
-    localId: string,
-    remoteId: string
-  ): Promise<void> {
-    const externalIdData = {
-      [this.provider.id]: {
-        id: remoteId,
-        provider: this.provider.id,
-        lastSyncedAt: new Date().toISOString()
-      }
-    };
-
-    await tx
-      .updateTable("purchaseOrder")
-      .set({
-        externalId: sql`COALESCE("externalId", '{}'::jsonb) || ${JSON.stringify(
-          externalIdData
-        )}::jsonb`
-      })
-      .where("id", "=", localId)
-      .where("companyId", "=", this.companyId)
-      .execute();
-  }
 
   // =================================================================
   // 2. TIMESTAMP EXTRACTION
@@ -363,23 +307,14 @@ export class PurchaseOrderSyncer extends BaseEntitySyncer<
       local.lines.map(async (line) => {
         let itemCode = line.itemCode;
 
-        // If we have an itemId but no itemCode, try to get it
+        // If we have an itemId but no itemCode, try to get it from the item table
         if (!itemCode && line.itemId) {
-          const itemLink = await getAccountingEntity(
-            this.database,
-            "item",
-            this.companyId,
-            this.provider.id,
-            { id: line.itemId }
-          );
-          if (itemLink) {
-            const item = await this.database
-              .selectFrom("item")
-              .select("readableId")
-              .where("id", "=", line.itemId)
-              .executeTakeFirst();
-            itemCode = item?.readableId ?? null;
-          }
+          const item = await this.database
+            .selectFrom("item")
+            .select("readableId")
+            .where("id", "=", line.itemId)
+            .executeTakeFirst();
+          itemCode = item?.readableId ?? null;
         }
 
         return {
@@ -475,29 +410,19 @@ export class PurchaseOrderSyncer extends BaseEntitySyncer<
   ): Promise<string> {
     const existingLocalId = await this.getLocalId(remoteId);
 
-    // Resolve supplier from Xero ContactID
+    // Resolve supplier from Xero ContactID using mapping service
     let supplierId: string | null = null;
     if (data.supplierExternalId) {
-      const supplier = await getAccountingEntity(
-        tx,
-        "supplier",
-        this.companyId,
+      const txMappingService = createMappingService(tx, this.companyId);
+      supplierId = await txMappingService.getEntityId(
         this.provider.id,
-        { externalId: data.supplierExternalId }
+        data.supplierExternalId,
+        "supplier"
       );
-      supplierId = supplier?.id ?? null;
     }
 
-    const externalIdData = {
-      [this.provider.id]: {
-        id: remoteId,
-        provider: this.provider.id,
-        lastSyncedAt: new Date().toISOString()
-      }
-    };
-
     if (existingLocalId) {
-      // Update existing purchase order
+      // Update existing purchase order (mapping is handled by linkEntities in base class)
       await tx
         .updateTable("purchaseOrder")
         .set({
@@ -507,10 +432,7 @@ export class PurchaseOrderSyncer extends BaseEntitySyncer<
           currencyCode: data.currencyCode,
           exchangeRate: data.exchangeRate,
           supplierReference: data.supplierReference,
-          updatedAt: new Date().toISOString(),
-          externalId: sql`COALESCE("externalId", '{}'::jsonb) || ${JSON.stringify(
-            externalIdData
-          )}::jsonb`
+          updatedAt: new Date().toISOString()
         })
         .where("id", "=", existingLocalId)
         .where("companyId", "=", this.companyId)
@@ -622,10 +544,9 @@ export class PurchaseOrderSyncer extends BaseEntitySyncer<
     });
 
     if (result.error) {
-      throw new Error(
-        `Failed to ${existingRemoteId ? "update" : "create"} PO in Xero: ${
-          result.error
-        }`
+      throwXeroApiError(
+        existingRemoteId ? "update purchase order" : "create purchase order",
+        result
       );
     }
 
@@ -636,9 +557,7 @@ export class PurchaseOrderSyncer extends BaseEntitySyncer<
 
     if (!poId) {
       throw new Error(
-        `Failed to ${
-          existingRemoteId ? "update" : "create"
-        } PO in Xero: No ID returned`
+        "Xero API returned success but no PurchaseOrderID was returned"
       );
     }
 
@@ -677,14 +596,17 @@ export class PurchaseOrderSyncer extends BaseEntitySyncer<
     });
 
     if (response.error) {
-      throw new Error(`Batch upsert failed: ${response.error}`);
+      throwXeroApiError("batch upsert purchase orders", response);
     }
 
-    const resData = response.data as
-      | { PurchaseOrders: Xero.PurchaseOrder[] }
-      | undefined;
-    for (let i = 0; i < (resData?.PurchaseOrders?.length ?? 0); i++) {
-      const returnedPO = resData?.PurchaseOrders?.[i];
+    if (!response.data?.PurchaseOrders) {
+      throw new Error(
+        "Xero API returned success but no PurchaseOrders array was returned"
+      );
+    }
+
+    for (let i = 0; i < response.data.PurchaseOrders.length; i++) {
+      const returnedPO = response.data.PurchaseOrders[i];
       const localId = localIdOrder[i];
       if (returnedPO?.PurchaseOrderID && localId) {
         result.set(localId, returnedPO.PurchaseOrderID);

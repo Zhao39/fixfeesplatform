@@ -1,27 +1,23 @@
 import { BillSyncer } from "../providers/xero/entities/bill";
 import { ContactSyncer } from "../providers/xero/entities/contact";
-import { EmployeeSyncer } from "../providers/xero/entities/employee";
 import { SalesInvoiceSyncer } from "../providers/xero/entities/invoice";
 import { ItemSyncer } from "../providers/xero/entities/item";
 import { PurchaseOrderSyncer } from "../providers/xero/entities/purchase-order";
-import type { AccountingEntityType, IEntitySyncer, SyncContext } from "./types";
+import type { IEntitySyncer, SyncContext } from "./types";
 
 export const SyncFactory = {
   /**
-   * Instantiates the correct Syncer class based on the Entity Type.
-   * @param type - The entity type string (e.g., 'customer', 'invoice')
-   * @param context - The execution context (DB connection, Provider, Config)
+   * Instantiates the correct Syncer class based on the Entity Type from context.
+   * @param context - The execution context (DB connection, Provider, Config, entityType)
    */
-  getSyncer(type: AccountingEntityType, context: SyncContext): IEntitySyncer {
-    switch (type) {
+  getSyncer(context: SyncContext): IEntitySyncer {
+    switch (context.entityType) {
       // Master Data
       case "vendor":
       case "customer":
         return new ContactSyncer(context);
       case "item":
         return new ItemSyncer(context);
-      case "employee":
-        return new EmployeeSyncer(context);
 
       // Transaction Data
       case "bill":
@@ -32,6 +28,8 @@ export const SyncFactory = {
         return new PurchaseOrderSyncer(context);
 
       // Not yet implemented
+      // case "employee":
+      //   Xero no longer supports the Employees API
       // case "payment":
       //   return new PaymentSyncer(context);
       // case "salesOrder":
@@ -41,7 +39,7 @@ export const SyncFactory = {
 
       default:
         throw new Error(
-          `No Syncer implementation found for entity type: ${type}`
+          `No Syncer implementation found for entity type: ${context.entityType}`
         );
     }
   }

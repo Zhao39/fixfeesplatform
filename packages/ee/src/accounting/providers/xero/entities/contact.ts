@@ -1,10 +1,7 @@
 import type { KyselyTx } from "@carbon/database/client";
-import { sql } from "kysely";
-import {
-  getAccountingEntity,
-  updateAccountingEntityExternalId
-} from "../../../core/service";
+import { createMappingService } from "../../../core/external-mapping";
 import { type Accounting, BaseEntitySyncer } from "../../../core/types";
+import { throwXeroApiError } from "../../../core/utils";
 import { parseDotnetDate, type Xero } from "../models";
 
 // Type for rows returned from customer/supplier queries with address joins
@@ -31,62 +28,56 @@ export class ContactSyncer extends BaseEntitySyncer<
   "UpdatedDateUTC"
 > {
   // =================================================================
-  // 1. ID MAPPING
+  // 1. ID MAPPING (Override to check both customer and supplier)
   // =================================================================
 
   async getRemoteId(localId: string): Promise<string | null> {
     // Try customer first
-    const customerLink = await getAccountingEntity(
-      this.database,
+    const customerMapping = await this.mappingService.getExternalId(
       "customer",
-      this.companyId,
-      this.provider.id,
-      { id: localId }
+      localId,
+      this.provider.id
     );
 
-    if (customerLink?.externalId?.xero?.id) {
-      return customerLink.externalId.xero.id;
+    if (customerMapping) {
+      return customerMapping;
     }
 
     // Try supplier
-    const supplierLink = await getAccountingEntity(
-      this.database,
+    const supplierMapping = await this.mappingService.getExternalId(
       "supplier",
-      this.companyId,
-      this.provider.id,
-      { id: localId }
+      localId,
+      this.provider.id
     );
 
-    return supplierLink?.externalId?.xero?.id ?? null;
+    return supplierMapping;
   }
 
   async getLocalId(remoteId: string): Promise<string | null> {
     // Check customer
-    const customerLink = await getAccountingEntity(
-      this.database,
-      "customer",
-      this.companyId,
+    const customerMapping = await this.mappingService.getEntityId(
       this.provider.id,
-      { externalId: remoteId }
+      remoteId,
+      "customer"
     );
-    if (customerLink) return customerLink.id;
+    if (customerMapping) return customerMapping;
 
     // Check supplier
-    const supplierLink = await getAccountingEntity(
-      this.database,
-      "supplier",
-      this.companyId,
+    const supplierMapping = await this.mappingService.getEntityId(
       this.provider.id,
-      { externalId: remoteId }
+      remoteId,
+      "supplier"
     );
-    return supplierLink?.id ?? null;
+    return supplierMapping;
   }
 
   protected async linkEntities(
     tx: KyselyTx,
     localId: string,
-    remoteId: string
+    remoteId: string,
+    remoteUpdatedAt?: Date
   ): Promise<void> {
+    // Determine if this is a customer or supplier
     const isCustomer = await tx
       .selectFrom("customer")
       .select("id")
@@ -94,12 +85,16 @@ export class ContactSyncer extends BaseEntitySyncer<
       .where("companyId", "=", this.companyId)
       .executeTakeFirst();
 
-    await updateAccountingEntityExternalId(
-      tx,
-      isCustomer ? "customer" : "supplier",
+    const entityType = isCustomer ? "customer" : "supplier";
+
+    // Create a mapping service with the transaction
+    const txMappingService = createMappingService(tx, this.companyId);
+    await txMappingService.link(
+      entityType,
       localId,
       this.provider.id,
-      remoteId
+      remoteId,
+      { remoteUpdatedAt }
     );
   }
 
@@ -414,32 +409,16 @@ export class ContactSyncer extends BaseEntitySyncer<
     const existingLocalId = await this.getLocalId(remoteId);
     const isVendor = data.isVendor && !data.isCustomer ? true : false;
 
-    const externalIdData = {
-      [this.provider.id]: {
-        id: remoteId,
-        provider: this.provider.id,
-        lastSyncedAt: new Date().toISOString()
-      }
-    };
-
     // 1. Upsert customer/supplier
     const entityId = await this.upsertEntity(
       tx,
       data,
       existingLocalId,
-      isVendor,
-      externalIdData
+      isVendor
     );
 
-    // 2. Upsert contact and link
-    await this.upsertContactAndLink(
-      tx,
-      data,
-      remoteId,
-      entityId,
-      isVendor,
-      externalIdData
-    );
+    // 2. Upsert contact and link to customer/supplier
+    await this.upsertContactAndLink(tx, data, remoteId, entityId, isVendor);
 
     return entityId;
   }
@@ -448,8 +427,7 @@ export class ContactSyncer extends BaseEntitySyncer<
     tx: KyselyTx,
     data: Partial<Accounting.Contact>,
     existingId: string | null,
-    isVendor: boolean,
-    externalIdData: Record<string, unknown>
+    isVendor: boolean
   ): Promise<string> {
     const table = isVendor ? "supplier" : "customer";
 
@@ -463,10 +441,7 @@ export class ContactSyncer extends BaseEntitySyncer<
           phone: data.workPhone,
           fax: data.fax,
           currencyCode: data.currencyCode,
-          updatedAt: new Date().toISOString(),
-          externalId: sql`COALESCE("externalId", '{}'::jsonb) || ${JSON.stringify(
-            externalIdData
-          )}::jsonb`
+          updatedAt: new Date().toISOString()
         })
         .where("id", "=", existingId)
         .execute();
@@ -484,8 +459,7 @@ export class ContactSyncer extends BaseEntitySyncer<
         fax: data.fax,
         currencyCode: data.currencyCode,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        externalId: externalIdData as any
+        updatedAt: new Date().toISOString()
       })
       .returning("id")
       .executeTakeFirstOrThrow();
@@ -498,27 +472,22 @@ export class ContactSyncer extends BaseEntitySyncer<
     data: Partial<Accounting.Contact>,
     remoteId: string,
     entityId: string,
-    isVendor: boolean,
-    externalIdData: Record<string, unknown>
+    isVendor: boolean
   ): Promise<void> {
     const junctionTable = isVendor ? "supplierContact" : "customerContact";
     const fkColumn = isVendor ? "supplierId" : "customerId";
 
-    // Try to find existing contact by externalId
-    const existingContact = await tx
-      .selectFrom("contact")
-      .select("id")
-      .where("companyId", "=", this.companyId)
-      .where(
-        sql.raw(`"externalId"->'${this.provider.id}'->>'id'`),
-        "=",
-        remoteId
-      )
-      .executeTakeFirst();
+    // Try to find existing contact by mapping table
+    const txMappingService = createMappingService(tx, this.companyId);
+    const existingContactId = await txMappingService.getEntityId(
+      this.provider.id,
+      remoteId,
+      "contact"
+    );
 
     let contactId: string;
 
-    if (existingContact) {
+    if (existingContactId) {
       // Update existing contact
       await tx
         .updateTable("contact")
@@ -529,14 +498,11 @@ export class ContactSyncer extends BaseEntitySyncer<
           workPhone: data.workPhone ?? null,
           mobilePhone: data.mobilePhone ?? null,
           homePhone: data.homePhone ?? null,
-          fax: data.fax ?? null,
-          externalId: sql`COALESCE("externalId", '{}'::jsonb) || ${JSON.stringify(
-            externalIdData
-          )}::jsonb`
+          fax: data.fax ?? null
         })
-        .where("id", "=", existingContact.id)
+        .where("id", "=", existingContactId)
         .execute();
-      contactId = existingContact.id;
+      contactId = existingContactId;
     } else {
       // Insert new contact
       const result = await tx
@@ -550,12 +516,19 @@ export class ContactSyncer extends BaseEntitySyncer<
           mobilePhone: data.mobilePhone ?? null,
           homePhone: data.homePhone ?? null,
           fax: data.fax ?? null,
-          isCustomer: !isVendor,
-          externalId: externalIdData as any
+          isCustomer: !isVendor
         })
         .returning("id")
         .executeTakeFirstOrThrow();
       contactId = result.id;
+
+      // Link the contact in the mapping table
+      await txMappingService.link(
+        "contact",
+        contactId,
+        this.provider.id,
+        remoteId
+      );
     }
 
     // Link contact to entity (upsert junction)
@@ -598,12 +571,16 @@ export class ContactSyncer extends BaseEntitySyncer<
       { body: JSON.stringify({ Contacts: contacts }) }
     );
 
-    if (result.error || !result.data?.Contacts?.[0]?.ContactID) {
+    if (result.error) {
+      throwXeroApiError(
+        existingRemoteId ? "update contact" : "create contact",
+        result
+      );
+    }
+
+    if (!result.data?.Contacts?.[0]?.ContactID) {
       throw new Error(
-        `Failed to ${existingRemoteId ? "update" : "create"} contact in Xero: ${
-          // @ts-expect-error
-          result.message ?? result.data ?? "Unknown error"
-        }`
+        "Xero API returned success but no ContactID was returned"
       );
     }
 
@@ -638,8 +615,14 @@ export class ContactSyncer extends BaseEntitySyncer<
       { body: JSON.stringify({ Contacts: contacts }) }
     );
 
-    if (response.error || !response.data?.Contacts) {
-      throw new Error(`Batch upsert failed: ${response.error}`);
+    if (response.error) {
+      throwXeroApiError("batch upsert contacts", response);
+    }
+
+    if (!response.data?.Contacts) {
+      throw new Error(
+        "Xero API returned success but no Contacts array was returned"
+      );
     }
 
     for (let i = 0; i < response.data.Contacts.length; i++) {

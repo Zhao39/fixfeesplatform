@@ -1,8 +1,11 @@
 import type { KyselyTx } from "@carbon/database/client";
-import { sql } from "kysely";
-import { getAccountingEntity } from "../../../core/service";
+import { createMappingService } from "../../../core/external-mapping";
 import { type Accounting, BaseEntitySyncer } from "../../../core/types";
+import { throwXeroApiError } from "../../../core/utils";
 import { parseDotnetDate, type Xero } from "../models";
+
+// Note: This syncer uses the default ID mapping from BaseEntitySyncer
+// which uses the externalIntegrationMapping table with entityType "bill"
 
 // Type for rows returned from purchaseInvoice queries
 type BillRow = {
@@ -82,79 +85,21 @@ export class BillSyncer extends BaseEntitySyncer<
   "UpdatedDateUTC"
 > {
   // =================================================================
-  // 1. ID MAPPING
+  // 1. ID MAPPING - Uses default implementation from BaseEntitySyncer
+  // The entityType "bill" maps to the purchaseInvoice table
   // =================================================================
 
-  /**
-   * Get the Xero InvoiceID for a local purchaseInvoice.
-   * We store the external ID in the customFields JSONB column since
-   * purchaseInvoice doesn't have a dedicated externalId column.
-   */
-  async getRemoteId(localId: string): Promise<string | null> {
-    const bill = await this.database
-      .selectFrom("purchaseInvoice")
-      .select(["id", "customFields"])
-      .where("id", "=", localId)
-      .where("companyId", "=", this.companyId)
-      .executeTakeFirst();
-
-    if (!bill?.customFields) return null;
-
-    const customFields = bill.customFields as Record<string, unknown>;
-    const externalIds = customFields?.externalIds as Record<
-      string,
-      { id?: string }
-    >;
-    return externalIds?.[this.provider.id]?.id ?? null;
-  }
-
-  /**
-   * Get the local purchaseInvoice ID for a Xero InvoiceID.
-   */
-  async getLocalId(remoteId: string): Promise<string | null> {
-    const bill = await this.database
-      .selectFrom("purchaseInvoice")
-      .select("id")
-      .where("companyId", "=", this.companyId)
-      .where(
-        sql`"customFields"->'externalIds'->${this.provider.id}->>'id'`,
-        "=",
-        remoteId
-      )
-      .executeTakeFirst();
-
-    return bill?.id ?? null;
-  }
-
-  /**
-   * Link a local purchaseInvoice to a Xero Invoice by storing the external ID
-   * in the customFields JSONB column.
-   */
   protected async linkEntities(
     tx: KyselyTx,
     localId: string,
-    remoteId: string
+    remoteId: string,
+    remoteUpdatedAt?: Date
   ): Promise<void> {
-    const externalIdData = {
-      externalIds: {
-        [this.provider.id]: {
-          id: remoteId,
-          provider: this.provider.id,
-          lastSyncedAt: new Date().toISOString()
-        }
-      }
-    };
-
-    await tx
-      .updateTable("purchaseInvoice")
-      .set({
-        customFields: sql`COALESCE("customFields", '{}'::jsonb) || ${JSON.stringify(
-          externalIdData
-        )}::jsonb`
-      })
-      .where("id", "=", localId)
-      .where("companyId", "=", this.companyId)
-      .execute();
+    // Use the mapping service to link bill -> purchaseInvoice
+    const txMappingService = createMappingService(tx, this.companyId);
+    await txMappingService.link("bill", localId, this.provider.id, remoteId, {
+      remoteUpdatedAt
+    });
   }
 
   // =================================================================
@@ -387,24 +332,14 @@ export class BillSyncer extends BaseEntitySyncer<
       local.lines.map(async (line) => {
         let itemCode = line.itemCode;
 
-        // If we have an itemId but no itemCode, try to get it from the synced item
+        // If we have an itemId but no itemCode, try to get it from the item table
         if (!itemCode && line.itemId) {
-          const itemLink = await getAccountingEntity(
-            this.database,
-            "item",
-            this.companyId,
-            this.provider.id,
-            { id: line.itemId }
-          );
-          if (itemLink) {
-            // Item is synced, get its code
-            const item = await this.database
-              .selectFrom("item")
-              .select("readableId")
-              .where("id", "=", line.itemId)
-              .executeTakeFirst();
-            itemCode = item?.readableId ?? null;
-          }
+          const item = await this.database
+            .selectFrom("item")
+            .select("readableId")
+            .where("id", "=", line.itemId)
+            .executeTakeFirst();
+          itemCode = item?.readableId ?? null;
         }
 
         return {
@@ -516,31 +451,19 @@ export class BillSyncer extends BaseEntitySyncer<
   ): Promise<string> {
     const existingLocalId = await this.getLocalId(remoteId);
 
-    // Resolve supplier from Xero ContactID
+    // Resolve supplier from Xero ContactID using mapping service
     let supplierId: string | null = null;
     if (data.supplierExternalId) {
-      const supplier = await getAccountingEntity(
-        tx,
-        "supplier",
-        this.companyId,
+      const txMappingService = createMappingService(tx, this.companyId);
+      supplierId = await txMappingService.getEntityId(
         this.provider.id,
-        { externalId: data.supplierExternalId }
+        data.supplierExternalId,
+        "supplier"
       );
-      supplierId = supplier?.id ?? null;
     }
 
-    const externalIdData = {
-      externalIds: {
-        [this.provider.id]: {
-          id: remoteId,
-          provider: this.provider.id,
-          lastSyncedAt: new Date().toISOString()
-        }
-      }
-    };
-
     if (existingLocalId) {
-      // Update existing purchase invoice
+      // Update existing purchase invoice (mapping is handled by linkEntities in base class)
       await tx
         .updateTable("purchaseInvoice")
         .set({
@@ -557,10 +480,7 @@ export class BillSyncer extends BaseEntitySyncer<
           totalAmount: data.totalAmount,
           balance: data.balance,
           supplierReference: data.supplierReference,
-          updatedAt: new Date().toISOString(),
-          customFields: sql`COALESCE("customFields", '{}'::jsonb) || ${JSON.stringify(
-            externalIdData
-          )}::jsonb`
+          updatedAt: new Date().toISOString()
         })
         .where("id", "=", existingLocalId)
         .where("companyId", "=", this.companyId)
@@ -669,20 +589,15 @@ export class BillSyncer extends BaseEntitySyncer<
     );
 
     if (result.error) {
-      const errorMessage =
-        (result as any).message ?? (result as any).data ?? "Unknown error";
-      throw new Error(
-        `Failed to ${
-          existingRemoteId ? "update" : "create"
-        } bill in Xero: ${errorMessage}`
+      throwXeroApiError(
+        existingRemoteId ? "update bill" : "create bill",
+        result
       );
     }
 
     if (!result.data?.Invoices?.[0]?.InvoiceID) {
       throw new Error(
-        `Failed to ${
-          existingRemoteId ? "update" : "create"
-        } bill in Xero: No invoice ID returned`
+        "Xero API returned success but no InvoiceID was returned for bill"
       );
     }
 
@@ -717,20 +632,18 @@ export class BillSyncer extends BaseEntitySyncer<
       { body: JSON.stringify({ Invoices: invoices }) }
     );
 
-    if (response.error || !response.data) {
+    if (response.error) {
+      throwXeroApiError("batch upsert bills", response);
+    }
+
+    if (!response.data?.Invoices) {
       throw new Error(
-        `Batch upsert failed: ${(response as any).message ?? "Unknown error"}`
+        "Xero API returned success but no Invoices array was returned for bills"
       );
     }
 
-    const returnedInvoices = (response.data as { Invoices: Xero.Invoice[] })
-      .Invoices;
-    if (!returnedInvoices) {
-      throw new Error(`Batch upsert failed: No invoices returned`);
-    }
-
-    for (let i = 0; i < returnedInvoices.length; i++) {
-      const returnedInvoice = returnedInvoices[i];
+    for (let i = 0; i < response.data.Invoices.length; i++) {
+      const returnedInvoice = response.data.Invoices[i];
       const localId = localIdOrder[i];
       if (returnedInvoice?.InvoiceID && localId) {
         result.set(localId, returnedInvoice.InvoiceID);

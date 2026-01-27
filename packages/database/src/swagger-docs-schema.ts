@@ -14110,6 +14110,9 @@ export default {
             $ref: "#/parameters/rowFilter.salesInvoice.updatedBy",
           },
           {
+            $ref: "#/parameters/rowFilter.salesInvoice.externalId",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -14271,6 +14274,9 @@ export default {
             $ref: "#/parameters/rowFilter.salesInvoice.updatedBy",
           },
           {
+            $ref: "#/parameters/rowFilter.salesInvoice.externalId",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -14384,6 +14390,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.salesInvoice.updatedBy",
+          },
+          {
+            $ref: "#/parameters/rowFilter.salesInvoice.externalId",
           },
           {
             $ref: "#/parameters/body.salesInvoice",
@@ -17938,6 +17947,9 @@ export default {
             $ref: "#/parameters/rowFilter.jobMakeMethod.version",
           },
           {
+            $ref: "#/parameters/rowFilter.jobMakeMethod.itemScrapPercentage",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -18042,6 +18054,9 @@ export default {
             $ref: "#/parameters/rowFilter.jobMakeMethod.version",
           },
           {
+            $ref: "#/parameters/rowFilter.jobMakeMethod.itemScrapPercentage",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -18098,6 +18113,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.jobMakeMethod.version",
+          },
+          {
+            $ref: "#/parameters/rowFilter.jobMakeMethod.itemScrapPercentage",
           },
           {
             $ref: "#/parameters/body.jobMakeMethod",
@@ -18961,6 +18979,213 @@ export default {
           },
         },
         tags: ["openJobMaterialLines"],
+      },
+    },
+    "/externalIntegrationMapping": {
+      get: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.entityType",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.entityId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.integration",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.externalId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.allowDuplicateExternalId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.metadata",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.lastSyncedAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.remoteUpdatedAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.createdAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.updatedAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.createdBy",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.companyId",
+          },
+          {
+            $ref: "#/parameters/select",
+          },
+          {
+            $ref: "#/parameters/order",
+          },
+          {
+            $ref: "#/parameters/range",
+          },
+          {
+            $ref: "#/parameters/rangeUnit",
+          },
+          {
+            $ref: "#/parameters/offset",
+          },
+          {
+            $ref: "#/parameters/limit",
+          },
+          {
+            $ref: "#/parameters/preferCount",
+          },
+        ],
+        responses: {
+          "200": {
+            description: "OK",
+            schema: {
+              items: {
+                $ref: "#/definitions/externalIntegrationMapping",
+              },
+              type: "array",
+            },
+          },
+          "206": {
+            description: "Partial Content",
+          },
+        },
+        tags: ["externalIntegrationMapping"],
+      },
+      post: {
+        parameters: [
+          {
+            $ref: "#/parameters/body.externalIntegrationMapping",
+          },
+          {
+            $ref: "#/parameters/select",
+          },
+          {
+            $ref: "#/parameters/preferPost",
+          },
+        ],
+        responses: {
+          "201": {
+            description: "Created",
+          },
+        },
+        tags: ["externalIntegrationMapping"],
+      },
+      delete: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.entityType",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.entityId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.integration",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.externalId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.allowDuplicateExternalId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.metadata",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.lastSyncedAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.remoteUpdatedAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.createdAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.updatedAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.createdBy",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.companyId",
+          },
+          {
+            $ref: "#/parameters/preferReturn",
+          },
+        ],
+        responses: {
+          "204": {
+            description: "No Content",
+          },
+        },
+        tags: ["externalIntegrationMapping"],
+      },
+      patch: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.entityType",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.entityId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.integration",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.externalId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.allowDuplicateExternalId",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.metadata",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.lastSyncedAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.remoteUpdatedAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.createdAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.updatedAt",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.createdBy",
+          },
+          {
+            $ref: "#/parameters/rowFilter.externalIntegrationMapping.companyId",
+          },
+          {
+            $ref: "#/parameters/body.externalIntegrationMapping",
+          },
+          {
+            $ref: "#/parameters/preferReturn",
+          },
+        ],
+        responses: {
+          "204": {
+            description: "No Content",
+          },
+        },
+        tags: ["externalIntegrationMapping"],
       },
     },
     "/sequence": {
@@ -28546,6 +28771,9 @@ export default {
             $ref: "#/parameters/rowFilter.jobOperation.conflictReason",
           },
           {
+            $ref: "#/parameters/rowFilter.jobOperation.targetQuantity",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -28731,6 +28959,9 @@ export default {
             $ref: "#/parameters/rowFilter.jobOperation.conflictReason",
           },
           {
+            $ref: "#/parameters/rowFilter.jobOperation.targetQuantity",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -28868,6 +29099,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.jobOperation.conflictReason",
+          },
+          {
+            $ref: "#/parameters/rowFilter.jobOperation.targetQuantity",
           },
           {
             $ref: "#/parameters/body.jobOperation",
@@ -44209,6 +44443,9 @@ export default {
             $ref: "#/parameters/rowFilter.jobMaterial.kit",
           },
           {
+            $ref: "#/parameters/rowFilter.jobMaterial.itemScrapPercentage",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -44349,6 +44586,9 @@ export default {
             $ref: "#/parameters/rowFilter.jobMaterial.kit",
           },
           {
+            $ref: "#/parameters/rowFilter.jobMaterial.itemScrapPercentage",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -44441,6 +44681,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.jobMaterial.kit",
+          },
+          {
+            $ref: "#/parameters/rowFilter.jobMaterial.itemScrapPercentage",
           },
           {
             $ref: "#/parameters/body.jobMaterial",
@@ -72075,6 +72318,9 @@ export default {
           format: "text",
           type: "string",
         },
+        externalId: {
+          format: "jsonb",
+        },
       },
       type: "object",
     },
@@ -73775,6 +74021,7 @@ export default {
         "requiresSerialTracking",
         "requiresBatchTracking",
         "version",
+        "itemScrapPercentage",
       ],
       properties: {
         id: {
@@ -73854,6 +74101,13 @@ export default {
         },
         version: {
           default: 1,
+          format: "numeric",
+          type: "number",
+        },
+        itemScrapPercentage: {
+          default: 0,
+          description:
+            "Scrap percentage from itemReplenishment at time of job creation",
           format: "numeric",
           type: "number",
         },
@@ -74369,6 +74623,82 @@ export default {
         },
         dueDate: {
           format: "date",
+          type: "string",
+        },
+      },
+      type: "object",
+    },
+    externalIntegrationMapping: {
+      required: [
+        "id",
+        "entityType",
+        "entityId",
+        "integration",
+        "externalId",
+        "allowDuplicateExternalId",
+        "createdAt",
+        "updatedAt",
+        "companyId",
+      ],
+      properties: {
+        id: {
+          default: "public.id()",
+          description: "Note:\nThis is a Primary Key.<pk/>",
+          format: "text",
+          type: "string",
+        },
+        entityType: {
+          format: "text",
+          type: "string",
+        },
+        entityId: {
+          format: "text",
+          type: "string",
+        },
+        integration: {
+          format: "text",
+          type: "string",
+        },
+        externalId: {
+          format: "text",
+          type: "string",
+        },
+        allowDuplicateExternalId: {
+          default: false,
+          format: "boolean",
+          type: "boolean",
+        },
+        metadata: {
+          format: "jsonb",
+        },
+        lastSyncedAt: {
+          format: "timestamp with time zone",
+          type: "string",
+        },
+        remoteUpdatedAt: {
+          format: "timestamp with time zone",
+          type: "string",
+        },
+        createdAt: {
+          default: "now()",
+          format: "timestamp with time zone",
+          type: "string",
+        },
+        updatedAt: {
+          default: "now()",
+          format: "timestamp with time zone",
+          type: "string",
+        },
+        createdBy: {
+          description:
+            "Note:\nThis is a Foreign Key to `user.id`.<fk table='user' column='id'/>",
+          format: "text",
+          type: "string",
+        },
+        companyId: {
+          description:
+            "Note:\nThis is a Foreign Key to `company.id`.<fk table='company' column='id'/>",
+          format: "text",
           type: "string",
         },
       },
@@ -78666,6 +78996,13 @@ export default {
           description: "Human-readable explanation of the scheduling conflict",
           format: "text",
           type: "string",
+        },
+        targetQuantity: {
+          default: 0,
+          description:
+            "The target quantity to produce before accounting for scrap (parent.estimatedQuantity * quantityPerParent)",
+          format: "numeric",
+          type: "number",
         },
       },
       type: "object",
@@ -86007,6 +86344,7 @@ export default {
         "requiresSerialTracking",
         "requiresBatchTracking",
         "kit",
+        "itemScrapPercentage",
       ],
       properties: {
         id: {
@@ -86147,6 +86485,13 @@ export default {
           default: false,
           format: "boolean",
           type: "boolean",
+        },
+        itemScrapPercentage: {
+          default: 0,
+          description:
+            "Scrap percentage from itemReplenishment at time of job creation",
+          format: "numeric",
+          type: "number",
         },
       },
       type: "object",
@@ -101921,6 +102266,12 @@ export default {
       in: "query",
       type: "string",
     },
+    "rowFilter.salesInvoice.externalId": {
+      name: "externalId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
     "body.customFieldTable": {
       name: "customFieldTable",
       description: "customFieldTable",
@@ -103898,6 +104249,14 @@ export default {
       in: "query",
       type: "string",
     },
+    "rowFilter.jobMakeMethod.itemScrapPercentage": {
+      name: "itemScrapPercentage",
+      description:
+        "Scrap percentage from itemReplenishment at time of job creation",
+      required: false,
+      in: "query",
+      type: "string",
+    },
     "body.salesRfqLine": {
       name: "salesRfqLine",
       description: "salesRfqLine",
@@ -104497,6 +104856,93 @@ export default {
     },
     "rowFilter.openJobMaterialLines.dueDate": {
       name: "dueDate",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "body.externalIntegrationMapping": {
+      name: "externalIntegrationMapping",
+      description: "externalIntegrationMapping",
+      required: false,
+      in: "body",
+      schema: {
+        $ref: "#/definitions/externalIntegrationMapping",
+      },
+    },
+    "rowFilter.externalIntegrationMapping.id": {
+      name: "id",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.externalIntegrationMapping.entityType": {
+      name: "entityType",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.externalIntegrationMapping.entityId": {
+      name: "entityId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.externalIntegrationMapping.integration": {
+      name: "integration",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.externalIntegrationMapping.externalId": {
+      name: "externalId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.externalIntegrationMapping.allowDuplicateExternalId": {
+      name: "allowDuplicateExternalId",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.externalIntegrationMapping.metadata": {
+      name: "metadata",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.externalIntegrationMapping.lastSyncedAt": {
+      name: "lastSyncedAt",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.externalIntegrationMapping.remoteUpdatedAt": {
+      name: "remoteUpdatedAt",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.externalIntegrationMapping.createdAt": {
+      name: "createdAt",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.externalIntegrationMapping.updatedAt": {
+      name: "updatedAt",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.externalIntegrationMapping.createdBy": {
+      name: "createdBy",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.externalIntegrationMapping.companyId": {
+      name: "companyId",
       required: false,
       in: "query",
       type: "string",
@@ -109256,6 +109702,14 @@ export default {
     "rowFilter.jobOperation.conflictReason": {
       name: "conflictReason",
       description: "Human-readable explanation of the scheduling conflict",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.jobOperation.targetQuantity": {
+      name: "targetQuantity",
+      description:
+        "The target quantity to produce before accounting for scrap (parent.estimatedQuantity * quantityPerParent)",
       required: false,
       in: "query",
       type: "string",
@@ -117804,6 +118258,14 @@ export default {
     },
     "rowFilter.jobMaterial.kit": {
       name: "kit",
+      required: false,
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.jobMaterial.itemScrapPercentage": {
+      name: "itemScrapPercentage",
+      description:
+        "Scrap percentage from itemReplenishment at time of job creation",
       required: false,
       in: "query",
       type: "string",

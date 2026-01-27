@@ -37,14 +37,14 @@ export const syncExternalAccountingTask = task({
     const integration = await getAccountingIntegration(
       client,
       payload.companyId,
-      payload.provider,
+      payload.provider
     );
 
     const provider = getProviderIntegration(
       client,
       payload.companyId,
       integration.id,
-      integration.metadata,
+      integration.metadata
     );
 
     const pool = getPostgresConnectionPool(10);
@@ -63,14 +63,15 @@ export const syncExternalAccountingTask = task({
 
         try {
           logger.info(
-            `Starting sync for ${entities.length} ${entityType} entities`,
+            `Starting sync for ${entities.length} ${entityType} entities`
           );
 
-          const syncer = SyncFactory.getSyncer(type, {
+          const syncer = SyncFactory.getSyncer({
             database: kysely,
             companyId: payload.companyId,
             provider,
             config: provider.getSyncConfig(type),
+            entityType: type,
           });
 
           if (entities.length === 0) {
@@ -80,17 +81,17 @@ export const syncExternalAccountingTask = task({
 
           if (input.syncDirection === "push-to-accounting") {
             const result = await syncer.pushBatchToAccounting(
-              entities.map((e) => e.entityId),
+              entities.map((e) => e.entityId)
             );
 
             logger.info("Sync result:", { entityType, result });
 
             results.success.push(result);
           }
-          
+
           if (input.syncDirection === "pull-from-accounting") {
             const result = await syncer.pullBatchFromAccounting(
-              entities.map((e) => e.entityId),
+              entities.map((e) => e.entityId)
             );
 
             logger.info("Sync result:", { entityType, result });

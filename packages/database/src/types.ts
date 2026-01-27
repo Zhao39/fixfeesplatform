@@ -6651,6 +6651,118 @@ export type Database = {
           },
         ]
       }
+      externalIntegrationMapping: {
+        Row: {
+          allowDuplicateExternalId: boolean
+          companyId: string
+          createdAt: string
+          createdBy: string | null
+          entityId: string
+          entityType: string
+          externalId: string
+          id: string
+          integration: string
+          lastSyncedAt: string | null
+          metadata: Json | null
+          remoteUpdatedAt: string | null
+          updatedAt: string
+        }
+        Insert: {
+          allowDuplicateExternalId?: boolean
+          companyId: string
+          createdAt?: string
+          createdBy?: string | null
+          entityId: string
+          entityType: string
+          externalId: string
+          id?: string
+          integration: string
+          lastSyncedAt?: string | null
+          metadata?: Json | null
+          remoteUpdatedAt?: string | null
+          updatedAt?: string
+        }
+        Update: {
+          allowDuplicateExternalId?: boolean
+          companyId?: string
+          createdAt?: string
+          createdBy?: string | null
+          entityId?: string
+          entityType?: string
+          externalId?: string
+          id?: string
+          integration?: string
+          lastSyncedAt?: string | null
+          metadata?: Json | null
+          remoteUpdatedAt?: string | null
+          updatedAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "externalIntegrationMapping_companyId_fkey"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "externalIntegrationMapping_companyId_fkey"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "externalIntegrationMapping_companyId_fkey"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "customFieldTables"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "externalIntegrationMapping_companyId_fkey"
+            columns: ["companyId"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["companyId"]
+          },
+          {
+            foreignKeyName: "externalIntegrationMapping_createdBy_fkey"
+            columns: ["createdBy"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "externalIntegrationMapping_createdBy_fkey"
+            columns: ["createdBy"]
+            isOneToOne: false
+            referencedRelation: "employeesAcrossCompanies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "externalIntegrationMapping_createdBy_fkey"
+            columns: ["createdBy"]
+            isOneToOne: false
+            referencedRelation: "employeeSummary"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "externalIntegrationMapping_createdBy_fkey"
+            columns: ["createdBy"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "externalIntegrationMapping_createdBy_fkey"
+            columns: ["createdBy"]
+            isOneToOne: false
+            referencedRelation: "userDefaults"
+            referencedColumns: ["userId"]
+          },
+        ]
+      }
       externalLink: {
         Row: {
           companyId: string
@@ -28615,6 +28727,7 @@ export type Database = {
           datePaid: string | null
           exchangeRate: number
           exchangeRateUpdatedAt: string | null
+          externalId: Json | null
           externalNotes: Json
           id: string
           internalNotes: Json
@@ -28651,6 +28764,7 @@ export type Database = {
           datePaid?: string | null
           exchangeRate?: number
           exchangeRateUpdatedAt?: string | null
+          externalId?: Json | null
           externalNotes?: Json
           id?: string
           internalNotes?: Json
@@ -28687,6 +28801,7 @@ export type Database = {
           datePaid?: string | null
           exchangeRate?: number
           exchangeRateUpdatedAt?: string | null
+          externalId?: Json | null
           externalNotes?: Json
           id?: string
           internalNotes?: Json
@@ -31404,48 +31519,6 @@ export type Database = {
             referencedColumns: ["userId"]
           },
         ]
-      }
-      searchIndex_7XFgHYBbyiscTuvDxncdhj: {
-        Row: {
-          createdAt: string
-          description: string | null
-          entityId: string
-          entityType: string
-          id: number
-          link: string
-          metadata: Json | null
-          searchVector: unknown
-          tags: string[] | null
-          title: string
-          updatedAt: string | null
-        }
-        Insert: {
-          createdAt?: string
-          description?: string | null
-          entityId: string
-          entityType: string
-          id?: number
-          link: string
-          metadata?: Json | null
-          searchVector?: unknown
-          tags?: string[] | null
-          title: string
-          updatedAt?: string | null
-        }
-        Update: {
-          createdAt?: string
-          description?: string | null
-          entityId?: string
-          entityType?: string
-          id?: number
-          link?: string
-          metadata?: Json | null
-          searchVector?: unknown
-          tags?: string[] | null
-          title?: string
-          updatedAt?: string | null
-        }
-        Relationships: []
       }
       searchIndexRegistry: {
         Row: {
@@ -45517,14 +45590,14 @@ export type Database = {
           },
           {
             foreignKeyName: "partner_id_fkey"
-            columns: ["supplierLocationId"]
+            columns: ["id"]
             isOneToOne: false
             referencedRelation: "supplierLocation"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "partner_id_fkey"
-            columns: ["id"]
+            columns: ["supplierLocationId"]
             isOneToOne: false
             referencedRelation: "supplierLocation"
             referencedColumns: ["id"]
@@ -53481,7 +53554,6 @@ export type Database = {
           quantityScrapped: number
           setupTime: number
           setupUnit: Database["public"]["Enums"]["factor"]
-          targetQuantity: number
           workCenterId: string
         }[]
       }

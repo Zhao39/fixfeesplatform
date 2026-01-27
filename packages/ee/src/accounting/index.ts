@@ -1,3 +1,4 @@
+export * from "./core/external-mapping";
 export * from "./core/models";
 export * from "./core/service";
 export * from "./core/sync";

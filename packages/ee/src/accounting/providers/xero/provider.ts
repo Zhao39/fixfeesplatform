@@ -14,6 +14,7 @@ export interface ListContactsOptions {
   page?: number;
   modifiedSince?: Date;
   includeArchived?: boolean;
+  summaryOnly?: boolean;
 }
 
 export interface ListContactsResponse {
@@ -157,6 +158,10 @@ export class XeroProvider implements BaseProvider {
     const page = options?.page ?? 1;
     const params = new URLSearchParams();
     params.set("page", String(page));
+
+    if (options?.summaryOnly) {
+      params.set("summarizeErrors", "true");
+    }
 
     if (options?.includeArchived) {
       params.set("includeArchived", "true");
