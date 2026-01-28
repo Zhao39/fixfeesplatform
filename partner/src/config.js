@@ -5,28 +5,28 @@ export const facebookColor = '#3b5998';
 export const linkedInColor = '#0e76a8';
 
 export const FIREBASE_API = {
-  apiKey: 'AIzaSyC74w_JCigORyepa_esLkPt-B3HgtI_X3o',
-  authDomain: 'mantis-4040b.firebaseapp.com',
-  projectId: 'mantis-4040b',
-  storageBucket: 'mantis-4040b.appspot.com',
-  messagingSenderId: '1073498457348',
-  appId: '1:1073498457348:web:268210e18c8f2cab30fc51',
-  measurementId: 'G-7SP8EXFS48'
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY || '',
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || '',
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || '',
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET || '',
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID || '',
+  appId: process.env.REACT_APP_FIREBASE_APP_ID || '',
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID || ''
 };
 
 export const AWS_API = {
-  poolId: 'us-east-1_AOfOTXLvD',
-  appClientId: '3eau2osduslvb7vks3vsh9t7b0'
+  poolId: process.env.REACT_APP_AWS_POOL_ID || '',
+  appClientId: process.env.REACT_APP_AWS_APP_CLIENT_ID || ''
 };
 
 export const JWT_API = {
-  secret: 'SECRET-KEY',
-  timeout: '1 days'
+  secret: process.env.REACT_APP_JWT_SECRET || '',
+  timeout: process.env.REACT_APP_JWT_TIMEOUT || '1 days'
 };
 
 export const AUTH0_API = {
-  client_id: '7T4IlWis4DKHSbG8JAye4Ipk0rvXkH9V',
-  domain: 'dev-w0-vxep3.us.auth0.com'
+  client_id: process.env.REACT_APP_AUTH0_CLIENT_ID || '',
+  domain: process.env.REACT_APP_AUTH0_DOMAIN || ''
 };
 
 // ==============================|| THEME CONFIG  ||============================== //
