@@ -1,0 +1,30 @@
+.vimeo-iframe {
+    height: 450px;
+    width: 800px;
+}
+
+.card-table-image-container {
+    width: 66px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    border-radius: 4px;
+    border: 1px solid #dcdce3;
+}
+
+.card-table-str-container {
+    width: 66px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    border: 1px solid #dcdce3;
+}
+
+.card-table-img {
+    width: 42px;
+    height: auto;
+}

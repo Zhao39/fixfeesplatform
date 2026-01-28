@@ -1,0 +1,32 @@
+@media (max-width: 991px){
+    .t-show-desktop{
+        display: none !important;
+    }
+    .m-text-center{
+        text-align: center !important;
+    }
+    .m-text-left{
+        text-align: left !important;
+    }
+    .m-text-right{
+        text-align: right !important;
+    }
+    .user-page .t-show-desktop{
+        display: none !important;
+    }
+    .user-page .m-text-center{
+        text-align: center !important;
+    }
+    .user-page .m-text-left{
+        text-align: left !important;
+    }
+    .user-page .m-text-right{
+        text-align: right !important;
+    }
+    .vimeo-iframe {
+        height: 43vw;
+        width: 78vw;
+    }
+}
+
+

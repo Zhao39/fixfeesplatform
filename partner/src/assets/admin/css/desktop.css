@@ -1,0 +1,6 @@
+@media (min-width: 992px){
+    .t-show-mobile{
+        display: none !important;
+    }
+
+}

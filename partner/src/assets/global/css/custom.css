@@ -1,0 +1,320 @@
+.a-btn {
+    cursor: pointer;
+}
+
+.overflow-hidden {
+    overflow: hidden;
+}
+
+/* WebKit and Opera browsers */
+@-webkit-keyframes spinner {
+    from {
+        -webkit-transform: rotateY(0deg);
+    }
+
+    to {
+        -webkit-transform: rotateY(-360deg);
+    }
+}
+
+/* all other browsers */
+@keyframes spinner {
+    from {
+        -moz-transform: rotateY(0deg);
+        -ms-transform: rotateY(0deg);
+        transform: rotateY(0deg);
+    }
+
+    to {
+        -moz-transform: rotateY(-360deg);
+        -ms-transform: rotateY(-360deg);
+        transform: rotateY(-360deg);
+    }
+}
+
+#stage {
+    -webkit-perspective: 1200px;
+    -moz-perspective: 1200px;
+    -ms-perspective: 1200px;
+    perspective: 1200px;
+}
+
+#spinner {
+    -webkit-animation-name: spinner;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-duration: 2s;
+
+    animation-name: spinner;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-duration: 2s;
+
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    -ms-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+}
+
+/* #spinner:hover {
+    -webkit-animation-play-state: paused;
+    animation-play-state: paused;
+} */
+
+body .react-table-container.loading:after {
+    content: 'Loading...';
+    display: flex;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.15rem;
+}
+
+.opacity-0 {
+    opacity: 0;
+}
+
+.fadeOut {
+    opacity: 0;
+    transition: all ease-in-out 0.5s;
+}
+
+.fadeIn {
+    opacity: 1;
+    transition: all ease-in-out 0.5s;
+}
+
+
+/* custom button style */
+.my-custom-btn-1 {
+    background-color: #099301
+}
+
+.admin-layout,
+.user-layout {
+    min-height: 100vh;
+}
+
+.common-layout {
+    min-height: 100vh;
+}
+
+body .smooth-dnd-ghost {
+    z-index: 9999999 !important;
+}
+
+body .custom-td-footer {
+    text-transform: none;
+    font-size: 0.85rem;
+}
+
+body table .resizer {
+    display: inline-block;
+    /* background: #c1c1c1; */
+    width: 4px;
+    position: absolute;
+    right: 0;
+    top: 10px;
+    bottom: 10px;
+    transform: translateX(50%);
+    z-index: 1;
+    border-radius: 4px;
+    overflow: hidden;
+    /* prevent scroll on touch devices */
+    touch-action: none;
+}
+
+body table .isResizing {
+    /* background: #c1c1c1; */
+}
+
+body .tableColumnDescTooltipContainer {
+    padding: 8px;
+}
+
+body .tableColumnDescTooltipTitle {}
+
+body .tableColumnDescTooltipText {
+    white-space: break-spaces !important;
+    word-break: break-word !important;
+    margin-top: 8px;
+    margin-bottom: 4px;
+}
+
+body .textNonTransform {
+    text-transform: none !important;
+}
+
+.table-loading-skelton-container {
+    width: 100%;
+    text-align: left;
+}
+
+.table-loading-skelton {
+    font-size: 16px;
+}
+
+.three-dot-loading {
+    display: inline-block;
+    /* font-size: 30px; */
+    font-family: monospace;
+    clip-path: inset(0 3ch 0 0);
+    animation: three_dot_loading 1s steps(4) infinite;
+    -webkit-animation: three_dot_loading 1s steps(4) infinite;
+}
+
+@keyframes three_dot_loading {
+    to {
+        clip-path: inset(0 -1ch 0 0)
+    }
+}
+
+@-webkit-keyframes three_dot_loading {
+    to {
+        clip-path: inset(0 -1ch 0 0)
+    }
+}
+
+.skicky-table-container {
+    width: 100%;
+    overflow-x: auto;
+    max-height: 500px;
+}
+
+.skicky-table-container table {
+    border-collapse: separate !important
+}
+
+.skicky-table-container table thead {
+    position: sticky !important;
+    top: 0;
+    z-index: 1;
+}
+
+.skicky-table-container table tfoot {
+    position: sticky !important;
+    bottom: 0;
+    z-index: 1;
+}
+
+.ad-thumbnail-img-wrapper {
+    width: 40px;
+    height: 40px;
+    position: relative;
+    cursor: pointer;
+}
+
+.ad-thumbnail-img {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    object-fit: cover;
+    object-position: center;
+    transition: all .25s;
+    cursor: pointer;
+}
+
+.ad-thumbnail-img:hover {
+    transform: scale(1.4);
+}
+
+body .ReactModal__Overlay {
+    z-index: 9999 !important;
+}
+
+body .coming_soon {
+    opacity: 0.38 !important;
+    -webkit-tap-highlight-color: transparent !important;
+    background-color: transparent !important;
+}
+
+.top-banner-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    z-index: 1202;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: rgb(166, 29, 36);
+}
+
+.active-banner-layout .MuiAppBar-root {
+    top: 60px;
+}
+
+.active-banner-layout .MuiDrawer-paper {
+    top: 60px;
+}
+
+.active-banner-layout .router-page-wrapper {
+    padding-top: 60px;
+}
+
+.active-banner-layout .router-page-wrapper .router-page-wrapper {
+    padding-top: 0px;
+}
+
+.no-banner-layout .top-banner-container {
+    display: none !important;
+}
+
+.top-banner-container .top-banner-box {
+    color: #ffffff;
+    width: 100%;
+    text-align: center;
+    font-size: 1rem;
+    padding: 0 16px;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+body .btn-main {
+    background: linear-gradient(90deg, #3BC734 0%, #088E01 80%);
+    filter: drop-shadow(0px 2px 5px #3BC734);
+    background-color: #37ca37;
+    transition: all .35s;
+}
+
+body .btn-main:hover {
+    filter: drop-shadow(0px 2px 10px #3BC734);
+}
+
+body .MuiButton-sizeXlarge {
+    font-size: 1.2rem;
+    line-height: 1.75;
+    min-width: 64px;
+    padding: 12px 30px;
+    border-radius: 6px;
+    font-weight: 700;
+}
+
+.react-code-input input::-webkit-outer-spin-button,
+.react-code-input input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+.react-code-input input[type=number] {
+    -moz-appearance: textfield;
+}
+
+body .MuiStepLabel-iconContainer svg {
+    /* width: 2.2rem;
+    height: 2.2rem; */
+}
+
+body .MuiStepConnector-horizontal {
+    top: 18px;
+}

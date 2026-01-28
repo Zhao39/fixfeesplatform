@@ -1,368 +1,659 @@
-<p align="center">
-   <a href="https://carbon.ms">
-      <img width="auto" height="100" alt="Carbon Logo" src="https://github.com/user-attachments/assets/86a5e583-adac-4bf9-8192-508a0adf2308" />
-   </a>
-</p>
+# FixFeesPlatform
 
-<p align="center">
-    The operating system for manufacturing
-    <br />
-    <br />
-    <a href="https://discord.gg/yGUJWhNqzy">Discord</a>
-    ·
-    <a href="https://carbon.ms">Website</a>
-    ·
-    <a href="https://docs.carbon.ms">Documentation</a>
-  </p>
-</p>
-<p align="center">
-  <img src="https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase" />
-  <img src="https://img.shields.io/badge/Typescript-1a67f3?style=for-the-badge&logo=react&logoColor=white" alt="Typescript" />
-  <img src="https://img.shields.io/badge/React-23272F?style=for-the-badge&logo=react&logoColor=white" alt="React" />
-</p>
+<div align="center">
 
-![ERP Screenshot](https://github.com/user-attachments/assets/2e09b891-d5e2-4f68-b924-a1c8ea42d24d)
+**A comprehensive multi-tenant SaaS platform for merchant payment processing fee management**
 
-![MES Screenshot](https://github.com/user-attachments/assets/b04f3644-91aa-4f74-af8d-6f3e12116a6b)
+[![License](https://img.shields.io/badge/license-Proprietary-red.svg)](LICENSE)
+[![Node.js](https://img.shields.io/badge/node-%3E%3D14.17.0-brightgreen.svg)](https://nodejs.org/)
+[![React](https://img.shields.io/badge/react-18.2.0-blue.svg)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/typescript-4.9.5-blue.svg)](https://www.typescriptlang.org/)
 
-## Does the world need another ERP?
+[Live Partner Portal](https://partners.fixmyfees.com/) • [Live Merchant Portal](https://merchants.fixmyfees.com/)
 
-We built Carbon after years of building end-to-end manufacturing systems with off-the-shelf solutions. We realized that:
+</div>
 
-- Modern, API-first tooling didn't exist
-- Vendor lock-in bordered on extortion
-- There is no "perfect ERP" because each company is unique
+---
 
-We built Carbon to solve these problems ☝️
+## 📋 Table of Contents
 
-## Architecture
+- [About](#about)
+- [Company Information](#company-information)
+- [Platform Overview](#platform-overview)
+- [Architecture](#architecture)
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+- [Environment Configuration](#environment-configuration)
+- [API Documentation](#api-documentation)
+- [Deployment](#deployment)
+- [Security](#security)
+- [Improvement Suggestions](#improvement-suggestions)
+- [Contributing](#contributing)
+- [License](#license)
 
-Carbon is designed to make it easy for you to extend the platform by building your own apps through our API. We provide some examples to get you started in the [examples](https://github.com/crbnos/carbon/blob/main/examples) folder.
+---
 
-![Carbon Functonality](https://github.com/user-attachments/assets/150c3025-ddcb-4ae4-b7b4-27c670d6cb81)
+## 🏢 About
 
-![Carbon Architecture](https://github.com/user-attachments/assets/3674b2d0-28c7-415f-a8ea-4d8c796337eb)
+**Fix My Fees LLC** is a payment processing company focused on providing transparent, low-cost merchant processing services. The platform helps businesses reduce their payment processing fees through comprehensive statement audits and integration with wholesale-rate processors.
 
-Features:
+### Key Value Propositions
 
-- [x] ERP
-- [x] MES
-- [x] QMS
-- [x] Custom Fields
-- [x] Nested BoM
-- [x] Traceability
-- [x] MRP
-- [x] Configurator
-- [x] MCP Client/Server
-- [x] API
-- [x] Webhooks
-- [ ] Accounting
-- [ ] Capacity Planning
-- [ ] Simulation
-- [ ] [Full Roadmap](https://github.com/orgs/crbnos/projects/1/views/1)
+- **Transparent Pricing**: No "bait and switch" pricing - rates are guaranteed for the lifetime of your account
+- **Wholesale Rates**: Interchange Plus pricing model with no long-term contracts
+- **Proven Track Record**: Over 10,000 businesses onboarded
+- **Month-to-Month Agreements**: Flexible merchant agreements with no long-term commitments
+- **PCI Compliance Support**: $250,000 breach protection included
 
-Technical highlights:
+---
 
-- [x] Unified auth and permissions across apps
-- [x] Full-stack type safety (Database → UI)
-- [x] Realtime database subscriptions
-- [x] Attribute-based access control (ABAC)
-- [x] Role-based access control (Customer, Supplier, Employee)
-- [x] Row-level security (RLS)
-- [x] Composable user groups
-- [x] Dependency graph for operations
-- [x] Third-party integrations
+## 🏛️ Company Information
 
-## Techstack
+- **Company Name**: Fix My Fees LLC
+- **Partner Portal**: [https://partners.fixmyfees.com/](https://partners.fixmyfees.com/)
+- **Merchant Portal**: [https://merchants.fixmyfees.com/](https://merchants.fixmyfees.com/)
 
-- [React Router](https://reactrouter.com) – framework
-- [Typescript](https://www.typescriptlang.org/) – language
-- [Tailwind](https://tailwindcss.com) – styling
-- [Radix UI](https://radix-ui.com) - behavior
-- [Supabase](https://supabase.com) - database
-- [Supabase](https://supabase.com) – auth
-- [Upstash](https://upstash.com) - cache
-- [Trigger](https://trigger.dev) - jobs
-- [Resend](https://resend.com) – email
-- [Novu](https://novu.co) – notifications
-- [Vercel](https://vercel.com) – hosting
-- [Stripe](https://stripe.com) - billing
+---
 
-## Codebase
+## 🎯 Platform Overview
 
-The monorepo follows the Turborepo convention of grouping packages into one of two folders.
+FixFeesPlatform is a multi-tenant SaaS platform consisting of three main applications:
 
-1. `/apps` for applications
-2. `/packages` for shared code
+1. **Partner Portal** (`partner/`) - Affiliate/referral management system for brand partners
+2. **Merchant Portal** (`business/`) - Merchant onboarding and management system
+3. **Backend API** (`backend/`) - RESTful API and real-time services
 
-### `/apps`
+### How It Works
 
-| Package Name | Description     | Local Command         |
-| ------------ | --------------- | --------------------- |
-| `erp`        | ERP Application | `npm run dev`         |
-| `mes`        | MES             | `npm run dev:mes`     |
-| `academy`    | Academy         | `npm run dev:academy` |
-| `starter`    | Starter         | `npm run dev:starter` |
+1. **Submit & Save**: Merchants submit their application and 3 months of merchant statements
+2. **Comprehensive Audit**: System analyzes statements to identify potential savings
+3. **Savings Call**: Account representatives present analysis and answer questions
+4. **Integration**: Seamless transition to FixFeesPlatform processors (24-48 hours)
+5. **Ongoing Management**: Fixed fees with no rate increases
 
-### `/packages`
+---
 
-| Package Name        | Description                                                             |
-| ------------------- | ----------------------------------------------------------------------- |
-| `@carbon/database`  | Database schema, migrations and types                                   |
-| `@carbon/documents` | Transactional PDFs and email templates                                  |
-| `@carbon/ee`        | Integration definitions and configurations                              |
-| `@carbon/jest`      | Jest preset configuration shared across apps and packages               |
-| `@carbon/jobs`      | Background jobs and workers                                             |
-| `@carbon/logger`    | Shared logger used across apps                                          |
-| `@carbon/react`     | Shared web-based UI components                                          |
-| `@carbon/kv`        | Redis cache client                                                      |
-| `@carbon/lib`       | Third-party client libraries (slack, resend)                            |
-| `@carbon/stripe`    | Stripe integration                                                      |
-| `@carbon/tsconfig`  | Shared, extendable tsconfig configuration used across apps and packages |
-| `@carbon/utils`     | Shared utility functions used across apps and packages                  |
+## 🏗️ Architecture
 
-## Development
+### Backend Architecture
 
-### Setup
+```
+┌─────────────────────────────────────────┐
+│         Express.js Server               │
+│  (HTTP/HTTPS with Socket.IO)            │
+├─────────────────────────────────────────┤
+│  Controllers → Services → Database      │
+│  (MVC Pattern)                          │
+├─────────────────────────────────────────┤
+│  • RESTful API Endpoints                │
+│  • Real-time Socket.IO Events          │
+│  • Background Cron Jobs                  │
+│  • File Upload (AWS S3)                 │
+└─────────────────────────────────────────┘
+              │
+              ▼
+┌─────────────────────────────────────────┐
+│         MySQL Database                   │
+│  (Connection Pooling)                   │
+└─────────────────────────────────────────┘
+```
 
-1. Clone the repo into a public GitHub repository (or fork https://github.com/crbnos/carbon/fork). If want to make the repo private, you should [acquire a commercial license](https://carbon.ms/sales) to comply with the AGPL license.
+### Frontend Architecture
 
-   ```sh
-   git clone https://github.com/crbnos/carbon.git
-   ```
+```
+┌─────────────────────────────────────────┐
+│      React 18 Applications               │
+│  (Material-UI + Redux Toolkit)          │
+├─────────────────────────────────────────┤
+│  • Component-Based Architecture         │
+│  • State Management (Redux)             │
+│  • Real-time Updates (Socket.IO)        │
+│  • Form Validation (Formik + Yup)       │
+└─────────────────────────────────────────┘
+```
 
-2. Go to the project folder
+---
 
-   ```sh
-   cd carbon
-   ```
+## ✨ Features
 
-Make sure that you have [Docker installed](https://docs.docker.com/desktop/install/mac-install/) on your system since this monorepo uses the Docker for local development.
+### 🔐 Authentication & Security
 
-In addition you must configure the following external services:
+- JWT-based authentication
+- Two-factor authentication (2FA)
+- Email verification system
+- Password reset functionality
+- KYC document verification
+- PCI compliance support
+- Token expiration (15 minutes)
 
-| Service     | Purpose                    | URL                                                                    |
-| ----------- | -------------------------- | ---------------------------------------------------------------------- |
-| Upstash     | Serverless Redis           | [https://console.upstash.com/login](https://console.upstash.com/login) |
-| Trigger.dev | Job runner                 | [https://cloud.trigger.dev/login](https://cloud.trigger.dev/login)     |
-| Posthog     | Product analytics platform | [https://us.posthog.com/signup](https://us.posthog.com/signup)         |
+### 👥 User Management
 
-Each of these services has a free tier which should be plenty to support local development. If you're self hosting, and you don't want to use Upstash or Posthog, it's pretty easy to replace upstash with a redis container in `@carbon/kv` and remove the Posthog analytics.
+- **Partner Users**: Affiliate/referral partners with commission tracking
+- **Merchant Users**: Business owners managing their payment processing
+- **Admin Users**: Platform administrators
+- **Business Admins**: Business-specific administrators
+
+### 💰 Financial Features
+
+- **Transaction Management**: Complete transaction history and reporting
+- **Payment Processing**: NMI (Network Merchants Inc.) integration
+- **Membership Subscriptions**: 
+  - Monthly: $19.97/month
+  - Yearly: $200/year
+- **License Management**: Trial licenses ($1 for 7 days)
+- **Coupon System**: Discount codes and promotional offers
+- **Invoice Generation**: Automated invoice creation and download
+- **Withdrawal Management**: Minimum $20 withdrawal requests
+
+### 🤝 Partner/Affiliate System
+
+- **Referral Tracking**: Track merchant and partner referrals
+- **Commission Management**: 
+  - Referral fees (10% default)
+  - Reward funds
+  - Residual income tracking
+- **Rank System**: Silver, Gold, Platinum tiers
+- **Tier System**: Tier 1-4 classification
+- **Performance Dashboards**: Real-time analytics and reporting
+- **Lead Management**: 
+  - Merchant prospects
+  - Partner prospects
+  - Daily limit: 1000 prospects
+- **Wallet System**: Track earnings and request withdrawals
+
+### 🏪 Merchant Management
+
+- **Onboarding Workflow**: 
+  - Prospects → Onboarding → Underwriting → Install → Active → Closed
+- **Residual Reports**: Detailed merchant residual profit analysis
+- **Document Management**: Upload and manage business documents
+- **Processor Integration**: Multiple processor support
+- **Statement Analysis**: Automated fee analysis
+
+### 💬 Communication & Support
+
+- **Ticket System**: Real-time support tickets with Socket.IO
+- **Email Notifications**: Automated email queue system
+- **In-App Notifications**: Real-time notification system
+- **Training Videos**: Educational content management
+- **Announcements**: Platform-wide announcements
+
+### 📅 Additional Features
+
+- **Google Calendar Integration**: OAuth2 calendar sync
+- **Funnel Types Management**: Customizable funnel configurations
+- **Prospect Management**: Lead tracking and management
+- **Residual Data Processing**: Automated residual calculations
+- **Rewards Plan Automation**: Automated reward distribution
+- **Email Queue System**: Reliable email delivery
+- **Comprehensive Logging**: Winston-based logging system
+
+---
+
+## 🛠️ Technology Stack
+
+### Backend
+
+| Category | Technology |
+|----------|-----------|
+| **Runtime** | Node.js 14.17.0+ |
+| **Framework** | Express.js 4.18.2 |
+| **Language** | TypeScript 4.9.5 |
+| **Database** | MySQL 8.0+ (mysql2) |
+| **Real-time** | Socket.IO 4.7.2 |
+| **Authentication** | JWT (jsonwebtoken) |
+| **File Storage** | AWS S3 (aws-sdk) |
+| **Email** | Nodemailer 6.9.1 |
+| **Payment** | NMI (Network Merchants Inc.) |
+| **PDF Generation** | PDFKit, pdf-lib |
+| **Logging** | Winston 3.8.2 |
+| **Scheduling** | Cron 2.2.0 |
+| **Calendar** | Google APIs (googleapis) |
+
+### Frontend
+
+| Category | Technology |
+|----------|-----------|
+| **Framework** | React 18.2.0 |
+| **UI Library** | Material-UI (MUI) 5.10.9 |
+| **State Management** | Redux Toolkit 1.8.6 |
+| **Routing** | React Router 6.4.2 |
+| **Forms** | Formik 2.2.9 + Yup 0.32.11 |
+| **HTTP Client** | Axios 1.1.2 |
+| **Real-time** | Socket.IO Client 4.7.2 |
+| **Charts** | ApexCharts 3.36.0 |
+| **Calendar** | FullCalendar 5.11.3 |
+| **Editor** | React Quill 2.0.0 |
+| **Build Tool** | Create React App (react-scripts) |
+
+### DevOps & Infrastructure
+
+- **Containerization**: Docker + Docker Compose
+- **Process Management**: PM2 (cluster mode)
+- **Version Control**: Git
+- **Cloud Storage**: AWS S3
+- **SSL/HTTPS**: Certificate-based encryption
+
+---
+
+## 📁 Project Structure
+
+```
+fixfeesplatform/
+├── backend/                    # Node.js/Express Backend API
+│   ├── src/
+│   │   ├── controllers/        # Request handlers
+│   │   │   ├── admin/         # Admin controllers
+│   │   │   ├── business/      # Business controllers
+│   │   │   ├── user/          # User controllers
+│   │   │   └── webhook/       # Webhook handlers
+│   │   ├── services/          # Business logic layer
+│   │   ├── routes/            # API route definitions
+│   │   ├── database/          # Database connection & queries
+│   │   ├── socket/            # Socket.IO real-time handlers
+│   │   ├── cronjob/           # Scheduled tasks
+│   │   ├── library/           # Third-party integrations
+│   │   ├── helpers/           # Utility functions
+│   │   ├── var/               # Configuration & constants
+│   │   └── views/             # Pug templates
+│   ├── assets/                # Static assets
+│   ├── Dockerfile             # Docker configuration
+│   ├── docker-compose.yaml    # Docker Compose setup
+│   └── package.json
+│
+├── business/                   # React Merchant Portal
+│   ├── src/
+│   │   ├── pages/             # Page components
+│   │   ├── components/        # Reusable components
+│   │   ├── layout/            # Layout components
+│   │   ├── sections/          # Page sections
+│   │   ├── store/             # Redux store
+│   │   ├── services/          # API services
+│   │   ├── routes/            # Route definitions
+│   │   └── config/            # Configuration
+│   ├── public/                # Static files
+│   └── package.json
+│
+├── partner/                    # React Partner Portal
+│   ├── src/                   # (Similar structure to business/)
+│   └── package.json
+│
+└── README.md                   # This file
+```
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- **Node.js**: 14.17.0 or higher
+- **MySQL**: 8.0 or higher
+- **npm** or **yarn**: Package manager
+- **AWS Account**: For S3 file storage (optional for development)
+- **Docker**: For containerized deployment (optional)
 
 ### Installation
 
-First download and initialize the repository dependencies.
+#### 1. Clone the Repository
 
 ```bash
-$ nvm use           # use node v20
-$ npm install       # install dependencies
-$ npm run db:start  # pull and run the containers
+git clone <repository-url>
+cd fixfeesplatform
 ```
 
-Create an `.env` file and copy the contents of `.env.example` file into it
+#### 2. Backend Setup
 
 ```bash
-$ cp ./.env.example ./.env
+cd backend
+npm install
 ```
 
-1. Use the output of `npm run db:start` to set the supabase entries:
+#### 3. Frontend Setup
 
-- `SUPABASE_SERVICE_ROLE_KEY=[service_role key]`
-- `SUPABASE_ANON_KEY=[anon key]`
+**Business Portal:**
+```bash
+cd ../business
+npm install
+```
 
-2. [Create a Redis database in upstash](https://console.upstash.com/redis) and copy the following from the `REST API` section:
+**Partner Portal:**
+```bash
+cd ../partner
+npm install
+```
 
-- `UPSTASH_REDIS_REST_URL=[UPSTASH_REDIS_REST_URL]`
-- `UPSTASH_REDIS_REST_TOKEN=[UPSTASH_REDIS_REST_TOKEN]`
+### Development
 
-3. Navigate to the project you created in [https://cloud.trigger.dev](https://cloud.trigger.dev) and copy the following from the `Environments & API Keys` section:
-
-- `TRIGGER_SECRET_KEY=[Private 'dev' API Key, starting 'tr_dev_*']`
-- `TRIGGER_API_URL="https://api.trigger.dev"`
-- `TRIGGER_PROJECT_ID=[Public 'project' key, starting 'proj*]`
-
-4. In Posthog go to [https://[region].posthog.com/project/[project-id]/settings/project-details](https://[region].posthog.com/project/[project-id]/settings/project-details) to find your Project ID and Project API key:
-
-- `POSTHOG_API_HOST=[https://[region].posthog.com]`
-- `POSTHOG_PROJECT_PUBLIC_KEY=[Project API Key starting 'phc*']`
-
-5. Add a `STRIPE_SECRET_KEY` from the Stripe admin interface, and then run `npm run -w @carbon/stripe register:stripe` to get a `STRIPE_WEBHOOK_SECRET`
-
-- `STRIPE_SECRET_KEY="sk_test_*************"`
-- `STRIPE_WEBHOOK_SECRET="whsec_************"`
-
-6. Signing in requires you to setup one of two methods:
-   - Email requires a Resend API key:
-     - `RESEND_API_KEY="re_**********"`
-     - `RESEND_DOMAIN="carbon.ms"`
-   - Sign-in with Google requires a [Google auth client](https://supabase.com/docs/guides/auth/social-login/auth-google) with these variables:
-     - `SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID="******.apps.googleusercontent.com"`
-     - `SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_SECRET="GOCSPX-****************"`
-     - `SUPABASE_AUTH_EXTERNAL_GOOGLE_REDIRECT_URI="http://127.0.0.1:54321/auth/v1/callback"`
-
-Then you can run the following:
+#### Backend Development
 
 ```bash
-$ npm run db:build     # run db migrations and seed script
-$ npm run build        # build the packages
+cd backend
+npm run dev          # Development mode with hot reload
+npm run build        # Build TypeScript
+npm run start        # Start production server
+npm run debug        # Debug mode with inspector
 ```
 
-Finally, start the apps and packages:
+#### Frontend Development
 
 ```bash
-$ npm run dev
-$ npm run dev:mes        # npm run dev in all apps & packages
+# Business Portal
+cd business
+npm start            # Start dev server (default: http://localhost:3000)
+
+# Partner Portal
+cd partner
+npm start            # Start dev server (default: http://localhost:3000)
 ```
 
-After installation you should be able run the apps locally.
+---
 
-| Application     | URL                                                                                                                |
-| --------------- | ------------------------------------------------------------------------------------------------------------------ |
-| ERP             | [http://localhost:3000](http://localhost:3000)                                                                     |
-| MES             | [http://localhost:3001](http://localhost:3001)                                                                     |
-| Academy         | [http://localhost:4111](http://localhost:4111)                                                                     |
-| Starter         | [http://localhost:4000](http://localhost:4000)                                                                     |
-| Postgres        | [postgresql://postgres:postgres@localhost:54322/postgres](postgresql://postgres:postgres@localhost:54322/postgres) |
-| Supabase Studio | [http://localhost:54323/project/default](http://localhost:54323/project/default)                                   |
-| Mailpit         | [http://localhost:54324](http://localhost:54324)                                                                   |
-| Edge Functions  | [http://localhost:54321/functions/v1/<function-name>](http://localhost:54321/functions/v1/<function-name>)         |
+## ⚙️ Environment Configuration
 
-### Code Formatting
+### Backend Environment Variables
 
-This project uses [Biome](https://biomejs.dev/) for code formatting and linting. To set up automatic formatting on save in VS Code:
+Create a `.env` file in the `backend/` directory based on `env.demo`:
 
-1. Install the [Biome VS Code extension](https://marketplace.visualstudio.com/items?itemName=biomejs.biome)
+```env
+# Server Configuration
+PORT=8090
+BASE_URL=http://localhost:8090
+BASE_FRONT_URL=http://localhost:3000/
+BASE_APP_URL=http://localhost:3000/
+BASE_BUSINESS_URL=http://localhost:3001/
+BASE_PARTNER_URL=http://localhost:3002/
+BACKEND_LOCATION=localhost
+ENVIRONMENT=development
 
-2. Add the following to your VS Code settings (`.vscode/settings.json` or global settings):
+# Database Configuration
+DB_HOST=localhost
+DB_USER=root
+DB_PWD=your_password
+DB_NAME=fixfeesplatform_db
+DB_PORT=3306
+DB_CONNECTION_LIMIT=100
 
-```json
-"editor.codeActionsOnSave": {
-  "source.organizeImports.biome": "explicit",
-  "source.fixAll.biome": "explicit"
-},
-"editor.defaultFormatter": "biomejs.biome"
+# Security
+JWT_SECRET=your_jwt_secret_key
+ENCRYPT_HASH_KEY=your_encryption_key
+
+# Payment Processing (NMI)
+NMI_IS_LIVE=false
+NMI_TEST_SECRET_KEY=your_test_key
+NMI_LIVE_SECRET_KEY=your_live_key
+NMI_SIGN_KEY=your_sign_key
+
+# Email Configuration
+MAILER_TYPE=GMAIL
+GMAIL_SMTP_USERNAME=your_email@gmail.com
+GMAIL_SMTP_PASSWORD=your_app_password
+SENDER_EMAIL=support@fixmyfees.com
+
+# AWS S3 Configuration
+AWS_REGION=us-west-2
+AWS_S3_BUCKET=your-bucket-name
+AWS_ACCESS_KEY_ID=your_access_key
+AWS_SECRET_ACCESS_KEY=your_secret_key
+
+# Google Calendar
+GOOGLE_CLIENT_SECRET_JSON=path/to/credentials.json
+GOOGLE_OAUTH_USER_REDIRECT_URL=http://localhost:3000/calendar/callback
+GOOGLE_OAUTH_ADMIN_REDIRECT_URL=http://localhost:3000/admin/calendar/callback
+
+# Feature Flags
+EMAIL_FUNC=enabled
+CRON_FUNC=enabled
+SMS_FUNC=disabled
+TICKET_IS_LIMITED=false
+AUTO_EMAIL_VERIFICATION=enabled
 ```
 
-### Commands
+### Frontend Configuration
 
-To add an edge function
+Update API endpoints in frontend configuration files:
+- `business/src/config/config.js`
+- `partner/src/config/config.js`
+
+---
+
+## 📚 API Documentation
+
+### Authentication Endpoints
+
+```
+POST   /login                          # User login
+POST   /login-two-fact-auth           # 2FA verification
+POST   /logout                         # User logout
+POST   /send-forgot-password-email    # Password reset request
+POST   /reset-password                 # Reset password
+```
+
+### User Endpoints
+
+```
+GET    /user/profile/get-page-detail           # Get user profile
+POST   /user/profile/update-detail             # Update profile
+POST   /user/profile/update-password          # Change password
+GET    /user/dashboard/get-page-detail         # Dashboard data
+GET    /user/wallet/get-page-detail           # Wallet information
+POST   /user/wallet/request-withdrawal        # Request withdrawal
+```
+
+### Partner Endpoints
+
+```
+GET    /user/lead/get-merchant-data-list       # Merchant leads
+GET    /user/lead/get-partner-data-list       # Partner leads
+POST   /user/lead/add-merchant-prospects       # Add merchant prospect
+GET    /user/rank-stats/get-page-detail       # Rank statistics
+GET    /user/residuals/get-page-detail        # Residual reports
+```
+
+### Business Endpoints
+
+```
+POST   /business/register                     # Business registration
+POST   /business/login                        # Business login
+GET    /business/get-business-detail          # Business information
+GET    /business/dashboard/get-page-detail   # Business dashboard
+```
+
+### Admin Endpoints
+
+```
+GET    /admin/users/get-data-list             # User management
+PUT    /admin/user/:id                        # Update user
+POST   /admin/user/update-status              # Update user status
+GET    /admin/ticket/get-data-list            # Ticket management
+GET    /admin/transaction/get-data-list       # Transaction management
+```
+
+### Webhook Endpoints
+
+```
+POST   /webhook/nmi/hook-received             # NMI payment webhook
+```
+
+---
+
+## 🐳 Deployment
+
+### Docker Deployment
 
 ```bash
-$ npm run db:function:new <name>
+# Build and run with Docker Compose
+cd backend
+docker-compose up -d
+
+# Or build individual containers
+docker build -t fixfeesplatform/fixfeesplatform-backend .
+docker run -p 8090:8090 fixfeesplatform-backend
 ```
 
-To add a database migration
+### PM2 Deployment
 
 ```bash
-$ npm run db:migrate:new <name>
+# Install PM2 globally
+npm install -g pm2
+
+# Start backend in cluster mode
+cd backend
+pm2 start dist/index.js -i max --name fixfeesplatform-backend
+
+# Or use provided script
+./run_cluster_mode.sh
 ```
 
-To add an AI agent
+### Production Build
 
 ```bash
-$ npm run agent:new <name>
+# Backend
+cd backend
+npm run build
+npm run start
+
+# Frontend - Business Portal
+cd business
+npm run build
+# Serve dist/ folder with nginx or similar
+
+# Frontend - Partner Portal
+cd partner
+npm run build
+# Serve dist/ folder with nginx or similar
 ```
 
-To add an AI tool
+---
 
-```bash
-$ npm run tool:new <name>
-```
+## 🔒 Security
 
-To kill the database containers in a non-recoverable way, you can run:
+### Security Features
 
-```bash
-$ npm run db:kill   # stop and delete all database containers
-```
+- ✅ JWT token-based authentication
+- ✅ Two-factor authentication (2FA)
+- ✅ Password encryption (crypto-js)
+- ✅ HTTPS/SSL support
+- ✅ CORS configuration
+- ✅ SQL injection prevention (parameterized queries)
+- ✅ Token expiration (15 minutes)
+- ✅ Email verification
+- ✅ KYC document verification
 
-To restart and reseed the database, you can run:
+### Security Best Practices
 
-```bash
-$ npm run db:build # runs db:kill, db:start, and setup
-```
+⚠️ **Important**: Before deploying to production:
 
-To run a particular application, use the `-w workspace` flag.
+1. Change all default secrets in `backend/src/var/config.ts`
+2. Use environment variables for sensitive data
+3. Enable HTTPS in production
+4. Configure proper CORS origins
+5. Set up rate limiting
+6. Enable database connection encryption
+7. Regularly update dependencies
+8. Implement proper error handling (avoid exposing stack traces)
 
-For example, to run test command in the `@carbon/react` package you can run:
+📋 **See [SUGGESTIONS.md](./SUGGESTIONS.md) for detailed security recommendations and improvement suggestions.**
 
-```
-$ npm run test -w @carbon/react
-```
+---
 
-To restore a production database locally:
+## 💡 Improvement Suggestions
 
-1. Download the production database as a .backup file
-2. Rename the `migrations` folder to `_migrations`
-3. Restore the database with the following command:
+We've compiled a comprehensive list of improvement suggestions covering:
 
-```bash
-$ npm run db:build # this should error out at the seed step
-$ PGPASSWORD=postgres psql -h localhost -p 54322 -U supabase_admin -d postgres < ~/Downloads/db_cluster-17-11-2025@09-03-36.backup
-$ npm run dev
-```
+- 🔴 **Critical Security Issues** - Immediate fixes needed
+- 🟡 **High Priority Improvements** - Important enhancements
+- 🟢 **Medium Priority Improvements** - Quality of life improvements
+- 🔵 **Low Priority / Nice to Have** - Future considerations
 
-4. Rename the `_migraitons` folder back to `migrations`
+**📋 See [SUGGESTIONS.md](./SUGGESTIONS.md) for detailed recommendations, code examples, and implementation guides.**
 
-## API
+### Quick Summary
 
-The API documentation is located in the ERP app at `${ERP}/x/api/js/intro`. It is auto-generated based on changes to the database.
+**Critical Issues to Address Immediately:**
+1. ⚠️ Hardcoded secrets in `backend/src/var/config.ts` - Move to environment variables
+2. ⚠️ Exposed credentials in `backend/env.demo` - Rotate all credentials immediately
+3. ⚠️ CORS configuration too permissive - Restrict to specific origins
+4. ⚠️ No rate limiting - Vulnerable to DDoS and brute force attacks
 
-There are two ways to use the API:
+**High Priority Improvements:**
+- Implement proper error handling middleware
+- Add input validation to all endpoints
+- Upgrade password hashing (use bcrypt instead of crypto-js)
+- Add database SSL/TLS encryption
+- Implement rate limiting
 
-1. From another codebase using a supabase client library:
+**Medium Priority:**
+- Add comprehensive test suite
+- Implement API documentation (Swagger/OpenAPI)
+- Add monitoring and observability
+- Performance optimizations
 
-- [Javascript](https://supabase.com/docs/reference/javascript/introduction)
-- [Flutter](https://supabase.com/docs/reference/dart/introduction)
-- [Python](https://supabase.com/docs/reference/python/introduction)
-- [C#](https://supabase.com/docs/reference/csharp/introduction)
-- [Swift](https://supabase.com/docs/reference/swift/introduction)
-- [Kotlin](https://supabase.com/docs/reference/kotlin/introduction)
+---
 
-2. From within the codebase using our packages.
+## 🤝 Contributing
 
-### From another Codebase
+### Development Workflow
 
-First, set up the necessary credentials in environment variables. For the example below:
+1. Create a feature branch from `main`
+2. Make your changes
+3. Write/update tests if applicable
+4. Ensure code follows project style guidelines
+5. Submit a pull request
 
-1. Navigate to settings in the ERP to generate an API key. Set this in `CARBON_API_KEY`
-2. Get the Supabase URL to call (this is `SUPABASE_URL` in your `.env` if hosting locally, e.g. http://localhost:54321). Set this as `CARBON_API_URL`.
-3. Get the `SUPABASE_ANON_KEY` e.g. from your .env file. Set this as `CARBON_PUBLIC_KEY`.
+### Code Style
 
-If you're self-hosting you can also use the supabase service key instead of the public key for root access. In that case you don't need to include the `carbon-key` header.
+- **Backend**: TypeScript with TSLint
+- **Frontend**: ESLint + Prettier
+- Use meaningful commit messages
+- Follow existing code patterns
 
-```ts
-import { Database } from "@carbon/database";
-import { createClient } from "@supabase/supabase-js";
+---
 
-const apiKey = process.env.CARBON_API_KEY;
-const apiUrl = process.env.CARBON_API_URL;
-const publicKey = process.env.CARBON_PUBLIC_KEY;
+## 📄 License
 
-const carbon = createClient<Database>(apiUrl, publicKey, {
-  global: {
-    headers: {
-      "carbon-key": apiKey,
-    },
-  },
-});
+This project is proprietary software owned by **Fix My Fees LLC**. All rights reserved.
 
-// returns items from the company associated with the api key
-const { data, error } = await carbon.from("item").select("*");
-```
+---
 
-### From the Monorepo
+## 📞 Support
 
-```tsx
-import { getCarbonServiceRole } from "@carbon/auth";
-const carbon = getCarbonServiceRole();
+For support and inquiries:
 
-// returns all items across companies
-const { data, error } = await carbon.from("item").select("*");
+- **Website**: [https://partners.fixmyfees.com/](https://partners.fixmyfees.com/)
+- **Merchant Portal**: [https://merchants.fixmyfees.com/](https://merchants.fixmyfees.com/)
+- **Email**: support@fixmyfees.com
 
-// returns items from a specific company
-const companyId = "xyz";
-const { data, error } = await carbon
-  .from("item")
-  .select("*")
-  .eq("companyId", companyId);
-```
+---
+
+## 📊 Platform Statistics
+
+- **Merchants Onboarded**: 10,000+
+- **Processing Model**: Interchange Plus Pricing
+- **Contract Terms**: Month-to-month (no long-term contracts)
+- **Rate Guarantee**: Lifetime rate guarantee
+- **PCI Compliance**: Included with $250,000 breach protection
+
+---
+
+## 🎯 Roadmap
+
+- [ ] Enhanced analytics and reporting
+- [ ] Mobile applications (iOS/Android)
+- [ ] Additional payment processor integrations
+- [ ] Advanced fraud detection
+- [ ] Multi-language support
+- [ ] API rate limiting improvements
+- [ ] Enhanced testing coverage
+
+---
+
+<div align="center">
+
+**Built with ❤️ by Fix My Fees LLC**
+
+© 2024 Fix My Fees LLC. All rights reserved.
+
+</div>

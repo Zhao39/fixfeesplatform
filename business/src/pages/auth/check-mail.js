@@ -1,0 +1,54 @@
+import { Link } from 'react-router-dom';
+
+// material-ui
+import { useTheme } from '@mui/material/styles';
+import { Box, Button, Grid, Divider, Typography, useMediaQuery } from '@mui/material';
+
+// project import
+import AnimateButton from 'components/@extended/AnimateButton';
+import AuthWrapper from 'sections/auth/AuthWrapper';
+import FirebaseSocial from 'sections/auth/auth-forms/FirebaseSocial';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { setPageData } from 'store/reducers/page';
+
+// ================================|| CHECK MAIL ||================================ //
+
+const CheckMail = () => {
+
+  const theme = useTheme();
+  const matchDownSM = useMediaQuery(theme.breakpoints.down('sm'));
+  return (
+    <AuthWrapper>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <Box sx={{ mb: { xs: -0.5, sm: 0.5 } }}>
+            <Typography variant="h3" component="h1">Hi, Check Your Mail</Typography>
+            <Typography color="secondary" sx={{ mb: 0.5, mt: 1.25 }}>
+              We have sent a password recover instructions to your email.
+            </Typography>
+          </Box>
+        </Grid>
+        <Grid item xs={12}>
+          <AnimateButton>
+            <Button
+              component={Link}
+              to={'/login'}
+              disableElevation
+              fullWidth
+              size="large"
+              type="submit"
+              variant="contained"
+              color="primary"
+            >
+              Sign in
+            </Button>
+          </AnimateButton>
+        </Grid>
+
+      </Grid>
+    </AuthWrapper>
+  );
+};
+
+export default CheckMail;

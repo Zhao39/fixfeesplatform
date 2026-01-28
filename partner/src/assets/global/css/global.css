@@ -1,0 +1,10 @@
+/* Chrome, Safari, Edge, Opera */
+input.no-spin::-webkit-outer-spin-button,
+input.no-spin::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+/* Firefox */
+input.no-spin[type=number] {
+    -moz-appearance: textfield;
+}

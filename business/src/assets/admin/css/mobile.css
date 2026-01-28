@@ -1,0 +1,22 @@
+@media (max-width: 991px){
+    .t-show-desktop{
+        display: none !important;
+    }
+    .m-text-center{
+        text-align: center !important;
+    }
+    .m-text-left{
+        text-align: left !important;
+    }
+    .m-text-right{
+        text-align: right !important;
+    }
+    .m-margin-0{
+        margin:  0 !important;
+    }
+    .m-padding-0{
+        padding: 0 !important;
+    }
+
+    
+}

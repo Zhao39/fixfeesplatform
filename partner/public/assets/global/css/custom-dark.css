@@ -1,0 +1,518 @@
+body .MuiTooltip-tooltip {
+    color: #000000;
+}
+
+/**** start date range picker ****/
+body .rdrCalendarWrapper {
+    color: #000000;
+    font-size: 12px;
+    background: rgb(30, 30, 30)
+}
+
+body .rdrDateDisplayWrapper {
+    background-color: rgb(30, 30, 30)
+}
+
+body .rdrDateDisplay {
+    margin: 0.833em;
+}
+
+body .rdrDateDisplayItem {
+    border-radius: 4px;
+    background-color: rgb(30, 30, 30);
+    box-shadow: 0 1px 2px 0 rgba(35, 57, 66, 0.21);
+    border: 1px solid transparent;
+}
+
+body .rdrDateDisplayItem input {
+    cursor: pointer;
+    height: 2.5em;
+    line-height: 2.5em;
+    border: 0px;
+    background: transparent;
+    width: 100%;
+    color: #849095;
+}
+
+body .rdrDateDisplayItemActive {
+    border-color: currentColor;
+}
+
+body .rdrDateDisplayItemActive input {
+    color: #7d888d
+}
+
+body .rdrMonthAndYearWrapper {
+    align-items: center;
+    height: 60px;
+    padding-top: 10px;
+}
+
+body .rdrMonthAndYearPickers {
+    font-weight: 600;
+}
+
+body .rdrMonthAndYearPickers select {
+    -moz-appearance: none;
+    appearance: none;
+    -webkit-appearance: none;
+    border: 0;
+    background: transparent;
+    padding: 10px 30px 10px 10px;
+    border-radius: 4px;
+    outline: 0;
+    color: rgba(255, 255, 255, 0.6);
+    background: url("data:image/svg+xml;utf8,<svg width='9px' height='6px' viewBox='0 0 9 6' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><g id='Artboard' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' transform='translate(-636.000000, -171.000000)' fill-opacity='0.368716033'><g id='input' transform='translate(172.000000, 37.000000)' fill='%230E242F' fill-rule='nonzero'><g id='Group-9' transform='translate(323.000000, 127.000000)'><path d='M142.280245,7.23952813 C141.987305,6.92353472 141.512432,6.92361662 141.219585,7.23971106 C140.926739,7.5558055 140.926815,8.06821394 141.219755,8.38420735 L145.498801,13 L149.780245,8.38162071 C150.073185,8.0656273 150.073261,7.55321886 149.780415,7.23712442 C149.487568,6.92102998 149.012695,6.92094808 148.719755,7.23694149 L145.498801,10.7113732 L142.280245,7.23952813 Z' id='arrow'></path></g></g></g></svg>") no-repeat;
+    background-position: right 8px center;
+    cursor: pointer;
+    text-align: center;
+    background-color: rgb(30, 30, 30);
+}
+
+body .rdrMonthAndYearPickers select:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+body .rdrMonthAndYearPickers select option {
+    background-color: rgb(30, 30, 30);
+}
+
+body .rdrMonthPicker,
+body .rdrYearPicker {
+    margin: 0 5px
+}
+
+body .rdrNextPrevButton {
+    display: block;
+    width: 24px;
+    height: 24px;
+    margin: 0 0.833em;
+    padding: 0;
+    border: 0;
+    border-radius: 5px;
+    background: rgb(30, 30, 30);
+}
+
+body .rdrNextPrevButton:hover {
+    background: rgb(30, 30, 30);
+}
+
+body .rdrNextPrevButton i {
+    display: block;
+    width: 0;
+    height: 0;
+    padding: 0;
+    text-align: center;
+    border-style: solid;
+    margin: auto;
+    transform: translate(-3px, 0px);
+}
+
+body .rdrPprevButton i {
+    border-width: 4px 6px 4px 4px;
+    border-color: transparent rgb(52, 73, 94) transparent transparent;
+    transform: translate(-3px, 0px);
+}
+
+body .rdrNextButton i {
+    margin: 0 0 0 7px;
+    border-width: 4px 4px 4px 6px;
+    border-color: transparent transparent transparent rgb(52, 73, 94);
+    transform: translate(3px, 0px);
+}
+
+body .rdrWeekDays {
+    padding: 0 0.833em;
+}
+
+body .rdrMonth {
+    padding: 0 0.833em 1.666em 0.833em;
+}
+
+body .rdrMonth .rdrWeekDays {
+    padding: 0;
+}
+
+body .rdrMonths.rdrMonthsVertical .rdrMonth:first-child .rdrMonthName {
+    display: none;
+}
+
+body .rdrWeekDay {
+    font-weight: 400;
+    line-height: 2.667em;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+body .rdrDay {
+    background: transparent;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 0;
+    padding: 0;
+    line-height: 3.000em;
+    height: 3.000em;
+    text-align: center;
+    color: #1d2429
+}
+
+body .rdrDay:focus {
+    outline: 0;
+}
+
+body .rdrDayNumber {
+    outline: 0;
+    font-weight: 300;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    top: 5px;
+    bottom: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body .rdrDayToday .rdrDayNumber span {
+    font-weight: 500
+}
+
+body .rdrDayToday .rdrDayNumber span:after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 18px;
+    height: 2px;
+    border-radius: 2px;
+    background: #3d91ff;
+}
+
+body .rdrDayToday:not(.rdrDayPassive) .rdrInRange~.rdrDayNumber span:after,
+body .rdrDayToday:not(.rdrDayPassive) .rdrStartEdge~.rdrDayNumber span:after,
+body .rdrDayToday:not(.rdrDayPassive) .rdrEndEdge~.rdrDayNumber span:after,
+body .rdrDayToday:not(.rdrDayPassive) .rdrSelected~.rdrDayNumber span:after {
+    background: rgba(255, 255, 255, 1);
+}
+
+body .rdrDay:not(.rdrDayPassive) .rdrInRange~.rdrDayNumber span,
+body .rdrDay:not(.rdrDayPassive) .rdrStartEdge~.rdrDayNumber span,
+body .rdrDay:not(.rdrDayPassive) .rdrEndEdge~.rdrDayNumber span,
+body .rdrDay:not(.rdrDayPassive) .rdrSelected~.rdrDayNumber span {
+    color: rgba(255, 255, 255, 1);
+}
+
+body .rdrSelected,
+body .rdrInRange,
+body .rdrStartEdge,
+body .rdrEndEdge {
+    background: currentColor;
+    position: absolute;
+    top: 5px;
+    left: 0;
+    right: 0;
+    bottom: 5px;
+}
+
+body .rdrSelected {
+    left: 2px;
+    right: 2px;
+}
+
+body .rdrInRange {}
+
+body .rdrStartEdge {
+    border-top-left-radius: 1.042em;
+    border-bottom-left-radius: 1.042em;
+    left: 2px;
+}
+
+body .rdrEndEdge {
+    border-top-right-radius: 1.042em;
+    border-bottom-right-radius: 1.042em;
+    right: 2px;
+}
+
+body .rdrSelected {
+    border-radius: 1.042em;
+}
+
+body .rdrDayStartOfMonth .rdrInRange,
+body .rdrDayStartOfMonth .rdrEndEdge,
+body .rdrDayStartOfWeek .rdrInRange,
+body .rdrDayStartOfWeek .rdrEndEdge {
+    border-top-left-radius: 1.042em;
+    border-bottom-left-radius: 1.042em;
+    left: 2px;
+}
+
+body .rdrDayEndOfMonth .rdrInRange,
+body .rdrDayEndOfMonth .rdrStartEdge,
+body .rdrDayEndOfWeek .rdrInRange,
+body .rdrDayEndOfWeek .rdrStartEdge {
+    border-top-right-radius: 1.042em;
+    border-bottom-right-radius: 1.042em;
+    right: 2px;
+}
+
+body .rdrDayStartOfMonth .rdrDayInPreview,
+body .rdrDayStartOfMonth .rdrDayEndPreview,
+body .rdrDayStartOfWeek .rdrDayInPreview,
+body .rdrDayStartOfWeek .rdrDayEndPreview {
+    border-top-left-radius: 1.333em;
+    border-bottom-left-radius: 1.333em;
+    border-left-width: 1px;
+    left: 0px;
+}
+
+body .rdrDayEndOfMonth .rdrDayInPreview,
+body .rdrDayEndOfMonth .rdrDayStartPreview,
+body .rdrDayEndOfWeek .rdrDayInPreview,
+body .rdrDayEndOfWeek .rdrDayStartPreview {
+    border-top-right-radius: 1.333em;
+    border-bottom-right-radius: 1.333em;
+    border-right-width: 1px;
+    right: 0px;
+}
+
+body .rdrDayStartPreview,
+body .rdrDayInPreview,
+body .rdrDayEndPreview {
+    background: rgba(255, 255, 255, 0.09);
+    position: absolute;
+    top: 3px;
+    left: 0px;
+    right: 0px;
+    bottom: 3px;
+    pointer-events: none;
+    border: 0px solid currentColor;
+    z-index: 1;
+}
+
+body .rdrDayStartPreview {
+    border-top-width: 1px;
+    border-left-width: 1px;
+    border-bottom-width: 1px;
+    border-top-left-radius: 1.333em;
+    border-bottom-left-radius: 1.333em;
+    left: 0px;
+}
+
+body .rdrDayInPreview {
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+}
+
+body .rdrDayEndPreview {
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-top-right-radius: 1.333em;
+    border-bottom-right-radius: 1.333em;
+    right: 2px;
+    right: 0px;
+}
+
+body .rdrDefinedRangesWrapper {
+    font-size: 12px;
+    width: 226px;
+    border-right: solid 1px rgb(30, 30, 30);
+    background: rgb(30, 30, 30);
+}
+
+body .rdrDefinedRangesWrapper .rdrStaticRangeSelected {
+    color: currentColor;
+    font-weight: 600;
+}
+
+body .rdrStaticRange {
+    border: 0;
+    cursor: pointer;
+    display: block;
+    outline: 0;
+    border-bottom: 1px solid rgb(30, 30, 30);
+    padding: 0;
+    background: rgb(30, 30, 30);
+    color: rgba(255, 255, 255, 0.6);
+}
+
+body .rdrStaticRange:hover .rdrStaticRangeLabel,
+body .rdrStaticRange:focus .rdrStaticRangeLabel {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 1);
+}
+
+body .rdrStaticRangeLabel {
+    display: block;
+    outline: 0;
+    line-height: 18px;
+    padding: 10px 20px;
+    text-align: left;
+}
+
+body .rdrInputRanges {
+    padding: 10px 0;
+}
+
+body .rdrInputRange {
+    align-items: center;
+    padding: 5px 20px;
+}
+
+body .rdrInputRangeInput {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 4px;
+    text-align: center;
+    border: solid 1px rgb(30, 30, 30);
+    margin-right: 10px;
+    color: rgb(108, 118, 122)
+}
+
+body .rdrInputRangeInput:focus,
+body .rdrInputRangeInput:hover {
+    border-color: rgb(30, 30, 30);
+    outline: 0;
+    color: #333;
+}
+
+body .rdrCalendarWrapper:not(.rdrDateRangeWrapper) .rdrDayHovered .rdrDayNumber:after {
+    content: '';
+    border: 1px solid currentColor;
+    border-radius: 1.333em;
+    position: absolute;
+    top: -2px;
+    bottom: -2px;
+    left: 0px;
+    right: 0px;
+    background: transparent;
+}
+
+body .rdrDayPassive {
+    pointer-events: none;
+}
+
+body .rdrDayPassive .rdrDayNumber span {
+    color: rgb(30, 30, 30);
+}
+
+body .rdrDayPassive .rdrInRange,
+body .rdrDayPassive .rdrStartEdge,
+body .rdrDayPassive .rdrEndEdge,
+body .rdrDayPassive .rdrSelected,
+body .rdrDayPassive .rdrDayStartPreview,
+body .rdrDayPassive .rdrDayInPreview,
+body .rdrDayPassive .rdrDayEndPreview {
+    display: none;
+}
+
+body .rdrDayDisabled {
+    background-color: rgb(30, 30, 30);
+}
+
+body .rdrDayDisabled .rdrDayNumber span {
+    color: rgb(30, 30, 30);
+}
+
+body .rdrDayDisabled .rdrInRange,
+body .rdrDayDisabled .rdrStartEdge,
+body .rdrDayDisabled .rdrEndEdge,
+body .rdrDayDisabled .rdrSelected,
+body .rdrDayDisabled .rdrDayStartPreview,
+body .rdrDayDisabled .rdrDayInPreview,
+body .rdrDayDisabled .rdrDayEndPreview {
+    filter: grayscale(100%) opacity(60%);
+}
+
+body .rdrMonthName {
+    text-align: left;
+    font-weight: 600;
+    color: #849095;
+    padding: 0.833em;
+}
+
+body .rdrDayNumber span {
+    color: #fff;
+}
+
+body .rdrInputRanges {
+    visibility: hidden !important;
+    display: none !important;
+}
+
+@media (max-width: 1023px) {
+    body .rdrDateRangePickerWrapper {
+        display: block;
+    }
+}
+
+/**** end date range picker ****/
+.dark-layout {
+    background-color: #121212;
+    min-height: 100vh;
+}
+
+.dark-layout .MuiTypography-root {
+    /* color: rgba(255, 255, 255, 0.87); */
+}
+
+body .react-table-container.loading:after {
+    background: rgba(0, 0, 0, 0.35);
+}
+
+body table .resizer {
+    background: #8c8c8c;
+}
+
+body table .isResizing {
+    background: #fd7261;
+}
+
+body .es-pixel-value {
+    color: #7917f7 !important;
+}
+
+body .es-pixel-value a {
+    color: #7917f7 !important;
+}
+
+body .simplebar-content {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+body .front-page-bg-container {
+    background-image: none !important;
+}
+
+body .scroll-to-top {
+    background-color: rgba(85, 85, 85, 0.86);
+}
+
+body .cms-page-wrapper [data-custom-class='link'],
+body .cms-page-wrapper [data-custom-class='link'] *,
+body .cms-page-wrapper [data-custom-class='link'] [data-custom-class='body_text'] {
+    color: #20ac00 !important;
+}
+body .cms-page-wrapper span strong {
+    color: #ffffff !important;
+}
+
+body .cms-page-wrapper [data-custom-class='title'],
+body .cms-page-wrapper [data-custom-class='title'] * {
+    color: #ffffff !important;
+}
+
+body .cms-page-wrapper [data-custom-class='body_text'],
+body .cms-page-wrapper [data-custom-class='body_text'] * {
+    color: #ffffff !important;
+}
+
+body .cms-page-wrapper [data-custom-class='body'],
+body .cms-page-wrapper [data-custom-class='body'] * {
+    background: transparent !important;
+}

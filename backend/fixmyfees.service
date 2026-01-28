@@ -1,0 +1,10 @@
+[Unit]
+Description=Job for fixfeesplatform service
+
+[Service]
+ExecStart=bash -c /var/www/html/fixfeesplatform-backend/run.sh
+Type=oneshot
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

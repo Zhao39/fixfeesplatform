@@ -1,0 +1,42 @@
+@media (max-width: 991px) {
+    body .custom-page-layout .cms-content {
+        padding: 0 5px;
+    }
+
+    body .home-page .t-show-desktop {
+        display: none !important;
+    }
+
+    body .home-page .m-text-center {
+        text-align: center !important;
+    }
+
+    body .home-page .m-text-left {
+        text-align: left !important;
+    }
+
+    body .home-page .m-text-right {
+        text-align: right !important;
+    }
+
+    .home-layout .vimeo-iframe {
+        /* width: 100%;
+        height: auto; */
+        width: 90vw;
+        height: 50vw;
+    }
+
+    .worked-company-item-block-1,
+    .worked-company-item-block-2,
+    .worked-company-item-block-3 {
+        padding: 20px 25px;
+    }
+
+    .step-box {
+        padding: 30px 30px;
+    }
+
+    .cms-page-wrapper {
+        padding: 60px 0;
+    }
+}

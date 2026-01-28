@@ -1,0 +1,32 @@
+@media (max-width: 991px) {
+    body .custom-page-layout .cms-content {
+        padding: 0 5px;
+    }
+
+    body .home-page .t-show-desktop {
+        display: none !important;
+    }
+
+    body .home-page .m-text-center {
+        text-align: center !important;
+    }
+
+    body .home-page .m-text-left {
+        text-align: left !important;
+    }
+
+    body .home-page .m-text-right {
+        text-align: right !important;
+    }
+
+    .home-layout .vimeo-iframe {
+        /* width: 100%;
+        height: auto; */
+        width: 90vw;
+        height: 50vw;
+    }
+
+    .cms-page-wrapper {
+        padding: 20px 0;
+    }
+}

@@ -1,0 +1,1 @@
+sudo pm2 start /var/www/html/fixfeesplatform-backend/dist/index.js --time

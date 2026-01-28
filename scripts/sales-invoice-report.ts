@@ -1,9 +1,15 @@
 import { createClient } from "@supabase/supabase-js";
 import fs from "fs";
-const companyId = "********************";
-const apiKey = "crbn_******************";
-const publicApiKey =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNxb2ppamlpamtuaGJneW9nbWx1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjM2MDU0MzksImV4cCI6MjAzOTE4MTQzOX0.JMzLs9Y4Y4kQ-jhQHrSqgNyHSZgrkwzBd1PwPbVPtbQ";
+
+const companyId = process.env.COMPANY_ID;
+const apiKey = process.env.CARBON_API_KEY;
+const publicApiKey = process.env.SUPABASE_ANON_KEY;
+
+if (!companyId || !apiKey || !publicApiKey) {
+  throw new Error(
+    "Missing required environment variables: COMPANY_ID, CARBON_API_KEY, SUPABASE_ANON_KEY"
+  );
+}
 
 const carbon = createClient("https://api.carbon.ms", publicApiKey, {
   global: {

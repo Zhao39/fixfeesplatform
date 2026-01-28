@@ -32,6 +32,3 @@ echo ""
 echo "Once you have the DNS name(s), create these DNS records in your domain provider:"
 echo "1. CNAME record: itar.carbon.ms -> <ERP_LOAD_BALANCER_DNS_NAME>"
 echo "2. CNAME record: mes.itar.carbon.ms -> <MES_LOAD_BALANCER_DNS_NAME>"
-
-carbonmesservic-suwrtafs-1163782910.us-gov-east-1.elb.amazonaws.com
-carbonerpservic-ktfsohkb-1407316043.us-gov-east-1.elb.amazonaws.com

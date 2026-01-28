@@ -1,0 +1,97 @@
+body .home-page {}
+
+body .custom-page-layout {
+    padding-top: 60px;
+    padding-bottom: 30px;
+}
+
+body .custom-page-layout .cms-content {
+    padding: 0 15px;
+}
+
+.home-layout .front-page-bg-container {
+    background-position: top center !important;
+    background-size: 100% auto !important;
+    background-image: url('../../images/bg/front-bg.png')
+}
+
+.home-layout .front-page-container {
+    padding-top: 40px;
+}
+
+.home-layout .front-page-container.has-banner {
+    padding-top: 100px;
+}
+
+.home-layout .front-banner-container {
+    display: block;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    /* height: 84px; */
+    background: linear-gradient(90deg, #15D500 0%, #088E01 100%);
+    z-index: 1150;
+}
+
+.home-layout .front-banner {
+    text-align: center;
+    padding: 18px 24px;
+}
+
+.home-layout .front-banner-text {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.home-layout .front-header-container {
+    padding: 10px 0;
+}
+
+.home-layout .front-main-container {
+    padding-bottom: 60px;
+}
+
+.home-layout .vimeo-iframe {
+    width: 640px;
+    height: 360px;
+    /* width: 960px;
+    height: 540px; */
+    width: 800px;
+    height: 450px;
+}
+
+.home-layout .front-video-footer,
+.home-layout .front-video-header {
+    padding: 15px 0;
+}
+
+.cms-page-wrapper {
+    padding: 40px 0;
+}
+
+.cms-page-wrapper [data-custom-class='link'],
+.cms-page-wrapper [data-custom-class='link'] * {
+    color: #3030F1 !important;
+    font-size: 14px !important;
+    font-family: Arial !important;
+    word-break: break-word !important;
+}
+
+.cms-page-wrapper [data-custom-class='title'],
+.cms-page-wrapper [data-custom-class='title'] * {
+    font-size: 26px !important;
+    color: #000000 !important;
+}
+
+.cms-page-wrapper [data-custom-class='body_text'],
+.cms-page-wrapper [data-custom-class='body_text'] * {
+    color: #595959 !important;
+    font-size: 14px !important;
+}
+
+.cms-page-wrapper [data-custom-class='body'],
+.cms-page-wrapper [data-custom-class='body'] * {
+    background: transparent !important;
+}
